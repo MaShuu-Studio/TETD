@@ -61,6 +61,7 @@
     <Compile Include="Assets\Scripts\Resource\Pool.cs" />
     <Compile Include="Assets\Scripts\Resource\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\Game Control\Initializer.cs" />
+    <Compile Include="Assets\Scripts\Tile\TileController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

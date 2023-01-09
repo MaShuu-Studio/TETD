@@ -57,7 +57,7 @@ public class PoolController : MonoBehaviour
         GameObject obj = pool[name].Pop();
         return obj;
     }
-
+    /*
     // Å×½ºÆ®
     Stack<GameObject> stack = new Stack<GameObject>();
     private void OnGUI()
@@ -80,5 +80,5 @@ public class PoolController : MonoBehaviour
                 Random.Range(-5, 5), Random.Range(-5, 5), 0);
             stack.Push(obj);
         }
-    }
+    }*/
 }
