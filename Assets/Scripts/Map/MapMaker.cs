@@ -102,7 +102,6 @@ public class MapMaker : MonoBehaviour
             return null;
         }
         return tilemap;
-
     }
 
     public void LoadMap(TilemapInfo tilemapInfo)

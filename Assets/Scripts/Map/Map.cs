@@ -41,6 +41,12 @@ public class TilemapInfo
         if (tiles.ContainsKey(pos) == false) return null;
         return tiles[pos].tile;
     }
+
+    public bool Buildable(Vector3Int pos)
+    {
+        if (tiles.ContainsKey(pos) == false) return false;
+        return tiles[pos].buildable;
+    }
 }
 
 [Serializable]

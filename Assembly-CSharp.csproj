@@ -66,6 +66,9 @@
     <Compile Include="Assets\Scripts\Resource\PoolController.cs" />
     <Compile Include="Assets\Scripts\Map\MapMaker.cs" />
     <Compile Include="Assets\Scripts\Map\MapUtil.cs" />
+    <Compile Include="Assets\Scripts\Game Control\GameController.cs" />
+    <Compile Include="Assets\Scripts\Object\TowerObject.cs" />
+    <Compile Include="Assets\Scripts\Game Control\TowerController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
