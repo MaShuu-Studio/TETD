@@ -141,32 +141,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: test terrain_0
+      name: Start Dirt
       rect:
         serializedVersion: 2
-        x: 32
-        y: 575
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dc65b79c3a75e8247a4fd081c5b30acc
-      internalID: 1325970941
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: test terrain_1
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 416
+        x: 0
+        y: 16
         width: 16
         height: 16
       alignment: 0
@@ -183,11 +162,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: test terrain_3
+      name: Dest Dirt
       rect:
         serializedVersion: 2
-        x: 192
-        y: 416
+        x: 16
+        y: 16
         width: 16
         height: 16
       alignment: 0
@@ -204,14 +183,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: test terrain_2
+      name: Buildable
       rect:
         serializedVersion: 2
-        x: 176
-        y: 416
+        x: 32
+        y: 16
         width: 16
         height: 16
-      alignment: 9
+      alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -220,6 +199,132 @@ TextureImporter:
       bones: []
       spriteID: d487d79f822bcee4fb513929271316c1
       internalID: -903657032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dest flag
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6019ff60f59b00b448fc086233d91238
+      internalID: -786491466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Corner
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2f9056f4685fb0499ee0b8de9bb990a
+      internalID: -1701017842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start flag
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c062e2ca013a08e49b92181c47fbe280
+      internalID: 1566231445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Grass
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3310781cde86e34b8e23ad98699d9f5
+      internalID: 2068529632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dirt
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4ae31d7dc78ee0458ec7fec607dc8f0
+      internalID: -595750629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Not Buildable
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6231556dd0e7488429b4ca6f0840eb22
+      internalID: 1243147153
       vertices: []
       indices: 
       edges: []
@@ -235,10 +340,15 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      test terrain_1: 259786353
-      test terrain_3: 259786353
-      test terrain_2: -903657032
-      test terrain_0: 784694816
+      Dest flag: -786491466
+      Dest Dirt: 259786353
+      Grass: 2068529632
+      Corner: -1701017842
+      Start flag: 1566231445
+      Buildable: -903657032
+      Not Buildable: 1243147153
+      Dirt: -595750629
+      Start Dirt: 784694816
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

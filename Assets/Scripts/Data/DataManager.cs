@@ -18,17 +18,18 @@ namespace Data
 
     public static class DataManager
     {
-        public static void Serialize<T>(string path, T obj)
+        public static void SerializeJson<T>(string path, string fileName, T obj)
         {
             string json = JsonUtility.ToJson(new SerializableObject<T>(obj));
-            string fileName = path + typeof(T).Name + ".json";
+            fileName += ".json";
 
-            File.WriteAllText(fileName, json);
+            File.WriteAllText(path + fileName, json);
         }
-        public static T Deserialize<T>(string path)
+
+        public static T DeserializeJson<T>(string path, string fileName)
         {
-            string fileName = path + typeof(T).Name + ".json";
-            string json = File.ReadAllText(fileName);
+            fileName += ".json";
+            string json = File.ReadAllText(path + fileName);
 
             SerializableObject<T> obj = JsonUtility.FromJson<SerializableObject<T>>(json);
 

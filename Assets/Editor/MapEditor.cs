@@ -9,7 +9,7 @@ public class MapEditor : Editor
 {
     private MapController targetComponent;
     private const string path = "Assets/Resources/Map/";
-
+    /*
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -42,7 +42,7 @@ public class MapEditor : Editor
         Vector2 prevPos = Vector2.zero; 
         for (int i = 0; i < roads.Count; i++)
         { 
-            /*if (i != 0)
+            if (i != 0)
             {
                 float xamount = Mathf.Abs(roads[i].x - prevPos.x);
                 float yamount = Mathf.Abs(roads[i].y - prevPos.y);
@@ -52,7 +52,7 @@ public class MapEditor : Editor
                 {
                     continue;
                 }
-            }*/
+            }
             roads[i] = Handles.PositionHandle(roads[i], Quaternion.identity);
             roads[i] = targetComponent.GetTilePos(roads[i]);
             prevPos = roads[i];
@@ -72,5 +72,5 @@ public class MapEditor : Editor
             if (i != 0) 
                 Handles.DrawPolyLine(roads[i - 1], roads[i]);
         }
-    }
+    }*/
 }

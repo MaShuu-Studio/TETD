@@ -1,21 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using System;
 
-[Serializable]
 public class Map
 {
-    public Vector2 mapSize;
-    public List<Vector2> enemyRoad;
+    public TilemapInfo tilemap;
+    public List<Vector3Int> enemyRoad;
 
-    public bool Buildable(Vector2 pos)
+    public Map(TilemapInfo info, List<Vector3Int> road)
     {
-        for(int i= 0; i < enemyRoad.Count; i++)
-        {
-            if (pos.x == enemyRoad[i].x && pos.y == enemyRoad[i].y) 
-                return true;
-        }
-        return false;
+        tilemap = new TilemapInfo(info);
+        enemyRoad = new List<Vector3Int>(road);
+    }
+}
+
+[Serializable]
+public class TilemapInfo
+{
+    public Vector3Int origin;
+    public Vector3Int size;
+    public List<TileInfo> tiles;
+
+    public TilemapInfo(Vector3Int origin, Vector3Int size, List<TileInfo> tiles)
+    {
+        this.origin = origin;
+        this.size = size;
+        this.tiles = new List<TileInfo>(tiles);
+    }
+
+    public TilemapInfo(TilemapInfo info)
+    {
+        this.origin = info.origin;
+        this.size = info.size;
+        this.tiles = new List<TileInfo>(info.tiles);
+    }
+}
+
+[Serializable]
+public struct TileInfo
+{
+    public Vector3Int pos;
+    public TileBase tile;
+    public bool buildable;
+
+    public TileInfo(Vector3Int pos, TileBase tile, bool b)
+    {
+        this.pos = pos;
+        this.tile = tile;
+        this.buildable = b;
     }
 }
