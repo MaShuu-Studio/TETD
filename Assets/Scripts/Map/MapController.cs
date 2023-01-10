@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(Grid))]
 public class MapController : MonoBehaviour
@@ -18,6 +19,7 @@ public class MapController : MonoBehaviour
     }
 
     [SerializeField] private GameObject selectedTile;
+    [SerializeField] private Tilemap tilemap;
     public Grid grid;
     public Map map;
 
@@ -52,5 +54,22 @@ public class MapController : MonoBehaviour
         float y = (int)Mathf.Floor(pos.y) + grid.cellSize.y / 2;
 
         return new Vector2(x, y);
+    }
+
+    public void LoadMap(Map map)
+    {
+        if (map == null) return;
+
+        this.map = map;
+
+        tilemap.ClearAllTiles();
+        tilemap.origin = map.tilemap.origin;
+        tilemap.size = map.tilemap.size;
+
+        foreach (var pos in map.tilemap.tiles.Keys)
+        {
+            TileInfo tile = map.tilemap.tiles[pos];
+            tilemap.SetTile(pos, tile.tile);
+        }
     }
 }

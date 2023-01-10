@@ -123,37 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &434288608
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 434288609}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &434288609
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 434288608}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 904932487}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -2099,7 +2068,7 @@ GameObject:
   - component: {fileID: 904932486}
   - component: {fileID: 904932488}
   m_Layer: 0
-  m_Name: Tile Controller
+  m_Name: Map Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2130,7 +2099,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 681961519}
-  - {fileID: 434288609}
   - {fileID: 1532182760}
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -2148,22 +2116,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedTile: {fileID: 1532182759}
+  tilemap: {fileID: 681961521}
   grid: {fileID: 904932486}
-  map:
-    mapSize: {x: 0, y: 0}
-    enemyRoad:
-    - {x: -5.5, y: 5.5}
-    - {x: -5.5, y: 1.5}
-    - {x: 5.5, y: 1.5}
-    - {x: 5.5, y: 5.5}
-    - {x: 1.5, y: 5.5}
-    - {x: 1.5, y: -5.5}
-    - {x: 5.5, y: -5.5}
-    - {x: 5.5, y: -1.5}
-    - {x: -5.5, y: -1.5}
-    - {x: -5.5, y: -5.5}
-    - {x: -1.5, y: -5.5}
-    - {x: -1.5, y: 5.5}
 --- !u!1 &1410051428
 GameObject:
   m_ObjectHideFlags: 0
@@ -2238,7 +2192,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 904932487}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1532182761
 SpriteRenderer:

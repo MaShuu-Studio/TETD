@@ -16,39 +16,82 @@ public class Map
     }
 }
 
-[Serializable]
 public class TilemapInfo
 {
     public Vector3Int origin;
     public Vector3Int size;
-    public List<TileInfo> tiles;
+    public Dictionary<Vector3Int, TileInfo> tiles;
 
-    public TilemapInfo(Vector3Int origin, Vector3Int size, List<TileInfo> tiles)
+    public TilemapInfo(Vector3Int origin, Vector3Int size, Dictionary<Vector3Int, TileInfo> tiles)
     {
         this.origin = origin;
         this.size = size;
-        this.tiles = new List<TileInfo>(tiles);
+        this.tiles = new Dictionary<Vector3Int, TileInfo>(tiles);
     }
 
     public TilemapInfo(TilemapInfo info)
     {
         this.origin = info.origin;
         this.size = info.size;
-        this.tiles = new List<TileInfo>(info.tiles);
+        this.tiles = new Dictionary<Vector3Int, TileInfo>(info.tiles);
+    }
+
+    public TileBase GetTile(Vector3Int pos)
+    {
+        if (tiles.ContainsKey(pos) == false) return null;
+        return tiles[pos].tile;
     }
 }
 
 [Serializable]
 public struct TileInfo
 {
-    public Vector3Int pos;
     public TileBase tile;
     public bool buildable;
 
-    public TileInfo(Vector3Int pos, TileBase tile, bool b)
+    public TileInfo(TileBase tile, bool b)
     {
-        this.pos = pos;
         this.tile = tile;
         this.buildable = b;
+    }
+}
+
+// 실 사용할 데이터와 직렬화할 데이터를 구분
+[Serializable]
+public class TilemapInfoJson : ISerializationCallbackReceiver
+{
+    public Vector3Int origin;
+    public Vector3Int size;
+    public List<Vector3Int> tileKeys = new List<Vector3Int>();
+    public List<TileInfo> tileValues = new List<TileInfo>();
+    public Dictionary<Vector3Int, TileInfo> tiles;
+
+    public TilemapInfoJson(TilemapInfo info)
+    {
+        this.origin = info.origin;
+        this.size = info.size;
+        this.tiles = info.tiles;
+    }
+
+    public void OnBeforeSerialize()
+    {
+        tileKeys.Clear();
+        tileValues.Clear();
+
+        foreach (var kvp in tiles)
+        {
+            tileKeys.Add(kvp.Key);
+            tileValues.Add(kvp.Value);
+        }
+    }
+
+    public void OnAfterDeserialize()
+    {
+        tiles = new Dictionary<Vector3Int, TileInfo>();
+
+        for (int i = 0; i < tileKeys.Count && i < tileValues.Count; i++)
+        {
+            tiles.Add(tileKeys[i], tileValues[i]);
+        }
     }
 }

@@ -59,15 +59,20 @@ public class MapMakerEditor : Editor
             route = null;
             targetComponent.ClearInfo();
         }
-        if (find) route = targetComponent.FindRoute();
+        if (find)
+        {
+            TilemapInfo info = targetComponent.MakeMap();
+            route = MapUtil.FindRoute(info);
+            targetComponent.FindRoute(info);
+        }
 
         if (generate)
         {
-            TilemapInfo info = targetComponent.MakeMap(mapName);
-            route = targetComponent.FindRoute();
-            if (string.IsNullOrEmpty(mapName) == false && info != null)
+            if (string.IsNullOrEmpty(mapName) == false)
             {
-                DataManager.SerializeJson<TilemapInfo>(MapMaker.Path, mapName, info);
+                TilemapInfo info = targetComponent.MakeMap();
+                route = MapUtil.FindRoute(info);
+                MapUtil.SaveMap(mapName, info);
             }
             else if (string.IsNullOrEmpty(mapName)) Debug.Log("[SYSTEM] Input map name");
         }
@@ -76,9 +81,9 @@ public class MapMakerEditor : Editor
         {
             if (string.IsNullOrEmpty(mapName) == false)
             {
-                TilemapInfo info = DataManager.DeserializeJson<TilemapInfo>(MapMaker.Path, mapName);
-                targetComponent.LoadMap(info);
-                route = targetComponent.FindRoute();
+                Map map = MapUtil.LoadMap(mapName);
+                route = MapUtil.FindRoute(map.tilemap);
+                targetComponent.LoadMap(map.tilemap);
             }
             else Debug.Log("[SYSTEM] Input map name");
         }

@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\Map\Map.cs" />
     <Compile Include="Assets\Scripts\Resource\PoolController.cs" />
     <Compile Include="Assets\Scripts\Map\MapMaker.cs" />
+    <Compile Include="Assets\Scripts\Map\MapUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
