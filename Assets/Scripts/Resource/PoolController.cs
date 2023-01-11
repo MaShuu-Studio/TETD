@@ -23,10 +23,14 @@ public class PoolController : MonoBehaviour
 
     Dictionary<string, Pool> pool;
 
+    private void Start()
+    {
+        Init();
+    }
     public void Init()
     {
         pool = new Dictionary<string, Pool>();
-        List<Poolable> list = ResourceManager.GetResources<Poolable>("");
+        List<Poolable> list = ResourceManager.GetResources<Poolable>("Prefab");
         for (int i = 0; i < list.Count; i++)
         {
             string objName = list[i].gameObject.name;

@@ -17,10 +17,8 @@ public class Initializer : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+
+        TileManager.Init();
     }
 
-    private void Start()
-    {
-        PoolController.Instance.Init();
-    }
 }

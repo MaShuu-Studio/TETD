@@ -81,8 +81,9 @@ public class MapController : MonoBehaviour
 
         foreach (var pos in map.tilemap.tiles.Keys)
         {
-            TileInfo tile = map.tilemap.tiles[pos];
-            tilemap.SetTile(pos, tile.tile);
+            TileInfo tileInfo = map.tilemap.tiles[pos];
+            TileBase tile = TileManager.GetTile(tileInfo.name);
+            tilemap.SetTile(pos, tile);
         }
     }
 }

@@ -89,7 +89,7 @@ public class MapMaker : MonoBehaviour
                 {
                     string tn = tile.name.ToUpper();
                     bool b = (tn != "ROAD" && tn != "START" && tn != "DEST");
-                    mapInfo.Add(pos, new TileInfo(tile, b));
+                    mapInfo.Add(pos, new TileInfo(tile.name, b));
                 }
             }
         }
@@ -113,8 +113,9 @@ public class MapMaker : MonoBehaviour
 
         foreach (var pos in tilemapInfo.tiles.Keys)
         {
-            TileInfo tile = tilemapInfo.tiles[pos];
-            mapTilemap.SetTile(pos, tile.tile);
+            TileInfo tileInfo = tilemapInfo.tiles[pos];
+            TileBase tile = TileManager.GetTile(tileInfo.name);
+            mapTilemap.SetTile(pos, tile);
         }
         FindRoute(tilemapInfo);
     }

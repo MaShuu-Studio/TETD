@@ -39,7 +39,7 @@ public class TilemapInfo
     public TileBase GetTile(Vector3Int pos)
     {
         if (tiles.ContainsKey(pos) == false) return null;
-        return tiles[pos].tile;
+        return TileManager.GetTile(tiles[pos].name);
     }
 
     public bool Buildable(Vector3Int pos)
@@ -52,12 +52,12 @@ public class TilemapInfo
 [Serializable]
 public struct TileInfo
 {
-    public TileBase tile;
+    public string name;
     public bool buildable;
 
-    public TileInfo(TileBase tile, bool b)
+    public TileInfo(string name, bool b)
     {
-        this.tile = tile;
+        this.name = name;
         this.buildable = b;
     }
 }
