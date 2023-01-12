@@ -16,7 +16,6 @@ public class GameController : MonoBehaviour
         instance = this;
     }
 
-    // 테스트용 임시 변수
     private Camera cam;
 
     private void Start()
@@ -38,49 +37,33 @@ public class GameController : MonoBehaviour
         if (readyToBuild)
         {
             buildable = MapController.Instance.SelectTile(worldPos);
-            if (click && buildable)
-                TowerController.Instance.BuildTower(id, pos);
+            if (click && buildable && TowerController.Instance.BuildTower(id, pos))
+            {
+                readyToBuild = false;
+                id = 0;
+            }
         }
-        else MapController.Instance.OffSeletedTile();
+
+        if (click && TowerController.Instance.SelectTower(pos))
+        {
+            MapController.Instance.OffSeletedTile();
+            readyToBuild = false;
+            id = 0;
+        }
 
         if (rclick)
             TowerController.Instance.RemoveTower(pos);
-
     }
 
-    private string selectedTower;
+    // 임시 함수 해당 부분이 어디로 가야할지는 고민을 해야할 듯
+    // 1. TowerController, 2. PlayerController, 3. GameController
+
     private bool readyToBuild;
     private int id;
 
-    private void OnGUI()
+    public void ReadyToBuild(int id)
     {
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 30;
-        bool firstTower = GUI.Button(new Rect(0, 0, 100, 50), TowerManager.Keys[0].ToString(), style);
-        bool secondTower = GUI.Button(new Rect(0, 60, 100, 50), TowerManager.Keys[1].ToString(), style);
-        bool notSelect = GUI.Button(new Rect(0, 120, 100, 50), "NOT SELECT", style);
-        if (firstTower)
-        {
-            readyToBuild = true;
-            id = TowerManager.Keys[0];
-        }
-        if (secondTower)
-        {
-            readyToBuild = true;
-            id = TowerManager.Keys[1];
-        }
-        if (notSelect) readyToBuild = false;
-
-        if (readyToBuild)
-        {
-            selectedTower = id.ToString();
-        }
-        else
-        {
-            selectedTower = "NONE";
-        }
-
-        GUI.Label(new Rect(120, 0, 100, 50), selectedTower, style);
-
+        this.id = id;
+        readyToBuild = true;
     }
 }

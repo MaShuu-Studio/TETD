@@ -18,6 +18,8 @@ public class Initializer : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
+        SpriteManager.Init();
+
         TileManager.Init();
         EnemyManager.Init();
         TowerManager.Init();

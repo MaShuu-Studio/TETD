@@ -40,5 +40,17 @@ namespace Data
 
             return obj.list;
         }
+
+        public static Sprite LoadSprite(string path, Vector2 pivot, float pixelsPerUnit)
+        {
+            byte[] imageBytes = File.ReadAllBytes(path);
+            Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            if (texture.LoadImage(imageBytes) == false) return null;
+
+            texture.filterMode = FilterMode.Point;
+
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), pivot, pixelsPerUnit);
+            return sprite;
+        }
     }
 }

@@ -8,7 +8,6 @@ public class MapMaker : MonoBehaviour
 {
     private Grid grid;
 
-    [SerializeField] private Vector2Int size;
     [SerializeField] private Tilemap mapTilemap;
     [SerializeField] private Tilemap buildableTilemap;
     [SerializeField] private Tilemap routeTilemap;
@@ -64,7 +63,7 @@ public class MapMaker : MonoBehaviour
                 if (tile != null)
                 {
                     string tn = tile.name.ToUpper();
-                    bool b = (tn != "ROAD" && tn != "START" && tn != "DEST");
+                    bool b = (tn != "WALL" && tn != "ROAD" && tn != "START" && tn != "DEST");
                     buildableTilemap.SetTile(pos, (b) ? buildableTile : notBuildableTile);
                 }
             }
@@ -73,9 +72,6 @@ public class MapMaker : MonoBehaviour
 
     public TilemapInfo MakeMap()
     {
-        mapTilemap.origin = buildableTilemap.origin = routeTilemap.origin = new Vector3Int(size.x / -2, size.y / -2);
-        mapTilemap.size = buildableTilemap.size = routeTilemap.size = new Vector3Int(size.x, size.y, 1);
-
         UpdateMap();
 
         Dictionary<Vector3Int, TileInfo> mapInfo = new Dictionary<Vector3Int, TileInfo>();
@@ -88,7 +84,7 @@ public class MapMaker : MonoBehaviour
                 if (tile != null)
                 {
                     string tn = tile.name.ToUpper();
-                    bool b = (tn != "ROAD" && tn != "START" && tn != "DEST");
+                    bool b = (tn != "WALL" && tn != "ROAD" && tn != "START" && tn != "DEST");
                     mapInfo.Add(pos, new TileInfo(tile.name, b));
                 }
             }
@@ -98,7 +94,9 @@ public class MapMaker : MonoBehaviour
 
         if (FindRoute(tilemap) == false)
         {
+#if UNITY_EDITOR
             Debug.Log("[SYSTEM] CAN NOT MAKE MAP");
+#endif
             return null;
         }
         return tilemap;

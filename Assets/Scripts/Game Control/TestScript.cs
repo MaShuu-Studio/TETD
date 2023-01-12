@@ -36,7 +36,7 @@ public class TestScript : MonoBehaviour
             int rand = Random.Range(0, EnemyManager.Keys.Count);
             int id = EnemyManager.Keys[rand];
             EnemyController.Instance.AddEnemy(id);
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(1f);
         }
     }
 }

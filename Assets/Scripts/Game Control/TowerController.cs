@@ -17,18 +17,19 @@ public class TowerController : MonoBehaviour
     }
 
     private Dictionary<Vector3, TowerObject> towers = new Dictionary<Vector3, TowerObject>();
+    private TowerObject selectedTower = null;
 
     public bool ContainsTower(Vector3 pos)
     {
         return towers.ContainsKey(pos);
     }
 
-    public void BuildTower(int id, Vector3 pos)
+    public bool BuildTower(int id, Vector3 pos)
     {
-        if (ContainsTower(pos)) return;
+        if (ContainsTower(pos)) return false;
 
         Tower tower = TowerManager.GetTower(id);
-        if (tower == null) return;
+        if (tower == null) return false;
 
         GameObject obj = PoolController.Pop(tower.name);
         obj.transform.position = pos;
@@ -38,6 +39,25 @@ public class TowerController : MonoBehaviour
         towerObj.Init(tower, pos);
 
         towers.Add(pos, towerObj);
+
+        return true;
+    }
+
+    public bool SelectTower(Vector3 pos)
+    {
+        if (selectedTower != null)
+        {
+            selectedTower.SelectTower(false);
+            selectedTower = null;
+        }
+
+        if (ContainsTower(pos) == false) return false;
+
+        TowerObject towerObj = towers[pos];
+        towerObj.SelectTower(true);
+        selectedTower = towerObj;
+
+        return true;
     }
 
     public void RemoveTower(Vector3 pos)
