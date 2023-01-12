@@ -34,7 +34,7 @@ public class GameController : MonoBehaviour
 
         Vector3 mousePos = Input.mousePosition;
         Vector3 worldPos = cam.ScreenToWorldPoint(mousePos);
-        Vector3 pos = MapController.Instance.GetTilePos(worldPos);
+        Vector3 pos = MapController.Instance.GetMapPos(worldPos);
 
         if (TowerController.Instance.ReadyToBuild)
         {

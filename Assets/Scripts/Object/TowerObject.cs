@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class TowerObject : MonoBehaviour
 {
-    private SpriteRenderer renderer;
+    private SpriteRenderer spriteRenderer;
     private void Awake()
     {
-        renderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sortingLayerName = "Character";
     }
     public void Arrange(Vector3 pos)
     {
         int sorting = Mathf.FloorToInt(pos.y) * -1;
-        renderer.sortingOrder = sorting;
+        spriteRenderer.sortingOrder = sorting;
     }
 }

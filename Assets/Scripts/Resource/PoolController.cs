@@ -23,10 +23,6 @@ public class PoolController : MonoBehaviour
 
     Dictionary<string, Pool> pool;
 
-    private void Start()
-    {
-        Init();
-    }
     public void Init()
     {
         pool = new Dictionary<string, Pool>();
@@ -43,22 +39,22 @@ public class PoolController : MonoBehaviour
         }
     }
 
-    public void Push(string name, GameObject obj)
+    public static void Push(string name, GameObject obj)
     {
         name = name.ToUpper();
 
-        if (pool.ContainsKey(name) == false) return;
+        if (Instance.pool.ContainsKey(name) == false) return;
 
-        pool[name].Push(obj);
+        Instance.pool[name].Push(obj);
     }
 
-    public GameObject Pop(string name)
+    public static GameObject Pop(string name)
     {
         name = name.ToUpper();
 
-        if (pool.ContainsKey(name) == false) return null;
+        if (Instance.pool.ContainsKey(name) == false) return null;
 
-        GameObject obj = pool[name].Pop();
+        GameObject obj = Instance.pool[name].Pop();
         return obj;
     }
     /*

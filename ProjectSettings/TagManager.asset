@@ -44,6 +44,9 @@ TagManager:
   - name: Map
     uniqueID: 303950905
     locked: 0
+  - name: Enemy
+    uniqueID: 274106759
+    locked: 0
   - name: Character
     uniqueID: 3507813793
     locked: 0

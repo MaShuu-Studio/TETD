@@ -29,11 +29,11 @@ public class TowerController : MonoBehaviour
         if (ContainsTower(pos)) return;
 
         selectedTower = towerDatas[index];
-        GameObject obj = PoolController.Instance.Pop(selectedTower);
+        GameObject obj = PoolController.Pop(selectedTower);
         obj.transform.position = pos;
         obj.transform.SetParent(transform);
 
-        TowerObject tower = obj.AddComponent<TowerObject>();
+        TowerObject tower = obj.GetComponent<TowerObject>();
         tower.Arrange(pos);
 
         towers.Add(pos, tower);
@@ -45,12 +45,12 @@ public class TowerController : MonoBehaviour
 
         GameObject obj = towers[pos].gameObject;
         Destroy(towers[pos]);
-        PoolController.Instance.Push(obj.name, obj);
+        PoolController.Push(obj.name, obj);
         towers.Remove(pos);
     }
 
     // 테스트용
-    private string[] towerDatas = { "TEST1", "TEST2" }; // 실제 타워 목록
+    private string[] towerDatas = { "TOWER-TEST1", "TOWER-TEST2" }; // 실제 타워 목록
     private string selectedTower;
     private int index = 0;
 

@@ -21,13 +21,17 @@ public class MapController : MonoBehaviour
     [SerializeField] private SpriteRenderer selectedTile;
     [SerializeField] private Tilemap tilemap;
     public Grid grid;
-    public Map map;
+    private Map map;
 
     private void Start()
     {
         transform.position = Vector3.zero;
         OffSeletedTile();
-        LoadMap(MapUtil.LoadMap("RTD"));
+    }
+
+    public Map GetMap()
+    {
+        return map;
     }
 
     public void OffSeletedTile()
@@ -41,7 +45,7 @@ public class MapController : MonoBehaviour
 
         // 굳이 WorldPos를 GetTilePos를 한번 더 거쳐주는 이유는 작업의 실수를 최소화 하기 위함임.
         // 실제 위치와 타일의 위치가 약간 다름.
-        Vector3 pos = GetTilePos(worldPos);
+        Vector3 pos = GetMapPos(worldPos);
         Vector3Int tilePos = new Vector3Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y));
 
         bool buildable = (map != null && map.tilemap.Buildable(tilePos));
@@ -57,7 +61,7 @@ public class MapController : MonoBehaviour
         return buildable;
     }
 
-    public Vector3 GetTilePos(Vector3 pos)
+    public Vector3 GetMapPos(Vector3 pos)
     {
         /* 타일은 grid.cellSize만큼 나누어져 있음
          * 따라서 worldPos에서 내림을 통해 사각형의 왼쪽 아래 꼭지점을 얻음.

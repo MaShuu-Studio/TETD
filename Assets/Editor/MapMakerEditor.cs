@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using Data;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(MapMaker))]
 public class MapMakerEditor : Editor
 {
@@ -103,3 +104,4 @@ public class MapMakerEditor : Editor
         }
     }
 }
+#endif

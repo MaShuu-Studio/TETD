@@ -20,5 +20,4 @@ public class Initializer : MonoBehaviour
 
         TileManager.Init();
     }
-
 }
