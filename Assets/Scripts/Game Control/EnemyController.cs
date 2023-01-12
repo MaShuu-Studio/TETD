@@ -33,13 +33,18 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void AddEnemy(EnemyObject enemy)
+    public void AddEnemy(int id)
     {
+        Enemy enemy = EnemyManager.GetEnemy(id);
+        if (enemy == null) return;
         if (enemies == null) return;
 
-        enemies.Add(enemy);
-        enemy.Init(road, -1 * enemyOrder++);
-        enemy.transform.SetParent(transform);
+        GameObject go = PoolController.Pop(enemy.name);
+        EnemyObject enemyObj = go.GetComponent<EnemyObject>();
+
+        enemies.Add(enemyObj);
+        enemyObj.Init(enemy, road, -1 * enemyOrder++);
+        enemyObj.transform.SetParent(transform);
     }
 
     public void RemoveEnemy(EnemyObject enemy)

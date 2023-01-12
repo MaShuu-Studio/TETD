@@ -6,6 +6,9 @@ using UnityEngine;
 public class EnemyObject : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
+
+    private Enemy data;
+
     private List<Vector3> road;
     private float speed;
     private int destRoad;
@@ -16,11 +19,13 @@ public class EnemyObject : MonoBehaviour
         spriteRenderer.sortingLayerName = "Enemy";
     }
 
-    public void Init(List<Vector3> road, int order)
+    public void Init(Enemy data, List<Vector3> road, int order)
     {
+        this.data = data;
         this.road = road;
 
-        speed = 5;
+        speed = data.speed;
+
         transform.position = road[0];
         destRoad = 1;
 

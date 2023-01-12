@@ -26,16 +26,16 @@ public class TestScript : MonoBehaviour
         MapController.Instance.LoadMap(MapUtil.LoadMap("RTD"));
         EnemyController.Instance.Init(MapController.Instance.GetMap());
 
-        StartCoroutine(MobSpawn("ENEMY-TEST"));
+        StartCoroutine(MobSpawn());
     }
 
-    IEnumerator MobSpawn(string name)
+    IEnumerator MobSpawn()
     {
         while(true)
         {
-            GameObject go = PoolController.Pop(name);
-            EnemyObject enemy = go.GetComponent<EnemyObject>();
-            EnemyController.Instance.AddEnemy(enemy);
+            int rand = Random.Range(0, EnemyManager.Keys.Count);
+            int id = EnemyManager.Keys[rand];
+            EnemyController.Instance.AddEnemy(id);
             yield return new WaitForSeconds(0.1f);
         }
     }

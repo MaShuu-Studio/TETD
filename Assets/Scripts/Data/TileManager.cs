@@ -15,6 +15,10 @@ public static class TileManager
         {
             tiles.Add(tile.name.ToUpper(), tile);
         }
+
+#if UNITY_EDITOR
+        Debug.Log($"[SYSTEM] LOAD TILE {tiles.Count}");
+#endif
     }
 
     public static TileBase GetTile(string name)

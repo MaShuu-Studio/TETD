@@ -6,7 +6,7 @@ using Data;
 
 public static class MapUtil
 {
-    private static string path = Application.streamingAssetsPath + "/Map/";
+    private static string path = Application.streamingAssetsPath + "/Data/Map/";
 
     public static List<Vector3Int> FindRoute(TilemapInfo tilemap)
     {

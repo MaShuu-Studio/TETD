@@ -1,0 +1,126 @@
+﻿using System;
+using System.IO;
+using System.Runtime.InteropServices;
+using Excel = Microsoft.Office.Interop.Excel;
+
+namespace Excel_To_Json
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string path = Path.Combine(Environment.CurrentDirectory, "Data.xlsx");
+
+            Excel.Application app = new Excel.Application();
+            Excel.Workbook workBook = app.Workbooks.Open(path);
+
+            try
+            {
+
+                foreach (Excel.Worksheet sheet in workBook.Worksheets)
+                {
+                    string name = sheet.Name;
+                    string filename = name + ".json";
+                    string contents = "";
+                    Excel.Range range = sheet.UsedRange;
+
+                    Console.WriteLine($"Start Parsing {name.ToUpper()}");
+                    contents = string.Format(JsonFormat.jsonFormat, ParseBasicData(name, range));
+                    File.WriteAllText(Path.Combine(Environment.CurrentDirectory, filename), contents);
+                }
+
+                workBook.Close(true);
+                app.Quit();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                ReleaseObject(app);
+                ReleaseObject(workBook);
+            }
+
+        }
+        private static string ParseBasicData(string dataName, Excel.Range range)
+        {
+            string contents = "";
+            int count = 1;
+
+            // 하나의 row는 하나의 데이터를 나타내고 있음.
+            for (int row = 2; row <= range.Rows.Count; row++)
+            {
+                string datas = "";
+
+                for (int column = 1; column <= range.Columns.Count; column++)
+                {
+                    object o = (range.Cells[row, column] as Excel.Range).Value2;
+                    string type = (range.Cells[1, column] as Excel.Range).Value2;
+                    string tmp = ParseValue(type.ToLower(), o);
+                    if (tmp != null)
+                    {
+                        datas += tmp + ",\n";
+                    }
+                }
+                if (datas != "")
+                {
+                    datas = datas.Remove(datas.Length - 2);
+                    if (contents != "") contents += ",\n";
+                    contents += string.Format(JsonFormat.contentsFormat, datas);
+                }
+                Console.WriteLine($"Progress {dataName.ToUpper()} {count++}");
+            }
+            return contents;
+        }
+        private static string ParseValue(string type, object value)
+        {
+            if (value == null) return null;
+
+            string s = value.ToString();
+            int i;
+            float f;
+            bool b;
+            // 타입에 대한 체크
+            if (int.TryParse(s, out i))
+            {
+                s = i.ToString();
+            }
+            else if (float.TryParse(s, out f))
+            {
+                s = f.ToString();
+            }
+            // bool
+            else if (bool.TryParse(s, out b))
+            {
+                s = b.ToString().ToLower();
+            }
+            // string
+            else
+            {
+                s = "\"" + s + "\"";
+            }
+            return string.Format(JsonFormat.valueFormat, type, s);
+        }
+        private static void ReleaseObject(object obj)
+        {
+            try
+            {
+                if (obj != null)
+                {
+                    Marshal.ReleaseComObject(obj);  // 액셀 객체 해제
+                    obj = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                obj = null;
+                throw ex;
+            }
+            finally
+            {
+                GC.Collect();   // 가비지 수집
+            }
+        }
+    }
+}

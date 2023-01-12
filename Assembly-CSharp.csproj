@@ -72,8 +72,10 @@
     <Compile Include="Assets\Scripts\Map\MapMaker.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
     <Compile Include="Assets\Scripts\Game Control\EnemyController.cs" />
-    <Compile Include="Assets\Scripts\Game Control\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Game Control\TestScript.cs" />
+    <Compile Include="Assets\Scripts\Data\TowerManager.cs" />
+    <Compile Include="Assets\Scripts\Data\EnemyManager.cs" />
+    <Compile Include="Assets\Scripts\Data\ObjectData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

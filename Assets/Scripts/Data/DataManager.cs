@@ -6,6 +6,11 @@ using UnityEngine;
 
 namespace Data
 {
+    public class SerializableList<T>
+    {
+        public List<T> list;
+    }
+
     public static class DataManager
     {
         public static void SerializeJson<T>(string path, string fileName, T obj)
@@ -24,6 +29,16 @@ namespace Data
             T obj = JsonUtility.FromJson<T>(json);
 
             return obj;
+        }
+
+        public static List<T> DeserializeListJson<T>(string path, string fileName)
+        {
+            fileName += ".json";
+            string json = File.ReadAllText(path + fileName);
+
+            SerializableList<T> obj = JsonUtility.FromJson<SerializableList<T>>(json);
+
+            return obj.list;
         }
     }
 }
