@@ -23,5 +23,15 @@ public class Initializer : MonoBehaviour
         TileManager.Init();
         EnemyManager.Init();
         TowerManager.Init();
+
+        RoundManager.Init();
+    }
+
+    private void Start()
+    {
+        PoolController.Instance.Init();
+        MapController.Instance.LoadMap(MapUtil.LoadMap("RTD"));
+        EnemyController.Instance.Init(MapController.Instance.GetMap());
+        RoundController.Instance.Init(MapController.Instance.GetMap().name);
     }
 }

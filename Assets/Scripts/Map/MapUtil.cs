@@ -123,6 +123,6 @@ public static class MapUtil
         List<Vector3Int> road = FindRoute(info);
         if (road == null) return null;
 
-        return new Map(info, road);
+        return new Map(mapName, info, road);
     }
 }

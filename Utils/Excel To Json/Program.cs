@@ -16,7 +16,6 @@ namespace Excel_To_Json
 
             try
             {
-
                 foreach (Excel.Worksheet sheet in workBook.Worksheets)
                 {
                     string name = sheet.Name;
@@ -42,7 +41,44 @@ namespace Excel_To_Json
                 ReleaseObject(workBook);
             }
 
+            path = Path.Combine(Environment.CurrentDirectory, "Round.xlsx");
+
+            app = new Excel.Application();
+            workBook = app.Workbooks.Open(path);
+
+            try
+            {
+                string filename = "Round.json";
+                string contents = "";
+                for (int i = 1; i <= workBook.Worksheets.Count; i++)
+                {
+                    Excel.Worksheet sheet = workBook.Worksheets[i];
+
+                    string name = sheet.Name;
+                    Excel.Range range = sheet.UsedRange;
+
+                    Console.WriteLine($"Start Parsing {name.ToUpper()}");
+                    contents += string.Format(JsonFormat.contentsFormat, ParseRoundData(name, range));
+
+                    if (i < workBook.Worksheets.Count) contents += ",\n";
+                }
+                contents = string.Format(JsonFormat.jsonFormat, contents);
+                File.WriteAllText(Path.Combine(Environment.CurrentDirectory, filename), contents);
+                workBook.Close(true);
+                app.Quit();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                ReleaseObject(app);
+                ReleaseObject(workBook);
+            }
         }
+
+
         private static string ParseBasicData(string dataName, Excel.Range range)
         {
             string contents = "";
@@ -71,6 +107,31 @@ namespace Excel_To_Json
                 }
                 Console.WriteLine($"Progress {dataName.ToUpper()} {count++}");
             }
+            return contents;
+        }
+
+        private static string ParseRoundData(string mapName, Excel.Range range)
+        {
+            string contents = "";
+            string datas = "";
+            contents = ParseValue("mapName", mapName) + ",";
+            for (int row = 2; row <= range.Rows.Count; row++)
+            {
+                // column 1: units
+                // column 2: amounts
+                string data = "";
+
+                for (int column = 1; column <= 2; column++)
+                {
+                    string type = (range.Cells[1, column] as Excel.Range).Value2;
+                    object o = (range.Cells[row, column] as Excel.Range).Value2;
+                    data += string.Format(JsonFormat.listFormat, type, o.ToString());
+                    if (column < 2) data += ",";
+                }
+                datas += string.Format(JsonFormat.contentsFormat, data);
+                if (row < range.Rows.Count) datas += ",\n";
+            }
+            contents += string.Format(JsonFormat.listFormat, "data", datas);
             return contents;
         }
         private static string ParseValue(string type, object value)
@@ -116,6 +177,7 @@ namespace Excel_To_Json
             if (xb && yb) return true;
             return false;
         }
+
         private static void ReleaseObject(object obj)
         {
             try

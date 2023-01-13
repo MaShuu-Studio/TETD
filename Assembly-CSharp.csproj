@@ -60,6 +60,7 @@
     <Compile Include="Assets\Scripts\Object\TowerObject.cs" />
     <Compile Include="Assets\Scripts\UI\ScriptableButton.cs" />
     <Compile Include="Assets\Scripts\Data\DataManager.cs" />
+    <Compile Include="Assets\Scripts\Data\Round.cs" />
     <Compile Include="Assets\Scripts\Map\MapUtil.cs" />
     <Compile Include="Assets\Scripts\Data\TowerManager.cs" />
     <Compile Include="Assets\Scripts\Data\SpriteManager.cs" />
@@ -70,12 +71,13 @@
     <Compile Include="Assets\Scripts\Object\TowerAttackArea.cs" />
     <Compile Include="Assets\Scripts\Data\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Data\ObjectData.cs" />
-    <Compile Include="Assets\Scripts\Game Control\TestScript.cs" />
     <Compile Include="Assets\Scripts\UI\BuildTowerButton.cs" />
     <Compile Include="Assets\Scripts\Map\MapController.cs" />
+    <Compile Include="Assets\Scripts\Game Control\RoundController.cs" />
     <Compile Include="Assets\Scripts\Game Control\Initializer.cs" />
     <Compile Include="Assets\Scripts\Map\Map.cs" />
     <Compile Include="Assets\Scripts\Game Control\GameController.cs" />
+    <Compile Include="Assets\Scripts\Data\RoundManager.cs" />
     <Compile Include="Assets\Scripts\Game Control\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Resource\PoolController.cs" />
     <Compile Include="Assets\Scripts\Map\MapMaker.cs" />

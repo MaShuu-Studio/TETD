@@ -6,11 +6,13 @@ using System;
 
 public class Map
 {
+    public string name;
     public TilemapInfo tilemap;
     public List<Vector3Int> enemyRoad;
 
-    public Map(TilemapInfo info, List<Vector3Int> road)
+    public Map(string name, TilemapInfo info, List<Vector3Int> road)
     {
+        this.name = name;
         tilemap = new TilemapInfo(info);
         enemyRoad = new List<Vector3Int>(road);
     }
