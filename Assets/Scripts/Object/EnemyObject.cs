@@ -10,6 +10,7 @@ public class EnemyObject : MonoBehaviour
     private Enemy data;
 
     private List<Vector3> road;
+    private float hp;
     private float speed;
     private int destRoad;
 
@@ -17,6 +18,8 @@ public class EnemyObject : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sortingLayerName = "Enemy";
+
+        tag = "Enemy";
     }
 
     public void Init(Enemy data, List<Vector3> road, int order)
@@ -24,6 +27,7 @@ public class EnemyObject : MonoBehaviour
         this.data = data;
         this.road = road;
 
+        hp = data.hp;
         speed = data.speed;
 
         transform.position = road[0];
@@ -54,6 +58,20 @@ public class EnemyObject : MonoBehaviour
             destRoad++;
         }
         ArriveDest();
+    }
+
+    public void Damaged(float dmg)
+    {
+#if UNITY_EDITOR
+        Debug.Log($"[SYSTEM] {name} Damaged {dmg} | HP: {hp}");
+#endif
+        hp -= dmg;
+
+        if (hp <= 0)
+        {
+            TowerController.Instance.RemoveEnemyObject(this);
+            EnemyController.Instance.RemoveEnemy(this);
+        }
     }
 
     private void ArriveDest()

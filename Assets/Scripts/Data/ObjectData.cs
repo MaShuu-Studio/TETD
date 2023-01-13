@@ -15,6 +15,7 @@ public class Tower : ObjectData
 
     public float range;
     public float dmg;
+    public float attackspeed;
 
     public Tower(TowerData data)
     {
@@ -24,6 +25,18 @@ public class Tower : ObjectData
         cost = data.cost;
         range = data.range;
         dmg = data.dmg;
+        attackspeed = data.attackspeed;
+    }
+
+    public Tower(Tower data)
+    {
+        id = data.id;
+        name = data.name;
+
+        cost = data.cost;
+        range = data.range;
+        dmg = data.dmg;
+        attackspeed = data.attackspeed;
     }
 }
 
@@ -37,6 +50,15 @@ public class Enemy : ObjectData
     {
         id = data.id;
         name = "ENEMY-" + data.name.ToUpper();
+
+        hp = data.hp;
+        speed = data.speed;
+        dmg = data.dmg;
+    }
+    public Enemy(Enemy data)
+    {
+        id = data.id;
+        name = data.name;
 
         hp = data.hp;
         speed = data.speed;
@@ -61,6 +83,7 @@ public class TowerData : JsonData
 
     public float range;
     public float dmg;
+    public float attackspeed;
 }
 
 [Serializable]

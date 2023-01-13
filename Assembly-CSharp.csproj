@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\Resource\Poolable.cs" />
     <Compile Include="Assets\Scripts\Resource\Pool.cs" />
     <Compile Include="Assets\Scripts\Resource\ResourceManager.cs" />
+    <Compile Include="Assets\Scripts\Object\TowerAttackArea.cs" />
     <Compile Include="Assets\Scripts\Data\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Data\ObjectData.cs" />
     <Compile Include="Assets\Scripts\Game Control\TestScript.cs" />

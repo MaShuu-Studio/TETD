@@ -64,8 +64,19 @@ public class TowerController : MonoBehaviour
     {
         if (ContainsTower(pos) == false) return;
 
+        TowerObject tower = towers[pos];
         GameObject obj = towers[pos].gameObject;
         PoolController.Push(obj.name, obj);
         towers.Remove(pos);
+
+        tower.RemoveTower();
+    }
+
+    public void RemoveEnemyObject(EnemyObject enemy)
+    {
+        foreach(var tower in towers.Values)
+        {
+            tower.RemoveEnemy(enemy);
+        }
     }
 }

@@ -9,6 +9,7 @@
 "cost": 3,
 "dmg": 1,
 "range": 2.5,
+"attackspeed": 3,
 "imgsrc": "/Tower/1001.png",
 "pivot": { "x": 0.5, "y": 0.5 },
 "pixelperunit": 24
@@ -18,8 +19,9 @@
     "id": 1002,
 "name": "TEST2",
 "cost": 3,
-"dmg": 1,
+"dmg": 2,
 "range": 3,
+"attackspeed": 2,
 "imgsrc": "/Tower/1002.png",
 "pivot": { "x": 0.5, "y": 0.5 },
 "pixelperunit": 24
