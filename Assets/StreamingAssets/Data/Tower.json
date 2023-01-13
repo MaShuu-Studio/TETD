@@ -4,19 +4,25 @@
     [
         
 {
-    "id": 2001,
+    "id": 1001,
 "name": "TEST1",
 "cost": 3,
 "dmg": 1,
-"range": 2
+"range": 2.5,
+"imgsrc": "/Tower/1001.png",
+"pivot": { "x": 0.5, "y": 0.5 },
+"pixelperunit": 24
 },
 
 {
-    "id": 2002,
+    "id": 1002,
 "name": "TEST2",
 "cost": 3,
 "dmg": 1,
-"range": 3
+"range": 3,
+"imgsrc": "/Tower/1002.png",
+"pivot": { "x": 0.5, "y": 0.5 },
+"pixelperunit": 24
 }
     ]
 }

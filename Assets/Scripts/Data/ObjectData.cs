@@ -44,12 +44,19 @@ public class Enemy : ObjectData
     }
 }
 
-[Serializable]
-public class TowerData
+public abstract class JsonData
 {
     public int id;
     public string name;
 
+    public string imgsrc;
+    public Vector2 pivot;
+    public float pixelperunit;
+}
+
+[Serializable]
+public class TowerData : JsonData
+{
     public int cost;
 
     public float range;
@@ -57,11 +64,8 @@ public class TowerData
 }
 
 [Serializable]
-public class EnemyData
+public class EnemyData : JsonData
 {
-    public int id;
-    public string name;
-
     public float hp;
     public float speed;
     public float dmg;

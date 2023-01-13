@@ -79,7 +79,7 @@ namespace Excel_To_Json
 
             string s = value.ToString();
             int i;
-            float f;
+            float f, x, y;
             bool b;
             // 타입에 대한 체크
             if (int.TryParse(s, out i))
@@ -95,12 +95,26 @@ namespace Excel_To_Json
             {
                 s = b.ToString().ToLower();
             }
+            // vector2
+            else if (TryParseVector2(s, out x, out y))
+            {
+                s = string.Format(JsonFormat.vector2Format, x, y);
+            }
             // string
             else
             {
                 s = "\"" + s + "\"";
             }
             return string.Format(JsonFormat.valueFormat, type, s);
+        }
+        private static bool TryParseVector2(string s, out float x, out float y)
+        {
+            string[] xy = s.Split(",");
+            bool xb = float.TryParse(xy[0], out x);
+            bool yb = float.TryParse(xy[0], out y);
+
+            if (xb && yb) return true;
+            return false;
         }
         private static void ReleaseObject(object obj)
         {

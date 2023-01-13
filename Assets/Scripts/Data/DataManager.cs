@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,6 +42,8 @@ namespace Data
 
         public static Sprite LoadSprite(string path, Vector2 pivot, float pixelsPerUnit)
         {
+            path = Application.streamingAssetsPath + "/Sprites" + path;
+
             byte[] imageBytes = File.ReadAllBytes(path);
             Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
             if (texture.LoadImage(imageBytes) == false) return null;

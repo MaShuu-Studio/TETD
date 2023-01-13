@@ -5,8 +5,6 @@ using Data;
 
 public static class SpriteManager
 {
-    private static string path = Application.streamingAssetsPath + "/Sprites/";
-
     private static Dictionary<int, Sprite> sprites;
 
     public static void Init()
@@ -14,13 +12,13 @@ public static class SpriteManager
         sprites = new Dictionary<int, Sprite>();
     }
 
-    public static void AddSprite<T>(int id, Vector2 pivot, int pixelPerUnit)
+    public static void AddSprite<T>(string path, int id, Vector2 pivot, float pixelPerUnit)
     {
         if (sprites.ContainsKey(id)) return;
 
         string type = typeof(T).ToString();
 
-        Sprite sprite = DataManager.LoadSprite(path + $"{type}/{id}.png", pivot, pixelPerUnit);
+        Sprite sprite = DataManager.LoadSprite(path, pivot, pixelPerUnit);
         sprites.Add(id, sprite);
     }
 

@@ -26,5 +26,12 @@ namespace Excel_To_Json
         // {1} 타입 값
         public static string valueFormat =
 @"""{0}"": {1}";
+
+        // {0 - 2} x, y, z
+        public static string vector2Format =
+    @"{{ ""x"": {0}, ""y"": {1} }}";
+
+        public static string vector3Format =
+    @"{{ ""x"": {0}, ""y"": {1}, ""z"": {2} }}";
     }
 }

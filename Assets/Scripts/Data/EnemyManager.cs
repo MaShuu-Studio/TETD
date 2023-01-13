@@ -21,7 +21,7 @@ public static class EnemyManager
         {
             Enemy enemy = new Enemy(data);
             enemies.Add(enemy.id, enemy);
-            SpriteManager.AddSprite<Enemy>(enemy.id, new Vector2(0.5f, 0.5f), 32);
+            SpriteManager.AddSprite<Enemy>(data.imgsrc, enemy.id, data.pivot, data.pixelperunit);
         }
 
         keys = enemies.Keys.ToList();

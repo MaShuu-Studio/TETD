@@ -21,7 +21,7 @@ public static class TowerManager
         {
             Tower tower = new Tower(data);
             towers.Add(tower.id, tower);
-            SpriteManager.AddSprite<Tower>(tower.id, new Vector2(0.5f, 0.16f), 20);
+            SpriteManager.AddSprite<Tower>(data.imgsrc, tower.id, data.pivot, data.pixelperunit);
         }
         keys = towers.Keys.ToList();
 
