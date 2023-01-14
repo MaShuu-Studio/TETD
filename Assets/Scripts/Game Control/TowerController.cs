@@ -51,13 +51,20 @@ public class TowerController : MonoBehaviour
             selectedTower = null;
         }
 
-        if (ContainsTower(pos) == false) return false;
+        Tower tower = null;
+        bool select = false;
 
-        TowerObject towerObj = towers[pos];
-        towerObj.SelectTower(true);
-        selectedTower = towerObj;
+        if (ContainsTower(pos))
+        {
+            TowerObject towerObj = towers[pos];
+            towerObj.SelectTower(true);
+            selectedTower = towerObj;
 
-        return true;
+            tower = towerObj.Data;
+            select = true;
+        }
+        UIController.Instance.SelectTower(select, tower);
+        return select;
     }
 
     public void RemoveTower(Vector3 pos)

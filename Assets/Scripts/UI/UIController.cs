@@ -28,6 +28,9 @@ public class UIController : MonoBehaviour
     [Header("Shop")]
     [SerializeField] private Shop shop;
 
+    [Header("Tower Info")]
+    [SerializeField] private TowerInfoPanel towerInfoPanel;
+
     private void Start()
     {
         buildTowerButtons = new List<BuildTowerButton>();
@@ -50,7 +53,9 @@ public class UIController : MonoBehaviour
 
         UpdateTowerList();
         RerollAll();
+
         OpenShop(false);
+        SelectTower(false, null);
     }
 
     public void UpdateTowerList()
@@ -66,6 +71,12 @@ public class UIController : MonoBehaviour
     public void BuildTower(int id)
     {
         GameController.Instance.ReadyToBuild(id);
+    }
+
+    public void SelectTower(bool b, Tower tower = null)
+    {
+        towerInfoPanel.gameObject.SetActive(b);
+        if (tower != null) towerInfoPanel.SetData(tower);
     }
 
     public void OpenShop(bool b)

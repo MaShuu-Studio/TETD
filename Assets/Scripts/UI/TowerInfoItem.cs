@@ -4,28 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class TowerInfoItem : MonoBehaviour
+public class TowerInfoItem : TowerInfo
 {
+    [Space]
     [SerializeField] private Image frameImage;
     [SerializeField] private Image gradeImage;
-    [SerializeField] private Image elementImage;
-    [SerializeField] private List<Sprite> elementSprites;
-    [SerializeField] private Image iconImage;
-    [SerializeField] private TextMeshProUGUI nameText;
-    [SerializeField] private TextMeshProUGUI damageText;
-    [SerializeField] private TextMeshProUGUI attackSpeedText;
-    [SerializeField] private TextMeshProUGUI rangeText;
     [SerializeField] private TextMeshProUGUI costText;
 
-    private Tower data;
-    public Tower Data { get { return data; } }
-
-    public void SetData(Tower data)
+    public override void SetData(Tower data)
     {
-        this.data = data;
-
-        nameText.text = data.name.Substring(6);
-        iconImage.sprite = SpriteManager.GetSprite(data.id);
+        base.SetData(data);
 
         // 간단하게 등급 구분을 먼저 색으로만
         Color c = new Color(1, 1, 1);
@@ -45,25 +33,15 @@ public class TowerInfoItem : MonoBehaviour
                 f = new Color(1, 0.1f, 0.05f);
                 break;
         }
+
         frameImage.color = f;
         gradeImage.color = c;
-
-        // UI Icon들도 id를 붙이고 SpriteManager에서 관리 예정
-        elementImage.sprite = elementSprites[data.element];
-
-        UpdateInfo();
     }
 
-    public void UpdateInfo()
+    public override void UpdateInfo()
     {
-        damageText.text = data.dmg.ToString();
-        attackSpeedText.text = data.attackspeed.ToString();
-        rangeText.text = data.range.ToString();
+        base.UpdateInfo();
+
         costText.text = data.cost.ToString();
-    }
-
-    private void AddSkill()
-    {
-
     }
 }

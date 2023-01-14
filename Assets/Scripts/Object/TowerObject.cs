@@ -8,6 +8,7 @@ public class TowerObject : MonoBehaviour
     [SerializeField] private GameObject range;
     private SpriteRenderer spriteRenderer;
 
+    public Tower Data { get { return data; } }
     private Tower data;
     private IEnumerator delayCoroutine;
     private List<EnemyObject> enemies;
