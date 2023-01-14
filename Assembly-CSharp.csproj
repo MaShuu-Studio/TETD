@@ -58,7 +58,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Data\TileManager.cs" />
     <Compile Include="Assets\Scripts\Object\TowerObject.cs" />
-    <Compile Include="Assets\Scripts\UI\ScriptableButton.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ScriptableButton.cs" />
     <Compile Include="Assets\Scripts\Data\DataManager.cs" />
     <Compile Include="Assets\Scripts\Data\Round.cs" />
     <Compile Include="Assets\Scripts\Map\MapUtil.cs" />
@@ -71,7 +71,7 @@
     <Compile Include="Assets\Scripts\Object\TowerAttackArea.cs" />
     <Compile Include="Assets\Scripts\Data\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Data\ObjectData.cs" />
-    <Compile Include="Assets\Scripts\UI\BuildTowerButton.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\BuildTowerButton.cs" />
     <Compile Include="Assets\Scripts\Map\MapController.cs" />
     <Compile Include="Assets\Scripts\Game Control\RoundController.cs" />
     <Compile Include="Assets\Scripts\Game Control\Initializer.cs" />
@@ -83,6 +83,12 @@
     <Compile Include="Assets\Scripts\Map\MapMaker.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
+    <Compile Include="Assets\Scripts\UI\TowerInfoItem.cs" />
+    <Compile Include="Assets\Scripts\Data\EnumData.cs" />
+    <Compile Include="Assets\Scripts\UI\Shop.cs" />
+    <Compile Include="Assets\Scripts\Game Control\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\GetTowerButton.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\RerollButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

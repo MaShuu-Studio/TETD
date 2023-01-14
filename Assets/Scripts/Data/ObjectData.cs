@@ -11,6 +11,9 @@ public abstract class ObjectData
 
 public class Tower : ObjectData
 {
+    public int grade;
+    public int element;
+
     public int cost;
 
     public float range;
@@ -22,6 +25,9 @@ public class Tower : ObjectData
         id = data.id;
         name = "TOWER-" + data.name.ToUpper();
 
+        grade = data.grade;
+        element = data.element;
+
         cost = data.cost;
         range = data.range;
         dmg = data.dmg;
@@ -32,6 +38,9 @@ public class Tower : ObjectData
     {
         id = data.id;
         name = data.name;
+
+        grade = data.grade;
+        element = data.element;
 
         cost = data.cost;
         range = data.range;
@@ -79,6 +88,9 @@ public abstract class JsonData
 [Serializable]
 public class TowerData : JsonData
 {
+    public int grade;
+    public int element;
+
     public int cost;
 
     public float range;

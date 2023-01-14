@@ -33,5 +33,6 @@ public class Initializer : MonoBehaviour
         MapController.Instance.LoadMap(MapUtil.LoadMap("RTD"));
         EnemyController.Instance.Init(MapController.Instance.GetMap());
         RoundController.Instance.Init(MapController.Instance.GetMap().name);
+        PlayerController.Instance.Init();
     }
 }

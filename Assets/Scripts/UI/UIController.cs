@@ -25,6 +25,9 @@ public class UIController : MonoBehaviour
     [SerializeField] private BuildTowerButton buildTowerButtonPrefab;
     private List<BuildTowerButton> buildTowerButtons;
 
+    [Header("Shop")]
+    [SerializeField] private Shop shop;
+
     private void Start()
     {
         buildTowerButtons = new List<BuildTowerButton>();
@@ -36,14 +39,7 @@ public class UIController : MonoBehaviour
     {
         for (int i = 0; i < 10; i++)
         {
-            int id = -1;
             Tower tower = null;
-
-            if (i < TowerManager.Keys.Count)
-            {
-                id = TowerManager.Keys[i];
-                tower = TowerManager.GetTower(id);
-            }
 
             GameObject go = Instantiate(buildTowerButtonPrefab.gameObject, buildTowerButtonsParent);
             BuildTowerButton button = go.GetComponent<BuildTowerButton>();
@@ -51,10 +47,39 @@ public class UIController : MonoBehaviour
             button.SetItem(tower);
             buildTowerButtons.Add(button);
         }
+
+        UpdateTowerList();
+        RerollAll();
+        OpenShop(false);
+    }
+
+    public void UpdateTowerList()
+    {
+        for (int i = 0; i < PlayerController.Instance.Towers.Count; i++)
+        {
+            Tower tower = PlayerController.Instance.Towers[i];
+
+            buildTowerButtons[i].SetItem(tower);
+        }
     }
 
     public void BuildTower(int id)
     {
         GameController.Instance.ReadyToBuild(id);
+    }
+
+    public void OpenShop(bool b)
+    {
+        shop.gameObject.SetActive(b);
+    }
+
+    public void RerollAll()
+    {
+        shop.RerollAll();
+    }
+
+    public void Reroll(TowerInfoItem item)
+    {
+        shop.Reroll(item);
     }
 }
