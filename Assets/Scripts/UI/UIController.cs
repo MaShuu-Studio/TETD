@@ -73,12 +73,20 @@ public class UIController : MonoBehaviour
         GameController.Instance.ReadyToBuild(id);
     }
 
+    #region TowerInfoPanel
     public void SelectTower(bool b, Tower tower = null)
     {
         towerInfoPanel.gameObject.SetActive(b);
         if (tower != null) towerInfoPanel.SetData(tower);
     }
 
+    public bool PointInTowerInfo(Vector2 point)
+    {
+        return towerInfoPanel.RectTransform.rect.Contains(point);
+    }
+    #endregion
+
+    #region Shop
     public void OpenShop(bool b)
     {
         shop.gameObject.SetActive(b);
@@ -93,4 +101,5 @@ public class UIController : MonoBehaviour
     {
         shop.Reroll(item);
     }
+    #endregion
 }

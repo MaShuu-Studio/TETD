@@ -13,6 +13,8 @@ public class EnemyObject : MonoBehaviour
     private float hp;
     private float speed;
     private int destRoad;
+    public int Order { get; private set; }
+    public float Hp { get { return hp; } }
 
     private void Awake()
     {
@@ -33,7 +35,7 @@ public class EnemyObject : MonoBehaviour
         transform.position = road[0];
         destRoad = 1;
 
-        spriteRenderer.sortingOrder = order;
+        spriteRenderer.sortingOrder = Order = order;
 
         StartCoroutine(Move());
     }

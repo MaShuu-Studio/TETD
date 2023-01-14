@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnumData;
 
 public class TowerObject : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class TowerObject : MonoBehaviour
     private Tower data;
     private IEnumerator delayCoroutine;
     private List<EnemyObject> enemies;
+
+    private AttackPriority priority;
+    public AttackPriority Priority { get { return priority; } }
 
     private void Awake()
     {
@@ -32,6 +36,7 @@ public class TowerObject : MonoBehaviour
         rangeUI.SetActive(false);
 
         enemies = new List<EnemyObject>();
+        priority = AttackPriority.FIRST;
 
         delayCoroutine = null;
     }
@@ -71,8 +76,7 @@ public class TowerObject : MonoBehaviour
     {
         while (enemies.Count > 0)
         {
-            // 우선순위에 따라 선택
-            int index = Random.Range(0, enemies.Count);
+            int index = SelectEnemy();
 
             EnemyController.Instance.EnemyDamaged(enemies[index], data.dmg);
 
@@ -86,5 +90,59 @@ public class TowerObject : MonoBehaviour
             yield return null;
         }
         delayCoroutine = null;
+    }
+
+    public void ChangePriority(AttackPriority type)
+    {
+        priority = type;
+    }
+
+    private int SelectEnemy()
+    {
+        int selected = 0;
+
+        EnemyObject selectedEnemy;
+        for (int i = 1; i < enemies.Count; i++)
+        {
+            selectedEnemy = enemies[selected];
+            EnemyObject enemy = enemies[i];
+
+            if (priority == AttackPriority.FIRST || priority == AttackPriority.LAST)
+            {
+                int selectedOrder = selectedEnemy.Order;
+                int order = enemy.Order;
+
+                selected = SelectIndex(selected, i, selectedOrder, order, priority == AttackPriority.FIRST);
+            }
+            else
+            {
+                float selectedHp = selectedEnemy.Hp;
+                float hp = enemy.Hp;
+
+                selected = SelectIndex(selected, i, selectedHp, hp, priority == AttackPriority.STRONG);
+            }
+        }
+        selectedEnemy = enemies[selected];
+        return selected;
+    }
+
+    private int SelectIndex(int firstIndex, int secondIndex, int firstValue, int secondValue, bool large)
+    {
+        if (firstValue == secondValue) return firstIndex;
+
+        if (firstValue > secondValue && large) return firstIndex;
+        if (firstValue < secondValue && !large) return firstIndex;
+
+        return secondIndex;
+    }
+
+    private int SelectIndex(int firstIndex, int secondIndex, float firstValue, float secondValue, bool large)
+    {
+        if (firstValue == secondValue) return firstIndex;
+
+        if (firstValue > secondValue && large) return firstIndex;
+        if (firstValue < secondValue && !large) return firstIndex;
+
+        return secondIndex;
     }
 }

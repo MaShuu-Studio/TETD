@@ -49,7 +49,9 @@ public class GameController : MonoBehaviour
             }
         }
 
-        if (click && TowerController.Instance.SelectTower(pos))
+        if (click
+            && UIController.Instance.PointInTowerInfo(mousePos) == false
+            && TowerController.Instance.SelectTower(pos))
         {
             MapController.Instance.OffSeletedTile();
             readyToBuild = false;
@@ -59,6 +61,7 @@ public class GameController : MonoBehaviour
         if (rclick)
             TowerController.Instance.RemoveTower(pos);
     }
+
 
     // 임시 함수 해당 부분이 어디로 가야할지는 고민을 해야할 듯
     // 1. TowerController, 2. PlayerController, 3. GameController

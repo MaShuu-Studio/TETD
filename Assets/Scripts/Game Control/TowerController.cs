@@ -18,6 +18,7 @@ public class TowerController : MonoBehaviour
 
     private Dictionary<Vector3, TowerObject> towers = new Dictionary<Vector3, TowerObject>();
     private TowerObject selectedTower = null;
+    public TowerObject SelectedTower { get { return selectedTower; } }
 
     public bool ContainsTower(Vector3 pos)
     {

@@ -4245,6 +4245,11 @@ MonoBehaviour:
   damageText: {fileID: 1939233517}
   attackSpeedText: {fileID: 1251839492}
   rangeText: {fileID: 667865178}
+  priorityToggles:
+  - {fileID: 1083762316}
+  - {fileID: 2040652120}
+  - {fileID: 1048419895}
+  - {fileID: 1553627174}
 --- !u!1 &636795297
 GameObject:
   m_ObjectHideFlags: 0
@@ -9028,7 +9033,7 @@ GameObject:
   - component: {fileID: 1048419895}
   - component: {fileID: 1048419894}
   m_Layer: 5
-  m_Name: Button
+  m_Name: STRONG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9132,7 +9137,19 @@ MonoBehaviour:
   m_Group: {fileID: 910494856}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 635979978}
+        m_TargetAssemblyTypeName: TowerInfoPanel, Assembly-CSharp
+        m_MethodName: SetPriority
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!222 &1048419896
 CanvasRenderer:
@@ -9155,7 +9172,7 @@ GameObject:
   - component: {fileID: 1083762316}
   - component: {fileID: 1083762315}
   m_Layer: 5
-  m_Name: Button
+  m_Name: FIRST
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9259,7 +9276,19 @@ MonoBehaviour:
   m_Group: {fileID: 910494856}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 635979978}
+        m_TargetAssemblyTypeName: TowerInfoPanel, Assembly-CSharp
+        m_MethodName: SetPriority
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!222 &1083762317
 CanvasRenderer:
@@ -12154,7 +12183,7 @@ GameObject:
   - component: {fileID: 1553627174}
   - component: {fileID: 1553627173}
   m_Layer: 5
-  m_Name: Button
+  m_Name: WEAK
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12258,7 +12287,19 @@ MonoBehaviour:
   m_Group: {fileID: 910494856}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 635979978}
+        m_TargetAssemblyTypeName: TowerInfoPanel, Assembly-CSharp
+        m_MethodName: SetPriority
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!222 &1553627175
 CanvasRenderer:
@@ -16208,7 +16249,7 @@ GameObject:
   - component: {fileID: 2040652120}
   - component: {fileID: 2040652119}
   m_Layer: 5
-  m_Name: Button
+  m_Name: LAST
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16312,7 +16353,19 @@ MonoBehaviour:
   m_Group: {fileID: 910494856}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 635979978}
+        m_TargetAssemblyTypeName: TowerInfoPanel, Assembly-CSharp
+        m_MethodName: SetPriority
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!222 &2040652121
 CanvasRenderer:
