@@ -89,6 +89,8 @@
     <Compile Include="Assets\Scripts\Game Control\PlayerController.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\GetTowerButton.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\RerollButton.cs" />
+    <Compile Include="Assets\Scripts\Game Control\SceneController.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\StartButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

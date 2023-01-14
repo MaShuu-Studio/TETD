@@ -21,6 +21,11 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         cam = FindObjectOfType<Camera>();
+
+        MapController.Instance.LoadMap(MapUtil.LoadMap("RTD"));
+        EnemyController.Instance.Init(MapController.Instance.GetMap());
+        RoundController.Instance.Init(MapController.Instance.GetMap().name);
+        PlayerController.Instance.Init();
     }
 
     // Update is called once per frame
