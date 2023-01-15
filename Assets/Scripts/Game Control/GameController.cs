@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnumData;
 
 public class GameController : MonoBehaviour
 {
@@ -20,16 +21,29 @@ public class GameController : MonoBehaviour
     }
 
     private IEnumerator loadingCoroutine;
+
+    private CharacterType character;
+    private List<DifficultyType> difficulties;
+    private string mapName;
     
-    public void StartGame(string mapName)
+    public void SettingGame(CharacterType c, List<DifficultyType> diff, string map)
+    {
+        character = c;
+        difficulties = diff;
+        mapName = map;
+    }
+
+    public void StartGame()
     {
         if (loadingCoroutine != null) return;
+        UIController.Instance.SettingGame();
+
         SceneController.Instance.ChangeScene("Game Scene");
-        loadingCoroutine = LoadGame(mapName);
+        loadingCoroutine = LoadGame();
         StartCoroutine(loadingCoroutine);
     }
 
-    IEnumerator LoadGame(string mapName)
+    IEnumerator LoadGame()
     {
         while (SceneController.Instance.IsLoaded) yield return null;
 

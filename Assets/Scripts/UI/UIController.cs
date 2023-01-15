@@ -29,6 +29,9 @@ public class UIController : MonoBehaviour
     [Header("Loading Scene")]
     [SerializeField] private Slider loadingGage;
 
+    [Header("Title")]
+    [SerializeField] private GameSettingController gameSetting;
+
     [Header("Tower Panel")]
     [SerializeField] private Transform buildTowerButtonsParent;
     [SerializeField] private BuildTowerButton buildTowerButtonPrefab;
@@ -59,6 +62,11 @@ public class UIController : MonoBehaviour
             scenes[i].SetActive(b);
         }
         loadingScene.SetActive(false);
+    }
+
+    public void SettingGame()
+    {
+        GameController.Instance.SettingGame(gameSetting.SelectedCharacter(), gameSetting.Difficulty(), gameSetting.MapName());
     }
 
     #region Game Scene

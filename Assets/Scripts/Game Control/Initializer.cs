@@ -24,6 +24,7 @@ public class Initializer : MonoBehaviour
         EnemyManager.Init();
         TowerManager.Init();
 
+        MapManager.Init();
         RoundManager.Init();
     }
 

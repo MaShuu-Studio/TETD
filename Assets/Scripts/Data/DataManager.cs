@@ -1,4 +1,3 @@
-using System.Linq;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +12,19 @@ namespace Data
 
     public static class DataManager
     {
+        public static List<string> GetFiles(string path)
+        {
+            List<string> files = new List<string>();
+            string[] pathes = Directory.GetFiles(path, "*.json");
+
+            for (int i = 0; i < pathes.Length; i++)
+            {
+                string file = Path.GetFileName(pathes[i]).Replace(".json","").ToUpper();
+                files.Add(file);
+            }
+            return files;
+        }
+
         public static void SerializeJson<T>(string path, string fileName, T obj)
         {
             string json = JsonUtility.ToJson(obj);

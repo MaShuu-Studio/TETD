@@ -6,6 +6,6 @@ public class StartButton : ScriptableButton
 {
     protected override void ClickEvent()
     {
-        GameController.Instance.StartGame("RTD");
+        GameController.Instance.StartGame();
     }
 }

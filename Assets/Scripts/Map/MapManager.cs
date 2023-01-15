@@ -8,6 +8,15 @@ public static class MapManager
 {
     private static string path = Application.streamingAssetsPath + "/Data/Map/";
 
+    public static List<string> Maps { get { return maps; } }
+    private static List<string> maps;
+
+    public static void Init()
+    {
+        maps = new List<string>();
+        maps = DataManager.GetFiles(path);
+    }
+
     public static List<Vector3Int> FindRoute(TilemapInfo tilemap)
     {
         if (tilemap == null) return null;

@@ -125,6 +125,7 @@ namespace Excel_To_Json
                 {
                     string type = (range.Cells[1, column] as Excel.Range).Value2;
                     object o = (range.Cells[row, column] as Excel.Range).Value2;
+                    if (o == null) continue;
                     data += string.Format(JsonFormat.listFormat, type, o.ToString());
                     if (column < 2) data += ",";
                 }

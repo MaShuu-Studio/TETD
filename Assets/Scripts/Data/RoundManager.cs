@@ -21,6 +21,7 @@ public static class RoundManager
         foreach (var data in list)
         {
             Round round = new Round(data);
+            if (MapManager.Maps.Contains(data.mapName.ToUpper()) == false) continue;
             rounds.Add(data.mapName, round);
         }
 
