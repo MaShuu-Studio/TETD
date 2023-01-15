@@ -6,6 +6,7 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance { get { return instance; } }
     private static GameController instance;
+
     private void Awake()
     {
         if (Instance != null)
@@ -14,64 +15,33 @@ public class GameController : MonoBehaviour
             return;
         }
         instance = this;
+
+        DontDestroyOnLoad(gameObject);
     }
 
-    private Camera cam;
-
-    private void Start()
+    private IEnumerator loadingCoroutine;
+    
+    public void StartGame(string mapName)
     {
-        cam = FindObjectOfType<Camera>();
-
-        MapController.Instance.LoadMap(MapUtil.LoadMap("RTD"));
-        EnemyController.Instance.Init(MapController.Instance.GetMap());
-        RoundController.Instance.Init(MapController.Instance.GetMap().name);
-        PlayerController.Instance.Init();
+        if (loadingCoroutine != null) return;
+        SceneController.Instance.ChangeScene("Game Scene");
+        loadingCoroutine = LoadGame(mapName);
+        StartCoroutine(loadingCoroutine);
     }
 
-    // Update is called once per frame
-    private void Update()
+    IEnumerator LoadGame(string mapName)
     {
-        bool buildable = false;
-        bool click = Input.GetMouseButtonDown(0);
-        bool rclick = Input.GetMouseButtonDown(1);
+        while (SceneController.Instance.IsLoaded) yield return null;
 
-        Vector3 mousePos = Input.mousePosition;
-        Vector3 worldPos = cam.ScreenToWorldPoint(mousePos);
-        Vector3 pos = MapController.Instance.GetMapPos(worldPos);
-
-        if (readyToBuild)
+        Map map = MapManager.LoadMap(mapName);
+        if (map != null)
         {
-            buildable = MapController.Instance.SelectTile(worldPos);
-            if (click && buildable && TowerController.Instance.BuildTower(id, pos))
-            {
-                readyToBuild = false;
-                id = 0;
-            }
+            MapController.Instance.Init(map);
+            EnemyController.Instance.Init(map);
+            RoundController.Instance.Init(map.name);
+            PlayerController.Instance.Init();
+            UIController.Instance.StartGame();
         }
-
-        if (click
-            && UIController.Instance.PointInTowerInfo(mousePos) == false
-            && TowerController.Instance.SelectTower(pos))
-        {
-            MapController.Instance.OffSeletedTile();
-            readyToBuild = false;
-            id = 0;
-        }
-
-        if (rclick)
-            TowerController.Instance.RemoveTower(pos);
-    }
-
-
-    // 임시 함수 해당 부분이 어디로 가야할지는 고민을 해야할 듯
-    // 1. TowerController, 2. PlayerController, 3. GameController
-
-    private bool readyToBuild;
-    private int id;
-
-    public void ReadyToBuild(int id)
-    {
-        this.id = id;
-        readyToBuild = true;
+        loadingCoroutine = null;
     }
 }

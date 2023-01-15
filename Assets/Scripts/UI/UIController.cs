@@ -17,8 +17,17 @@ public class UIController : MonoBehaviour
         }
 
         instance = this;
-        DontDestroyOnLoad(transform.parent.gameObject);
+        DontDestroyOnLoad(gameObject);
+
+        buildTowerButtons = new List<BuildTowerButton>();
     }
+
+    [Header("Scenes")]
+    [SerializeField] private GameObject loadingScene;
+    [SerializeField] private List<GameObject> scenes;
+
+    [Header("Loading Scene")]
+    [SerializeField] private Slider loadingGage;
 
     [Header("Tower Panel")]
     [SerializeField] private Transform buildTowerButtonsParent;
@@ -31,15 +40,36 @@ public class UIController : MonoBehaviour
     [Header("Tower Info")]
     [SerializeField] private TowerInfoPanel towerInfoPanel;
 
-    private void Start()
-    {
-        buildTowerButtons = new List<BuildTowerButton>();
 
-        Init();
+    public void StartLoading()
+    {
+        loadingScene.SetActive(true);
     }
 
-    public void Init()
+    public void Loading(float value)
     {
+        loadingGage.value = value;
+    }
+
+    public void ChangeScene(int index)
+    {
+        for (int i = 0; i < scenes.Count; i++)
+        {
+            bool b = (i == index);
+            scenes[i].SetActive(b);
+        }
+        loadingScene.SetActive(false);
+    }
+
+    #region Game Scene
+    public void StartGame()
+    {
+        for (int i = 0; i < buildTowerButtons.Count; i++)
+        {
+            Destroy(buildTowerButtons[i].gameObject);
+        }
+        buildTowerButtons.Clear();
+
         for (int i = 0; i < 10; i++)
         {
             Tower tower = null;
@@ -70,7 +100,7 @@ public class UIController : MonoBehaviour
 
     public void BuildTower(int id)
     {
-        GameController.Instance.ReadyToBuild(id);
+        MapController.Instance.ReadyToBuild(id);
     }
 
     #region TowerInfoPanel
@@ -101,5 +131,6 @@ public class UIController : MonoBehaviour
     {
         shop.Reroll(item);
     }
+    #endregion
     #endregion
 }

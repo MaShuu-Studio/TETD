@@ -34,7 +34,7 @@ public class MapMaker : MonoBehaviour
     // 루트를 보여주는 용도
     public bool FindRoute(TilemapInfo tilemap)
     {
-        List<Vector3Int> road = MapUtil.FindRoute(tilemap);
+        List<Vector3Int> road = MapManager.FindRoute(tilemap);
 
         if (road == null) return false;
 

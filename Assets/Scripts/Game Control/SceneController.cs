@@ -20,11 +20,12 @@ public class SceneController : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    [SerializeField] private GameObject canvas;
-    [SerializeField] private Image cutSceneImage;
-    [SerializeField] private Slider loadingGage;
+    private string[] SceneNames { get; }
+    = { "Title", "Game Scene" };
 
     private const string LoadingScene = "Loading";
+    public bool IsLoaded { get { return isLoaded; } }
+    private bool isLoaded;
     private string currentScene;
     private IEnumerator loadCoroutine;
 
@@ -33,19 +34,31 @@ public class SceneController : MonoBehaviour
         ChangeScene("Title");
     }
 
+    public int FindScene(string scene)
+    {
+        for (int i = 0; i < SceneNames.Length; i++)
+        {
+            if (scene == SceneNames[i]) return i;
+        }
+        return -1;
+    }
+
     public void ChangeScene(string scene)
     {
-        if (loadCoroutine != null) return;
+        int sceneNumber = FindScene(scene);
+        if (loadCoroutine != null || sceneNumber == -1) return;
 
-        loadingGage.value = 0;
-        canvas.SetActive(true);
+        isLoaded = true;
+        Progress(0);
+        UIController.Instance.StartLoading();
 
-        loadCoroutine = LoadScene(scene);
+        loadCoroutine = LoadScene(sceneNumber);
         StartCoroutine(loadCoroutine);
     }
 
-    private IEnumerator LoadScene(string scene)
+    private IEnumerator LoadScene(int sceneNumber)
     {
+        string scene = SceneNames[sceneNumber];
         AsyncOperation async = SceneManager.LoadSceneAsync(LoadingScene);
 
         while (async.isDone == false)
@@ -57,13 +70,19 @@ public class SceneController : MonoBehaviour
 
         while (async.isDone == false)
         {
-            loadingGage.value = async.progress;
+            Progress(async.progress);
             yield return null;
         }
+        isLoaded = false;
 
-        canvas.SetActive(false);
+        UIController.Instance.ChangeScene(sceneNumber);
         currentScene = scene;
 
         loadCoroutine = null;
+    }
+
+    private void Progress(float value)
+    {
+        UIController.Instance.Loading(value);
     }
 }

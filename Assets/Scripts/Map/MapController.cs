@@ -16,22 +16,78 @@ public class MapController : MonoBehaviour
             return;
         }
         instance = this;
+
+        cam = FindObjectOfType<Camera>();
+
+        transform.position = Vector3.zero;
+        OffSeletedTile();
     }
 
+    private Camera cam;
     [SerializeField] private SpriteRenderer selectedTile;
     [SerializeField] private Tilemap tilemap;
     public Grid grid;
     private Map map;
 
-    private void Start()
+    private bool readyToBuild;
+    private int id;
+
+    public void Init(Map map)
     {
-        transform.position = Vector3.zero;
-        OffSeletedTile();
+        if (map == null) return;
+
+        this.map = map;
+
+        tilemap.ClearAllTiles();
+        tilemap.origin = map.tilemap.origin;
+        tilemap.size = map.tilemap.size;
+
+        foreach (var pos in map.tilemap.tiles.Keys)
+        {
+            TileInfo tileInfo = map.tilemap.tiles[pos];
+            TileBase tile = TileManager.GetTile(tileInfo.name);
+            tilemap.SetTile(pos, tile);
+        }
+    }
+    #region Tile
+    // Update is called once per frame
+    private void Update()
+    {
+        bool buildable = false;
+        bool click = Input.GetMouseButtonDown(0);
+        bool rclick = Input.GetMouseButtonDown(1);
+
+        Vector3 mousePos = Input.mousePosition;
+        Vector3 worldPos = cam.ScreenToWorldPoint(mousePos);
+        Vector3 pos = GetMapPos(worldPos);
+
+        if (readyToBuild)
+        {
+            buildable = SelectTile(worldPos);
+            if (click && buildable && TowerController.Instance.BuildTower(id, pos))
+            {
+                readyToBuild = false;
+                id = 0;
+            }
+        }
+
+        if (click
+            && UIController.Instance.PointInTowerInfo(mousePos) == false
+            && TowerController.Instance.SelectTower(pos))
+        {
+            OffSeletedTile();
+            readyToBuild = false;
+            id = 0;
+        }
+
+        if (rclick)
+            TowerController.Instance.RemoveTower(pos);
     }
 
-    public Map GetMap()
+    public void ReadyToBuild(int id)
     {
-        return map;
+        this.id = id;
+        readyToBuild = true;
     }
 
     public void OffSeletedTile()
@@ -72,22 +128,5 @@ public class MapController : MonoBehaviour
 
         return new Vector3(x, y);
     }
-
-    public void LoadMap(Map map)
-    {
-        if (map == null) return;
-
-        this.map = map;
-
-        tilemap.ClearAllTiles();
-        tilemap.origin = map.tilemap.origin;
-        tilemap.size = map.tilemap.size;
-
-        foreach (var pos in map.tilemap.tiles.Keys)
-        {
-            TileInfo tileInfo = map.tilemap.tiles[pos];
-            TileBase tile = TileManager.GetTile(tileInfo.name);
-            tilemap.SetTile(pos, tile);
-        }
-    }
+    #endregion
 }

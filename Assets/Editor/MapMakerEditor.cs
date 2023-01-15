@@ -63,7 +63,7 @@ public class MapMakerEditor : Editor
         if (find)
         {
             TilemapInfo info = targetComponent.MakeMap();
-            route = MapUtil.FindRoute(info);
+            route = MapManager.FindRoute(info);
             targetComponent.FindRoute(info);
         }
 
@@ -72,8 +72,8 @@ public class MapMakerEditor : Editor
             if (string.IsNullOrEmpty(mapName) == false)
             {
                 TilemapInfo info = targetComponent.MakeMap();
-                route = MapUtil.FindRoute(info);
-                MapUtil.SaveMap(mapName, info);
+                route = MapManager.FindRoute(info);
+                MapManager.SaveMap(mapName, info);
             }
             else if (string.IsNullOrEmpty(mapName)) Debug.Log("[SYSTEM] Input map name");
         }
@@ -82,8 +82,8 @@ public class MapMakerEditor : Editor
         {
             if (string.IsNullOrEmpty(mapName) == false)
             {
-                Map map = MapUtil.LoadMap(mapName);
-                route = MapUtil.FindRoute(map.tilemap);
+                Map map = MapManager.LoadMap(mapName);
+                route = MapManager.FindRoute(map.tilemap);
                 targetComponent.LoadMap(map.tilemap);
             }
             else Debug.Log("[SYSTEM] Input map name");

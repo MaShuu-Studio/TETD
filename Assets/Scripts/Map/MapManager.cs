@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Data;
 
-public static class MapUtil
+public static class MapManager
 {
     private static string path = Application.streamingAssetsPath + "/Data/Map/";
 
