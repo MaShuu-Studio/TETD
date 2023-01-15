@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIController : MonoBehaviour
 {
@@ -31,6 +32,11 @@ public class UIController : MonoBehaviour
 
     [Header("Title")]
     [SerializeField] private GameSettingController gameSetting;
+
+    [Space]
+    [Header("Game Scene")]
+    [SerializeField] private RectTransform infoRect;
+    [SerializeField] private TextMeshProUGUI roundInfo;
 
     [Header("Tower Panel")]
     [SerializeField] private Transform buildTowerButtonsParent;
@@ -96,6 +102,28 @@ public class UIController : MonoBehaviour
         SelectTower(false, null);
     }
 
+    #region Info Panel
+    public void NextRoundInfo(EachRound nextRoundInfo)
+    {
+        string info = "";
+        int height = 0;
+        if (nextRoundInfo != null)
+        {
+            height = 30;
+            foreach (var kvp in nextRoundInfo.unitData)
+            {
+                info += $"{EnemyManager.GetEnemy(kvp.Key).name.Substring(6)} : {kvp.Value}\n";
+                height += 50;
+
+            }
+        }
+
+        infoRect.sizeDelta = new Vector2(infoRect.rect.width, height);
+        roundInfo.text = info;
+    }
+    #endregion
+
+    #region Towers Panel
     public void UpdateTowerList()
     {
         for (int i = 0; i < PlayerController.Instance.Towers.Count; i++)
@@ -110,6 +138,7 @@ public class UIController : MonoBehaviour
     {
         MapController.Instance.ReadyToBuild(id);
     }
+    #endregion
 
     #region TowerInfoPanel
     public void SelectTower(bool b, Tower tower = null)

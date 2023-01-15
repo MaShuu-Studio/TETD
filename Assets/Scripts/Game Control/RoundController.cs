@@ -35,8 +35,9 @@ public class RoundController : MonoBehaviour
     public void StartRound()
     {
         if (timerCoroutine != null) StopCoroutine(timerCoroutine);
-
         EachRound round = data.data[curRound++];
+
+        UIController.Instance.NextRoundInfo(null);
 
         spawnCoroutine = MobSpawn(round);
         StartCoroutine(spawnCoroutine);
@@ -44,6 +45,8 @@ public class RoundController : MonoBehaviour
 
     IEnumerator NextRoundTimer(int cur)
     {
+        EachRound nextRound = data.data[curRound];
+        UIController.Instance.NextRoundInfo(nextRound);
         float time = 0;
 
         while (time < 5)
