@@ -12,7 +12,7 @@ public class TowerObject : MonoBehaviour
     public Tower Data { get { return data; } }
     private Tower data;
     private IEnumerator delayCoroutine;
-    private List<EnemyObject> enemies;
+    private PriorityQueue<EnemyObject> enemies;
 
     private AttackPriority priority;
     public AttackPriority Priority { get { return priority; } }
@@ -35,7 +35,7 @@ public class TowerObject : MonoBehaviour
 
         rangeUI.SetActive(false);
 
-        enemies = new List<EnemyObject>();
+        enemies = new PriorityQueue<EnemyObject>();
         priority = AttackPriority.FIRST;
 
         delayCoroutine = null;
@@ -48,7 +48,6 @@ public class TowerObject : MonoBehaviour
 
     public void RemoveTower()
     {
-        enemies.Clear();
         enemies = null;
         if (delayCoroutine != null)
         {
@@ -59,7 +58,7 @@ public class TowerObject : MonoBehaviour
 
     public void AddEnemy(EnemyObject enemy)
     {
-        enemies.Add(enemy);
+        enemies.Enqueue(enemy, GetPriority(enemy));
         if (delayCoroutine == null)
         {
             delayCoroutine = Attack();
@@ -76,9 +75,7 @@ public class TowerObject : MonoBehaviour
     {
         while (enemies.Count > 0)
         {
-            int index = SelectEnemy();
-
-            EnemyController.Instance.EnemyDamaged(enemies[index], data.dmg);
+            EnemyController.Instance.EnemyDamaged(enemies.Get(), data.dmg);
 
             float delayTime = 0;
             float delay = 1 / data.attackspeed;
@@ -95,54 +92,30 @@ public class TowerObject : MonoBehaviour
     public void ChangePriority(AttackPriority type)
     {
         priority = type;
-    }
 
-    private int SelectEnemy()
-    {
-        int selected = 0;
-
-        EnemyObject selectedEnemy;
-        for (int i = 1; i < enemies.Count; i++)
+        PriorityQueue<EnemyObject> tmp = new PriorityQueue<EnemyObject>();
+        for (int i = 0; i < enemies.Count; i++)
         {
-            selectedEnemy = enemies[selected];
-            EnemyObject enemy = enemies[i];
-
-            if (priority == AttackPriority.FIRST || priority == AttackPriority.LAST)
-            {
-                int selectedOrder = selectedEnemy.Order;
-                int order = enemy.Order;
-
-                selected = SelectIndex(selected, i, selectedOrder, order, priority == AttackPriority.FIRST);
-            }
-            else
-            {
-                float selectedHp = selectedEnemy.Hp;
-                float hp = enemy.Hp;
-
-                selected = SelectIndex(selected, i, selectedHp, hp, priority == AttackPriority.STRONG);
-            }
+            EnemyObject enemy = enemies.Dequeue();
+            tmp.Enqueue(enemy, GetPriority(enemy));
         }
-        selectedEnemy = enemies[selected];
-        return selected;
+
+        enemies = null;
+        enemies = tmp;
     }
 
-    private int SelectIndex(int firstIndex, int secondIndex, int firstValue, int secondValue, bool large)
+    public float GetPriority(EnemyObject enemy)
     {
-        if (firstValue == secondValue) return firstIndex;
+        float prior = 0;
+        if (priority == AttackPriority.FIRST)
+            prior = enemy.Order;
+        else if (priority == AttackPriority.LAST)
+            prior = enemy.Order * -1;
+        else if (priority == AttackPriority.STRONG)
+            prior = enemy.Hp;
+        else if (priority == AttackPriority.WEAK)
+            prior = enemy.Hp * -1;
 
-        if (firstValue > secondValue && large) return firstIndex;
-        if (firstValue < secondValue && !large) return firstIndex;
-
-        return secondIndex;
-    }
-
-    private int SelectIndex(int firstIndex, int secondIndex, float firstValue, float secondValue, bool large)
-    {
-        if (firstValue == secondValue) return firstIndex;
-
-        if (firstValue > secondValue && large) return firstIndex;
-        if (firstValue < secondValue && !large) return firstIndex;
-
-        return secondIndex;
+        return prior;
     }
 }
