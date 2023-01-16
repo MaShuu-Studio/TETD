@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class EnemyObject : MonoBehaviour
+public class EnemyObject : Poolable
 {
     private SpriteRenderer spriteRenderer;
 
@@ -16,17 +16,29 @@ public class EnemyObject : MonoBehaviour
     public int Order { get; private set; }
     public float Hp { get { return hp; } }
 
-    private void Awake()
+    public override bool MakePrefab(int id)
     {
+        this.id = id;
+        Enemy data = EnemyManager.GetEnemy(id);
+        if (data == null) return false;
+
+        amount = 2;
+
+        this.data = new Enemy(data);
+        gameObject.name = data.name;
+
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sortingLayerName = "Enemy";
 
         tag = "Enemy";
+
+        spriteRenderer.sprite = SpriteManager.GetSprite(id);
+
+        return true;
     }
 
-    public void Init(Enemy data, List<Vector3> road, int order)
+    public void Init(List<Vector3> road, int order)
     {
-        this.data = data;
         this.road = road;
 
         hp = data.hp;

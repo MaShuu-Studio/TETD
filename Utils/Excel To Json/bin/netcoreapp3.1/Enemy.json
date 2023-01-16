@@ -10,7 +10,7 @@
 "speed": 5,
 "imgsrc": "/Enemy/2001.png",
 "pivot": { "x": 0.5, "y": 0.5 },
-"pixelperunit": 24
+"pixelperunit": 36
 },
 
 {
@@ -21,7 +21,7 @@
 "speed": 5,
 "imgsrc": "/Enemy/2002.png",
 "pivot": { "x": 0.5, "y": 0.5 },
-"pixelperunit": 24
+"pixelperunit": 36
 }
     ]
 }

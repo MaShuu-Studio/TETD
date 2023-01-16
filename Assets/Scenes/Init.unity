@@ -7532,6 +7532,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b7744ababca3e7499438a6a589d7ce6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolPrefab: {fileID: 2307349764552379096, guid: 7d71846bf886eba43a5002672b5e50ba, type: 3}
+  towerBase: {fileID: 1975622453013394220, guid: a3721f6cdb8ebc446a1244f80cc5b3bb, type: 3}
+  enemyBase: {fileID: 6413443112162607841, guid: 010a38941f3b82547b9c7bfb85b77482, type: 3}
 --- !u!4 &859669236
 Transform:
   m_ObjectHideFlags: 0

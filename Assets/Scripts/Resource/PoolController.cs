@@ -21,64 +21,73 @@ public class PoolController : MonoBehaviour
     }
     #endregion
 
-    Dictionary<string, Pool> pool;
+    [SerializeField] private Pool poolPrefab;
+    [SerializeField] private Poolable towerBase;
+    [SerializeField] private Poolable enemyBase;
+    
+    private Dictionary <int, Pool> pool;
 
     public void Init()
     {
-        pool = new Dictionary<string, Pool>();
+        pool = new Dictionary<int, Pool>();
+
+        for (int i = 0; i < TowerManager.Keys.Count; i++)
+        {
+            int id = TowerManager.Keys[i];
+            GameObject go = Instantiate(towerBase.gameObject);
+            Poolable poolable = go.GetComponent<Poolable>();
+            if (poolable.MakePrefab(id) == false) continue;
+
+            GameObject poolObject = Instantiate(poolPrefab.gameObject, transform);
+            poolObject.name = id.ToString();
+            Pool poolComponent = poolObject.GetComponent<Pool>();
+            poolComponent.Init(poolable);
+
+            pool.Add(id, poolComponent);
+        }
+
+        for (int i = 0; i < EnemyManager.Keys.Count; i++)
+        {
+            int id = EnemyManager.Keys[i];
+            GameObject go = Instantiate(enemyBase.gameObject);
+            Poolable poolable = go.GetComponent<Poolable>();
+            if (poolable.MakePrefab(id) == false) continue;
+
+            GameObject poolObject = Instantiate(poolPrefab.gameObject, transform);
+            poolObject.name = id.ToString();
+            Pool poolComponent = poolObject.GetComponent<Pool>();
+            poolComponent.Init(poolable);
+
+            pool.Add(id, poolComponent);
+        }
+
+        /* Poolable의 존재에 따라 자동으로 Object Pool에 넣어주는 시스템
         List<Poolable> list = ResourceManager.GetResources<Poolable>("Prefab");
         for (int i = 0; i < list.Count; i++)
         {
             string objName = list[i].gameObject.name;
-            GameObject poolObject = new GameObject(objName);
-            poolObject.transform.SetParent(transform);
-            Pool poolComponent = poolObject.AddComponent<Pool>();
+            GameObject poolObject = Instantiate(poolPrefab.gameObject, transform);
+            poolObject.name = objName;
+            Pool poolComponent = poolObject.GetComponent<Pool>();
             poolComponent.Init(list[i]);
 
             pool.Add(objName.ToUpper(), poolComponent);
         }
+        */
     }
 
-    public static void Push(string name, GameObject obj)
+    public static void Push(int id, GameObject obj)
     {
-        name = name.ToUpper();
+        if (Instance.pool.ContainsKey(id) == false) return;
 
-        if (Instance.pool.ContainsKey(name) == false) return;
-
-        Instance.pool[name].Push(obj);
+        Instance.pool[id].Push(obj);
     }
 
-    public static GameObject Pop(string name)
+    public static GameObject Pop(int id)
     {
-        name = name.ToUpper();
+        if (Instance.pool.ContainsKey(id) == false) return null;
 
-        if (Instance.pool.ContainsKey(name) == false) return null;
-
-        GameObject obj = Instance.pool[name].Pop();
+        GameObject obj = Instance.pool[id].Pop();
         return obj;
     }
-    /*
-    // 테스트
-    Stack<GameObject> stack = new Stack<GameObject>();
-    private void OnGUI()
-    {
-        if (GUI.Button(new Rect(new Vector2(0, 0), new Vector2(100, 50)), "PUSH"))
-        {
-            if (stack.Count > 0)
-            {
-                GameObject obj = stack.Pop();
-
-                Push("Poolable", obj);
-            }
-        }
-
-        if (GUI.Button(new Rect(new Vector2(0, 100), new Vector2(100, 50)), "POP"))
-        {
-            GameObject obj = Pop("Poolable");
-
-            obj.transform.position = new Vector3(
-                Random.Range(-5, 5), Random.Range(-5, 5), 0);
-            stack.Push(obj);
-        }
-    }*/
 }

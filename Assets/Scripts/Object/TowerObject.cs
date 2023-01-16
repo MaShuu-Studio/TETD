@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using EnumData;
 
-public class TowerObject : MonoBehaviour
+public class TowerObject : Poolable
 {
     [SerializeField] private GameObject rangeUI;
     [SerializeField] private GameObject range;
@@ -17,25 +17,37 @@ public class TowerObject : MonoBehaviour
     private AttackPriority priority;
     public AttackPriority Priority { get { return priority; } }
 
-    private void Awake()
+    public override bool MakePrefab(int id)
     {
+        this.id = id;
+        Tower data = TowerManager.GetTower(id);
+        if (data == null) return false;
+
+        amount = 2;
+
+        this.data = new Tower(data);
+        gameObject.name = data.name;
+
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sortingLayerName = "Character";
-    }
 
-    public void Init(Tower data, Vector3 pos)
-    {
-        this.data = new Tower(data);
-
-        int sorting = Mathf.FloorToInt(pos.y) * -1;
-        spriteRenderer.sortingOrder = sorting;
+        spriteRenderer.sprite = SpriteManager.GetSprite(id);
 
         rangeUI.transform.localPosition = range.transform.localPosition = Vector3.zero;
         rangeUI.transform.localScale = range.transform.localScale = Vector3.one * (1 + data.range * 2);
 
+        return true;
+    }
+
+    public void Build(Vector3 pos)
+    {
+        int sorting = Mathf.FloorToInt(pos.y) * -1;
+        spriteRenderer.sortingOrder = sorting;
+
         rangeUI.SetActive(false);
 
         enemies = new PriorityQueue<EnemyObject>();
+
         priority = AttackPriority.FIRST;
 
         delayCoroutine = null;

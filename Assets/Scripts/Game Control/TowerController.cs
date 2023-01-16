@@ -32,12 +32,12 @@ public class TowerController : MonoBehaviour
         Tower tower = TowerManager.GetTower(id);
         if (tower == null) return false;
 
-        GameObject obj = PoolController.Pop(tower.name);
+        GameObject obj = PoolController.Pop(tower.id);
         obj.transform.position = pos;
         obj.transform.SetParent(transform);
 
         TowerObject towerObj = obj.GetComponent<TowerObject>();
-        towerObj.Init(tower, pos);
+        towerObj.Build(pos);
 
         towers.Add(pos, towerObj);
 
@@ -74,7 +74,7 @@ public class TowerController : MonoBehaviour
 
         TowerObject tower = towers[pos];
         GameObject obj = towers[pos].gameObject;
-        PoolController.Push(obj.name, obj);
+        PoolController.Push(tower.Id, obj);
         towers.Remove(pos);
 
         tower.RemoveTower();

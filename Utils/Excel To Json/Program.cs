@@ -172,8 +172,12 @@ namespace Excel_To_Json
         private static bool TryParseVector2(string s, out float x, out float y)
         {
             string[] xy = s.Split(",");
+            x = 0.5f;
+            y = 0.5f;
+            if (xy.Length != 2) return false;
+
             bool xb = float.TryParse(xy[0], out x);
-            bool yb = float.TryParse(xy[0], out y);
+            bool yb = float.TryParse(xy[1], out y);
 
             if (xb && yb) return true;
             return false;

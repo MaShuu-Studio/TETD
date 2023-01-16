@@ -45,11 +45,11 @@ public class EnemyController : MonoBehaviour
         if (enemy == null) return;
         if (enemies == null) return;
 
-        GameObject go = PoolController.Pop(enemy.name);
+        GameObject go = PoolController.Pop(id);
         EnemyObject enemyObj = go.GetComponent<EnemyObject>();
 
         enemies.Add(enemyObj);
-        enemyObj.Init(enemy, road, -1 * enemyOrder++);
+        enemyObj.Init(road, -1 * enemyOrder++);
         enemyObj.transform.SetParent(transform);
     }
 
@@ -59,7 +59,7 @@ public class EnemyController : MonoBehaviour
 
         enemies.Remove(enemy);
 
-        PoolController.Push(enemy.name, enemy.gameObject);
+        PoolController.Push(enemy.Id, enemy.gameObject);
     }
 
     public EnemyObject FindEnemy(GameObject go)
