@@ -112,7 +112,7 @@ public class MapMaker : MonoBehaviour
         foreach (var pos in tilemapInfo.tiles.Keys)
         {
             TileInfo tileInfo = tilemapInfo.tiles[pos];
-            TileBase tile = TileManager.GetTile(tileInfo.name);
+            CustomTile tile = TileManager.GetTile(tileInfo.name);
             mapTilemap.SetTile(pos, tile);
         }
         FindRoute(tilemapInfo);

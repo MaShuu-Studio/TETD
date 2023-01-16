@@ -12,14 +12,14 @@ namespace Data
 
     public static class DataManager
     {
-        public static List<string> GetFiles(string path)
+        public static List<string> GetFiles(string path, string type)
         {
             List<string> files = new List<string>();
-            string[] pathes = Directory.GetFiles(path, "*.json");
+            string[] pathes = Directory.GetFiles(path, "*" + type);
 
             for (int i = 0; i < pathes.Length; i++)
             {
-                string file = Path.GetFileName(pathes[i]).Replace(".json","").ToUpper();
+                string file = Path.GetFileName(pathes[i]).Replace(type,"").ToUpper();
                 files.Add(file);
             }
             return files;

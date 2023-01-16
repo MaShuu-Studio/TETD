@@ -11,7 +11,7 @@ public class MapMakerEditor : Editor
     private MapMaker targetComponent;
     private static List<Vector3Int> route = null;
     private static string mapName;
-
+    private static bool isLoaded = false;
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -92,6 +92,12 @@ public class MapMakerEditor : Editor
 
     private void OnSceneGUI()
     {
+        if (isLoaded == false)
+        {
+            MapManager.Init();
+            TileManager.Init();
+            isLoaded = true;
+        }
         targetComponent = (MapMaker)target;
 
         if (route != null)

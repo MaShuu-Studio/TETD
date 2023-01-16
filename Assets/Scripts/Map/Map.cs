@@ -38,7 +38,7 @@ public class TilemapInfo
         this.tiles = new Dictionary<Vector3Int, TileInfo>(info.tiles);
     }
 
-    public TileBase GetTile(Vector3Int pos)
+    public CustomTile GetTile(Vector3Int pos)
     {
         if (tiles.ContainsKey(pos) == false) return null;
         return TileManager.GetTile(tiles[pos].name);
@@ -61,6 +61,15 @@ public struct TileInfo
     {
         this.name = name;
         this.buildable = b;
+    }
+}
+
+public class CustomTile : Tile
+{
+    public void SetData(string name, Sprite sprite)
+    {
+        this.name = name;
+        this.sprite = sprite;
     }
 }
 

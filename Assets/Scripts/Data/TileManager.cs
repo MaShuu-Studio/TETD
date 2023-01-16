@@ -2,18 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Data;
 
 public static class TileManager
 {
-    private static Dictionary<string, TileBase> tiles;
+    private static Dictionary<string, CustomTile> tiles;
+
+    private static string path = "/Tile/";
     public static void Init()
     {
-        tiles = new Dictionary<string, TileBase>();
-        List<TileBase> list = ResourceManager.GetResources<TileBase>("Tile");
-
-        foreach (var tile in list)
+        tiles = new Dictionary<string, CustomTile>();
+        List<string> fileNames = DataManager.GetFiles(Application.streamingAssetsPath + "/Sprites" + path, ".png");
+        for (int i = 0; i < fileNames.Count; i++)
         {
-            tiles.Add(tile.name.ToUpper(), tile);
+            string name = fileNames[i].ToUpper();
+            Sprite sprite = DataManager.LoadSprite(path + name + ".png", Vector2.one / 2, 16);
+
+            if (sprite == null) continue;
+
+            CustomTile tile = ScriptableObject.CreateInstance<CustomTile>();
+            tile.SetData(name, sprite);
+            tiles.Add(name, tile);
         }
 
 #if UNITY_EDITOR
@@ -21,7 +30,7 @@ public static class TileManager
 #endif
     }
 
-    public static TileBase GetTile(string name)
+    public static CustomTile GetTile(string name)
     {
         name = name.ToUpper();
         if (tiles.ContainsKey(name)) return tiles[name];

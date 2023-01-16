@@ -14,7 +14,10 @@ public static class MapManager
     public static void Init()
     {
         maps = new List<string>();
-        maps = DataManager.GetFiles(path);
+        maps = DataManager.GetFiles(path, ".json");
+#if UNITY_EDITOR
+        Debug.Log($"[SYSTEM] LOAD MAP {maps.Count}");
+#endif
     }
 
     public static List<Vector3Int> FindRoute(TilemapInfo tilemap)
