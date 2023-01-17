@@ -12,7 +12,7 @@ public class TowerAttackArea : MonoBehaviour
         if (collision.tag == "Enemy")
         {
             EnemyObject obj = EnemyController.Instance.FindEnemy(collision.gameObject);
-            tower.AddEnemy(obj);
+            if (obj != null) tower.AddEnemy(obj);
         }
     }
 
