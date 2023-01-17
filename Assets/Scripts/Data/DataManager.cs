@@ -1,3 +1,4 @@
+using System.Linq;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,11 @@ namespace Data
 
     public static class DataManager
     {
+        public static List<T> GetResources<T>(string path) where T : Object
+        {
+            return Resources.LoadAll<T>(path).ToList();
+        }
+
         public static List<string> GetFiles(string path, string type)
         {
             List<string> files = new List<string>();

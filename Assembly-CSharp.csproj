@@ -71,10 +71,9 @@
     <Compile Include="Assets\Scripts\Data\SpriteManager.cs" />
     <Compile Include="Assets\Scripts\Game Control\TowerController.cs" />
     <Compile Include="Assets\Scripts\UI\GameSettingIcon.cs" />
-    <Compile Include="Assets\Scripts\Resource\Poolable.cs" />
-    <Compile Include="Assets\Scripts\Resource\Pool.cs" />
+    <Compile Include="Assets\Scripts\Object\Poolable.cs" />
+    <Compile Include="Assets\Scripts\Object\Pool.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfoItem.cs" />
-    <Compile Include="Assets\Scripts\Resource\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\Object\TowerAttackArea.cs" />
     <Compile Include="Assets\Scripts\Data\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Data\ObjectData.cs" />
@@ -91,7 +90,7 @@
     <Compile Include="Assets\Scripts\Game Control\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Data\EnumData.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfo.cs" />
-    <Compile Include="Assets\Scripts\Resource\PoolController.cs" />
+    <Compile Include="Assets\Scripts\Object\PoolController.cs" />
     <Compile Include="Assets\Scripts\Game Control\SceneController.cs" />
     <Compile Include="Assets\Scripts\Map\MapMaker.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
