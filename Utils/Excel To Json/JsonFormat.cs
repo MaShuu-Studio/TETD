@@ -36,5 +36,21 @@ namespace Excel_To_Json
         // {1} 콘텐츠 목록 (contentsFormat)
         public static string listFormat =
 @"    ""{0}"": [ {1} ]";
+
+        // {0} 각 enum
+        public static string enumFileFormat =
+@"
+namespace EnumData
+{{
+{0}}}
+";
+        // {0} Type 이름
+        // {1} 데이터
+        public static string enumFormat =
+@"  public enum {0} {{ {1}}}";
+        // {0} 데이터 이름
+        // {1} 데이터 번호
+        public static string enumDataFormat =
+@"{0} = {1}, ";
     }
 }

@@ -24,7 +24,14 @@ namespace Excel_To_Json
                     Excel.Range range = sheet.UsedRange;
 
                     Console.WriteLine($"Start Parsing {name.ToUpper()}");
-                    contents = string.Format(JsonFormat.jsonFormat, ParseBasicData(name, range));
+
+                    if (name != "EnumData")
+                        contents = string.Format(JsonFormat.jsonFormat, ParseBasicData(name, range));
+                    else
+                    {
+                        filename = name + ".cs";
+                        contents = string.Format(JsonFormat.enumFileFormat, ParseEnumData(name, range));
+                    }
                     File.WriteAllText(Path.Combine(Environment.CurrentDirectory, filename), contents);
                 }
 
@@ -135,6 +142,30 @@ namespace Excel_To_Json
             contents += string.Format(JsonFormat.listFormat, "data", datas);
             return contents;
         }
+
+        private static string ParseEnumData(string name, Excel.Range range)
+        {
+            string contents = "";
+
+            for (int row = 1; row <= range.Rows.Count; row++)
+            {
+                // column 1: enumType
+                // column 2-: enumData
+                string data = "";
+                string type = (range.Cells[row, 1] as Excel.Range).Value2;
+                int count = 0;
+                for (int column = 2; column <= range.Columns.Count; column++)
+                {
+                    string o = (range.Cells[row, column] as Excel.Range).Value2;
+                    if (string.IsNullOrEmpty(o)) continue;
+                    data += string.Format(JsonFormat.enumDataFormat, o, count++);
+                }
+                contents += string.Format(JsonFormat.enumFormat, type, data) + "\n";
+            }
+
+            return contents;
+        }
+
         private static string ParseValue(string type, object value)
         {
             if (value == null) return null;
