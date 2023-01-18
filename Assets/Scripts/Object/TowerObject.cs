@@ -88,10 +88,10 @@ public class TowerObject : Poolable
         while (enemies.Count > 0)
         {
             SoundController.PlayAudio(id);
-            EnemyController.Instance.EnemyDamaged(enemies.Get(), data.dmg);
+            EnemyController.Instance.EnemyDamaged(enemies.Get(), Stat(TowerMainStatType.DAMAGE));
 
             float delayTime = 0;
-            float delay = 1 / data.attackspeed;
+            float delay = 1 / Stat(TowerMainStatType.ATTACKSPEED);
             while (delayTime < delay)
             {
                 delayTime += Time.deltaTime;
@@ -100,6 +100,37 @@ public class TowerObject : Poolable
             yield return null;
         }
         delayCoroutine = null;
+    }
+
+    private float Stat(TowerMainStatType type)
+    {
+        float value = 0;
+        if (type == TowerMainStatType.DAMAGE) value = data.dmg;
+        else if (type == TowerMainStatType.ATTACKSPEED) value = data.attackspeed;
+
+        value += BonusStat(type);
+
+        return value;
+    }
+
+    public float BonusStat(TowerMainStatType type)
+    {
+        float value = 0;
+
+        if (type == TowerMainStatType.DAMAGE && PlayerController.Instance.Type == CharacterType.POWER)
+        {
+            int stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
+            float percent = stat / 100f;
+            value = data.dmg * percent;
+        }
+        else if (type == TowerMainStatType.ATTACKSPEED && PlayerController.Instance.Type == CharacterType.ATTACKSPEED)
+        {
+            int stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
+            float percent = stat / 100f;
+            value = data.attackspeed * percent;
+        }
+
+        return value;
     }
 
     public void ChangePriority(AttackPriority type)

@@ -5,7 +5,7 @@ using EnumData;
 
 public class ReinforceButton : ScriptableButton
 {
-    [SerializeField] private StatType type;
+    [SerializeField] private CharacterStatType type;
     protected override void ClickEvent()
     {
         PlayerController.Instance.Reinforce(type);

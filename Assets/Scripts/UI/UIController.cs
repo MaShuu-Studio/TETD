@@ -125,10 +125,12 @@ public class UIController : MonoBehaviour
 
         for (int i = 0; i < statText.Count; i++)
         {
-            statText[i].text = string.Format("{0:#0}", c.Stat[(StatType)i]);
+            statText[i].text = string.Format("{0:#0}", c.Stat[(CharacterStatType)i]);
         }
 
         bonusText.text = string.Format("{0:#0}", c.BonusStat);
+
+        towerInfoPanel.UpdateBonusStat();
     }
 
     public void NextRoundInfo(EachRound nextRoundInfo)

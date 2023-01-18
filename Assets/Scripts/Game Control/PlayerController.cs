@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
 
     private List<Tower> towers;
     public List<Tower> Towers { get { return towers; } }
+    public CharacterType Type { get { return character.Type; } }
     private Character character;
 
     public void Init(CharacterType type)
@@ -51,10 +52,15 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
-    public void Reinforce(StatType type)
+    public void Reinforce(CharacterStatType type)
     {
         character.Reinforce(type, 5);
         UpdateStat();
+    }
+
+    public int GetStat(CharacterStatType type)
+    {
+        return character.Stat[type];
     }
 
     public void LevelUp()
@@ -85,8 +91,8 @@ public class Character
     public CharacterType Type { get { return type; } }
     private CharacterType type;
 
-    public Dictionary<StatType, int> Stat { get { return stat; } }
-    private Dictionary<StatType, int> stat;
+    public Dictionary<CharacterStatType, int> Stat { get { return stat; } }
+    private Dictionary<CharacterStatType, int> stat;
 
     public Character(CharacterType type)
     {
@@ -96,12 +102,12 @@ public class Character
         level = 1;
         bonusStat = 0;
 
-        stat = new Dictionary<StatType, int>();
+        stat = new Dictionary<CharacterStatType, int>();
         for (int i = 0; i < 5; i++)
         {
-            stat.Add((StatType)i, 0);
+            stat.Add((CharacterStatType)i, 0);
         }
-        stat[StatType.ABILITY] = 10;
+        stat[CharacterStatType.ABILITY] = 10;
     }
 
     public void LevelUp()
@@ -110,7 +116,7 @@ public class Character
         bonusStat += 2;
     }
 
-    public void Reinforce(StatType type, int amount)
+    public void Reinforce(CharacterStatType type, int amount)
     {
         if (bonusStat <= 0) return;
 
