@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -146,13 +147,14 @@ namespace Excel_To_Json
         private static string ParseEnumData(string name, Excel.Range range)
         {
             string contents = "";
-
+            List<string> types = new List<string>();
             for (int row = 1; row <= range.Rows.Count; row++)
             {
                 // column 1: enumType
                 // column 2-: enumData
                 string data = "";
                 string type = (range.Cells[row, 1] as Excel.Range).Value2;
+                types.Add(type);
                 int count = 0;
                 for (int column = 2; column <= range.Columns.Count; column++)
                 {
@@ -162,6 +164,14 @@ namespace Excel_To_Json
                 }
                 contents += string.Format(JsonFormat.enumFormat, type, data) + "\n";
             }
+
+            string array = "";
+            for (int i = 0; i < types.Count; i++)
+            {
+                array += string.Format(JsonFormat.enumArrayFormat, types[i]) + "\n";
+            }
+
+            contents += string.Format(JsonFormat.enumArrayClassForamt, array);
 
             return contents;
         }

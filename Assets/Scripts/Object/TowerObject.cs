@@ -88,7 +88,7 @@ public class TowerObject : Poolable
         while (enemies.Count > 0)
         {
             SoundController.PlayAudio(id);
-            EnemyController.Instance.EnemyDamaged(enemies.Get(), Stat(TowerMainStatType.DAMAGE));
+            EnemyController.Instance.EnemyDamaged(enemies.Get(), data.element, Stat(TowerMainStatType.DAMAGE));
 
             float delayTime = 0;
             float delay = 1 / Stat(TowerMainStatType.ATTACKSPEED);

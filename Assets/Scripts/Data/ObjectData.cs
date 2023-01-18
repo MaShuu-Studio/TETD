@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using EnumData;
 
 public abstract class ObjectData
 {
@@ -11,8 +12,8 @@ public abstract class ObjectData
 
 public class Tower : ObjectData
 {
-    public int grade;
-    public int element;
+    public Grade grade;
+    public Element element;
 
     public int cost;
 
@@ -51,6 +52,8 @@ public class Tower : ObjectData
 
 public class Enemy : ObjectData
 {
+    public Element element;
+
     public float hp;
     public float speed;
     public float dmg;
@@ -59,6 +62,8 @@ public class Enemy : ObjectData
     {
         id = data.id;
         name = "ENEMY-" + data.name.ToUpper();
+
+        element = data.element;
 
         hp = data.hp;
         speed = data.speed;
@@ -69,9 +74,27 @@ public class Enemy : ObjectData
         id = data.id;
         name = data.name;
 
+        element = data.element;
+
         hp = data.hp;
         speed = data.speed;
         dmg = data.dmg;
+    }
+
+    public Element WeakElement()
+    {
+        Element weak = element + 1;
+        if (weak > EnumArray.Elements[EnumArray.Elements.Length - 1]) weak = EnumArray.Elements[0];
+
+        return weak;
+    }
+
+    public Element StrongElement()
+    {
+        Element strong = element - 1; 
+        if (strong < EnumArray.Elements[0]) strong = EnumArray.Elements[EnumArray.Elements.Length - 1];
+
+        return strong;
     }
 }
 
@@ -88,8 +111,8 @@ public abstract class JsonData
 [Serializable]
 public class TowerData : JsonData
 {
-    public int grade;
-    public int element;
+    public Grade grade;
+    public Element element;
 
     public int cost;
 
@@ -101,6 +124,8 @@ public class TowerData : JsonData
 [Serializable]
 public class EnemyData : JsonData
 {
+    public Element element;
+
     public float hp;
     public float speed;
     public float dmg;

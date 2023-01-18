@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnumData;
 
 public class EnemyController : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class EnemyController : MonoBehaviour
         instance = this;
     }
 
-    private Queue<Tuple<EnemyObject, float>> enemyDamagedQueue;
+    private Queue<Tuple<EnemyObject, Element, float>> enemyDamagedQueue;
     private IEnumerator flushCoroutine;
 
     private List<EnemyObject> enemies;
@@ -28,7 +29,7 @@ public class EnemyController : MonoBehaviour
 
     public void Init(Map map)
     {
-        enemyDamagedQueue = new Queue<Tuple<EnemyObject, float>>();
+        enemyDamagedQueue = new Queue<Tuple<EnemyObject, Element, float>>();
         enemies = new List<EnemyObject>();
         road = new List<Vector3>();
         for (int i = 0; i < map.enemyRoad.Count; i++)
@@ -74,11 +75,11 @@ public class EnemyController : MonoBehaviour
         return null;
     }
 
-    public void EnemyDamaged(EnemyObject enemy, float dmg)
+    public void EnemyDamaged(EnemyObject enemy, Element element, float dmg)
     {
         if (enemy == null) return;
 
-        enemyDamagedQueue.Enqueue(new Tuple<EnemyObject, float>(enemy, dmg));
+        enemyDamagedQueue.Enqueue(new Tuple<EnemyObject, Element, float>(enemy, element, dmg));
         if (flushCoroutine == null)
         {
             flushCoroutine = Flush();
@@ -91,14 +92,15 @@ public class EnemyController : MonoBehaviour
         int count = enemyDamagedQueue.Count;
         for (int i = 0; i < count; i++)
         {
-            Tuple<EnemyObject, float> tuple;
+            Tuple<EnemyObject, Element, float> tuple;
             if (enemyDamagedQueue.TryDequeue(out tuple) == false) continue;
 
             EnemyObject enemy = tuple.Item1;
-            float dmg = tuple.Item2;
+            Element element = tuple.Item2;
+            float dmg = tuple.Item3;
 
             if (enemies.Contains(enemy) == false) continue;
-            enemy.Damaged(dmg);
+            enemy.Damaged(element, dmg);
         }
         yield return null;
 

@@ -4,7 +4,8 @@
         
 {
     "id": 2001,
-"name": "TEST1",
+"name": "FIRE",
+"element": 0,
 "hp": 2,
 "dmg": 1,
 "speed": 5,
@@ -15,11 +16,24 @@
 
 {
     "id": 2002,
-"name": "TEST2",
+"name": "WATER",
+"element": 1,
 "hp": 2,
 "dmg": 1,
 "speed": 5,
 "imgsrc": "/Enemy/2002.png",
+"pivot": { "x": 0.5, "y": 0.5 },
+"pixelperunit": 36
+},
+
+{
+    "id": 2003,
+"name": "NATURE",
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"speed": 5,
+"imgsrc": "/Enemy/2003.png",
 "pivot": { "x": 0.5, "y": 0.5 },
 "pixelperunit": 36
 }

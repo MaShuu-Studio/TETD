@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnumData;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class EnemyObject : Poolable
@@ -74,12 +75,15 @@ public class EnemyObject : Poolable
         ArriveDest();
     }
 
-    public void Damaged(float dmg)
+    public void Damaged(Element element, float dmg)
     {
+        if (element == data.WeakElement()) dmg *= 1.5f;
+        else if (element == data.StrongElement()) dmg *= 0.5f;
+        hp -= dmg;
+
 #if UNITY_EDITOR
         Debug.Log($"[SYSTEM] {name} Damaged {dmg} | HP: {hp}");
 #endif
-        hp -= dmg;
 
         if (hp <= 0)
         {
