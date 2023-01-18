@@ -1,8 +1,11 @@
+using System;
 using System.Linq;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+using System.Threading.Tasks;
 
 namespace Data
 {
@@ -13,7 +16,7 @@ namespace Data
 
     public static class DataManager
     {
-        public static List<T> GetResources<T>(string path) where T : Object
+        public static List<T> GetResources<T>(string path) where T : UnityEngine.Object
         {
             return Resources.LoadAll<T>(path).ToList();
         }
@@ -71,6 +74,29 @@ namespace Data
 
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), pivot, pixelsPerUnit);
             return sprite;
+        }
+        public static async Task<AudioClip> LoadSound(string path, string name, AudioType type)
+        {
+            path = Application.streamingAssetsPath + "/Sounds" + path;
+
+            AudioClip clip = null;
+            using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(path, type))
+            {
+                req.SendWebRequest();
+
+                try
+                {
+                    while(!req.isDone) await Task.Delay(5);
+
+                    clip = DownloadHandlerAudioClip.GetContent(req);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"{e}");
+                }
+            }
+
+            return clip;
         }
     }
 }

@@ -19,6 +19,7 @@ public class Initializer : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         SpriteManager.Init();
+        SoundManager.Init();
 
         TileManager.Init();
         EnemyManager.Init();
@@ -31,6 +32,7 @@ public class Initializer : MonoBehaviour
     private void Start()
     {
         PoolController.Instance.Init();
+
         SceneController.Instance.Init();
     }
 }

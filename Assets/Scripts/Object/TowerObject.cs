@@ -87,6 +87,7 @@ public class TowerObject : Poolable
     {
         while (enemies.Count > 0)
         {
+            SoundController.PlayAudio(id);
             EnemyController.Instance.EnemyDamaged(enemies.Get(), data.dmg);
 
             float delayTime = 0;
