@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using EnumData;
 
 public class UIController : MonoBehaviour
 {
@@ -37,6 +38,13 @@ public class UIController : MonoBehaviour
     [Header("Game Scene")]
     [SerializeField] private RectTransform infoRect;
     [SerializeField] private TextMeshProUGUI roundInfo;
+
+    [Header("Info Panel")]
+    [SerializeField] private TextMeshProUGUI lifeText;
+    [SerializeField] private TextMeshProUGUI moneyText;
+    [SerializeField] private TextMeshProUGUI infoText;
+    [SerializeField] private List<TextMeshProUGUI> statText;
+    [SerializeField] private TextMeshProUGUI bonusText;
 
     [Header("Tower Panel")]
     [SerializeField] private Transform buildTowerButtonsParent;
@@ -103,6 +111,26 @@ public class UIController : MonoBehaviour
     }
 
     #region Info Panel
+
+    public void UpdateInfo(int life, int maxlife, int money)
+    {
+        lifeText.text = life.ToString() + " / " + maxlife.ToString();
+        moneyText.text = money.ToString();
+    }
+    public void UpdateStat(Character c)
+    {
+        infoText.text =
+            $"LEVEL: { string.Format("{0:##}", c.Level)}\n" +
+            $"TYPE: {c.TypeString}";
+
+        for (int i = 0; i < statText.Count; i++)
+        {
+            statText[i].text = string.Format("{0:#0}", c.Stat[(StatType)i]);
+        }
+
+        bonusText.text = string.Format("{0:#0}", c.BonusStat);
+    }
+
     public void NextRoundInfo(EachRound nextRoundInfo)
     {
         string info = "";
