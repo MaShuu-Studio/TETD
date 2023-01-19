@@ -17,9 +17,8 @@ public class Tower : ObjectData
 
     public int cost;
 
-    public float range;
-    public float dmg;
-    public float attackspeed;
+    public Dictionary<TowerMainStatType, float> stat;
+    public Dictionary<TowerMainStatType, int> statLevel;
 
     public Tower(TowerData data)
     {
@@ -30,9 +29,11 @@ public class Tower : ObjectData
         element = data.element;
 
         cost = data.cost;
-        range = data.range;
-        dmg = data.dmg;
-        attackspeed = data.attackspeed;
+
+        stat = new Dictionary<TowerMainStatType, float>();
+        stat.Add(TowerMainStatType.DAMAGE, data.dmg);
+        stat.Add(TowerMainStatType.ATTACKSPEED, data.attackspeed);
+        stat.Add(TowerMainStatType.DISTANCE, data.range);
     }
 
     public Tower(Tower data)
@@ -44,9 +45,33 @@ public class Tower : ObjectData
         element = data.element;
 
         cost = data.cost;
-        range = data.range;
-        dmg = data.dmg;
-        attackspeed = data.attackspeed;
+
+        stat = new Dictionary<TowerMainStatType, float>(data.stat);
+
+        statLevel = new Dictionary<TowerMainStatType, int>();
+        for (int i = 0; i < EnumArray.TowerMainStatTypes.Length; i++)
+        {
+            statLevel.Add((TowerMainStatType)i, 1);
+        }
+    }
+
+    public void Upgrade(TowerMainStatType type)
+    {
+        statLevel[type]++;
+        stat[type] *= 1.1f;
+    }
+
+    public int UpgradeCost(TowerMainStatType type)
+    {
+        int upgradeCost = 0;
+        int level = statLevel[type];
+
+        for (int i = 1; i <= level; i++)
+        {
+            upgradeCost += cost / 10;
+        }
+
+        return upgradeCost;
     }
 }
 
@@ -100,7 +125,7 @@ public class Enemy : ObjectData
 
     public Element StrongElement()
     {
-        Element strong = element - 1; 
+        Element strong = element - 1;
         if (strong < EnumArray.Elements[0]) strong = EnumArray.Elements[EnumArray.Elements.Length - 1];
 
         return strong;
@@ -125,9 +150,9 @@ public class TowerData : JsonData
 
     public int cost;
 
-    public float range;
     public float dmg;
     public float attackspeed;
+    public float range;
 }
 
 [Serializable]

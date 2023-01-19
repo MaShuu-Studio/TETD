@@ -25,7 +25,6 @@ public class TowerObject : Poolable
 
         amount = 2;
 
-        this.data = new Tower(data);
         gameObject.name = data.name;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -34,15 +33,19 @@ public class TowerObject : Poolable
         spriteRenderer.sprite = SpriteManager.GetSprite(id);
 
         rangeUI.transform.localPosition = range.transform.localPosition = Vector3.zero;
-        rangeUI.transform.localScale = range.transform.localScale = Vector3.one * (1 + data.range * 2);
 
         return true;
     }
 
     public void Build(Vector3 pos)
     {
+        Tower data = TowerManager.GetTower(id);
+        this.data = new Tower(data);
+
         int sorting = Mathf.FloorToInt(pos.y) * -1;
         spriteRenderer.sortingOrder = sorting;
+
+        UpdateDistnace();
 
         rangeUI.SetActive(false);
 
@@ -66,6 +69,11 @@ public class TowerObject : Poolable
             StopCoroutine(delayCoroutine);
             delayCoroutine = null;
         }
+    }
+
+    public void UpdateDistnace()
+    {
+        rangeUI.transform.localScale = range.transform.localScale = Vector3.one * (1 + data.stat[TowerMainStatType.DISTANCE] * 2);
     }
 
     public void AddEnemy(EnemyObject enemy)
@@ -104,9 +112,7 @@ public class TowerObject : Poolable
 
     private float Stat(TowerMainStatType type)
     {
-        float value = 0;
-        if (type == TowerMainStatType.DAMAGE) value = data.dmg;
-        else if (type == TowerMainStatType.ATTACKSPEED) value = data.attackspeed;
+        float value = data.stat[type];
 
         value += BonusStat(type);
 
@@ -116,19 +122,16 @@ public class TowerObject : Poolable
     public float BonusStat(TowerMainStatType type)
     {
         float value = 0;
+        int stat = 0;
 
         if (type == TowerMainStatType.DAMAGE && PlayerController.Instance.Type == CharacterType.POWER)
-        {
-            int stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
-            float percent = stat / 100f;
-            value = data.dmg * percent;
-        }
+            stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
+
         else if (type == TowerMainStatType.ATTACKSPEED && PlayerController.Instance.Type == CharacterType.ATTACKSPEED)
-        {
-            int stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
-            float percent = stat / 100f;
-            value = data.attackspeed * percent;
-        }
+            stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
+
+        float percent = stat / 100f;
+        value = data.stat[type] * percent;
 
         return value;
     }

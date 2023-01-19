@@ -37,10 +37,21 @@ public class PlayerController : MonoBehaviour
         character = new Character(type);
 
         life = maxLife = 100;
-        money = 0;
+        money = 10000;
 
         UpdateInfo();
         UpdateStat();
+    }
+
+    public bool Buy(int cost)
+    {
+        if (money >= cost)
+        {
+            money -= cost;
+            UpdateInfo();
+            return true;
+        }
+        return false;
     }
 
     public bool AddTower(Tower tower)

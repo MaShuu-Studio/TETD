@@ -32,9 +32,9 @@ public class TowerInfo : MonoBehaviour
 
     public virtual void UpdateInfo()
     {
-        damageText.text = data.dmg.ToString();
-        attackSpeedText.text = data.attackspeed.ToString();
-        rangeText.text = data.range.ToString();
+        damageText.text = string.Format("{0:0.#}", data.stat[EnumData.TowerMainStatType.DAMAGE]);
+        attackSpeedText.text = string.Format("{0:0.#}", data.stat[EnumData.TowerMainStatType.ATTACKSPEED]);
+        rangeText.text = string.Format("{0:0.#}", data.stat[EnumData.TowerMainStatType.DISTANCE]);
     }
 
     protected void AddSkill()

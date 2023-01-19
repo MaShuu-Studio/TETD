@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using EnumData;
+using System;
 
 public class UIController : MonoBehaviour
 {
@@ -197,8 +198,15 @@ public class UIController : MonoBehaviour
 
     public bool PointInTowerInfo(Vector2 point)
     {
-        return towerInfoPanel.RectTransform.rect.Contains(point);
+        Rect rect = new Rect(towerInfoPanel.RectTransform.anchorMin, towerInfoPanel.RectTransform.rect.size);
+        return rect.Contains(point);
     }
+
+    public void ReinforceTower(TowerMainStatType type)
+    {
+        towerInfoPanel.Reinforce(type);
+    }
+
     #endregion
 
     #region Shop

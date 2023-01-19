@@ -101,6 +101,7 @@
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
     <Compile Include="Assets\Scripts\UI\DamageUI.cs" />
     <Compile Include="Assets\Scripts\UI\DamagePool.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\TowerReinforceButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

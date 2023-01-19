@@ -37,13 +37,14 @@ public class DamageUI : Poolable
     private void OnEnable()
     {
         string[] xyf = gameObject.name.Split(",");
-        float x, y;
+        float x, y, f;
 
         float.TryParse(xyf[0], out x);
         float.TryParse(xyf[1], out y);
+        float.TryParse(xyf[2], out f);
 
         transform.position = new Vector2(x, y);
-        damageText.text = string.Format("{0:0.#}", xyf[2]);
+        damageText.text = string.Format("{0:0.#}", f);
 
         ShowDamage();
     }

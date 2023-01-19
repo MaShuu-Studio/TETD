@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using EnumData;
 
 public class TowerInfoPanel : TowerInfo
 {
@@ -11,6 +12,8 @@ public class TowerInfoPanel : TowerInfo
 
     [SerializeField] private GameObject[] bonusStatObjects;
     [SerializeField] private TextMeshProUGUI[] bonusStatTexts;
+    [SerializeField] private TowerReinforceButton[] reinforceButtons;
+
     private RectTransform rectTransform;
     public RectTransform RectTransform { get { return rectTransform; } }
 
@@ -30,6 +33,11 @@ public class TowerInfoPanel : TowerInfo
         int index = (int)selectedTower.Priority;
         priorityToggles[index].isOn = true;
 
+        for (int i = 0; i < EnumArray.TowerMainStatTypes.Length; i++)
+        {
+            UpdateUpgradeStat((TowerMainStatType)i);
+        }
+
         UpdateBonusStat();
     }
 
@@ -38,7 +46,7 @@ public class TowerInfoPanel : TowerInfo
         for (int i = 0; i < bonusStatObjects.Length; i++)
         {
             float bonus = 0;
-            if (selectedTower != null) bonus = selectedTower.BonusStat((EnumData.TowerMainStatType)i);
+            if (selectedTower != null) bonus = selectedTower.BonusStat((TowerMainStatType)i);
             if (bonus == 0) bonusStatObjects[i].SetActive(false);
             else
             {
@@ -46,6 +54,29 @@ public class TowerInfoPanel : TowerInfo
                 bonusStatTexts[i].text = string.Format("{0:0.#}", bonus);
             }
         }
+    }
+
+    public void Reinforce(TowerMainStatType type)
+    {
+        if (PlayerController.Instance.Buy(selectedTower.Data.UpgradeCost(type)))
+        {
+            selectedTower.Data.Upgrade(type);
+            selectedTower.UpdateDistnace();
+
+            UpdateUpgradeStat(type);
+            UpdateInfo();
+            UpdateBonusStat();
+        }
+    }
+
+    public void UpdateUpgradeStat(TowerMainStatType type)
+    {
+        int level = selectedTower.Data.statLevel[type];
+        int cost = selectedTower.Data.UpgradeCost(type);
+        float cur = selectedTower.Data.stat[type];
+        float next = cur * 1.1f;
+
+        reinforceButtons[(int)type].SetData(level, cost, cur, next);
     }
 
     // 토글 작동시 ValueChanged를 통해 조정
