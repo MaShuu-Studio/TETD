@@ -159,6 +159,13 @@ public class TowerObject : Poolable
             prior = enemy.Hp;
         else if (priority == AttackPriority.WEAK)
             prior = enemy.Hp * -1;
+        else if (priority == AttackPriority.ELEMENT)
+        {
+            if (enemy.Data.WeakElement() == data.element) prior = 100;
+            else if (enemy.Data.StrongElement() != data.element) prior = 10;
+
+            prior += enemy.Order / 10000f;
+        }
 
         return prior;
     }

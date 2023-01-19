@@ -9,6 +9,7 @@ public class EnemyObject : Poolable
     [SerializeField] private GameObject hpGage;
     private SpriteRenderer spriteRenderer;
 
+    public Enemy Data { get { return data; } }
     private Enemy data;
 
     private List<Vector3> road;
