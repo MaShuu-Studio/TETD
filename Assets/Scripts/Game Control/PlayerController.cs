@@ -63,15 +63,16 @@ public class PlayerController : MonoBehaviour
         return character.Stat[type];
     }
 
-    public void LevelUp()
+    public void Reward(int exp, int money)
     {
-        character.LevelUp();
-        UpdateStat();
+        this.money += money;
+        character.GetExp(exp);
+        UpdateInfo();
     }
 
     public void UpdateInfo()
     {
-        UIController.Instance.UpdateInfo(life, maxLife, money);
+        UIController.Instance.UpdateInfo(life, maxLife, money, character);
     }
 
     public void UpdateStat()
@@ -84,6 +85,8 @@ public class Character
 {
     public int Level { get { return level; } }
     private int level;
+    public int Exp { get { return exp; } }
+    private int exp;
     public int BonusStat { get { return bonusStat; } }
     private int bonusStat;
 
@@ -100,6 +103,7 @@ public class Character
         TypeString = type.ToString();
 
         level = 1;
+        exp = 0;
         bonusStat = 0;
 
         stat = new Dictionary<CharacterStatType, int>();
@@ -110,10 +114,16 @@ public class Character
         stat[CharacterStatType.ABILITY] = 10;
     }
 
-    public void LevelUp()
+    public void GetExp(int amount)
     {
-        level++;
-        bonusStat += 2;
+        exp += amount;
+
+        if (exp >= 100)
+        {
+            exp -= 100;
+            level++;
+            bonusStat += 2;
+        }
     }
 
     public void Reinforce(CharacterStatType type, int amount)

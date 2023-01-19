@@ -45,6 +45,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lifeText;
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private TextMeshProUGUI infoText;
+    [SerializeField] private Slider expSlider;
     [SerializeField] private List<TextMeshProUGUI> statText;
     [SerializeField] private TextMeshProUGUI bonusText;
 
@@ -126,22 +127,25 @@ public class UIController : MonoBehaviour
 
     #region Info Panel
 
-    public void UpdateInfo(int life, int maxlife, int money)
+    public void UpdateInfo(int life, int maxlife, int money, Character c)
     {
         lifeText.text = life.ToString() + " / " + maxlife.ToString();
         moneyText.text = money.ToString();
-    }
-    public void UpdateStat(Character c)
-    {
+        expSlider.value = c.Exp;
+
         infoText.text =
             $"LEVEL: { string.Format("{0:##}", c.Level)}\n" +
             $"TYPE: {c.TypeString}";
 
+        bonusText.text = string.Format("{0:#0}", c.BonusStat);
+
+    }
+    public void UpdateStat(Character c)
+    {
         for (int i = 0; i < statText.Count; i++)
         {
             statText[i].text = string.Format("{0:#0}", c.Stat[(CharacterStatType)i]);
         }
-
         bonusText.text = string.Format("{0:#0}", c.BonusStat);
 
         towerInfoPanel.UpdateBonusStat();

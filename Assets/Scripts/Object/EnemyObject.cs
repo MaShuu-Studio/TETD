@@ -93,6 +93,7 @@ public class EnemyObject : Poolable
 
         if (hp <= 0)
         {
+            PlayerController.Instance.Reward(data.exp, data.money);
             TowerController.Instance.RemoveEnemyObject(this);
             EnemyController.Instance.RemoveEnemy(this);
         }

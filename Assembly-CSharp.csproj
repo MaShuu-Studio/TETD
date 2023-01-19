@@ -93,7 +93,6 @@
     <Compile Include="Assets\Scripts\Data\RoundManager.cs" />
     <Compile Include="Assets\Scripts\Game Control\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Data\EnumData.cs" />
-    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\TestButton.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfo.cs" />
     <Compile Include="Assets\Scripts\Object\PoolController.cs" />
     <Compile Include="Assets\Scripts\Game Control\SceneController.cs" />

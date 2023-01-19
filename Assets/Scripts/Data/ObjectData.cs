@@ -54,6 +54,9 @@ public class Enemy : ObjectData
 {
     public Element element;
 
+    public int money;
+    public int exp;
+
     public float hp;
     public float speed;
     public float dmg;
@@ -65,6 +68,9 @@ public class Enemy : ObjectData
 
         element = data.element;
 
+        exp = data.exp;
+        money = data.money;
+
         hp = data.hp;
         speed = data.speed;
         dmg = data.dmg;
@@ -75,6 +81,9 @@ public class Enemy : ObjectData
         name = data.name;
 
         element = data.element;
+
+        exp = data.exp;
+        money = data.money;
 
         hp = data.hp;
         speed = data.speed;
@@ -125,6 +134,9 @@ public class TowerData : JsonData
 public class EnemyData : JsonData
 {
     public Element element;
+
+    public int money;
+    public int exp;
 
     public float hp;
     public float speed;
