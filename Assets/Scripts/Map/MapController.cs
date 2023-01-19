@@ -128,5 +128,10 @@ public class MapController : MonoBehaviour
 
         return new Vector3(x, y);
     }
+
+    public Vector3 PosToScreen(Vector3 pos)
+    {
+        return cam.WorldToScreenPoint(pos);
+    }
     #endregion
 }

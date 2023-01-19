@@ -6,11 +6,13 @@ using EnumData;
 [RequireComponent(typeof(SpriteRenderer))]
 public class EnemyObject : Poolable
 {
+    [SerializeField] private GameObject hpGage;
     private SpriteRenderer spriteRenderer;
 
     private Enemy data;
 
     private List<Vector3> road;
+    private float maxHp;
     private float hp;
     private float speed;
     private int destRoad;
@@ -42,7 +44,8 @@ public class EnemyObject : Poolable
     {
         this.road = road;
 
-        hp = data.hp;
+        hp = maxHp = data.hp;
+        UpdateHp();
         speed = data.speed;
 
         transform.position = road[0];
@@ -79,8 +82,11 @@ public class EnemyObject : Poolable
     {
         if (element == data.WeakElement()) dmg *= 1.5f;
         else if (element == data.StrongElement()) dmg *= 0.5f;
-        hp -= dmg;
 
+        UIController.Instance.EnemyDamaged(transform.position, dmg);
+
+        hp -= dmg;
+        UpdateHp();
 #if UNITY_EDITOR
         Debug.Log($"[SYSTEM] {name} Damaged {dmg} | HP: {hp}");
 #endif
@@ -90,6 +96,12 @@ public class EnemyObject : Poolable
             TowerController.Instance.RemoveEnemyObject(this);
             EnemyController.Instance.RemoveEnemy(this);
         }
+    }
+
+    private void UpdateHp()
+    {
+        if (hp < 0) hp = 0;
+        hpGage.transform.localScale = new Vector3(hp / maxHp, 1);
     }
 
     private void ArriveDest()

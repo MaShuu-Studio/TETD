@@ -38,6 +38,8 @@ public class UIController : MonoBehaviour
     [Header("Game Scene")]
     [SerializeField] private RectTransform infoRect;
     [SerializeField] private TextMeshProUGUI roundInfo;
+    [SerializeField] private DamageUI damageUI;
+    [SerializeField] private DamagePool damageUIPool;
 
     [Header("Info Panel")]
     [SerializeField] private TextMeshProUGUI lifeText;
@@ -103,11 +105,23 @@ public class UIController : MonoBehaviour
             buildTowerButtons.Add(button);
         }
 
+        damageUIPool.Init(damageUI);
+
         UpdateTowerList();
         RerollAll();
 
         OpenShop(false);
         SelectTower(false, null);
+    }
+
+    public void EnemyDamaged(Vector3 pos, float damage)
+    {
+        damageUIPool.Pop(MapController.Instance.PosToScreen(pos), damage);
+    }
+
+    public void PushDamageUI(GameObject go)
+    {
+        damageUIPool.Push(go);
     }
 
     #region Info Panel
