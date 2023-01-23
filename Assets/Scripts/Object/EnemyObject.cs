@@ -30,12 +30,10 @@ public class EnemyObject : Poolable
 
         this.data = new Enemy(data);
         gameObject.name = data.name;
+        tag = "Enemy";
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sortingLayerName = "Enemy";
-
-        tag = "Enemy";
-
         spriteRenderer.sprite = SpriteManager.GetSprite(id);
 
         return true;
@@ -53,7 +51,6 @@ public class EnemyObject : Poolable
         destRoad = 1;
 
         spriteRenderer.sortingOrder = Order = order;
-
         StartCoroutine(Move());
     }
 

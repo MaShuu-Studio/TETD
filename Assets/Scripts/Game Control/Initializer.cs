@@ -18,21 +18,22 @@ public class Initializer : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
-        SpriteManager.Init();
-        SoundManager.Init();
+        Initialize();
+    }
 
-        TileManager.Init();
-        EnemyManager.Init();
-        TowerManager.Init();
+    private async void Initialize()
+    {
+        SpriteManager.Init();
+        await SoundManager.Init();
+
+        await TileManager.Init();
+        await EnemyManager.Init();
+        await TowerManager.Init();
 
         MapManager.Init();
         RoundManager.Init();
-    }
 
-    private void Start()
-    {
         PoolController.Instance.Init();
-
         SceneController.Instance.Init();
     }
 }

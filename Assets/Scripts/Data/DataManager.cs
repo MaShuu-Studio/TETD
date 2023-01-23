@@ -28,7 +28,7 @@ namespace Data
 
             for (int i = 0; i < pathes.Length; i++)
             {
-                string file = Path.GetFileName(pathes[i]).Replace(type,"").ToUpper();
+                string file = Path.GetFileName(pathes[i]).Replace(type, "").ToUpper();
                 files.Add(file);
             }
             return files;
@@ -62,17 +62,31 @@ namespace Data
             return obj.list;
         }
 
-        public static Sprite LoadSprite(string path, Vector2 pivot, float pixelsPerUnit)
+        public static async Task<Sprite> LoadSprite(string path, Vector2 pivot, float pixelsPerUnit)
         {
             path = Application.streamingAssetsPath + "/Sprites" + path;
+            Sprite sprite = null;
+            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(path))
+            {
+                req.SendWebRequest();
 
-            byte[] imageBytes = File.ReadAllBytes(path);
-            Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-            if (texture.LoadImage(imageBytes) == false) return null;
+                try
+                {
+                    while (!req.isDone) await Task.Delay(5);
 
-            texture.filterMode = FilterMode.Point;
+                    Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
 
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), pivot, pixelsPerUnit);
+                    texture = DownloadHandlerTexture.GetContent(req);
+                    texture.filterMode = FilterMode.Point;
+
+                    sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), pivot, pixelsPerUnit);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"{e}");
+                }
+            }
+
             return sprite;
         }
         public static async Task<AudioClip> LoadSound(string path, string name, AudioType type)
@@ -86,7 +100,7 @@ namespace Data
 
                 try
                 {
-                    while(!req.isDone) await Task.Delay(5);
+                    while (!req.isDone) await Task.Delay(5);
 
                     clip = DownloadHandlerAudioClip.GetContent(req);
                 }

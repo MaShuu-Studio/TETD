@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Data;
+using System.Threading.Tasks;
 
 public static class SoundManager
 {
@@ -11,7 +12,7 @@ public static class SoundManager
     private static List<string> keys;
     private static string path = Application.streamingAssetsPath + "/Sounds/";
 
-    public static async void Init()
+    public static async Task Init()
     {
         sounds = new Dictionary<string, AudioClip>();
 

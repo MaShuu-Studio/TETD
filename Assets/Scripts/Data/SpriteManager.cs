@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Data;
+using System.Threading.Tasks;
 
 public static class SpriteManager
 {
@@ -12,13 +13,13 @@ public static class SpriteManager
         sprites = new Dictionary<int, Sprite>();
     }
 
-    public static void AddSprite<T>(string path, int id, Vector2 pivot, float pixelPerUnit)
+    public static async Task AddSprite<T>(string path, int id, Vector2 pivot, float pixelPerUnit)
     {
         if (sprites.ContainsKey(id)) return;
 
         string type = typeof(T).ToString();
 
-        Sprite sprite = DataManager.LoadSprite(path, pivot, pixelPerUnit);
+        Sprite sprite = await DataManager.LoadSprite(path, pivot, pixelPerUnit);
         sprites.Add(id, sprite);
     }
 

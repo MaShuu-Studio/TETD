@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Data;
+using System.Threading.Tasks;
 
 public static class EnemyManager
 {
@@ -12,7 +13,7 @@ public static class EnemyManager
     public static List<int> Keys { get { return keys; } }
     private static List<int> keys;
 
-    public static void Init()
+    public static async Task Init()
     {
         enemies = new Dictionary<int, Enemy>();
         List<EnemyData> list = DataManager.DeserializeListJson<EnemyData>(path, "Enemy");
@@ -21,7 +22,7 @@ public static class EnemyManager
         {
             Enemy enemy = new Enemy(data);
             enemies.Add(enemy.id, enemy);
-            SpriteManager.AddSprite<Enemy>(data.imgsrc, enemy.id, data.pivot, data.pixelperunit);
+            await SpriteManager.AddSprite<Enemy>(data.imgsrc, enemy.id, data.pivot, data.pixelperunit);
         }
 
         keys = enemies.Keys.ToList();

@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using EnumData;
 using Data;
+using System.Threading.Tasks;
 
 public static class TowerManager
 {
@@ -14,7 +15,7 @@ public static class TowerManager
     public static List<int> Keys { get { return keys; } }
     private static List<int> keys;
 
-    public static void Init()
+    public static async Task Init()
     {
         towers = new Dictionary<int, Tower>();
         List<TowerData> list = DataManager.DeserializeListJson<TowerData>(path, "Tower");
@@ -28,7 +29,7 @@ public static class TowerManager
             Tower tower = new Tower(data);
             towers.Add(tower.id, tower);
             egTowerIds[(int)tower.element, (int)tower.grade].Add(tower.id);
-            SpriteManager.AddSprite<Tower>(data.imgsrc, tower.id, data.pivot, data.pixelperunit);
+            await SpriteManager.AddSprite<Tower>(data.imgsrc, tower.id, data.pivot, data.pixelperunit);
         }
         keys = towers.Keys.ToList();
 
