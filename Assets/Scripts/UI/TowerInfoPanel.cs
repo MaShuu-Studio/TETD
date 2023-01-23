@@ -72,7 +72,7 @@ public class TowerInfoPanel : TowerInfo
     public void UpdateUpgradeStat(TowerMainStatType type)
     {
         int level = selectedTower.Data.statLevel[type];
-        int cost = selectedTower.Data.UpgradeCost(type);
+        int cost = PlayerController.Cost(selectedTower.Data.UpgradeCost(type));
         float cur = selectedTower.Data.stat[type];
         float next = cur * 1.1f;
 

@@ -54,10 +54,7 @@ public class PlayerController : MonoBehaviour
 
     public bool Buy(int cost)
     {
-        if (Type == CharacterType.COST)
-        {
-            cost = (int)(cost / ((100 + GetStat(CharacterStatType.ABILITY)) / 100f));
-        }
+        cost = Cost(cost);
 
         if (money >= cost)
         {
@@ -66,6 +63,16 @@ public class PlayerController : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public static int Cost(int cost)
+    {
+        if (Instance.Type == CharacterType.COST)
+        {
+            cost = (int)(cost / ((100 + Instance.GetStat(CharacterStatType.ABILITY)) / 100f));
+        }
+
+        return cost;
     }
 
     public bool AddTower(Tower tower)

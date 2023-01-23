@@ -27,6 +27,7 @@ public class BuildTowerButton : ScriptableButton
         }
         id = tower.id;
         image.sprite = SpriteManager.GetSprite(id);
+        costText.text = "$ " + PlayerController.Cost(tower.cost);
     }
 
     protected override void ClickEvent()

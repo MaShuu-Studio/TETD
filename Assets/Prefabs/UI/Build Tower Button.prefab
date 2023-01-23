@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 3688499872716658120}
   - component: {fileID: 4601604952340429049}
   m_Layer: 5
-  m_Name: Tower Buy Button
+  m_Name: Build Tower Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

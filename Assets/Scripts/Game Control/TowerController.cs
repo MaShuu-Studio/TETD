@@ -31,6 +31,7 @@ public class TowerController : MonoBehaviour
 
         Tower tower = TowerManager.GetTower(id);
         if (tower == null) return false;
+        if (PlayerController.Instance.Buy(tower.cost) == false) return false;
 
         GameObject obj = PoolController.Pop(tower.id);
         obj.transform.position = pos;
