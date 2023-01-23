@@ -9,21 +9,35 @@ public class Shop : MonoBehaviour
     [SerializeField] private TextMeshProUGUI probText;
     [SerializeField] private List<TowerInfoItem> items;
 
+    private Dictionary<Grade, float> originProb;
     private Dictionary<Grade, float> prob;
 
     private void Awake()
     {
-        prob = new Dictionary<Grade, float>();
-        prob.Add(Grade.NORMAL, 50);
-        prob.Add(Grade.RARE, 80);
-        prob.Add(Grade.HEROIC, 95);
-        prob.Add(Grade.LEGENDARY, 100);
+        originProb = new Dictionary<Grade, float>();
+        originProb.Add(Grade.NORMAL, 50);
+        originProb.Add(Grade.RARE, 30);
+        originProb.Add(Grade.HEROIC, 15);
+        originProb.Add(Grade.LEGENDARY, 5);
+
+        prob = new Dictionary<Grade, float>(originProb);
+    }
+
+    public void UpdateProb()
+    {
+        float mul = PlayerController.Instance.BonusProb;
+
+        prob[Grade.RARE] = originProb[Grade.RARE] * mul;
+        prob[Grade.HEROIC] = originProb[Grade.HEROIC] * mul;
+        prob[Grade.LEGENDARY] = originProb[Grade.LEGENDARY] * mul;
+
+        prob[Grade.NORMAL] = 100 - (prob[Grade.RARE] + prob[Grade.HEROIC] + prob[Grade.LEGENDARY]);
 
         probText.text =
-            "NORMAL: " + prob[Grade.NORMAL] + "%\n" +
-            "RARE: " + (prob[Grade.RARE] - prob[Grade.NORMAL]) + "%\n" +
-            "HEROIC: " + (prob[Grade.HEROIC] - prob[Grade.RARE]) + "%\n" +
-            "LEGENDARY: " + (prob[Grade.LEGENDARY] - prob[Grade.HEROIC]) + "%";
+            "NORMAL: " + string.Format("{0:0.##}", prob[Grade.NORMAL]) + "%\n" +
+            "RARE: " + string.Format("{0:0.##}", prob[Grade.RARE]) + "%\n" +
+            "HEROIC: " + string.Format("{0:0.##}", prob[Grade.HEROIC]) + "%\n" +
+            "LEGENDARY: " + string.Format("{0:0.##}", prob[Grade.LEGENDARY]) + "%";
     }
 
     public void RerollAll()
@@ -33,14 +47,15 @@ public class Shop : MonoBehaviour
             Reroll(items[i]);
         }
     }
+
     public void Reroll(TowerInfoItem item)
     {
         float rand = Random.Range(0, 100f);
-        Grade grade;
-        if (rand <= prob[Grade.NORMAL]) grade = Grade.NORMAL;
-        else if (rand <= prob[Grade.RARE]) grade = Grade.RARE;
-        else if (rand <= prob[Grade.HEROIC]) grade = Grade.HEROIC;
-        else grade = Grade.LEGENDARY;
+        Grade grade = Grade.NORMAL;
+
+        if (rand <= prob[Grade.LEGENDARY]) grade = Grade.LEGENDARY;
+        else if (rand <= prob[Grade.LEGENDARY] + prob[Grade.HEROIC]) grade = Grade.HEROIC;
+        else if (rand <= prob[Grade.LEGENDARY] + prob[Grade.HEROIC] + prob[Grade.RARE]) grade = Grade.RARE;
 
         Tower tower = TowerManager.GetRandomTower(item.SelectedElement, grade);
 

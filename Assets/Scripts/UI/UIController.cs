@@ -213,6 +213,7 @@ public class UIController : MonoBehaviour
     public void OpenShop(bool b)
     {
         shop.gameObject.SetActive(b);
+        shop.UpdateProb();
     }
 
     public void RerollAll()

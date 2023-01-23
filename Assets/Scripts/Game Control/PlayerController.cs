@@ -30,6 +30,15 @@ public class PlayerController : MonoBehaviour
     public List<Tower> Towers { get { return towers; } }
     public CharacterType Type { get { return character.Type; } }
     private Character character;
+    public float BonusProb
+    {
+        get
+        {
+            if (Type == CharacterType.PROB)
+                return (100 + GetStat(CharacterStatType.ABILITY)) / 100f;
+            else return 1;
+        }
+    }
 
     public void Init(CharacterType type)
     {
@@ -45,6 +54,11 @@ public class PlayerController : MonoBehaviour
 
     public bool Buy(int cost)
     {
+        if (Type == CharacterType.COST)
+        {
+            cost = (int)(cost / ((100 + GetStat(CharacterStatType.ABILITY)) / 100f));
+        }
+
         if (money >= cost)
         {
             money -= cost;
@@ -72,6 +86,21 @@ public class PlayerController : MonoBehaviour
     public int GetStat(CharacterStatType type)
     {
         return character.Stat[type];
+    }
+
+    public int BonusElement(Element element)
+    {
+        switch(element)
+        {
+            case Element.FIRE:
+                return character.Stat[CharacterStatType.FIRE];
+            case Element.WATER:
+                return character.Stat[CharacterStatType.WATER];
+            case Element.NATURE:
+                return character.Stat[CharacterStatType.NATURE];
+        }
+
+        return 0;
     }
 
     public void Reward(int exp, int money)

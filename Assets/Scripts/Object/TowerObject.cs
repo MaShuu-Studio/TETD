@@ -121,7 +121,7 @@ public class TowerObject : Poolable
 
     public float BonusStat(TowerMainStatType type)
     {
-        float value = 0;
+        float value;
         int stat = 0;
 
         if (type == TowerMainStatType.DAMAGE && PlayerController.Instance.Type == CharacterType.POWER)
@@ -129,6 +129,8 @@ public class TowerObject : Poolable
 
         else if (type == TowerMainStatType.ATTACKSPEED && PlayerController.Instance.Type == CharacterType.ATTACKSPEED)
             stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
+
+        stat += PlayerController.Instance.BonusElement(data.element);
 
         float percent = stat / 100f;
         value = data.stat[type] * percent;
