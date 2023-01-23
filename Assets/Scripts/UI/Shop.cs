@@ -36,15 +36,13 @@ public class Shop : MonoBehaviour
     public void Reroll(TowerInfoItem item)
     {
         float rand = Random.Range(0, 100f);
-        Grade grade = Grade.NORMAL;
+        Grade grade;
         if (rand <= prob[Grade.NORMAL]) grade = Grade.NORMAL;
         else if (rand <= prob[Grade.RARE]) grade = Grade.RARE;
         else if (rand <= prob[Grade.HEROIC]) grade = Grade.HEROIC;
         else grade = Grade.LEGENDARY;
 
-        Element element = (Element) Random.Range(0, EnumArray.Elements.Length);
-
-        Tower tower = TowerManager.GetRandomTower(element, grade);
+        Tower tower = TowerManager.GetRandomTower(item.SelectedElement, grade);
 
         item.SetData(tower);
     }

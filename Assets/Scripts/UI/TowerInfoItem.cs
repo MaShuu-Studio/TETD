@@ -12,6 +12,9 @@ public class TowerInfoItem : TowerInfo
     [SerializeField] private Image gradeImage;
     [SerializeField] private TextMeshProUGUI costText;
 
+    public int SelectedElement { get { return selectedElement; } }
+    private int selectedElement = -1;
+
     public override void SetData(Tower data)
     {
         base.SetData(data);
@@ -44,5 +47,10 @@ public class TowerInfoItem : TowerInfo
         base.UpdateInfo();
 
         costText.text = data.cost.ToString();
+    }
+
+    public void SelectElement(int index)
+    {
+        selectedElement = index - 1;
     }
 }

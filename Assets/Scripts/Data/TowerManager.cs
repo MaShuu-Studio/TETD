@@ -44,11 +44,13 @@ public static class TowerManager
         return null;
     }
 
-    public static Tower GetRandomTower(Element element, Grade grade)
+    public static Tower GetRandomTower(int element, Grade grade)
     {
-        int count = egTowerIds[(int)element, (int)grade].Count;
+        if (element < 0) element = Random.Range(0, EnumArray.Elements.Length);
+
+        int count = egTowerIds[element, (int)grade].Count;
         int rand = Random.Range(0, count);
-        int id = egTowerIds[(int)element, (int)grade][rand];
+        int id = egTowerIds[element, (int)grade][rand];
 
         return GetTower(id);
     }
