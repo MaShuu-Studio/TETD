@@ -9,6 +9,7 @@ public class TowerObject : Poolable
     [SerializeField] private GameObject range;
     private SpriteRenderer spriteRenderer;
 
+    public Vector3 Pos { get; private set; }
     public Tower Data { get { return data; } }
     private Tower data;
     private IEnumerator delayCoroutine;
@@ -39,6 +40,8 @@ public class TowerObject : Poolable
 
     public void Build(Vector3 pos)
     {
+        Pos = pos;
+
         Tower data = TowerManager.GetTower(id);
         this.data = new Tower(data);
 

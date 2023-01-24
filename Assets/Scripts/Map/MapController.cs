@@ -53,9 +53,7 @@ public class MapController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        bool buildable = false;
         bool click = Input.GetMouseButtonDown(0);
-        bool rclick = Input.GetMouseButtonDown(1);
 
         Vector3 mousePos = Input.mousePosition;
         Vector3 worldPos = cam.ScreenToWorldPoint(mousePos);
@@ -63,7 +61,7 @@ public class MapController : MonoBehaviour
 
         if (readyToBuild)
         {
-            buildable = SelectTile(worldPos);
+            bool buildable = SelectTile(worldPos);
             if (click && buildable && TowerController.Instance.BuildTower(id, pos))
             {
                 readyToBuild = false;
@@ -79,9 +77,6 @@ public class MapController : MonoBehaviour
             readyToBuild = false;
             id = 0;
         }
-
-        if (rclick)
-            TowerController.Instance.RemoveTower(pos);
     }
 
     public void ReadyToBuild(int id)

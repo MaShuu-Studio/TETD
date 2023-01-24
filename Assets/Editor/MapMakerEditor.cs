@@ -90,12 +90,12 @@ public class MapMakerEditor : Editor
         }
     }
 
-    private void OnSceneGUI()
+    private async void OnSceneGUI()
     {
         if (isLoaded == false)
         {
             MapManager.Init();
-            TileManager.Init();
+            await TileManager.Init();
             isLoaded = true;
         }
         targetComponent = (MapMaker)target;

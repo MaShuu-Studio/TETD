@@ -102,6 +102,7 @@
     <Compile Include="Assets\Scripts\Map\MapMaker.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\SellButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -13,6 +13,7 @@ public class TowerInfoPanel : TowerInfo
     [SerializeField] private GameObject[] bonusStatObjects;
     [SerializeField] private TextMeshProUGUI[] bonusStatTexts;
     [SerializeField] private TowerReinforceButton[] reinforceButtons;
+    [SerializeField] private TextMeshProUGUI valueText;
 
     private RectTransform rectTransform;
     public RectTransform RectTransform { get { return rectTransform; } }
@@ -30,6 +31,7 @@ public class TowerInfoPanel : TowerInfo
         base.SetData(data);
 
         selectedTower = TowerController.Instance.SelectedTower;
+        valueText.text = "$ " + data.Value();
         int index = (int)selectedTower.Priority;
         priorityToggles[index].isOn = true;
 
@@ -62,6 +64,7 @@ public class TowerInfoPanel : TowerInfo
         {
             selectedTower.Data.Upgrade(type);
             selectedTower.UpdateDistnace();
+            valueText.text = "$ " + data.Value();
 
             UpdateUpgradeStat(type);
             UpdateInfo();

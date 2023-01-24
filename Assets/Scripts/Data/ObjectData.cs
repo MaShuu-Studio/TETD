@@ -55,6 +55,27 @@ public class Tower : ObjectData
         }
     }
 
+    public int Value()
+    {
+        int value = cost;
+        bool isUpgrade = false;
+        foreach(var level in statLevel.Values)
+        {
+            int upgradeCost = 0;
+
+            for (int i = 1; i < level; i++)
+            {
+                isUpgrade = true;
+                upgradeCost += cost / 10;
+                value += upgradeCost;
+            }
+        }
+
+        if (isUpgrade) value = Mathf.CeilToInt(value * 0.7f);
+
+        return value;
+    }
+
     public void Upgrade(TowerMainStatType type)
     {
         statLevel[type]++;

@@ -69,16 +69,18 @@ public class TowerController : MonoBehaviour
         return select;
     }
 
-    public void RemoveTower(Vector3 pos)
+    public void SellTower()
     {
-        if (ContainsTower(pos) == false) return;
+        if (selectedTower == null) return;
 
-        TowerObject tower = towers[pos];
-        GameObject obj = towers[pos].gameObject;
-        PoolController.Push(tower.Id, obj);
-        towers.Remove(pos);
+        int value = selectedTower.Data.Value();
+        GameObject obj = selectedTower.gameObject;
+        PoolController.Push(selectedTower.Id, obj);
+        towers.Remove(selectedTower.Pos);
 
-        tower.RemoveTower();
+        PlayerController.Instance.Reward(0, value);
+        selectedTower.RemoveTower();
+        selectedTower = null;
     }
 
     public void RemoveEnemyObject(EnemyObject enemy)
