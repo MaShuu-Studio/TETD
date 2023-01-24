@@ -113,7 +113,7 @@ public class UIController : MonoBehaviour
         RerollAll();
 
         OpenShop(false);
-        SelectTower(false, null);
+        SelectTower(false);
     }
 
     public void EnemyDamaged(Vector3 pos, float damage)
@@ -198,6 +198,8 @@ public class UIController : MonoBehaviour
 
     public bool PointInTowerInfo(Vector2 point)
     {
+        if (towerInfoPanel.gameObject.activeSelf == false) return false;
+
         Rect rect = new Rect(towerInfoPanel.RectTransform.anchorMin, towerInfoPanel.RectTransform.rect.size);
         return rect.Contains(point);
     }

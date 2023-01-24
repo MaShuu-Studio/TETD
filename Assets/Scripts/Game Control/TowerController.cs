@@ -81,6 +81,8 @@ public class TowerController : MonoBehaviour
         PlayerController.Instance.Reward(0, value);
         selectedTower.RemoveTower();
         selectedTower = null;
+
+        UIController.Instance.SelectTower(false);
     }
 
     public void RemoveEnemyObject(EnemyObject enemy)
