@@ -20,6 +20,11 @@ public class EnemyObject : Poolable
     public int Order { get; private set; }
     public float Hp { get { return hp; } }
 
+    private IEnumerator moveCoroutine;
+    private float slowAmount;
+    private Dictionary<int, IEnumerator> dotCoroutines;
+    private Dictionary<int, int> dotTime;
+
     public override bool MakePrefab(int id)
     {
         this.id = id;
@@ -36,6 +41,9 @@ public class EnemyObject : Poolable
         spriteRenderer.sortingLayerName = "Enemy";
         spriteRenderer.sprite = SpriteManager.GetSprite(id);
 
+        slowAmount = 0;
+        dotCoroutines = new Dictionary<int, IEnumerator>();
+        dotTime = new Dictionary<int, int>();
         return true;
     }
 
@@ -51,7 +59,8 @@ public class EnemyObject : Poolable
         destRoad = 1;
 
         spriteRenderer.sortingOrder = Order = order;
-        StartCoroutine(Move());
+        moveCoroutine = Move();
+        StartCoroutine(moveCoroutine);
     }
 
     private IEnumerator Move()
@@ -66,7 +75,7 @@ public class EnemyObject : Poolable
             while (CompareVector(transform.position, road[destRoad], destlargeX, destlargeY))
             {
                 yield return null;
-                Vector3 moveAmount = v * speed * Time.deltaTime;
+                Vector3 moveAmount = v * speed * Time.deltaTime * (1 - slowAmount);
                 transform.position += moveAmount;
             }
             transform.position = road[destRoad];
@@ -74,6 +83,57 @@ public class EnemyObject : Poolable
             destRoad++;
         }
         ArriveDest();
+    }
+
+    public void Attacked(Tower tower)
+    {
+        Element element = tower.element;
+        float dmg = tower.Stat(TowerStatType.DAMAGE);
+
+        if (dmg != 0) Damaged(element, dmg);
+
+        if (hp <= 0) return;
+        // 공격력, 공격속도, 사거리 제외
+        for (int i = 3; i < tower.StatTypes.Count; i++)
+        {
+            TowerStatType type = tower.StatTypes[i];
+            float value = tower.Stat(type);
+
+            if (type == TowerStatType.DOTDAMAGE)
+            {
+                if (dotCoroutines.ContainsKey(tower.id) == false)
+                {
+                    dotTime.Add(tower.id, 5);
+                    dotCoroutines.Add(tower.id, DotDamage(tower.id, element, value));
+                    StartCoroutine(dotCoroutines[tower.id]);
+                }
+                else dotTime[tower.id] = 5;
+            }
+            else if (type == TowerStatType.SLOW)
+            {
+                if (slowAmount * 100 < value)
+                    slowAmount = value / 100;
+            }
+        }
+    }
+
+    public IEnumerator DotDamage(int id, Element element, float dmg)
+    {
+        float time = 0;
+        while (hp > 0 && dotTime[id] > 0)
+        {
+            while (time < 1)
+            {
+                time += Time.deltaTime;
+                yield return null;
+            }
+            time -= 1;
+            dotTime[id] -= 1;
+            Damaged(element, dmg);
+        }
+
+        dotCoroutines.Remove(id);
+        dotTime.Remove(id);
     }
 
     public void Damaged(Element element, float dmg)
@@ -91,6 +151,15 @@ public class EnemyObject : Poolable
 
         if (hp <= 0)
         {
+            StopCoroutine(moveCoroutine);
+            foreach (var coroutine in dotCoroutines.Values)
+            {
+                StopCoroutine(coroutine);
+            }
+            moveCoroutine = null;
+            dotCoroutines.Clear();
+            dotTime.Clear();
+
             PlayerController.Instance.Reward(data.exp, data.money);
             TowerController.Instance.RemoveEnemyObject(this);
             EnemyController.Instance.RemoveEnemy(this);

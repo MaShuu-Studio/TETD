@@ -92,6 +92,18 @@ public class PriorityQueue<T>
         return array[0].data;
     }
 
+    public List<T> Get(int amount)
+    {
+        if (count == 0) return null;
+
+        List<T> ts = new List<T>();
+        for (int i = 0; i < amount && i < count; i++)
+        {
+            ts.Add(array[i].data);
+        }
+        return ts;
+    }
+
     public bool Contains(T data)
     {
         for (int i = 0; i < count; i++)

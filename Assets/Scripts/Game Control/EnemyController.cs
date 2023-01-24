@@ -20,7 +20,7 @@ public class EnemyController : MonoBehaviour
         instance = this;
     }
 
-    private Queue<Tuple<EnemyObject, Element, float>> enemyDamagedQueue;
+    private Queue<Tuple<EnemyObject, Tower>> enemyAttackedQueue;
     private IEnumerator flushCoroutine;
 
     private List<EnemyObject> enemies;
@@ -29,7 +29,7 @@ public class EnemyController : MonoBehaviour
 
     public void Init(Map map)
     {
-        enemyDamagedQueue = new Queue<Tuple<EnemyObject, Element, float>>();
+        enemyAttackedQueue = new Queue<Tuple<EnemyObject, Tower>>();
         enemies = new List<EnemyObject>();
         road = new List<Vector3>();
         for (int i = 0; i < map.enemyRoad.Count; i++)
@@ -48,7 +48,6 @@ public class EnemyController : MonoBehaviour
 
         GameObject go = PoolController.Pop(id);
         EnemyObject enemyObj = go.GetComponent<EnemyObject>();
-
         enemies.Add(enemyObj);
         enemyObj.Init(road, -1 * enemyOrder++);
         enemyObj.transform.SetParent(transform);
@@ -75,11 +74,14 @@ public class EnemyController : MonoBehaviour
         return null;
     }
 
-    public void EnemyDamaged(EnemyObject enemy, Element element, float dmg)
+    public void EnemyAttacked(List<EnemyObject> enemies, Tower data)
     {
-        if (enemy == null) return;
-
-        enemyDamagedQueue.Enqueue(new Tuple<EnemyObject, Element, float>(enemy, element, dmg));
+        if (enemies == null) return;
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            EnemyObject enemy = enemies[i];
+            enemyAttackedQueue.Enqueue(new Tuple<EnemyObject, Tower>(enemy, data));
+        }
         if (flushCoroutine == null)
         {
             flushCoroutine = Flush();
@@ -89,22 +91,21 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator Flush()
     {
-        int count = enemyDamagedQueue.Count;
+        int count = enemyAttackedQueue.Count;
         for (int i = 0; i < count; i++)
         {
-            Tuple<EnemyObject, Element, float> tuple;
-            if (enemyDamagedQueue.TryDequeue(out tuple) == false) continue;
+            Tuple<EnemyObject, Tower> tuple;
+            if (enemyAttackedQueue.TryDequeue(out tuple) == false) continue;
 
             EnemyObject enemy = tuple.Item1;
-            Element element = tuple.Item2;
-            float dmg = tuple.Item3;
+            Tower data = tuple.Item2;
 
             if (enemies.Contains(enemy) == false) continue;
-            enemy.Damaged(element, dmg);
+            enemy.Attacked(data);
         }
         yield return null;
 
-        if (enemyDamagedQueue.Count > 0)
+        if (enemyAttackedQueue.Count > 0)
         {
             flushCoroutine = Flush();
             StartCoroutine(flushCoroutine);

@@ -12,7 +12,8 @@ public class TowerObject : Poolable
     public Vector3 Pos { get; private set; }
     public Tower Data { get { return data; } }
     private Tower data;
-    private IEnumerator delayCoroutine;
+    private IEnumerator attackCoroutine;
+    private IEnumerator miningCoroutine;
     private PriorityQueue<EnemyObject> enemies;
 
     private AttackPriority priority;
@@ -56,7 +57,13 @@ public class TowerObject : Poolable
 
         priority = AttackPriority.FIRST;
 
-        delayCoroutine = null;
+        attackCoroutine = null;
+        miningCoroutine = null;
+        if (data.Stat(TowerStatType.GOLDMINE) != 0)
+        {
+            miningCoroutine = Mining();
+            StartCoroutine(miningCoroutine);
+        }
     }
 
     public void SelectTower(bool b)
@@ -67,10 +74,15 @@ public class TowerObject : Poolable
     public void RemoveTower()
     {
         enemies = null;
-        if (delayCoroutine != null)
+        if (attackCoroutine != null)
         {
-            StopCoroutine(delayCoroutine);
-            delayCoroutine = null;
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+        }
+        if (miningCoroutine != null)
+        {
+            StopCoroutine(miningCoroutine);
+            miningCoroutine = null;
         }
     }
 
@@ -82,9 +94,9 @@ public class TowerObject : Poolable
     public void AddEnemy(EnemyObject enemy)
     {
         enemies.Enqueue(enemy, GetPriority(enemy));
-        if (delayCoroutine == null)
+        if (attackCoroutine == null)
         {
-            delayCoroutine = Attack();
+            attackCoroutine = Attack();
             StartCoroutine(Attack());
         }
     }
@@ -98,8 +110,10 @@ public class TowerObject : Poolable
     {
         while (enemies.Count > 0)
         {
+            int targetAmount = (int)data.Stat(TowerStatType.MULTISHOT);
+            if (targetAmount == 0) targetAmount = 1;
             SoundController.PlayAudio(id);
-            EnemyController.Instance.EnemyDamaged(enemies.Get(), data.element, Stat(TowerStatType.DAMAGE));
+            EnemyController.Instance.EnemyAttacked(enemies.Get(targetAmount), data);
 
             float delayTime = 0;
             float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
@@ -110,7 +124,25 @@ public class TowerObject : Poolable
             }
             yield return null;
         }
-        delayCoroutine = null;
+        attackCoroutine = null;
+    }
+
+    private IEnumerator Mining()
+    {
+        while (true)
+        {
+
+            float delayTime = 0;
+            float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
+            while (delayTime < delay)
+            {
+                delayTime += Time.deltaTime;
+                yield return null;
+            }
+            int value = (int)data.Stat(TowerStatType.GOLDMINE);
+            PlayerController.Instance.Reward(0, value);
+            yield return null;
+        }
     }
 
     private float Stat(TowerStatType type)
