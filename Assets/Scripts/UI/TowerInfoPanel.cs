@@ -35,9 +35,9 @@ public class TowerInfoPanel : TowerInfo
         int index = (int)selectedTower.Priority;
         priorityToggles[index].isOn = true;
 
-        for (int i = 0; i < EnumArray.TowerMainStatTypes.Length; i++)
+        for (int i = 0; i < 3; i++)
         {
-            UpdateUpgradeStat((TowerMainStatType)i);
+            UpdateUpgradeStat((TowerStatType)i);
         }
 
         UpdateBonusStat();
@@ -48,7 +48,7 @@ public class TowerInfoPanel : TowerInfo
         for (int i = 0; i < bonusStatObjects.Length; i++)
         {
             float bonus = 0;
-            if (selectedTower != null) bonus = selectedTower.BonusStat((TowerMainStatType)i);
+            if (selectedTower != null) bonus = selectedTower.BonusStat((TowerStatType)i);
             if (bonus == 0) bonusStatObjects[i].SetActive(false);
             else
             {
@@ -58,7 +58,7 @@ public class TowerInfoPanel : TowerInfo
         }
     }
 
-    public void Reinforce(TowerMainStatType type)
+    public void Reinforce(TowerStatType type)
     {
         if (PlayerController.Instance.Buy(selectedTower.Data.UpgradeCost(type)))
         {
@@ -72,11 +72,11 @@ public class TowerInfoPanel : TowerInfo
         }
     }
 
-    public void UpdateUpgradeStat(TowerMainStatType type)
+    public void UpdateUpgradeStat(TowerStatType type)
     {
-        int level = selectedTower.Data.statLevel[type];
+        int level = selectedTower.Data.StatLevel(type);
         int cost = PlayerController.Cost(selectedTower.Data.UpgradeCost(type));
-        float cur = selectedTower.Data.stat[type];
+        float cur = selectedTower.Data.Stat(type);
         float next = cur * 1.1f;
 
         reinforceButtons[(int)type].SetData(level, cost, cur, next);

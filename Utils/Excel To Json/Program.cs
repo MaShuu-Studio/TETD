@@ -184,6 +184,8 @@ namespace Excel_To_Json
             int i;
             float f, x, y;
             bool b;
+            int[] types;
+            float[] values;
             // 타입에 대한 체크
             if (int.TryParse(s, out i))
             {
@@ -197,6 +199,19 @@ namespace Excel_To_Json
             else if (bool.TryParse(s, out b))
             {
                 s = b.ToString().ToLower();
+            }
+            // 
+            else if (TryParseAbility(s, out types, out values))
+            {
+                string content = "";
+                for (int a =0; a < types.Length; a++)
+                {
+                    content += string.Format(JsonFormat.abilityFormat, types[a], values[a]);
+                    if (a < types.Length - 1) content += ",\n";
+                }
+
+                s = string.Format(JsonFormat.listFormat, type, content);
+                return s;
             }
             // vector2
             else if (TryParseVector2(s, out x, out y))
@@ -222,6 +237,26 @@ namespace Excel_To_Json
 
             if (xb && yb) return true;
             return false;
+        }
+
+        private static bool TryParseAbility(string s, out int[] types, out float[] values)
+        {
+            string[] abilities = s.Split(";");
+            types = null;
+            values = null;
+            if (abilities.Length <= 1) return false;
+
+            types = new int[abilities.Length - 1];
+            values = new float[abilities.Length - 1];
+
+            for (int i = 0; i < abilities.Length - 1; i++)
+            {
+                string[] tv = abilities[i].Split(",");
+                int.TryParse(tv[0], out types[i]);
+                float.TryParse(tv[1], out values[i]);
+            }
+
+            return true;
         }
 
         private static void ReleaseObject(object obj)

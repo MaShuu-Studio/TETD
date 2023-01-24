@@ -76,7 +76,7 @@ public class TowerObject : Poolable
 
     public void UpdateDistnace()
     {
-        rangeUI.transform.localScale = range.transform.localScale = Vector3.one * (1 + data.stat[TowerMainStatType.DISTANCE] * 2);
+        rangeUI.transform.localScale = range.transform.localScale = Vector3.one * (1 + data.Stat(TowerStatType.DISTANCE) * 2);
     }
 
     public void AddEnemy(EnemyObject enemy)
@@ -99,10 +99,10 @@ public class TowerObject : Poolable
         while (enemies.Count > 0)
         {
             SoundController.PlayAudio(id);
-            EnemyController.Instance.EnemyDamaged(enemies.Get(), data.element, Stat(TowerMainStatType.DAMAGE));
+            EnemyController.Instance.EnemyDamaged(enemies.Get(), data.element, Stat(TowerStatType.DAMAGE));
 
             float delayTime = 0;
-            float delay = 1 / Stat(TowerMainStatType.ATTACKSPEED);
+            float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
             while (delayTime < delay)
             {
                 delayTime += Time.deltaTime;
@@ -113,30 +113,30 @@ public class TowerObject : Poolable
         delayCoroutine = null;
     }
 
-    private float Stat(TowerMainStatType type)
+    private float Stat(TowerStatType type)
     {
-        float value = data.stat[type];
+        float value = data.Stat(type);
 
         value += BonusStat(type);
 
         return value;
     }
 
-    public float BonusStat(TowerMainStatType type)
+    public float BonusStat(TowerStatType type)
     {
         float value;
         int stat = 0;
 
-        if (type == TowerMainStatType.DAMAGE && PlayerController.Instance.Type == CharacterType.POWER)
+        if (type == TowerStatType.DAMAGE && PlayerController.Instance.Type == CharacterType.POWER)
             stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
 
-        else if (type == TowerMainStatType.ATTACKSPEED && PlayerController.Instance.Type == CharacterType.ATTACKSPEED)
+        else if (type == TowerStatType.ATTACKSPEED && PlayerController.Instance.Type == CharacterType.ATTACKSPEED)
             stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
 
         stat += PlayerController.Instance.BonusElement(data.element);
 
         float percent = stat / 100f;
-        value = data.stat[type] * percent;
+        value = data.Stat(type) * percent;
 
         return value;
     }

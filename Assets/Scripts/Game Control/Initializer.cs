@@ -23,7 +23,7 @@ public class Initializer : MonoBehaviour
 
     private async void Initialize()
     {
-        SpriteManager.Init();
+        await SpriteManager.Init();
         await SoundManager.Init();
 
         await TileManager.Init();

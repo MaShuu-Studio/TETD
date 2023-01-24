@@ -202,7 +202,7 @@ public class UIController : MonoBehaviour
         return rect.Contains(point);
     }
 
-    public void ReinforceTower(TowerMainStatType type)
+    public void ReinforceTower(TowerStatType type)
     {
         towerInfoPanel.Reinforce(type);
     }

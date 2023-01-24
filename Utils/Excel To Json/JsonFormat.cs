@@ -36,7 +36,10 @@ namespace Excel_To_Json
         // {1} 콘텐츠 목록 (contentsFormat)
         public static string listFormat =
 @"    ""{0}"": [ {1} ]";
-
+        // {0} abliity Type (enum)
+        // {1} ability Value (float)
+        public static string abilityFormat =
+@"{{""type"": {0}, ""value"": {1}}}";
         // {0} 각 enum
         // {1} 각 enum의 Array
         public static string enumFileFormat =

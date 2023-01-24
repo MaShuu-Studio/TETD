@@ -2,15 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Data;
+using EnumData;
 using System.Threading.Tasks;
 
 public static class SpriteManager
 {
     private static Dictionary<int, Sprite> sprites;
+    private static Dictionary<string, Sprite> uiSprites;
 
-    public static void Init()
+    public static async Task Init()
     {
         sprites = new Dictionary<int, Sprite>();
+        uiSprites = new Dictionary<string, Sprite>();
+
+        // UI를 ID로 넘기게 되면 조정
+        for (int i = 0; i < EnumArray.Elements.Length; i++)
+        {
+            string name = $"Element{i}";
+            Sprite sprite = await DataManager.LoadSprite("/UI/" + name + ".png", Vector2.one / 2, 16);
+            uiSprites.Add(name, sprite);
+        }
+
+        for (int i = 0; i < EnumArray.TowerStatTypes.Length; i++)
+        {
+            string name = $"TowerStatType{i}";
+            Sprite sprite = await DataManager.LoadSprite("/UI/" + name + ".png", Vector2.one / 2, 16);
+            uiSprites.Add(name, sprite);
+        }
     }
 
     public static async Task AddSprite<T>(string path, int id, Vector2 pivot, float pixelPerUnit)
@@ -26,6 +44,13 @@ public static class SpriteManager
     public static Sprite GetSprite(int id)
     {
         if (sprites.ContainsKey(id)) return sprites[id];
+
+        return null;
+    }
+
+    public static Sprite GetSprite(string name)
+    {
+        if (uiSprites.ContainsKey(name)) return uiSprites[name];
 
         return null;
     }

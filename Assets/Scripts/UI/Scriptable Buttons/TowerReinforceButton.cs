@@ -6,7 +6,7 @@ using EnumData;
 
 public class TowerReinforceButton : ScriptableButton
 {
-    [SerializeField] private TowerMainStatType type;
+    [SerializeField] private TowerStatType type;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI curText;
     [SerializeField] private TextMeshProUGUI nextText;

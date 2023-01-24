@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using System;
 using EnumData;
@@ -17,8 +18,9 @@ public class Tower : ObjectData
 
     public int cost;
 
-    public Dictionary<TowerMainStatType, float> stat;
-    public Dictionary<TowerMainStatType, int> statLevel;
+    public List<TowerStatType> StatTypes { get { return stat.Keys.ToList(); } }
+    private Dictionary<TowerStatType, float> stat;
+    private Dictionary<TowerStatType, int> statLevel;
 
     public Tower(TowerData data)
     {
@@ -30,10 +32,17 @@ public class Tower : ObjectData
 
         cost = data.cost;
 
-        stat = new Dictionary<TowerMainStatType, float>();
-        stat.Add(TowerMainStatType.DAMAGE, data.dmg);
-        stat.Add(TowerMainStatType.ATTACKSPEED, data.attackspeed);
-        stat.Add(TowerMainStatType.DISTANCE, data.range);
+        stat = new Dictionary<TowerStatType, float>();
+        stat.Add(TowerStatType.DAMAGE, data.dmg);
+        stat.Add(TowerStatType.ATTACKSPEED, data.attackspeed);
+        stat.Add(TowerStatType.DISTANCE, data.range);
+        if (data.ability != null)
+        {
+            for (int i = 0; i < data.ability.Count; i++)
+            {
+                stat.Add(data.ability[i].type, data.ability[i].value);
+            }
+        }
     }
 
     public Tower(Tower data)
@@ -46,27 +55,51 @@ public class Tower : ObjectData
 
         cost = data.cost;
 
-        stat = new Dictionary<TowerMainStatType, float>(data.stat);
-
-        statLevel = new Dictionary<TowerMainStatType, int>();
-        for (int i = 0; i < EnumArray.TowerMainStatTypes.Length; i++)
+        stat = new Dictionary<TowerStatType, float>(data.stat);
+        statLevel = new Dictionary<TowerStatType, int>();
+        foreach (TowerStatType stat in data.stat.Keys)
         {
-            statLevel.Add((TowerMainStatType)i, 1);
+            statLevel.Add(stat, 1);
         }
+    }
+
+    public float Stat(TowerStatType type)
+    {
+        if (stat.ContainsKey(type))
+        {
+            return stat[type];
+        }
+
+        return 0;
+    }
+    public int StatLevel(TowerStatType type)
+    {
+        if (statLevel.ContainsKey(type))
+        {
+            return statLevel[type];
+        }
+
+        return 0;
     }
 
     public int Value()
     {
         int value = cost;
         bool isUpgrade = false;
-        foreach(var level in statLevel.Values)
+        foreach (var kv in statLevel)
         {
+            TowerStatType type = kv.Key;
+            int level = kv.Value;
+
             int upgradeCost = 0;
 
             for (int i = 1; i < level; i++)
             {
                 isUpgrade = true;
-                upgradeCost += cost / 10;
+                if (type == TowerStatType.MULTISHOT)
+                    upgradeCost += cost;
+                else
+                    upgradeCost += cost / 10;
                 value += upgradeCost;
             }
         }
@@ -76,20 +109,25 @@ public class Tower : ObjectData
         return value;
     }
 
-    public void Upgrade(TowerMainStatType type)
+    public void Upgrade(TowerStatType type)
     {
         statLevel[type]++;
-        stat[type] *= 1.1f;
+        if (type == TowerStatType.MULTISHOT)
+            stat[type] += 1;
+        else
+            stat[type] *= 1.1f;
     }
 
-    public int UpgradeCost(TowerMainStatType type)
+    public int UpgradeCost(TowerStatType type)
     {
         int upgradeCost = 0;
         int level = statLevel[type];
-
         for (int i = 1; i <= level; i++)
         {
-            upgradeCost += cost / 10;
+            if (type == TowerStatType.MULTISHOT)
+                upgradeCost += cost / 2;
+            else
+                upgradeCost += cost / 10;
         }
 
         return upgradeCost;
@@ -169,6 +207,8 @@ public class TowerData : JsonData
     public Grade grade;
     public Element element;
 
+    public List<TowerAbility> ability;
+
     public int cost;
 
     public float dmg;
@@ -187,4 +227,11 @@ public class EnemyData : JsonData
     public float hp;
     public float speed;
     public float dmg;
+}
+
+[Serializable]
+public class TowerAbility
+{
+    public TowerStatType type;
+    public float value;
 }
