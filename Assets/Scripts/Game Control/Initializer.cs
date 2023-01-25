@@ -23,6 +23,8 @@ public class Initializer : MonoBehaviour
 
     private async void Initialize()
     {
+        EnumData.EnumArray.Init();
+
         await SpriteManager.Init();
         await SoundManager.Init();
 

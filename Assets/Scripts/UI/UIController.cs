@@ -109,6 +109,7 @@ public class UIController : MonoBehaviour
 
         damageUIPool.Init(damageUI);
 
+        OpenShop(true);
         UpdateTowerList();
         RerollAll();
 
@@ -204,9 +205,9 @@ public class UIController : MonoBehaviour
         return rect.Contains(point);
     }
 
-    public void ReinforceTower(TowerStatType type)
+    public void ReinforceTower(int index, TowerStatType type)
     {
-        towerInfoPanel.Reinforce(type);
+        towerInfoPanel.Reinforce(index, type);
     }
 
     #endregion

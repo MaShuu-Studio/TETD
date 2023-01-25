@@ -44,9 +44,12 @@ namespace Excel_To_Json
         // {1} 각 enum의 Array
         public static string enumFileFormat =
 @"using System;
+using System.Collections.Generic;
+
 namespace EnumData
 {{
-{0}}}
+{0}
+}}
 ";
         // {0} Type 이름
         // {1} 데이터
@@ -58,15 +61,33 @@ namespace EnumData
 @"{0} = {1}, ";
 
         // {0} 데이터 내용
+        // {1} Init 초기화 내용
         public static string enumArrayClassForamt =
 @"
     public static class EnumArray
     {{
         {0}
+
+        public static void Init()
+        {{
+            {1}
+        }}
     }}";
 
         // {0} Type 이름
         public static string enumArrayFormat =
 @"public static {0}[] {0}s {{ get; private set; }} = ({0}[])Enum.GetValues(typeof({0}));";
+        // {0} Type 이름
+        public static string enumArrayStringFormat =
+@"public static Dictionary<{0},string> {0}Strings {{ get; private set; }}";
+        // {0} Type 이름
+        public static string enumArrayInitFormat =
+@"
+            {0}Strings = new Dictionary<{0}, string>();
+            for (int i = 0; i < {0}s.Length; i++)
+            {{
+                {0} type = {0}s[i];
+                {0}Strings.Add(type, type.ToString()); 
+            }}";
     }
 }

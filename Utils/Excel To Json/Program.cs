@@ -166,12 +166,18 @@ namespace Excel_To_Json
             }
 
             string array = "";
+            string dics = "";
+            string init = "";
             for (int i = 0; i < types.Count; i++)
             {
                 array += string.Format(JsonFormat.enumArrayFormat, types[i]) + "\n";
+                dics += string.Format(JsonFormat.enumArrayStringFormat, types[i]) + "\n";
+                init += string.Format(JsonFormat.enumArrayInitFormat, types[i]) + "\n";
             }
 
-            contents += string.Format(JsonFormat.enumArrayClassForamt, array);
+            array += dics;
+
+            contents += string.Format(JsonFormat.enumArrayClassForamt, array, init);
 
             return contents;
         }

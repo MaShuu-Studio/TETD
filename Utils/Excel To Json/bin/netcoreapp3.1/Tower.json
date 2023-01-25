@@ -55,7 +55,7 @@
 "range": 4,
 "attackspeed": 2,
     "ability": [ {"type": 4, "value": 2},
-{"type": 6, "value": 3} ],
+{"type": 6, "value": 2} ],
 "imgsrc": "/Tower/1004.png",
 "pivot": { "x": 0.5, "y": 0.1875 },
 "pixelperunit": 20

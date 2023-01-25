@@ -105,6 +105,7 @@
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
     <Compile Include="Assets\Scripts\Object\SplashPoint.cs" />
+    <Compile Include="Assets\Scripts\UI\TowerUpgradeItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

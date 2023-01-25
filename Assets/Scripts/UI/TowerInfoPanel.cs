@@ -12,7 +12,7 @@ public class TowerInfoPanel : TowerInfo
 
     [SerializeField] private GameObject[] bonusStatObjects;
     [SerializeField] private TextMeshProUGUI[] bonusStatTexts;
-    [SerializeField] private TowerReinforceButton[] reinforceButtons;
+    [SerializeField] private TowerUpgradeItem[] upgradeItems;
     [SerializeField] private TextMeshProUGUI valueText;
 
     private RectTransform rectTransform;
@@ -37,9 +37,16 @@ public class TowerInfoPanel : TowerInfo
 
         priorityToggles[(int)AttackPriority.DEBUFF].gameObject.SetActive(data.hasDebuff);
 
-        for (int i = 0; i < 3; i++)
+        int i = 0;
+        for (; i < data.StatTypes.Count; i++)
         {
-            UpdateUpgradeStat((TowerStatType)i);
+            TowerStatType type = data.StatTypes[i];
+            upgradeItems[i].gameObject.SetActive(true);
+            UpdateUpgradeStat(i, type);
+        }
+        for (; i < upgradeItems.Length; i++)
+        {
+            upgradeItems[i].gameObject.SetActive(false);
         }
 
         UpdateBonusStat();
@@ -60,7 +67,7 @@ public class TowerInfoPanel : TowerInfo
         }
     }
 
-    public void Reinforce(TowerStatType type)
+    public void Reinforce(int index, TowerStatType type)
     {
         if (PlayerController.Instance.Buy(selectedTower.Data.UpgradeCost(type)))
         {
@@ -68,20 +75,20 @@ public class TowerInfoPanel : TowerInfo
             selectedTower.UpdateDistnace();
             valueText.text = "$ " + data.Value();
 
-            UpdateUpgradeStat(type);
+            UpdateUpgradeStat(index, type);
             UpdateInfo();
             UpdateBonusStat();
         }
     }
 
-    public void UpdateUpgradeStat(TowerStatType type)
+    public void UpdateUpgradeStat(int index, TowerStatType type)
     {
         int level = selectedTower.Data.StatLevel(type);
         int cost = PlayerController.Cost(selectedTower.Data.UpgradeCost(type));
         float cur = selectedTower.Data.Stat(type);
         float next = cur * 1.1f;
 
-        reinforceButtons[(int)type].SetData(level, cost, cur, next);
+        upgradeItems[index].SetData(index, type, level, cost, cur, next);
     }
 
     // 토글 작동시 ValueChanged를 통해 조정
