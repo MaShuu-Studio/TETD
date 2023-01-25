@@ -74,18 +74,23 @@ public class EnemyController : MonoBehaviour
         return null;
     }
 
+    public void EnemyAttacked(EnemyObject enemy, Tower data)
+    {
+        enemyAttackedQueue.Enqueue(new Tuple<EnemyObject, Tower>(enemy, data));
+
+        if (flushCoroutine == null)
+        {
+            flushCoroutine = Flush();
+            StartCoroutine(flushCoroutine);
+        }
+    }
     public void EnemyAttacked(List<EnemyObject> enemies, Tower data)
     {
         if (enemies == null) return;
         for (int i = 0; i < enemies.Count; i++)
         {
             EnemyObject enemy = enemies[i];
-            enemyAttackedQueue.Enqueue(new Tuple<EnemyObject, Tower>(enemy, data));
-        }
-        if (flushCoroutine == null)
-        {
-            flushCoroutine = Flush();
-            StartCoroutine(flushCoroutine);
+            EnemyAttacked(enemy, data);
         }
     }
 

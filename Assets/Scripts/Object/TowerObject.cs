@@ -114,19 +114,34 @@ public class TowerObject : Poolable
             if (targetAmount == 0) targetAmount = 1;
             List<EnemyObject> target = enemies.Get(targetAmount);
             // 전부 목록에서 제거
-            enemies.Dequeue();
-            for (int i = 1; i < target.Count; i++)
-                enemies.Remove(target[i]);
+            if (data.hasDebuff)
+            {
+                enemies.Dequeue();
+                for (int i = 1; i < target.Count; i++)
+                    enemies.Remove(target[i]);
+            }
 
             SoundController.PlayAudio(id);
-            EnemyController.Instance.EnemyAttacked(target, data);
-
-            for (int i = 0; i < target.Count; i++)
+            if (data.Stat(TowerStatType.SPLASH) != 0)
             {
-                // 살아있는 경우에만 추가
-                if (target[i].gameObject.activeSelf)
+                for (int i = 0; i < target.Count; i++)
                 {
-                    enemies.Enqueue(target[i], GetPriority(target[i]));
+                    SplashPoint point = TowerController.Instance.PopSplash();
+                    point.transform.position = target[i].transform.position;
+                    point.SetData(data);
+                }
+            }
+            else EnemyController.Instance.EnemyAttacked(target, data);
+
+            if (data.hasDebuff)
+            {
+                for (int i = 0; i < target.Count; i++)
+                {
+                    // 살아있는 경우에만 추가
+                    if (target[i].gameObject.activeSelf)
+                    {
+                        enemies.Enqueue(target[i], GetPriority(target[i]));
+                    }
                 }
             }
 

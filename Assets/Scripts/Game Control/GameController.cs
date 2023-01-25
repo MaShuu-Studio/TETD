@@ -54,6 +54,7 @@ public class GameController : MonoBehaviour
             EnemyController.Instance.Init(map);
             RoundController.Instance.Init(map.name);
             PlayerController.Instance.Init(character);
+            TowerController.Instance.Init();
             UIController.Instance.StartGame();
         }
         loadingCoroutine = null;

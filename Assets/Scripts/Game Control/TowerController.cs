@@ -16,9 +16,29 @@ public class TowerController : MonoBehaviour
         instance = this;
     }
 
+    [SerializeField] private Pool splashPool;
+    [SerializeField] private SplashPoint splashPoint;
+
     private Dictionary<Vector3, TowerObject> towers = new Dictionary<Vector3, TowerObject>();
     private TowerObject selectedTower = null;
     public TowerObject SelectedTower { get { return selectedTower; } }
+
+    public void Init()
+    {
+        splashPool.Init(splashPoint);
+    }
+
+    public SplashPoint PopSplash()
+    {
+        GameObject point = splashPool.Pop();
+
+        return point.GetComponent<SplashPoint>();
+    }
+
+    public void PushSplash(GameObject obj)
+    {
+        splashPool.Push(obj);
+    }
 
     public bool ContainsTower(Vector3 pos)
     {
