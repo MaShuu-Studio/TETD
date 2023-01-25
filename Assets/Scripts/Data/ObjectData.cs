@@ -18,6 +18,8 @@ public class Tower : ObjectData
 
     public int cost;
 
+    public bool hasDebuff;
+
     public List<TowerStatType> StatTypes { get { return stat.Keys.ToList(); } }
     private Dictionary<TowerStatType, float> stat;
     private Dictionary<TowerStatType, int> statLevel;
@@ -32,6 +34,8 @@ public class Tower : ObjectData
 
         cost = data.cost;
 
+        hasDebuff = false;
+
         stat = new Dictionary<TowerStatType, float>();
         stat.Add(TowerStatType.DAMAGE, data.dmg);
         stat.Add(TowerStatType.ATTACKSPEED, data.attackspeed);
@@ -40,6 +44,8 @@ public class Tower : ObjectData
         {
             for (int i = 0; i < data.ability.Count; i++)
             {
+                if (data.ability[i].type >= TowerStatType.DOTDAMAGE) hasDebuff = true;
+
                 stat.Add(data.ability[i].type, data.ability[i].value);
             }
         }
@@ -54,6 +60,8 @@ public class Tower : ObjectData
         element = data.element;
 
         cost = data.cost;
+
+        hasDebuff = data.hasDebuff;
 
         stat = new Dictionary<TowerStatType, float>(data.stat);
         statLevel = new Dictionary<TowerStatType, int>();

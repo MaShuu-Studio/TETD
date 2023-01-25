@@ -21,6 +21,7 @@ public class EnemyObject : Poolable
     public float Hp { get { return hp; } }
 
     private IEnumerator moveCoroutine;
+    public float SlowAmount { get { return slowAmount; } }
     private float slowAmount;
     private Dictionary<int, IEnumerator> dotCoroutines;
     private Dictionary<int, int> dotTime;
@@ -136,6 +137,13 @@ public class EnemyObject : Poolable
         dotTime.Remove(id);
     }
 
+    public int RemainDotDmaage(int id)
+    {
+        if (dotTime.ContainsKey(id)) return dotTime[id];
+
+        return 0;
+    }
+
     public void Damaged(Element element, float dmg)
     {
         if (element == data.WeakElement()) dmg *= 1.5f;
@@ -159,6 +167,7 @@ public class EnemyObject : Poolable
             moveCoroutine = null;
             dotCoroutines.Clear();
             dotTime.Clear();
+            slowAmount = 0;
 
             PlayerController.Instance.Reward(data.exp, data.money);
             TowerController.Instance.RemoveEnemyObject(this);

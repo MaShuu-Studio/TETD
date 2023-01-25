@@ -5,7 +5,7 @@ namespace EnumData
     public enum DifficultyType { HP = 0, SPEED = 1, AMOUNT = 2, COST = 3, PROB = 4, TIME = 5, }
     public enum Element { FIRE = 0, WATER = 1, NATURE = 2, }
     public enum Grade { NORMAL = 0, RARE = 1, HEROIC = 2, LEGENDARY = 3, }
-    public enum AttackPriority { FIRST = 0, LAST = 1, STRONG = 2, WEAK = 3, ELEMENT = 4, }
+    public enum AttackPriority { FIRST = 0, LAST = 1, STRONG = 2, WEAK = 3, ELEMENT = 4, DEBUFF = 5 }
     public enum TowerStatType { DAMAGE = 0, ATTACKSPEED = 1, DISTANCE = 2, GOLDMINE = 3, MULTISHOT = 4, SPLASH = 5, DOTDAMAGE = 6, SLOW = 7, }
     public enum CharacterStatType { ABILITY = 0, REWARD = 1, FIRE = 2, WATER = 3, NATURE = 4, }
 

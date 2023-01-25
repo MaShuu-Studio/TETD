@@ -35,6 +35,8 @@ public class TowerInfoPanel : TowerInfo
         int index = (int)selectedTower.Priority;
         priorityToggles[index].isOn = true;
 
+        priorityToggles[(int)AttackPriority.DEBUFF].gameObject.SetActive(data.hasDebuff);
+
         for (int i = 0; i < 3; i++)
         {
             UpdateUpgradeStat((TowerStatType)i);
@@ -92,7 +94,7 @@ public class TowerInfoPanel : TowerInfo
         {
             if (priorityToggles[i].isOn)
             {
-                selectedTower.ChangePriority((EnumData.AttackPriority)i);
+                selectedTower.ChangePriority((AttackPriority)i);
                 break;
             }
         }

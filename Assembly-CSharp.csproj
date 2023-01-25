@@ -61,6 +61,7 @@
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\TowerReinforceButton.cs" />
     <Compile Include="Assets\Scripts\UI\Shop.cs" />
     <Compile Include="Assets\Scripts\Object\TowerObject.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\SellButton.cs" />
     <Compile Include="Assets\Scripts\Data\PriorityQueue.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ScriptableButton.cs" />
     <Compile Include="Assets\Scripts\Data\DataManager.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Assets\Scripts\Map\MapController.cs" />
     <Compile Include="Assets\Scripts\Game Control\RoundController.cs" />
     <Compile Include="Assets\Scripts\Game Control\Initializer.cs" />
+    <Compile Include="Assets\Scripts\UI\TowerStatItem.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\RerollButton.cs" />
     <Compile Include="Assets\Scripts\Map\Map.cs" />
     <Compile Include="Assets\Scripts\Game Control\GameController.cs" />
@@ -102,8 +104,6 @@
     <Compile Include="Assets\Scripts\Map\MapMaker.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
-    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\SellButton.cs" />
-    <Compile Include="Assets\Scripts\UI\TowerStatItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

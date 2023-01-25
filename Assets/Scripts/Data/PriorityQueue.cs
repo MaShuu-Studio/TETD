@@ -62,7 +62,7 @@ public class PriorityQueue<T>
 
     private void Heapify(int index)
     {
-        Swap(index, count-1);
+        Swap(index, count - 1);
         count--;
 
         while (index < count - 1)
@@ -102,6 +102,15 @@ public class PriorityQueue<T>
             ts.Add(array[i].data);
         }
         return ts;
+    }
+    
+    public void Remove(int amount)
+    {
+        if (amount > count) amount = count;
+        for (int i = amount - 1; i >= 0; i--)
+        {
+            Heapify(i);
+        }    
     }
 
     public bool Contains(T data)

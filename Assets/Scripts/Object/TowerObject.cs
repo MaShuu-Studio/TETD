@@ -112,8 +112,23 @@ public class TowerObject : Poolable
         {
             int targetAmount = (int)data.Stat(TowerStatType.MULTISHOT);
             if (targetAmount == 0) targetAmount = 1;
+            List<EnemyObject> target = enemies.Get(targetAmount);
+            // 전부 목록에서 제거
+            enemies.Dequeue();
+            for (int i = 1; i < target.Count; i++)
+                enemies.Remove(target[i]);
+
             SoundController.PlayAudio(id);
-            EnemyController.Instance.EnemyAttacked(enemies.Get(targetAmount), data);
+            EnemyController.Instance.EnemyAttacked(target, data);
+
+            for (int i = 0; i < target.Count; i++)
+            {
+                // 살아있는 경우에만 추가
+                if (target[i].gameObject.activeSelf)
+                {
+                    enemies.Enqueue(target[i], GetPriority(target[i]));
+                }
+            }
 
             float delayTime = 0;
             float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
@@ -131,7 +146,6 @@ public class TowerObject : Poolable
     {
         while (true)
         {
-
             float delayTime = 0;
             float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
             while (delayTime < delay)
@@ -201,9 +215,29 @@ public class TowerObject : Poolable
             prior = enemy.Hp * -1;
         else if (priority == AttackPriority.ELEMENT)
         {
+            // 강속: 100, 동속: 10
             if (enemy.Data.WeakElement() == data.element) prior = 100;
             else if (enemy.Data.StrongElement() != data.element) prior = 10;
 
+            // 앞의 유닛이 더 높은 우선순위
+            // 만 마리의 유닛까지 앞의 우선순위에 영향을 끼치지 못함.
+            prior += enemy.Order / 10000f;
+        }
+        else if (priority == AttackPriority.DEBUFF)
+        {
+            // 기본적으로 디버프 미부여 시 같은 우선순위 부여.
+            if (data.Stat(TowerStatType.SLOW) != 0)
+            {
+                if (enemy.SlowAmount == 0) prior += 100;
+                else prior += (data.Stat(TowerStatType.SLOW) - enemy.SlowAmount);
+            }
+            if (data.Stat(TowerStatType.DOTDAMAGE) != 0)
+            {
+                int remainTime = enemy.RemainDotDmaage(data.id);
+                prior += (5 - remainTime) * 20;
+            }
+
+            // 앞의 유닛이 더 높은 우선순위
             prior += enemy.Order / 10000f;
         }
 
