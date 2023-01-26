@@ -108,6 +108,7 @@ public class UIController : MonoBehaviour
         }
 
         damageUIPool.Init(damageUI);
+        shop.Init();
 
         OpenShop(true);
         UpdateTowerList();

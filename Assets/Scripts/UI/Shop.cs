@@ -12,7 +12,7 @@ public class Shop : MonoBehaviour
     private Dictionary<Grade, float> originProb;
     private Dictionary<Grade, float> prob;
 
-    private void Awake()
+    public void Init()
     {
         originProb = new Dictionary<Grade, float>();
         originProb.Add(Grade.NORMAL, 50);

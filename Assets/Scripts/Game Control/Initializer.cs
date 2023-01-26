@@ -17,25 +17,30 @@ public class Initializer : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
-
-        Initialize();
     }
 
-    private async void Initialize()
+    private void Start()
     {
-        EnumData.EnumArray.Init();
+        Initialize();
+    }
+    
+    private void Initialize()
+    {
+        List<SceneAction> actions = new List<SceneAction>();
 
-        await SpriteManager.Init();
-        await SoundManager.Init();
+        actions.Add(new SceneAction(() => EnumData.EnumArray.Init()));
 
-        await TileManager.Init();
-        await EnemyManager.Init();
-        await TowerManager.Init();
+        actions.Add(new SceneAction(SpriteManager.Init()));
+        actions.Add(new SceneAction(SoundManager.Init()));
 
-        MapManager.Init();
-        RoundManager.Init();
+        actions.Add(new SceneAction(TileManager.Init()));
+        actions.Add(new SceneAction(EnemyManager.Init()));
+        actions.Add(new SceneAction(TowerManager.Init()));
 
-        PoolController.Instance.Init();
-        SceneController.Instance.Init();
+        actions.Add(new SceneAction(() => MapManager.Init()));
+        actions.Add(new SceneAction(() => RoundManager.Init()));
+
+        actions.Add(new SceneAction(() => PoolController.Instance.Init()));
+        SceneController.Instance.ChangeScene("Title", actions);
     }
 }

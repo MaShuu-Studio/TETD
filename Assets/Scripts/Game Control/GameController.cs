@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using EnumData;
+using System;
+using System.Threading.Tasks;
 
 public class GameController : MonoBehaviour
 {
@@ -25,7 +27,7 @@ public class GameController : MonoBehaviour
     private CharacterType character;
     private List<DifficultyType> difficulties;
     private string mapName;
-    
+
     public void SettingGame(CharacterType c, List<DifficultyType> diff, string map)
     {
         character = c;
@@ -38,25 +40,15 @@ public class GameController : MonoBehaviour
         if (loadingCoroutine != null) return;
         UIController.Instance.SettingGame();
 
-        SceneController.Instance.ChangeScene("Game Scene");
-        loadingCoroutine = LoadGame();
-        StartCoroutine(loadingCoroutine);
-    }
-
-    IEnumerator LoadGame()
-    {
-        while (SceneController.Instance.IsLoaded) yield return null;
-
         Map map = MapManager.LoadMap(mapName);
-        if (map != null)
-        {
-            MapController.Instance.Init(map);
-            EnemyController.Instance.Init(map);
-            RoundController.Instance.Init(map.name);
-            PlayerController.Instance.Init(character);
-            TowerController.Instance.Init();
-            UIController.Instance.StartGame();
-        }
-        loadingCoroutine = null;
+        List<SceneAction> actions = new List<SceneAction>();
+        actions.Add(new SceneAction(() => MapController.Instance.Init(map)));
+        actions.Add(new SceneAction(() => EnemyController.Instance.Init(map)));
+        actions.Add(new SceneAction(() => RoundController.Instance.Init(map.name)));
+        actions.Add(new SceneAction(() => PlayerController.Instance.Init(character)));
+        actions.Add(new SceneAction(() => TowerController.Instance.Init()));
+        actions.Add(new SceneAction(() => UIController.Instance.StartGame()));
+
+        SceneController.Instance.ChangeScene("Game Scene", actions);
     }
 }
