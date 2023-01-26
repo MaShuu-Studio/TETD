@@ -16,7 +16,7 @@ public static class EnemyManager
     public static async Task Init()
     {
         enemies = new Dictionary<int, Enemy>();
-        List<EnemyData> list = DataManager.DeserializeListJson<EnemyData>(path, "Enemy");
+        List<EnemyData> list = await DataManager.DeserializeListJson<EnemyData>(path, "Enemy");
 
         foreach (var data in list)
         {

@@ -82,7 +82,7 @@ public class MapMakerEditor : Editor
         {
             if (string.IsNullOrEmpty(mapName) == false)
             {
-                Map map = MapManager.LoadMap(mapName);
+                Map map = null; // MapManager.LoadMap(mapName);
                 route = MapManager.FindRoute(map.tilemap);
                 targetComponent.LoadMap(map.tilemap);
             }

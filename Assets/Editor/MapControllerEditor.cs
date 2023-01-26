@@ -26,8 +26,8 @@ public class MapControllerEditor : Editor
 
         if (load)
         {
-            Map map = MapManager.LoadMap(mapName);
-            targetComponent.Init(map);
+            //Map map = MapManager.LoadMap(mapName);
+            //targetComponent.Init(map);
         }
     }
 }

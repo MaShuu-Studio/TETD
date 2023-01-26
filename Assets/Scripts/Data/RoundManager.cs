@@ -12,11 +12,10 @@ public static class RoundManager
     public static List<string> Keys { get { return keys; } }
     private static List<string> keys;
 
-    public static void Init()
+    public static async void Init()
     {
         rounds = new Dictionary<string, Round>();
-        List<RoundData> list = DataManager.DeserializeListJson<RoundData>(path, "Round");
-
+        List<RoundData> list = await DataManager.DeserializeListJson<RoundData>(path, "Round");
 
         foreach (var data in list)
         {

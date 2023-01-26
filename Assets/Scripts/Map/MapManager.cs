@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Data;
+using System.Threading.Tasks;
 
 public static class MapManager
 {
@@ -11,10 +12,15 @@ public static class MapManager
     public static List<string> Maps { get { return maps; } }
     private static List<string> maps;
 
-    public static void Init()
+    public static async void Init()
     {
-        maps = new List<string>();
-        maps = DataManager.GetFiles(path, ".json");
+        maps = new List<string>()
+        {
+            "RTD",
+            "SNAKE"
+        };
+        //maps = await DataManager.GetFiles(path, ".json");
+
 #if UNITY_EDITOR
         Debug.Log($"[SYSTEM] LOAD MAP {maps.Count}");
 #endif
@@ -126,9 +132,9 @@ public static class MapManager
         DataManager.SerializeJson<TilemapInfoJson>(path, mapName, data);
     }
 
-    public static Map LoadMap(string mapName)
+    public static async Task<Map> LoadMap(string mapName)
     {
-        TilemapInfoJson data = DataManager.DeserializeJson<TilemapInfoJson>(path, mapName);
+        TilemapInfoJson data = await DataManager.DeserializeJson<TilemapInfoJson>(path, mapName);
         if (data == null) return null;
 
         TilemapInfo info = new TilemapInfo(data.origin, data.size, data.tiles);

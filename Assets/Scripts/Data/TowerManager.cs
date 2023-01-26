@@ -18,7 +18,7 @@ public static class TowerManager
     public static async Task Init()
     {
         towers = new Dictionary<int, Tower>();
-        List<TowerData> list = DataManager.DeserializeListJson<TowerData>(path, "Tower");
+        List<TowerData> list = await DataManager .DeserializeListJson<TowerData>(path, "Tower");
         egTowerIds = new List<int>[EnumArray.Elements.Length, EnumArray.Grades.Length];
         for (int i = 0; i < EnumArray.Elements.Length; i++)
             for (int j = 0; j < EnumArray.Grades.Length; j++)

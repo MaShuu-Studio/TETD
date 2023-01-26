@@ -16,8 +16,22 @@ public static class SoundManager
     {
         sounds = new Dictionary<string, AudioClip>();
 
-        List<string> names = DataManager.GetFiles(path, ".wav");
-
+       // List<string> names = await DataManager.GetFiles(path, ".wav");
+        List<string> names = new List<string>()
+        {
+            "1001",
+            "1002",
+            "1003",
+            "1004",
+            "1005",
+            "1006",
+            "1007",
+            "1008",
+            "1009",
+            "1010",
+            "1011",
+            "1012"
+        };
         foreach (string name in names)
         {
             AudioClip clip = await DataManager.LoadSound("/" + name + ".wav", name, AudioType.WAV);

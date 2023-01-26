@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(Grid))]
@@ -18,12 +19,20 @@ public class MapController : MonoBehaviour
         instance = this;
 
         cam = FindObjectOfType<Camera>();
+        pcam = cam.GetComponent<PixelPerfectCamera>();
+
+        float ratio = (float)1920 / Screen.width;
+
+        pcam.assetsPPU = Mathf.CeilToInt(81 / ratio);
+        pcam.refResolutionX = Screen.width;
+        pcam.refResolutionY = Screen.height;
 
         transform.position = Vector3.zero;
         OffSeletedTile();
     }
 
     private Camera cam;
+    private PixelPerfectCamera pcam;
     [SerializeField] private SpriteRenderer selectedTile;
     [SerializeField] private Tilemap tilemap;
     public Grid grid;

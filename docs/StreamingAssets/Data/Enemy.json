@@ -1,0 +1,47 @@
+{
+    "list": 
+    [
+        
+{
+    "id": 2001,
+"name": "FIRE",
+"element": 0,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Enemy/2001.png",
+"pivot": { "x": 0.5, "y": 0.5 },
+"pixelperunit": 36
+},
+
+{
+    "id": 2002,
+"name": "WATER",
+"element": 1,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Enemy/2002.png",
+"pivot": { "x": 0.5, "y": 0.5 },
+"pixelperunit": 36
+},
+
+{
+    "id": 2003,
+"name": "NATURE",
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Enemy/2003.png",
+"pivot": { "x": 0.5, "y": 0.5 },
+"pixelperunit": 36
+}
+    ]
+}

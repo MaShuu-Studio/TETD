@@ -53,7 +53,7 @@ public class SceneController : MonoBehaviour
             sceneLoaded = false;
             StartCoroutine(LoadScene(sceneNumber, count));
 
-            while (sceneLoaded == false) await Task.Delay(10);
+            while (sceneLoaded == false) await Task.Yield();
 
             for (int i = 0; i < actions.Count; i++)
             {

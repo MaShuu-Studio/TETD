@@ -21,11 +21,25 @@ namespace Data
             return Resources.LoadAll<T>(path).ToList();
         }
 
-        public static List<string> GetFiles(string path, string type)
+        public static async Task<List<string>> GetFiles(string path, string type)
         {
             List<string> files = new List<string>();
-            string[] pathes = Directory.GetFiles(path, "*" + type);
+            
+            using (UnityWebRequest req = UnityWebRequest.Get(path))
+            {
+                req.SendWebRequest();
 
+                try
+                {
+                    while (!req.isDone) await Task.Yield();
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"{e}");
+                }
+            }
+
+            string[] pathes = Directory.GetFiles(path, "*" + type);
             for (int i = 0; i < pathes.Length; i++)
             {
                 string file = Path.GetFileName(pathes[i]).Replace(type, "").ToUpper();
@@ -34,30 +48,75 @@ namespace Data
             return files;
         }
 
-        public static void SerializeJson<T>(string path, string fileName, T obj)
+        public static async void SerializeJson<T>(string path, string fileName, T obj)
         {
             string json = JsonUtility.ToJson(obj);
             fileName += ".json";
+            path = Path.Combine(path, fileName);
 
-            File.WriteAllText(path + fileName, json);
+            using (UnityWebRequest req = UnityWebRequest.Put(path, json))
+            {
+                req.SendWebRequest();
+
+                try
+                {
+                    while (!req.isDone) await Task.Yield();
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"{e}");
+                }
+            }
         }
 
-        public static T DeserializeJson<T>(string path, string fileName)
+        public static async Task<T> DeserializeJson<T>(string path, string fileName)
         {
             fileName += ".json";
-            string json = File.ReadAllText(path + fileName);
+            path = Path.Combine(path, fileName);
 
-            T obj = JsonUtility.FromJson<T>(json);
+            T obj = default(T);
+
+            using (UnityWebRequest req = UnityWebRequest.Get(path))
+            {
+                req.SendWebRequest();
+
+                try
+                {
+                    while (!req.isDone) await Task.Yield();
+                    string json = req.downloadHandler.text;
+                    obj = JsonUtility.FromJson<T>(json);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"{e}");
+                }
+            }
 
             return obj;
         }
 
-        public static List<T> DeserializeListJson<T>(string path, string fileName)
+        public static async Task<List<T>> DeserializeListJson<T>(string path, string fileName)
         {
             fileName += ".json";
-            string json = File.ReadAllText(path + fileName);
+            path = Path.Combine(path, fileName);
 
-            SerializableList<T> obj = JsonUtility.FromJson<SerializableList<T>>(json);
+            SerializableList<T> obj = null;
+
+            using (UnityWebRequest req = UnityWebRequest.Get(path))
+            {
+                req.SendWebRequest();
+
+                try
+                {
+                    while (!req.isDone) await Task.Yield();
+                    string json = req.downloadHandler.text;
+                    obj = JsonUtility.FromJson<SerializableList<T>>(json);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"{e}");
+                }
+            }
 
             return obj.list;
         }
@@ -72,7 +131,7 @@ namespace Data
 
                 try
                 {
-                    while (!req.isDone) await Task.Delay(5);
+                    while (!req.isDone) await Task.Yield();
 
                     Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
 
@@ -100,7 +159,7 @@ namespace Data
 
                 try
                 {
-                    while (!req.isDone) await Task.Delay(5);
+                    while (!req.isDone) await Task.Yield();
 
                     clip = DownloadHandlerAudioClip.GetContent(req);
                 }

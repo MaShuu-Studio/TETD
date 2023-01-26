@@ -35,12 +35,12 @@ public class GameController : MonoBehaviour
         mapName = map;
     }
 
-    public void StartGame()
+    public async void StartGame()
     {
         if (loadingCoroutine != null) return;
         UIController.Instance.SettingGame();
 
-        Map map = MapManager.LoadMap(mapName);
+        Map map = await MapManager.LoadMap(mapName);
         List<SceneAction> actions = new List<SceneAction>();
         actions.Add(new SceneAction(() => MapController.Instance.Init(map)));
         actions.Add(new SceneAction(() => EnemyController.Instance.Init(map)));
