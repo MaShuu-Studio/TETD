@@ -17,6 +17,10 @@ public class Initializer : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+
+#if UNITY_EDITOR
+        Data.DataManager.MakeFileNameList();
+#endif
     }
 
     private void Start()
@@ -37,8 +41,8 @@ public class Initializer : MonoBehaviour
         actions.Add(new SceneAction(EnemyManager.Init()));
         actions.Add(new SceneAction(TowerManager.Init()));
 
-        actions.Add(new SceneAction(() => MapManager.Init()));
-        actions.Add(new SceneAction(() => RoundManager.Init()));
+        actions.Add(new SceneAction(MapManager.Init()));
+        actions.Add(new SceneAction(RoundManager.Init()));
 
         actions.Add(new SceneAction(() => PoolController.Instance.Init()));
         SceneController.Instance.ChangeScene("Title", actions);

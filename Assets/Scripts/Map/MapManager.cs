@@ -9,20 +9,21 @@ public static class MapManager
 {
     private static string path = Application.streamingAssetsPath + "/Data/Map/";
 
-    public static List<string> Maps { get { return maps; } }
-    private static List<string> maps;
+    public static string[] Maps { get { return maps; } }
+    private static string[] maps;
 
-    public static async void Init()
+    public static async Task Init()
     {
-        maps = new List<string>()
+        string[] files = await DataManager.GetFiles(path);
+        maps = new string[files.Length];
+        for (int i = 0; i < files.Length; i++)
         {
-            "RTD",
-            "SNAKE"
-        };
-        //maps = await DataManager.GetFiles(path, ".json");
+            maps[i] = DataManager.FileNameTriming(files[i]);
+            Debug.Log(maps[i]);
+        }
 
 #if UNITY_EDITOR
-        Debug.Log($"[SYSTEM] LOAD MAP {maps.Count}");
+        Debug.Log($"[SYSTEM] LOAD MAP {maps.Length}");
 #endif
     }
 

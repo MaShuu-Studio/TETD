@@ -11,7 +11,7 @@
 "exp": 2,
 "money": 50,
 "speed": 5,
-"imgsrc": "/Enemy/2001.png",
+"imgsrc": "/Sprites/Enemy/2001.png",
 "pivot": { "x": 0.5, "y": 0.5 },
 "pixelperunit": 36
 },
@@ -25,7 +25,7 @@
 "exp": 2,
 "money": 50,
 "speed": 5,
-"imgsrc": "/Enemy/2002.png",
+"imgsrc": "/Sprites/Enemy/2002.png",
 "pivot": { "x": 0.5, "y": 0.5 },
 "pixelperunit": 36
 },
@@ -39,7 +39,7 @@
 "exp": 2,
 "money": 50,
 "speed": 5,
-"imgsrc": "/Enemy/2003.png",
+"imgsrc": "/Sprites/Enemy/2003.png",
 "pivot": { "x": 0.5, "y": 0.5 },
 "pixelperunit": 36
 }

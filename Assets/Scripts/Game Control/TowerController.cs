@@ -107,7 +107,7 @@ public class TowerController : MonoBehaviour
 
     public void RemoveEnemyObject(EnemyObject enemy)
     {
-        foreach(var tower in towers.Values)
+        foreach (var tower in towers.Values)
         {
             tower.RemoveEnemy(enemy);
         }

@@ -13,27 +13,15 @@ public static class TileManager
     public static async Task Init()
     {
         tiles = new Dictionary<string, CustomTile>();
-        //List<string> fileNames = await DataManager.GetFiles(Application.streamingAssetsPath + "/Sprites" + path, ".png");
-        List<string> fileNames = new List<string>()
+        string[] fileNames = await DataManager.GetFiles(Application.streamingAssetsPath + "/Sprites" + path);
+
+        for (int i = 0; i < fileNames.Length; i++)
         {
-            "BUILDABLE",
-            "CORNER",
-            "DESTFLAG",
-            "DEST",
-            "GRASS",
-            "NOTBUILDABLE",
-            "ROAD",
-            "STARTFLAG",
-            "START",
-            "WALL"
-        };
-        for (int i = 0; i < fileNames.Count; i++)
-        {
-            Sprite sprite = await DataManager.LoadSprite(path + fileNames[i] + ".png", Vector2.one / 2, 16);
+            Sprite sprite = await DataManager.LoadSprite(fileNames[i], Vector2.one / 2, 16);
 
             if (sprite == null) continue;
 
-            string name = fileNames[i].ToUpper();
+            string name = DataManager.FileNameTriming(fileNames[i]).ToUpper();
 
             CustomTile tile = ScriptableObject.CreateInstance<CustomTile>();
             tile.SetData(name, sprite);

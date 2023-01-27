@@ -16,15 +16,54 @@ namespace Data
 
     public static class DataManager
     {
+        private const string fileListName = "FILELIST.txt";
+        private const string fileListSplit = ",\n";
+
+        public static void MakeFileNameList()
+        {
+            string[] pathes =
+            {
+                "/Data/Map/",
+                "/Sprites/Tile/",
+                "/Sounds/"
+            };
+            for (int i = 0; i < pathes.Length; i++)
+            {
+                string content = FileList(pathes[i]);
+                File.WriteAllText(Application.streamingAssetsPath + pathes[i] + fileListName, content);
+            }
+        }
+        public static string FileList(string path)
+        {
+            string text = "";
+            string[] files = Directory.GetFiles(Application.streamingAssetsPath + path);
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].Contains(".meta") || files[i].Contains(".txt")) continue;
+                string file = Path.GetFileName(files[i]);
+                text += path + file + fileListSplit;
+            }
+            text = text.Substring(0, text.Length - fileListSplit.Length);
+            return text;
+        }
+        public static string FileNameTriming(string fileName)
+        {
+            string[] split = fileName.Split("/");
+            fileName = split[split.Length - 1];
+            split = fileName.Split(".");
+            fileName = split[0];
+
+            return fileName;
+        }
         public static List<T> GetResources<T>(string path) where T : UnityEngine.Object
         {
             return Resources.LoadAll<T>(path).ToList();
         }
 
-        public static async Task<List<string>> GetFiles(string path, string type)
+        public static async Task<string[]> GetFiles(string path)
         {
-            List<string> files = new List<string>();
-            
+            string[] files = null;
+            path += fileListName;
             using (UnityWebRequest req = UnityWebRequest.Get(path))
             {
                 req.SendWebRequest();
@@ -32,6 +71,7 @@ namespace Data
                 try
                 {
                     while (!req.isDone) await Task.Yield();
+                    files = req.downloadHandler.text.Split(fileListSplit);
                 }
                 catch (Exception e)
                 {
@@ -39,19 +79,13 @@ namespace Data
                 }
             }
 
-            string[] pathes = Directory.GetFiles(path, "*" + type);
-            for (int i = 0; i < pathes.Length; i++)
-            {
-                string file = Path.GetFileName(pathes[i]).Replace(type, "").ToUpper();
-                files.Add(file);
-            }
             return files;
         }
 
         public static async void SerializeJson<T>(string path, string fileName, T obj)
         {
             string json = JsonUtility.ToJson(obj);
-            fileName += ".json";
+            if (fileName.Contains(".json") == false) fileName += ".json";
             path = Path.Combine(path, fileName);
 
             using (UnityWebRequest req = UnityWebRequest.Put(path, json))
@@ -71,7 +105,7 @@ namespace Data
 
         public static async Task<T> DeserializeJson<T>(string path, string fileName)
         {
-            fileName += ".json";
+            if (fileName.Contains(".json") == false) fileName += ".json";
             path = Path.Combine(path, fileName);
 
             T obj = default(T);
@@ -123,7 +157,7 @@ namespace Data
 
         public static async Task<Sprite> LoadSprite(string path, Vector2 pivot, float pixelsPerUnit)
         {
-            path = Application.streamingAssetsPath + "/Sprites" + path;
+            path = Application.streamingAssetsPath + path;
             Sprite sprite = null;
             using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(path))
             {
@@ -133,9 +167,7 @@ namespace Data
                 {
                     while (!req.isDone) await Task.Yield();
 
-                    Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-
-                    texture = DownloadHandlerTexture.GetContent(req);
+                    Texture2D texture = DownloadHandlerTexture.GetContent(req);
                     texture.filterMode = FilterMode.Point;
 
                     sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), pivot, pixelsPerUnit);
@@ -148,9 +180,9 @@ namespace Data
 
             return sprite;
         }
-        public static async Task<AudioClip> LoadSound(string path, string name, AudioType type)
+        public static async Task<AudioClip> LoadSound(string path, AudioType type)
         {
-            path = Application.streamingAssetsPath + "/Sounds" + path;
+            path = Application.streamingAssetsPath + path;
 
             AudioClip clip = null;
             using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(path, type))

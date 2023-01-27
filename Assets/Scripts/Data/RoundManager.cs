@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Data;
+using System.Threading.Tasks;
 
 public static class RoundManager
 {
@@ -12,7 +13,7 @@ public static class RoundManager
     public static List<string> Keys { get { return keys; } }
     private static List<string> keys;
 
-    public static async void Init()
+    public static async Task Init()
     {
         rounds = new Dictionary<string, Round>();
         List<RoundData> list = await DataManager.DeserializeListJson<RoundData>(path, "Round");

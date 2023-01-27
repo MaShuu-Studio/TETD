@@ -19,14 +19,14 @@ public static class SpriteManager
         for (int i = 0; i < EnumArray.Elements.Length; i++)
         {
             string name = $"Element{i}";
-            Sprite sprite = await DataManager.LoadSprite("/UI/" + name + ".png", Vector2.one / 2, 16);
+            Sprite sprite = await DataManager.LoadSprite("/Sprites/UI/" + name + ".png", Vector2.one / 2, 16);
             uiSprites.Add(name, sprite);
         }
 
         for (int i = 0; i < EnumArray.TowerStatTypes.Length; i++)
         {
             string name = $"TowerStatType{i}";
-            Sprite sprite = await DataManager.LoadSprite("/UI/" + name + ".png", Vector2.one / 2, 16);
+            Sprite sprite = await DataManager.LoadSprite("/Sprites/UI/" + name + ".png", Vector2.one / 2, 16);
             uiSprites.Add(name, sprite);
         }
     }

@@ -16,26 +16,11 @@ public static class SoundManager
     {
         sounds = new Dictionary<string, AudioClip>();
 
-       // List<string> names = await DataManager.GetFiles(path, ".wav");
-        List<string> names = new List<string>()
+        string[] fileNames = await DataManager.GetFiles(path);
+        for (int i = 0; i < fileNames.Length; i++)
         {
-            "1001",
-            "1002",
-            "1003",
-            "1004",
-            "1005",
-            "1006",
-            "1007",
-            "1008",
-            "1009",
-            "1010",
-            "1011",
-            "1012"
-        };
-        foreach (string name in names)
-        {
-            AudioClip clip = await DataManager.LoadSound("/" + name + ".wav", name, AudioType.WAV);
-            sounds.Add(name, clip);
+            AudioClip clip = await DataManager.LoadSound(fileNames[i], AudioType.WAV);
+            sounds.Add(DataManager.FileNameTriming(fileNames[i]).ToUpper(), clip);
         }
         keys = sounds.Keys.ToList();
 
