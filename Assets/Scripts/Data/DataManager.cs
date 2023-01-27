@@ -82,25 +82,13 @@ namespace Data
             return files;
         }
 
-        public static async void SerializeJson<T>(string path, string fileName, T obj)
+        public static void SerializeJson<T>(string path, string fileName, T obj)
         {
             string json = JsonUtility.ToJson(obj);
             if (fileName.Contains(".json") == false) fileName += ".json";
             path = Path.Combine(path, fileName);
 
-            using (UnityWebRequest req = UnityWebRequest.Put(path, json))
-            {
-                req.SendWebRequest();
-
-                try
-                {
-                    while (!req.isDone) await Task.Yield();
-                }
-                catch (Exception e)
-                {
-                    Debug.Log($"{e}");
-                }
-            }
+            File.WriteAllText(path, json);
         }
 
         public static async Task<T> DeserializeJson<T>(string path, string fileName)

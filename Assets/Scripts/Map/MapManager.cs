@@ -9,21 +9,20 @@ public static class MapManager
 {
     private static string path = Application.streamingAssetsPath + "/Data/Map/";
 
-    public static string[] Maps { get { return maps; } }
-    private static string[] maps;
+    public static List<string> Maps { get { return maps; } }
+    private static List<string> maps;
 
     public static async Task Init()
     {
         string[] files = await DataManager.GetFiles(path);
-        maps = new string[files.Length];
+        maps = new List<string>();
         for (int i = 0; i < files.Length; i++)
         {
-            maps[i] = DataManager.FileNameTriming(files[i]);
-            Debug.Log(maps[i]);
+            maps.Add(DataManager.FileNameTriming(files[i]));
         }
 
 #if UNITY_EDITOR
-        Debug.Log($"[SYSTEM] LOAD MAP {maps.Length}");
+        Debug.Log($"[SYSTEM] LOAD MAP {maps.Count}");
 #endif
     }
 
@@ -131,6 +130,7 @@ public static class MapManager
     {
         TilemapInfoJson data = new TilemapInfoJson(info);
         DataManager.SerializeJson<TilemapInfoJson>(path, mapName, data);
+        if (maps.Contains(mapName) == false) maps.Add(mapName);
     }
 
     public static async Task<Map> LoadMap(string mapName)

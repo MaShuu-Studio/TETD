@@ -34,6 +34,7 @@ public class UIController : MonoBehaviour
 
     [Header("Title")]
     [SerializeField] private GameSettingController gameSetting;
+    [SerializeField] private TMP_InputField mapNameInputfield;
 
     [Space]
     [Header("Game Scene")]
@@ -61,6 +62,14 @@ public class UIController : MonoBehaviour
     [Header("Tower Info")]
     [SerializeField] private TowerInfoPanel towerInfoPanel;
 
+    [Space]
+    [Header("Map Editor")]
+    [SerializeField] private TextMeshProUGUI mapNameText;
+    [SerializeField] private MapEditorTile tilePrefab;
+    [SerializeField] private RectTransform tileList;
+    [SerializeField] private RectTransform[] sidePanel;
+    private List<MapEditorTile> tiles;
+
 
     public void StartLoading()
     {
@@ -82,12 +91,17 @@ public class UIController : MonoBehaviour
         loadingScene.SetActive(false);
     }
 
+    public void Title()
+    {
+        gameSetting.Init();
+    }
+
+    #region Game Scene
     public void SettingGame()
     {
         GameController.Instance.SettingGame(gameSetting.SelectedCharacter(), gameSetting.Difficulty(), gameSetting.MapName());
     }
 
-    #region Game Scene
     public void StartGame()
     {
         for (int i = 0; i < buildTowerButtons.Count; i++)
@@ -230,5 +244,56 @@ public class UIController : MonoBehaviour
         shop.Reroll(item);
     }
     #endregion
+    #endregion
+
+    #region Map Edit Scene
+    public string GetMapName()
+    {
+        return mapNameInputfield.text;
+    }
+    public void EditMap(string mapName)
+    {
+        if (tiles != null) tiles.Clear();
+        mapNameText.text = mapName;
+        LoadTiles();
+        int count = Mathf.CeilToInt(tileList.childCount / 2);
+        tileList.sizeDelta = new Vector2(300, 120 * count + 20 * (count - 1) + 30);
+    }
+
+    public void LoadTiles()
+    {
+        if (tiles != null)
+        {
+            foreach (var tile in tiles)
+            {
+                Destroy(tile.gameObject);
+            }
+            tiles.Clear();
+        }
+
+        tiles = new List<MapEditorTile>();
+        // юс╫ц©К 
+        string[] names = { "GRASS", "ROAD", "START", "DEST", "WALL" };
+        for (int i = 0; i < names.Length; i++)
+        {
+            CustomTile tile = TileManager.GetTile(names[i]);
+            MapEditorTile metile = Instantiate(tilePrefab);
+
+            metile.SetTile(tile);
+            metile.transform.SetParent(tileList);
+            tiles.Add(metile);
+        }
+    }
+    public bool PointInTilePanel(Vector2 point)
+    {
+        for (int i = 0; i < sidePanel.Length; i++)
+        {
+            Vector2 pos = sidePanel[i].position;
+            Rect rect = new Rect(pos + sidePanel[i].offsetMin, sidePanel[i].rect.size);
+            if (rect.Contains(point)) return true;
+        }
+        return false;
+    }
+
     #endregion
 }

@@ -23,7 +23,7 @@ public class SceneController : MonoBehaviour
     }
 
     private string[] SceneNames { get; }
-    = { "Title", "Game Scene" };
+    = { "Title", "Game Scene", "Map Editor" };
 
     private const string LoadingScene = "Loading";
     private bool isLoading;
@@ -54,21 +54,23 @@ public class SceneController : MonoBehaviour
             StartCoroutine(LoadScene(sceneNumber, count));
 
             while (sceneLoaded == false) await Task.Yield();
-
-            for (int i = 0; i < actions.Count; i++)
+            if (actions != null)
             {
-                // Task가 아닌 Action의 경우 바로 진행
-                if (actions[i].action != null)
+                for (int i = 0; i < actions.Count; i++)
                 {
-                    actions[i].action.Invoke();
+                    // Task가 아닌 Action의 경우 바로 진행
+                    if (actions[i].action != null)
+                    {
+                        actions[i].action.Invoke();
+                    }
+                    // Task의 경우 Func<Task>로 변환 및 await
+                    else
+                    {
+                        Func<Task> task = async () => await actions[i].task;
+                        await task.Invoke();
+                    }
+                    Progress((1 + i + 1) / (float)count);
                 }
-                // Task의 경우 Func<Task>로 변환 및 await
-                else
-                {
-                    Func<Task> task = async () => await actions[i].task;
-                    await task.Invoke();
-                }
-                Progress((1 + i + 1) / (float)count);
             }
 
             UIController.Instance.ChangeScene(sceneNumber);

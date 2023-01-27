@@ -16,6 +16,8 @@ public class GameSettingIcon : MonoBehaviour
         get { return toggle.isOn; }
         set
         {
+            if (toggle == null) toggle = GetComponent<Toggle>();
+            if (image == null) image = GetComponent<Image>();
             toggle.isOn = value;
             ChangeColor(value);
         }
@@ -23,12 +25,14 @@ public class GameSettingIcon : MonoBehaviour
 
     private void Awake()
     {
-        toggle = GetComponent<Toggle>();
-        image = GetComponent<Image>();
+        if (toggle == null) toggle = GetComponent<Toggle>();
+        if (image == null) image = GetComponent<Image>();
     }
-    public void SetIcon(string str)
+    public void SetIcon(string str, ToggleGroup group = null)
     {
         desc.text = str;
+        if (group != null)
+            toggle.group = group;
     }
 
     public void ChangeColor(bool b)

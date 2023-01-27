@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ using System.Threading.Tasks;
 public static class TileManager
 {
     private static Dictionary<string, CustomTile> tiles;
+    public static List<string> Keys { get { return keys; } }
+    private static List<string> keys;
 
     private static string path = "/Tile/";
     public static async Task Init()
@@ -27,6 +30,7 @@ public static class TileManager
             tile.SetData(name, sprite);
             tiles.Add(name, tile);
         }
+        keys = tiles.Keys.ToList();
 
 #if UNITY_EDITOR
         Debug.Log($"[SYSTEM] LOAD TILE {tiles.Count}");

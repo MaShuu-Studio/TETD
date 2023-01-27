@@ -22,8 +22,6 @@ public class GameController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private IEnumerator loadingCoroutine;
-
     private CharacterType character;
     private List<DifficultyType> difficulties;
     private string mapName;
@@ -35,9 +33,15 @@ public class GameController : MonoBehaviour
         mapName = map;
     }
 
+    public void Title()
+    {
+        List<SceneAction> actions = new List<SceneAction>();
+        actions.Add(new SceneAction(() => UIController.Instance.Title()));
+        SceneController.Instance.ChangeScene("Title", actions);
+    }
+
     public async void StartGame()
     {
-        if (loadingCoroutine != null) return;
         UIController.Instance.SettingGame();
 
         Map map = await MapManager.LoadMap(mapName);
@@ -50,5 +54,17 @@ public class GameController : MonoBehaviour
         actions.Add(new SceneAction(() => UIController.Instance.StartGame()));
 
         SceneController.Instance.ChangeScene("Game Scene", actions);
+    }
+
+    public async void EditMap()
+    {
+        string mapName = UIController.Instance.GetMapName();
+        if (string.IsNullOrEmpty(mapName)) return;
+
+        Map map = await MapManager.LoadMap(mapName);
+        List<SceneAction> actions = new List<SceneAction>();
+        actions.Add(new SceneAction(() => MapEditor.Instance.Init(map, mapName)));
+        actions.Add(new SceneAction(() => UIController.Instance.EditMap(mapName)));
+        SceneController.Instance.ChangeScene("Map Editor", actions);
     }
 }

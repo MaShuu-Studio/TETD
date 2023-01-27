@@ -8,12 +8,10 @@ public class GameSettingController : MonoBehaviour
 {
     [SerializeField] private List<GameSettingIcon> charIcons;
     [SerializeField] private List<GameSettingIcon> difficultIcons;
-    [SerializeField] private List<GameSettingIcon> mapIcons;
+    [SerializeField] private ToggleGroup mapInfos;
+    [SerializeField] private GameSettingIcon mapIconPrefab;
+    private List<GameSettingIcon> mapIcons;
 
-    private void Start()
-    {
-        Init();
-    }
     public void Init()
     {
         // 추후 해당 부분을 데이터화 및 자동 생성시켜 작동시킬 예정
@@ -27,11 +25,24 @@ public class GameSettingController : MonoBehaviour
             difficultIcons[i].SetIcon(((DifficultyType)i).ToString());
             difficultIcons[i].isOn = false;
         }
-        for (int i = 0; i < mapIcons.Count; i++)
+
+        if (mapIcons != null)
+        {
+            foreach (var icon in mapIcons)
+            {
+                Destroy(icon.gameObject);
+            }
+            mapIcons.Clear();
+        }
+        mapIcons = new List<GameSettingIcon>();
+        for (int i = 0; i < MapManager.Maps.Count; i++)
         {
             string name = MapManager.Maps[i];
-            mapIcons[i].SetIcon(name);
-            mapIcons[i].isOn = false;
+            GameSettingIcon mapIcon = Instantiate(mapIconPrefab);
+            mapIcon.transform.SetParent(mapInfos.transform);
+            mapIcon.SetIcon(name, mapInfos);
+            mapIcon.isOn = false;
+            mapIcons.Add(mapIcon);
         }
 
         charIcons[0].isOn = true;

@@ -18,6 +18,8 @@ public class MapController : MonoBehaviour
         }
         instance = this;
 
+        grid = GetComponent<Grid>();
+
         cam = FindObjectOfType<Camera>();
         pcam = cam.GetComponent<PixelPerfectCamera>();
 
@@ -35,7 +37,7 @@ public class MapController : MonoBehaviour
     private PixelPerfectCamera pcam;
     [SerializeField] private SpriteRenderer selectedTile;
     [SerializeField] private Tilemap tilemap;
-    public Grid grid;
+    private Grid grid;
     private Map map;
 
     private bool readyToBuild;
