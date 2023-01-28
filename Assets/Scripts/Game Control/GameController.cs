@@ -22,17 +22,6 @@ public class GameController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private CharacterType character;
-    private List<DifficultyType> difficulties;
-    private string mapName;
-
-    public void SettingGame(CharacterType c, List<DifficultyType> diff, string map)
-    {
-        character = c;
-        difficulties = diff;
-        mapName = map;
-    }
-
     public void Title()
     {
         List<SceneAction> actions = new List<SceneAction>();
@@ -42,14 +31,17 @@ public class GameController : MonoBehaviour
 
     public async void StartGame()
     {
-        UIController.Instance.SettingGame();
+        CharacterType character;
+        List<DifficultyType> difficulties;
+        string mapName;
+        UIController.Instance.GameSetting(out character, out difficulties, out mapName);
 
         Map map = await MapManager.LoadMap(mapName);
         List<SceneAction> actions = new List<SceneAction>();
         actions.Add(new SceneAction(() => MapController.Instance.Init(map)));
-        actions.Add(new SceneAction(() => EnemyController.Instance.Init(map)));
-        actions.Add(new SceneAction(() => RoundController.Instance.Init(map.name)));
-        actions.Add(new SceneAction(() => PlayerController.Instance.Init(character)));
+        actions.Add(new SceneAction(() => EnemyController.Instance.Init(map, difficulties)));
+        actions.Add(new SceneAction(() => RoundController.Instance.Init(map.name, difficulties)));
+        actions.Add(new SceneAction(() => PlayerController.Instance.Init(character, difficulties)));
         actions.Add(new SceneAction(() => TowerController.Instance.Init()));
         actions.Add(new SceneAction(() => UIController.Instance.StartGame()));
 

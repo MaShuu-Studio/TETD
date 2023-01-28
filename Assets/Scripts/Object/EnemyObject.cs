@@ -48,13 +48,13 @@ public class EnemyObject : Poolable
         return true;
     }
 
-    public void Init(List<Vector3> road, int order)
+    public void Init(List<Vector3> road, int order, float hpDif, float speedDif)
     {
         this.road = road;
 
-        hp = maxHp = data.hp;
+        hp = maxHp = data.hp * hpDif;
         UpdateHp();
-        speed = data.speed;
+        speed = data.speed * speedDif;
 
         transform.position = road[0];
         destRoad = 1;

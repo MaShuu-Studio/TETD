@@ -59,6 +59,7 @@
     <Compile Include="Assets\Scripts\Data\SoundManager.cs" />
     <Compile Include="Assets\Scripts\Data\TileManager.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\TowerReinforceButton.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\SaveMapButton.cs" />
     <Compile Include="Assets\Scripts\UI\Shop.cs" />
     <Compile Include="Assets\Scripts\Object\TowerObject.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\SellButton.cs" />
@@ -71,12 +72,14 @@
     <Compile Include="Assets\Scripts\Game Control\SoundController.cs" />
     <Compile Include="Assets\Scripts\Map\MapManager.cs" />
     <Compile Include="Assets\Scripts\Data\TowerManager.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\FIndRouteButton.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfoPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\StartButton.cs" />
     <Compile Include="Assets\Scripts\UI\GameSettingController.cs" />
     <Compile Include="Assets\Scripts\Data\SpriteManager.cs" />
     <Compile Include="Assets\Scripts\Game Control\TowerController.cs" />
     <Compile Include="Assets\Scripts\UI\GameSettingIcon.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\EditMapButton.cs" />
     <Compile Include="Assets\Scripts\Object\Poolable.cs" />
     <Compile Include="Assets\Scripts\Object\Pool.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfoItem.cs" />
@@ -100,16 +103,13 @@
     <Compile Include="Assets\Scripts\Game Control\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Data\EnumData.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfo.cs" />
+    <Compile Include="Assets\Scripts\Map\MapEditorTile.cs" />
     <Compile Include="Assets\Scripts\Object\PoolController.cs" />
     <Compile Include="Assets\Scripts\UI\DamageUI.cs" />
     <Compile Include="Assets\Scripts\Game Control\SceneController.cs" />
     <Compile Include="Assets\Scripts\Map\MapEditor.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
-    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\EditMapButton.cs" />
-    <Compile Include="Assets\Scripts\Map\MapEditorTile.cs" />
-    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\FIndRouteButton.cs" />
-    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\SaveMapButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

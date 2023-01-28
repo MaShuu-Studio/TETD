@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnumData;
 
 public class RoundController : MonoBehaviour
 {
@@ -23,8 +24,17 @@ public class RoundController : MonoBehaviour
     private Round data;
     private int curRound;
 
-    public void Init(string mapName)
+    private float amountDiff;
+    private float timeDiff;
+
+    public void Init(string mapName, List<DifficultyType> difficulties)
     {
+        amountDiff = 1;
+        timeDiff = 1;
+
+        if (difficulties.Contains(DifficultyType.AMOUNT)) amountDiff = 1.5f;
+        if (difficulties.Contains(DifficultyType.TIME)) timeDiff = 0.5f;
+
         data = RoundManager.GetRound(mapName);
         curRound = 0;
 
@@ -46,10 +56,10 @@ public class RoundController : MonoBehaviour
     IEnumerator NextRoundTimer(int cur)
     {
         EachRound nextRound = data.data[curRound];
-        UIController.Instance.NextRoundInfo(nextRound);
+        UIController.Instance.NextRoundInfo(nextRound, amountDiff);
         float time = 0;
 
-        while (time < 5)
+        while (time < (5 * timeDiff))
         {
             time += Time.deltaTime;
             yield return null;
@@ -63,7 +73,7 @@ public class RoundController : MonoBehaviour
     {
         foreach (int id in round.unitData.Keys)
         {
-            for (int i = 0; i < round.unitData[id]; i++)
+            for (int i = 0; i < round.unitData[id] * amountDiff; i++)
             {
                 EnemyController.Instance.AddEnemy(id);
 

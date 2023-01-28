@@ -46,7 +46,7 @@ public class TowerInfoItem : TowerInfo
     {
         base.UpdateInfo();
 
-        costText.text = data.cost.ToString();
+        costText.text = PlayerController.Cost(data.cost).ToString();
     }
 
     public void SelectElement(int index)

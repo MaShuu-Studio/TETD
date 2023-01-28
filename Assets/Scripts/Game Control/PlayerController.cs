@@ -30,18 +30,29 @@ public class PlayerController : MonoBehaviour
     public List<Tower> Towers { get { return towers; } }
     public CharacterType Type { get { return character.Type; } }
     private Character character;
+
+    private float probDiff;
+    private float costDiff;
+
     public float BonusProb
     {
         get
         {
+            float prob = probDiff;
             if (Type == CharacterType.PROB)
-                return (100 + GetStat(CharacterStatType.ABILITY)) / 100f;
-            else return 1;
+                return prob * ((100 + GetStat(CharacterStatType.ABILITY)) / 100f);
+            else return prob;
         }
     }
 
-    public void Init(CharacterType type)
+    public void Init(CharacterType type, List<DifficultyType> difficulties)
     {
+        probDiff = 1;
+        costDiff = 1;
+
+        if (difficulties.Contains(DifficultyType.PROB)) probDiff = 0.5f;
+        if (difficulties.Contains(DifficultyType.COST)) costDiff = 1.5f;
+
         towers = new List<Tower>();
         character = new Character(type);
 
@@ -67,12 +78,15 @@ public class PlayerController : MonoBehaviour
 
     public static int Cost(int cost)
     {
+        float c = cost;
         if (Instance.Type == CharacterType.COST)
         {
-            cost = (int)(cost / ((100 + Instance.GetStat(CharacterStatType.ABILITY)) / 100f));
+            c /= ((100 + Instance.GetStat(CharacterStatType.ABILITY)) / 100f);
         }
 
-        return cost;
+        c *= Instance.costDiff;
+
+        return (int)c;
     }
 
     public bool AddTower(Tower tower)

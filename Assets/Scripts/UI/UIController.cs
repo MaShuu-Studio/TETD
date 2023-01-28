@@ -97,9 +97,11 @@ public class UIController : MonoBehaviour
     }
 
     #region Game Scene
-    public void SettingGame()
+    public void GameSetting(out CharacterType c, out List<DifficultyType> diff, out string map)
     {
-        GameController.Instance.SettingGame(gameSetting.SelectedCharacter(), gameSetting.Difficulty(), gameSetting.MapName());
+        c = gameSetting.SelectedCharacter();
+        diff = gameSetting.Difficulty();
+        map = gameSetting.MapName();
     }
 
     public void StartGame()
@@ -168,7 +170,7 @@ public class UIController : MonoBehaviour
         towerInfoPanel.UpdateBonusStat();
     }
 
-    public void NextRoundInfo(EachRound nextRoundInfo)
+    public void NextRoundInfo(EachRound nextRoundInfo, float amountDiff = 1)
     {
         string info = "";
         int height = 0;
@@ -177,9 +179,8 @@ public class UIController : MonoBehaviour
             height = 30;
             foreach (var kvp in nextRoundInfo.unitData)
             {
-                info += $"{EnemyManager.GetEnemy(kvp.Key).name.Substring(6)} : {kvp.Value}\n";
+                info += $"{EnemyManager.GetEnemy(kvp.Key).name.Substring(6)} : {string.Format("{0:0}", kvp.Value * amountDiff)}\n";
                 height += 50;
-
             }
         }
 

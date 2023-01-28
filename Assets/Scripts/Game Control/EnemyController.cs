@@ -27,8 +27,17 @@ public class EnemyController : MonoBehaviour
     private List<Vector3> road;
     private int enemyOrder;
 
-    public void Init(Map map)
+    private float hpDif;
+    private float speedDif;
+
+    public void Init(Map map, List<DifficultyType> difficulties)
     {
+        hpDif = 1;
+        speedDif = 1;
+
+        if (difficulties.Contains(DifficultyType.HP)) hpDif = 1.5f;
+        if (difficulties.Contains(DifficultyType.SPEED)) speedDif = 1.5f;
+
         enemyAttackedQueue = new Queue<Tuple<EnemyObject, Tower>>();
         enemies = new List<EnemyObject>();
         road = new List<Vector3>();
@@ -49,7 +58,7 @@ public class EnemyController : MonoBehaviour
         GameObject go = PoolController.Pop(id);
         EnemyObject enemyObj = go.GetComponent<EnemyObject>();
         enemies.Add(enemyObj);
-        enemyObj.Init(road, -1 * enemyOrder++);
+        enemyObj.Init(road, -1 * enemyOrder++, hpDif, speedDif);
         enemyObj.transform.SetParent(transform);
     }
 
