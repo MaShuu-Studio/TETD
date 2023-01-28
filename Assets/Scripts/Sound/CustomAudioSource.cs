@@ -10,6 +10,8 @@ public class CustomAudioSource : Poolable
 
     private void Update()
     {
+        if (play) source.volume = SoundController.Instance.SfxVolume;
+
         if (play && source.isPlaying == false)
         {
             source.Stop();

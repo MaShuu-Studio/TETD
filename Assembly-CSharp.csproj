@@ -111,6 +111,9 @@
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
     <Compile Include="Assets\Scripts\UI\MapInfoIcon.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ExitButton.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\TitleButton.cs" />
+    <Compile Include="Assets\Scripts\UI\OptionUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

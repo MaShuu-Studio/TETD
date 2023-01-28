@@ -26,8 +26,10 @@ public class SceneController : MonoBehaviour
     = { "Title", "Game Scene", "Map Editor" };
 
     private const string LoadingScene = "Loading";
+    public bool IsLoading { get { return isLoading; } }
     private bool isLoading;
     private bool sceneLoaded;
+    public string CurrentScene { get { return currentScene; } }
     private string currentScene;
 
     public int FindScene(string scene)

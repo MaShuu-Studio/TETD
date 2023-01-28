@@ -20,13 +20,33 @@ public class GameController : MonoBehaviour
         instance = this;
 
         DontDestroyOnLoad(gameObject);
+        settingUI = false;
+    }
+
+    private bool settingUI;
+    private void Update()
+    {
+        if(SceneController.Instance.IsLoading == false)
+        {
+            bool esc = Input.GetButtonDown("Cancel");
+            if (esc)
+            {
+                settingUI = !settingUI;
+                UIController.Instance.OpenSetting(settingUI);
+            }
+        }
     }
 
     public void Title()
     {
+        if (SceneController.Instance.CurrentScene == "Title") return;
+
         List<SceneAction> actions = new List<SceneAction>();
         actions.Add(new SceneAction(UIController.Instance.Title()));
         SceneController.Instance.ChangeScene("Title", actions);
+
+        settingUI = false;
+        UIController.Instance.OpenSetting(settingUI);
     }
 
     public async void StartGame()

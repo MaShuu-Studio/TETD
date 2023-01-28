@@ -22,8 +22,15 @@ public class SoundController : MonoBehaviour
     [SerializeField] private Poolable soundBase;
     private Dictionary<int, Pool> pool;
 
+    public float SfxVolume { get { return sfxVolume; } }
+    private float bgmVolume;
+    private float sfxVolume;
+
     public void Init()
     {
+        bgmVolume = 1;
+        sfxVolume = 1;
+
         pool = new Dictionary<int, Pool>();
 
         for (int i = 0; i < SoundManager.Keys.Count; i++)
@@ -56,5 +63,11 @@ public class SoundController : MonoBehaviour
 
         GameObject obj = Instance.pool[id].Pop();
         return obj;
+    }
+
+    public void SetVolume(float bgm, float sfx)
+    {
+        bgmVolume = bgm / 10;
+        sfxVolume = sfx / 10;
     }
 }

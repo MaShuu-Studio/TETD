@@ -23,18 +23,26 @@ public class UIController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         buildTowerButtons = new List<BuildTowerButton>();
+        OpenSetting(false);
     }
 
     [Header("Scenes")]
     [SerializeField] private GameObject loadingScene;
     [SerializeField] private List<GameObject> scenes;
 
+    [Space]
     [Header("Loading Scene")]
     [SerializeField] private Slider loadingGage;
 
+    [Space]
     [Header("Title")]
     [SerializeField] private GameSettingController gameSetting;
     [SerializeField] private TMP_InputField mapNameInputfield;
+
+    [Space]
+    [Header("Setting")]
+    [SerializeField] private GameObject settingObject;
+    [SerializeField] private OptionUI optionUI;
 
     [Space]
     [Header("Game Scene")]
@@ -94,6 +102,12 @@ public class UIController : MonoBehaviour
     public async Task Title()
     {
         await gameSetting.Init();
+    }
+
+    public void OpenSetting(bool b)
+    {
+        settingObject.SetActive(b);
+        optionUI.gameObject.SetActive(false);
     }
 
     #region Game Scene
