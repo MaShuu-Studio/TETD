@@ -122,10 +122,11 @@ namespace Excel_To_Json
             return contents;
         }
 
-        private static string ParseRoundData(string dataName, Excel.Range range)
+        private static string ParseRoundData(string mapName, Excel.Range range)
         {
             string contents = "";
             string datas = "";
+            //contents = ParseValue("mapName", mapName) + ",";
             for (int row = 2; row <= range.Rows.Count; row++)
             {
                 // column 1: units
@@ -146,32 +147,6 @@ namespace Excel_To_Json
             contents += string.Format(JsonFormat.listFormat, "data", datas);
             return contents;
         }
-        /*
-        private static string ParseRoundData(string mapName, Excel.Range range)
-        {
-            string contents = "";
-            string datas = "";
-            contents = ParseValue("mapName", mapName) + ",";
-            for (int row = 2; row <= range.Rows.Count; row++)
-            {
-                // column 1: units
-                // column 2: amounts
-                string data = "";
-
-                for (int column = 1; column <= 2; column++)
-                {
-                    string type = (range.Cells[1, column] as Excel.Range).Value2;
-                    object o = (range.Cells[row, column] as Excel.Range).Value2;
-                    if (o == null) continue;
-                    data += string.Format(JsonFormat.listFormat, type, o.ToString());
-                    if (column < 2) data += ",";
-                }
-                datas += string.Format(JsonFormat.contentsFormat, data);
-                if (row < range.Rows.Count) datas += ",\n";
-            }
-            contents += string.Format(JsonFormat.listFormat, "data", datas);
-            return contents;
-        }*/
 
         private static string ParseEnumData(string name, Excel.Range range)
         {

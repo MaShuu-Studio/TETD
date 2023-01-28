@@ -25,7 +25,7 @@ public static class TileManager
             if (sprite == null) continue;
 
             string name = DataManager.FileNameTriming(fileNames[i]).ToUpper();
-
+            sprite.name = name;
             CustomTile tile = ScriptableObject.CreateInstance<CustomTile>();
             tile.SetData(name, sprite);
             tiles.Add(name, tile);

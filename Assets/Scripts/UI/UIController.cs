@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using EnumData;
-using System;
+using System.Threading.Tasks;
 
 public class UIController : MonoBehaviour
 {
@@ -91,9 +91,9 @@ public class UIController : MonoBehaviour
         loadingScene.SetActive(false);
     }
 
-    public void Title()
+    public async Task Title()
     {
-        gameSetting.Init();
+        await gameSetting.Init();
     }
 
     #region Game Scene

@@ -20,6 +20,7 @@ public static class SpriteManager
         {
             string name = $"Element{i}";
             Sprite sprite = await DataManager.LoadSprite("/Sprites/UI/" + name + ".png", Vector2.one / 2, 16);
+            sprite.name = name;
             uiSprites.Add(name, sprite);
         }
 
@@ -27,6 +28,7 @@ public static class SpriteManager
         {
             string name = $"TowerStatType{i}";
             Sprite sprite = await DataManager.LoadSprite("/Sprites/UI/" + name + ".png", Vector2.one / 2, 16);
+            sprite.name = name;
             uiSprites.Add(name, sprite);
         }
     }
@@ -38,6 +40,7 @@ public static class SpriteManager
         string type = typeof(T).ToString();
 
         Sprite sprite = await DataManager.LoadSprite(path, pivot, pixelPerUnit);
+        sprite.name = id.ToString();
         sprites.Add(id, sprite);
     }
 

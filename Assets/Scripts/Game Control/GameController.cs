@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour
     public void Title()
     {
         List<SceneAction> actions = new List<SceneAction>();
-        actions.Add(new SceneAction(() => UIController.Instance.Title()));
+        actions.Add(new SceneAction(UIController.Instance.Title()));
         SceneController.Instance.ChangeScene("Title", actions);
     }
 

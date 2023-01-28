@@ -8,9 +8,9 @@ using TMPro;
 [RequireComponent(typeof(Image))]
 public class GameSettingIcon : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI desc;
-    private Toggle toggle;
-    private Image image;
+    [SerializeField] protected TextMeshProUGUI desc;
+    protected Toggle toggle;
+    protected Image image;
     public bool isOn
     {
         get { return toggle.isOn; }
@@ -23,19 +23,17 @@ public class GameSettingIcon : MonoBehaviour
         }
     }
 
-    private void Awake()
+    protected void Awake()
     {
         if (toggle == null) toggle = GetComponent<Toggle>();
         if (image == null) image = GetComponent<Image>();
     }
-    public void SetIcon(string str, ToggleGroup group = null)
+    public void SetIcon(string str)
     {
         desc.text = str;
-        if (group != null)
-            toggle.group = group;
     }
 
-    public void ChangeColor(bool b)
+    public virtual void ChangeColor(bool b)
     {
         if (b) image.color = Color.white;
         else image.color = Color.gray * 0.5f;

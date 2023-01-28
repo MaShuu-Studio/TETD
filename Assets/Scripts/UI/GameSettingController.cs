@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 using EnumData;
 
 public class GameSettingController : MonoBehaviour
@@ -9,10 +10,10 @@ public class GameSettingController : MonoBehaviour
     [SerializeField] private List<GameSettingIcon> charIcons;
     [SerializeField] private List<GameSettingIcon> difficultIcons;
     [SerializeField] private ToggleGroup mapInfos;
-    [SerializeField] private GameSettingIcon mapIconPrefab;
-    private List<GameSettingIcon> mapIcons;
+    [SerializeField] private MapInfoIcon mapIconPrefab;
+    private List<MapInfoIcon> mapIcons;
 
-    public void Init()
+    public async Task Init()
     {
         // 추후 해당 부분을 데이터화 및 자동 생성시켜 작동시킬 예정
         for (int i = 0; i < charIcons.Count; i++)
@@ -34,14 +35,19 @@ public class GameSettingController : MonoBehaviour
             }
             mapIcons.Clear();
         }
-        mapIcons = new List<GameSettingIcon>();
+        mapIcons = new List<MapInfoIcon>();
+
+        while (MapManager.Maps == null || TileManager.Keys == null) await Task.Yield();
+
         for (int i = 0; i < MapManager.Maps.Count; i++)
         {
-            string name = MapManager.Maps[i];
-            GameSettingIcon mapIcon = Instantiate(mapIconPrefab);
+            string mapName = MapManager.Maps[i];
+            Map map = await MapManager.LoadMap(mapName);
+            MapInfoIcon mapIcon = Instantiate(mapIconPrefab);
             mapIcon.transform.SetParent(mapInfos.transform);
-            mapIcon.SetIcon(name, mapInfos);
+            mapIcon.SetIcon(map, mapInfos);
             mapIcon.isOn = false;
+
             mapIcons.Add(mapIcon);
         }
 
