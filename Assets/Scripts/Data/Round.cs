@@ -6,13 +6,10 @@ using Data;
 
 public class Round
 {
-    public string mapName;
     public List<EachRound> data;
 
     public Round(RoundData data)
     {
-        mapName = data.mapName;
-
         this.data = new List<EachRound>();
         for (int i = 0; i < data.data.Count; i++)
         {
@@ -49,6 +46,5 @@ public class EachRoundData
 [Serializable]
 public class RoundData
 {
-    public string mapName;
     public List<EachRoundData> data;
 }

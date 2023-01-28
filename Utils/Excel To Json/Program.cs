@@ -26,13 +26,17 @@ namespace Excel_To_Json
 
                     Console.WriteLine($"Start Parsing {name.ToUpper()}");
 
-                    if (name != "EnumData")
-                        contents = string.Format(JsonFormat.jsonFormat, ParseBasicData(name, range));
-                    else
+                    if (name == "EnumData")
                     {
                         filename = name + ".cs";
                         contents = string.Format(JsonFormat.enumFileFormat, ParseEnumData(name, range));
                     }
+                    else if (name == "Round")
+                    {
+                        contents = string.Format(JsonFormat.contentsFormat, ParseRoundData(name, range));
+                    }
+                    else contents = string.Format(JsonFormat.jsonFormat, ParseBasicData(name, range));
+
                     File.WriteAllText(Path.Combine(Environment.CurrentDirectory, filename), contents);
                 }
 
@@ -48,7 +52,7 @@ namespace Excel_To_Json
                 ReleaseObject(app);
                 ReleaseObject(workBook);
             }
-
+            /*
             path = Path.Combine(Environment.CurrentDirectory, "Round.xlsx");
 
             app = new Excel.Application();
@@ -84,8 +88,8 @@ namespace Excel_To_Json
                 ReleaseObject(app);
                 ReleaseObject(workBook);
             }
+            */
         }
-
 
         private static string ParseBasicData(string dataName, Excel.Range range)
         {
@@ -118,6 +122,31 @@ namespace Excel_To_Json
             return contents;
         }
 
+        private static string ParseRoundData(string dataName, Excel.Range range)
+        {
+            string contents = "";
+            string datas = "";
+            for (int row = 2; row <= range.Rows.Count; row++)
+            {
+                // column 1: units
+                // column 2: amounts
+                string data = "";
+
+                for (int column = 1; column <= 2; column++)
+                {
+                    string type = (range.Cells[1, column] as Excel.Range).Value2;
+                    object o = (range.Cells[row, column] as Excel.Range).Value2;
+                    if (o == null) continue;
+                    data += string.Format(JsonFormat.listFormat, type, o.ToString());
+                    if (column < 2) data += ",";
+                }
+                datas += string.Format(JsonFormat.contentsFormat, data);
+                if (row < range.Rows.Count) datas += ",\n";
+            }
+            contents += string.Format(JsonFormat.listFormat, "data", datas);
+            return contents;
+        }
+        /*
         private static string ParseRoundData(string mapName, Excel.Range range)
         {
             string contents = "";
@@ -142,7 +171,7 @@ namespace Excel_To_Json
             }
             contents += string.Format(JsonFormat.listFormat, "data", datas);
             return contents;
-        }
+        }*/
 
         private static string ParseEnumData(string name, Excel.Range range)
         {
@@ -210,7 +239,7 @@ namespace Excel_To_Json
             else if (TryParseAbility(s, out types, out values))
             {
                 string content = "";
-                for (int a =0; a < types.Length; a++)
+                for (int a = 0; a < types.Length; a++)
                 {
                     content += string.Format(JsonFormat.abilityFormat, types[a], values[a]);
                     if (a < types.Length - 1) content += ",\n";

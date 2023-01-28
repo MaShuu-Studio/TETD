@@ -9,6 +9,24 @@ public static class RoundManager
 {
     private static string path = Application.streamingAssetsPath + "/Data/";
 
+    private static Round round;
+
+    public static async Task Init()
+    {
+        RoundData data = await DataManager.DeserializeJson<RoundData>(path, "Round");
+        round = new Round(data);
+
+#if UNITY_EDITOR
+        Debug.Log($"[SYSTEM] LOAD ROUND DATA");
+#endif
+    }
+
+    public static Round GetRound(string mapName)
+    {
+        return round;
+    }
+
+    /*
     private static Dictionary<string, Round> rounds;
     public static List<string> Keys { get { return keys; } }
     private static List<string> keys;
@@ -30,11 +48,11 @@ public static class RoundManager
         Debug.Log($"[SYSTEM] LOAD ROUND {rounds.Count}");
 #endif
     }
-
+    
     public static Round GetRound(string mapName)
     {
         if (rounds.ContainsKey(mapName)) return rounds[mapName];
 
         return null;
-    }
+    }*/
 }
