@@ -61,6 +61,11 @@ public class RoundController : MonoBehaviour
 
         while (time < (5 * timeDiff))
         {
+            if (GameController.Instance.Paused)
+            {
+                yield return null;
+                continue;
+            }
             time += Time.deltaTime;
             yield return null;
         }
@@ -80,6 +85,11 @@ public class RoundController : MonoBehaviour
                 float time = 0;
                 while (time < 0.3f)
                 {
+                    if (GameController.Instance.Paused)
+                    {
+                        yield return null;
+                        continue;
+                    }
                     time += Time.deltaTime;
                     yield return null;
                 }

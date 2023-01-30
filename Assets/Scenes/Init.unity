@@ -4708,7 +4708,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SETTING
+  m_text: PAUSE
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9ec7ad16586adbb47b96fbda765eb26c, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 06b885fcd129c154697025cd47fa725c, type: 2}
@@ -49627,6 +49627,7 @@ GameObject:
   - component: {fileID: 2145905632}
   - component: {fileID: 2145905631}
   - component: {fileID: 2145905630}
+  - component: {fileID: 2145905633}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -49737,3 +49738,15 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2145905628}
   m_CullTransparentMesh: 1
+--- !u!114 &2145905633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2145905628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f50d4f5dd041b844181f0edbdf39910b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

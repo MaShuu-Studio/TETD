@@ -20,10 +20,10 @@ public class GameController : MonoBehaviour
         instance = this;
 
         DontDestroyOnLoad(gameObject);
-        settingUI = false;
+        paused = false;
     }
-
-    private bool settingUI;
+    public bool Paused { get { return paused; } }
+    private bool paused;
     private void Update()
     {
         if(SceneController.Instance.IsLoading == false)
@@ -31,8 +31,8 @@ public class GameController : MonoBehaviour
             bool esc = Input.GetButtonDown("Cancel");
             if (esc)
             {
-                settingUI = !settingUI;
-                UIController.Instance.OpenSetting(settingUI);
+                paused = !paused;
+                UIController.Instance.OpenSetting(paused);
             }
         }
     }
@@ -45,8 +45,8 @@ public class GameController : MonoBehaviour
         actions.Add(new SceneAction(UIController.Instance.Title()));
         SceneController.Instance.ChangeScene("Title", actions);
 
-        settingUI = false;
-        UIController.Instance.OpenSetting(settingUI);
+        paused = false;
+        UIController.Instance.OpenSetting(paused);
     }
 
     public async void StartGame()

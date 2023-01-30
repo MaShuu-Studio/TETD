@@ -42,6 +42,11 @@ public class SplashPoint : Poolable
         float time = 0;
         while(time < 0.1f)
         {
+            if (GameController.Instance.Paused)
+            {
+                yield return null;
+                continue;
+            }
             time += Time.deltaTime;
             yield return null;
         }

@@ -26,6 +26,11 @@ public class DamageUI : Poolable
 
         while (time < 0.3f)
         {
+            if (GameController.Instance.Paused)
+            {
+                yield return null;
+                continue;
+            }
             time += Time.deltaTime;
             transform.position += Vector3.up * 1f;
             yield return null;

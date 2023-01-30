@@ -149,6 +149,11 @@ public class TowerObject : Poolable
             float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
             while (delayTime < delay)
             {
+                if (GameController.Instance.Paused)
+                {
+                    yield return null;
+                    continue;
+                }
                 delayTime += Time.deltaTime;
                 yield return null;
             }
@@ -165,6 +170,11 @@ public class TowerObject : Poolable
             float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
             while (delayTime < delay)
             {
+                if (GameController.Instance.Paused)
+                {
+                    yield return null;
+                    continue;
+                }
                 delayTime += Time.deltaTime;
                 yield return null;
             }

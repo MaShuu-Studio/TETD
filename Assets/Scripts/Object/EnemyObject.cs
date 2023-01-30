@@ -75,9 +75,14 @@ public class EnemyObject : Poolable
 
             while (CompareVector(transform.position, road[destRoad], destlargeX, destlargeY))
             {
-                yield return null;
+                if (GameController.Instance.Paused)
+                {
+                    yield return null;
+                    continue;
+                }
                 Vector3 moveAmount = v * speed * Time.deltaTime * (1 - slowAmount);
                 transform.position += moveAmount;
+                yield return null;
             }
             transform.position = road[destRoad];
 
@@ -125,6 +130,11 @@ public class EnemyObject : Poolable
         {
             while (time < 1)
             {
+                if (GameController.Instance.Paused)
+                {
+                    yield return null;
+                    continue;
+                }
                 time += Time.deltaTime;
                 yield return null;
             }

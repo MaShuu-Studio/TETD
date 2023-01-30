@@ -105,25 +105,23 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator Flush()
     {
-        int count = enemyAttackedQueue.Count;
-        for (int i = 0; i < count; i++)
+        while (enemyAttackedQueue.Count > 0)
         {
-            Tuple<EnemyObject, Tower> tuple;
-            if (enemyAttackedQueue.TryDequeue(out tuple) == false) continue;
+            int count = enemyAttackedQueue.Count;
+            for (int i = 0; i < count; i++)
+            {
+                Tuple<EnemyObject, Tower> tuple;
+                if (enemyAttackedQueue.TryDequeue(out tuple) == false) continue;
 
-            EnemyObject enemy = tuple.Item1;
-            Tower data = tuple.Item2;
+                EnemyObject enemy = tuple.Item1;
+                Tower data = tuple.Item2;
 
-            if (enemies.Contains(enemy) == false) continue;
-            enemy.Attacked(data);
+                if (enemies.Contains(enemy) == false) continue;
+                enemy.Attacked(data);
+            }
+            yield return null;
         }
-        yield return null;
 
-        if (enemyAttackedQueue.Count > 0)
-        {
-            flushCoroutine = Flush();
-            StartCoroutine(flushCoroutine);
-        }
-        else flushCoroutine = null;
+        flushCoroutine = null;
     }
 }
