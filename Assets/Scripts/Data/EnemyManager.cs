@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Data;
+using EnumData;
 using System.Threading.Tasks;
 
 public static class EnemyManager
@@ -36,5 +37,12 @@ public static class EnemyManager
         if (enemies.ContainsKey(id)) return enemies[id];
 
         return null;
+    }
+    public static void UpdateLanguage(LanguageType type)
+    {
+        foreach (var enemy in enemies.Values)
+        {
+            enemy.UpdateName(Translator.GetLanguage(enemy.id), type);
+        }
     }
 }

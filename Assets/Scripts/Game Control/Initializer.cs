@@ -32,6 +32,7 @@ public class Initializer : MonoBehaviour
 
         actions.Add(new SceneAction(() => EnumData.EnumArray.Init()));
 
+        actions.Add(new SceneAction(Translator.Init()));
         actions.Add(new SceneAction(SpriteManager.Init()));
         actions.Add(new SceneAction(SoundManager.Init()));
 
@@ -43,7 +44,8 @@ public class Initializer : MonoBehaviour
         actions.Add(new SceneAction(RoundManager.Init()));
 
         actions.Add(new SceneAction(() => PoolController.Instance.Init()));
-        actions.Add(new SceneAction(UIController.Instance.Title()));
+        actions.Add(new SceneAction(UIController.Instance.Init()));
+        actions.Add(new SceneAction(() => GameController.Instance.SetLanguage(0)));
         SceneController.Instance.ChangeScene("Title", actions);
     }
 }

@@ -50,6 +50,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI roundInfo;
     [SerializeField] private DamageUI damageUI;
     [SerializeField] private DamagePool damageUIPool;
+    private EachRound nextRound;
 
     [Header("Info Panel")]
     [SerializeField] private TextMeshProUGUI lifeText;
@@ -78,6 +79,11 @@ public class UIController : MonoBehaviour
     [SerializeField] private RectTransform[] sidePanel;
     private List<MapEditorTile> tiles;
 
+    public async Task Init()
+    {
+        optionUI.Init();
+        await Title();
+    }
 
     public void StartLoading()
     {
@@ -108,6 +114,13 @@ public class UIController : MonoBehaviour
     {
         settingObject.SetActive(b);
         optionUI.gameObject.SetActive(false);
+    }
+
+    public void UpdateLanguage()
+    {
+        towerInfoPanel.UpdateLanguage();
+        shop.UpdateLanguage();
+        UpdateRoundInfo();
     }
 
     #region Game Scene
@@ -184,16 +197,26 @@ public class UIController : MonoBehaviour
         towerInfoPanel.UpdateBonusStat();
     }
 
-    public void NextRoundInfo(EachRound nextRoundInfo, float amountDiff = 1)
+    public void NextRoundInfo(EachRound nextRoundInfo)
     {
+        nextRound = nextRoundInfo;
+        UpdateRoundInfo();
+    }
+
+    public void UpdateRoundInfo()
+    {
+        if (RoundController.Instance == null) return;
+
         string info = "";
         int height = 0;
-        if (nextRoundInfo != null)
+        float amountDiff = RoundController.Instance.Difficulty;
+
+        if (nextRound != null)
         {
             height = 30;
-            foreach (var kvp in nextRoundInfo.unitData)
+            foreach (var kvp in nextRound.unitData)
             {
-                info += $"{EnemyManager.GetEnemy(kvp.Key).name.Substring(6)} : {string.Format("{0:0}", kvp.Value * amountDiff)}\n";
+                info += $"{EnemyManager.GetEnemy(kvp.Key).name} : {string.Format("{0:0}", kvp.Value * amountDiff)}\n";
                 height += 50;
             }
         }

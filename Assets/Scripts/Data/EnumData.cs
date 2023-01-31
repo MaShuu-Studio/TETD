@@ -10,6 +10,7 @@ namespace EnumData
     public enum AttackPriority { FIRST = 0, LAST = 1, STRONG = 2, WEAK = 3, ELEMENT = 4, DEBUFF = 5, }
     public enum TowerStatType { DAMAGE = 0, ATTACKSPEED = 1, DISTANCE = 2, GOLDMINE = 3, MULTISHOT = 4, SPLASH = 5, DOTDAMAGE = 6, SLOW = 7, }
     public enum CharacterStatType { ABILITY = 0, REWARD = 1, FIRE = 2, WATER = 3, NATURE = 4, }
+    public enum LanguageType { KOREAN = 0, ENGLISH = 1, }
 
     public static class EnumArray
     {
@@ -20,6 +21,7 @@ namespace EnumData
         public static AttackPriority[] AttackPrioritys { get; private set; } = (AttackPriority[])Enum.GetValues(typeof(AttackPriority));
         public static TowerStatType[] TowerStatTypes { get; private set; } = (TowerStatType[])Enum.GetValues(typeof(TowerStatType));
         public static CharacterStatType[] CharacterStatTypes { get; private set; } = (CharacterStatType[])Enum.GetValues(typeof(CharacterStatType));
+        public static LanguageType[] LanguageTypes { get; private set; } = (LanguageType[])Enum.GetValues(typeof(LanguageType));
         public static Dictionary<CharacterType, string> CharacterTypeStrings { get; private set; }
         public static Dictionary<DifficultyType, string> DifficultyTypeStrings { get; private set; }
         public static Dictionary<Element, string> ElementStrings { get; private set; }
@@ -27,10 +29,12 @@ namespace EnumData
         public static Dictionary<AttackPriority, string> AttackPriorityStrings { get; private set; }
         public static Dictionary<TowerStatType, string> TowerStatTypeStrings { get; private set; }
         public static Dictionary<CharacterStatType, string> CharacterStatTypeStrings { get; private set; }
+        public static Dictionary<LanguageType, string> LanguageTypeStrings { get; private set; }
 
 
         public static void Init()
         {
+
             CharacterTypeStrings = new Dictionary<CharacterType, string>();
             for (int i = 0; i < CharacterTypes.Length; i++)
             {
@@ -78,6 +82,13 @@ namespace EnumData
             {
                 CharacterStatType type = CharacterStatTypes[i];
                 CharacterStatTypeStrings.Add(type, type.ToString());
+            }
+
+            LanguageTypeStrings = new Dictionary<LanguageType, string>();
+            for (int i = 0; i < LanguageTypes.Length; i++)
+            {
+                LanguageType type = LanguageTypes[i];
+                LanguageTypeStrings.Add(type, type.ToString());
             }
 
         }

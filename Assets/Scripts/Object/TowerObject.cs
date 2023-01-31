@@ -86,6 +86,11 @@ public class TowerObject : Poolable
         }
     }
 
+    public void UpdateLanguage(LanguageType lang)
+    {
+        data.UpdateName(Translator.GetLanguage(id), lang);
+    }
+
     public void UpdateDistnace()
     {
         rangeUI.transform.localScale = range.transform.localScale = Vector3.one * (1 + data.Stat(TowerStatType.DISTANCE) * 2);

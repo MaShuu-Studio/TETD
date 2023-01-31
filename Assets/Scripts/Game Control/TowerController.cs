@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnumData;
 
 public class TowerController : MonoBehaviour
 {
@@ -110,6 +111,14 @@ public class TowerController : MonoBehaviour
         foreach (var tower in towers.Values)
         {
             tower.RemoveEnemy(enemy);
+        }
+    }
+
+    public void UpdateLanguage(LanguageType lang)
+    {
+        foreach (var tower in towers.Values)
+        {
+            tower.UpdateLanguage(lang);
         }
     }
 }

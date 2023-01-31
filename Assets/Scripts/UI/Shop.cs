@@ -61,4 +61,12 @@ public class Shop : MonoBehaviour
 
         item.SetData(tower);
     }
+
+    public void UpdateLanguage()
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            items[i].UpdateLanguage();
+        }
+    }
 }

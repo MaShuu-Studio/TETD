@@ -9,6 +9,11 @@ public abstract class ObjectData
 {
     public int id { get; protected set; }
     public string name { get; protected set; }
+
+    public void UpdateName(Language lang, LanguageType type)
+    {
+        name = lang.name[type];
+    }
 }
 
 public class Tower : ObjectData
@@ -27,7 +32,7 @@ public class Tower : ObjectData
     public Tower(TowerData data)
     {
         id = data.id;
-        name = "TOWER-" + data.name.ToUpper();
+        name = data.name.ToUpper();
 
         grade = data.grade;
         element = data.element;
@@ -156,7 +161,7 @@ public class Enemy : ObjectData
     public Enemy(EnemyData data)
     {
         id = data.id;
-        name = "ENEMY-" + data.name.ToUpper();
+        name = data.name.ToUpper();
 
         element = data.element;
 

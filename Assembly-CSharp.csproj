@@ -95,11 +95,13 @@
     <Compile Include="Assets\Scripts\Game Control\RoundController.cs" />
     <Compile Include="Assets\Scripts\Game Control\Initializer.cs" />
     <Compile Include="Assets\Scripts\UI\TowerStatItem.cs" />
+    <Compile Include="Assets\Scripts\Data\Language.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\RerollButton.cs" />
     <Compile Include="Assets\Scripts\Map\Map.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ExitButton.cs" />
     <Compile Include="Assets\Scripts\Game Control\GameController.cs" />
     <Compile Include="Assets\Scripts\UI\DamagePool.cs" />
+    <Compile Include="Assets\Scripts\Data\Translator.cs" />
     <Compile Include="Assets\Scripts\Sound\CustomAudioSource.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\GetTowerButton.cs" />
     <Compile Include="Assets\Scripts\Data\RoundManager.cs" />
@@ -117,7 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
-    <None Include="Assets\StreamingAssets\SoundsFILELIST.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\StreamingAssets\Data\Map\FILELIST.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

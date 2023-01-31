@@ -1,0 +1,20 @@
+{
+    "list": 
+    [
+        
+{
+    "id": 2001,
+    "name": [ "불슬라임","FIRE SLIME" ]
+},
+
+{
+    "id": 2002,
+    "name": [ "물슬라임","WATER SLIME" ]
+},
+
+{
+    "id": 2003,
+    "name": [ "풀슬라임","NATURE SLIME" ]
+}
+    ]
+}

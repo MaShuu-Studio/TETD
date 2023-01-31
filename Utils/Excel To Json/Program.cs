@@ -231,7 +231,20 @@ namespace Excel_To_Json
             // string
             else
             {
-                s = "\"" + s + "\"";
+                string[] l = s.Split(",");
+                if (l.Length > 1)
+                {
+                    string content = "";
+                    for (int a = 0; a < l.Length; a++)
+                    {
+                        content += "\"" + l[a] + "\"";
+                        if (a < l.Length - 1) content += ",";
+                    }
+
+                    s = string.Format(JsonFormat.listFormat, type, content);
+                    return s;
+                }
+                else s = "\"" + s + "\"";
             }
             return string.Format(JsonFormat.valueFormat, type, s);
         }

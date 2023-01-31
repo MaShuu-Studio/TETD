@@ -19,7 +19,7 @@ public class TowerInfo : MonoBehaviour
     {
         this.data = data;
 
-        nameText.text = data.name.Substring(6);
+        nameText.text = data.name;
         iconImage.sprite = SpriteManager.GetSprite(data.id);
 
         // UI Icon들도 id를 붙이고 SpriteManager에서 관리 예정
@@ -65,8 +65,8 @@ public class TowerInfo : MonoBehaviour
         }
     }
 
-    protected void AddSkill()
+    public void UpdateLanguage()
     {
-
+        if (data != null) nameText.text = data.name;
     }
 }

@@ -24,6 +24,7 @@ public class RoundController : MonoBehaviour
     private Round data;
     private int curRound;
 
+    public float Difficulty { get { return amountDiff; } }
     private float amountDiff;
     private float timeDiff;
 
@@ -56,7 +57,7 @@ public class RoundController : MonoBehaviour
     IEnumerator NextRoundTimer(int cur)
     {
         EachRound nextRound = data.data[curRound];
-        UIController.Instance.NextRoundInfo(nextRound, amountDiff);
+        UIController.Instance.NextRoundInfo(nextRound);
         float time = 0;
 
         while (time < (5 * timeDiff))

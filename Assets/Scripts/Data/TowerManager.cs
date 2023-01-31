@@ -55,4 +55,12 @@ public static class TowerManager
 
         return GetTower(id);
     }
+
+    public static void UpdateLanguage(LanguageType type)
+    {
+        foreach(var tower in towers.Values)
+        {
+            tower.UpdateName(Translator.GetLanguage(tower.id), type);
+        }
+    }
 }

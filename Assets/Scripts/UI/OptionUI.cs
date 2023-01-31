@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 using TMPro;
+using System.Threading.Tasks;
 
 public class OptionUI : MonoBehaviour
 {
@@ -10,12 +12,18 @@ public class OptionUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bgmText;
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private TextMeshProUGUI sfxText;
+    [SerializeField] private TMP_Dropdown languages;
 
-    private void Start()
+    public async void Init()
     {
         bgmSlider.value = 10;
         sfxSlider.value = 10;
         SetSound();
+
+        while (EnumData.EnumArray.LanguageTypeStrings == null) await Task.Yield();
+        languages.options.Clear();
+        languages.AddOptions(EnumData.EnumArray.LanguageTypeStrings.Values.ToList());
+        languages.onValueChanged.AddListener(i => GameController.Instance.SetLanguage(i));
     }
 
     public void SetSound()

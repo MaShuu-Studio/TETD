@@ -24,6 +24,21 @@ public class GameController : MonoBehaviour
     }
     public bool Paused { get { return paused; } }
     private bool paused;
+
+    private LanguageType currentLanguage;
+
+    public void SetLanguage(int index)
+    {
+        currentLanguage = (LanguageType)index;
+        TowerManager.UpdateLanguage(currentLanguage);
+        EnemyManager.UpdateLanguage(currentLanguage);
+
+        UIController.Instance.UpdateLanguage();
+
+        if (TowerController.Instance != null)
+            TowerController.Instance.UpdateLanguage(currentLanguage);
+    }
+
     private void Update()
     {
         if(SceneController.Instance.IsLoading == false)
