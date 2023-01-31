@@ -23,6 +23,7 @@ public class EnemyController : MonoBehaviour
     private Queue<Tuple<EnemyObject, Tower>> enemyAttackedQueue;
     private IEnumerator flushCoroutine;
 
+    public int EnemyAmount { get { return enemies.Count; } }
     private List<EnemyObject> enemies;
     private List<Vector3> road;
     private int enemyOrder;
@@ -69,6 +70,12 @@ public class EnemyController : MonoBehaviour
         enemies.Remove(enemy);
 
         PoolController.Push(enemy.Id, enemy.gameObject);
+    }
+
+    public void EnemyArrive(EnemyObject enemy)
+    {
+        PlayerController.Instance.Damaged(1);
+        RemoveEnemy(enemy);
     }
 
     public EnemyObject FindEnemy(GameObject go)

@@ -56,11 +56,18 @@ public class PlayerController : MonoBehaviour
         towers = new List<Tower>();
         character = new Character(type);
 
-        life = maxLife = 100;
+        life = maxLife = 10;
         money = 10000;
 
         UpdateInfo();
         UpdateStat();
+    }
+
+    public void Damaged(int damage)
+    {
+        life -= damage;
+        if (life < 0) life = 0;
+        UpdateInfo();
     }
 
     public bool Buy(int cost)
@@ -111,7 +118,7 @@ public class PlayerController : MonoBehaviour
 
     public int BonusElement(Element element)
     {
-        switch(element)
+        switch (element)
         {
             case Element.FIRE:
                 return character.Stat[CharacterStatType.FIRE];

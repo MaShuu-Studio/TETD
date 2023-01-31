@@ -41,13 +41,25 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        if(SceneController.Instance.IsLoading == false)
+        if (SceneController.Instance.IsLoading == false)
         {
             bool esc = Input.GetButtonDown("Cancel");
             if (esc)
             {
                 paused = !paused;
                 UIController.Instance.OpenSetting(paused);
+            }
+
+            if (SceneController.Instance.CurrentScene == "Game Scene")
+            {
+                if (PlayerController.Instance.Life <= 0)
+                {
+                    GameOver();
+                }
+                else if (RoundController.Instance.IsEnd && EnemyController.Instance.EnemyAmount == 0)
+                {
+                    Clear();
+                }
             }
         }
     }
@@ -93,5 +105,15 @@ public class GameController : MonoBehaviour
         actions.Add(new SceneAction(() => MapEditor.Instance.Init(map, mapName)));
         actions.Add(new SceneAction(() => UIController.Instance.EditMap(mapName)));
         SceneController.Instance.ChangeScene("Map Editor", actions);
+    }
+
+    public void Clear()
+    {
+        UIController.Instance.Clear();
+    }
+
+    public void GameOver()
+    {
+        UIController.Instance.GameOver();
     }
 }

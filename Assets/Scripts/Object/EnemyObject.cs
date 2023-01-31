@@ -88,7 +88,7 @@ public class EnemyObject : Poolable
 
             destRoad++;
         }
-        ArriveDest();
+        EnemyController.Instance.EnemyArrive(this);
     }
 
     public void Attacked(Tower tower)
@@ -189,11 +189,6 @@ public class EnemyObject : Poolable
     {
         if (hp < 0) hp = 0;
         hpGage.transform.localScale = new Vector3(hp / maxHp, 1);
-    }
-
-    private void ArriveDest()
-    {
-        EnemyController.Instance.RemoveEnemy(this);
     }
 
     // first, second, secondLargeX, secondLargeY

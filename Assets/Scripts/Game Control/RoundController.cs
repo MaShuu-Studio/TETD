@@ -27,9 +27,13 @@ public class RoundController : MonoBehaviour
     public float Difficulty { get { return amountDiff; } }
     private float amountDiff;
     private float timeDiff;
+    public bool IsEnd { get { return isEnd; } }
+    private bool isEnd;
 
     public void Init(string mapName, List<DifficultyType> difficulties)
     {
+        isEnd = false;
+
         amountDiff = 1;
         timeDiff = 1;
 
@@ -56,23 +60,31 @@ public class RoundController : MonoBehaviour
 
     IEnumerator NextRoundTimer(int cur)
     {
-        EachRound nextRound = data.data[curRound];
-        UIController.Instance.NextRoundInfo(nextRound);
-        float time = 0;
-
-        while (time < (5 * timeDiff))
+        if (data.data.Count == curRound)
         {
-            if (GameController.Instance.Paused)
-            {
-                yield return null;
-                continue;
-            }
-            time += Time.deltaTime;
-            yield return null;
+            isEnd = true;
+            timerCoroutine = null;
         }
+        else
+        {
+            EachRound nextRound = data.data[curRound];
+            UIController.Instance.NextRoundInfo(nextRound);
+            float time = 0;
 
-        if (curRound == cur)
-            StartRound();
+            while (time < (5 * timeDiff))
+            {
+                if (GameController.Instance.Paused)
+                {
+                    yield return null;
+                    continue;
+                }
+                time += Time.deltaTime;
+                yield return null;
+            }
+
+            if (curRound == cur)
+                StartRound();
+        }
     }
 
     IEnumerator MobSpawn(EachRound round)

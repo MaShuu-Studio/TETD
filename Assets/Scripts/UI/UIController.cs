@@ -46,6 +46,8 @@ public class UIController : MonoBehaviour
 
     [Space]
     [Header("Game Scene")]
+    [SerializeField] private GameObject clearView;
+    [SerializeField] private GameObject gameOverView;
     [SerializeField] private RectTransform infoRect;
     [SerializeField] private TextMeshProUGUI roundInfo;
     [SerializeField] private DamageUI damageUI;
@@ -123,6 +125,15 @@ public class UIController : MonoBehaviour
         UpdateRoundInfo();
     }
 
+    public void Clear()
+    {
+        clearView.SetActive(true);
+    }
+    public void GameOver()
+    {
+        gameOverView.SetActive(true);
+    }
+
     #region Game Scene
     public void GameSetting(out CharacterType c, out List<DifficultyType> diff, out string map)
     {
@@ -133,6 +144,9 @@ public class UIController : MonoBehaviour
 
     public void StartGame()
     {
+        clearView.SetActive(false);
+        gameOverView.SetActive(false);
+
         for (int i = 0; i < buildTowerButtons.Count; i++)
         {
             Destroy(buildTowerButtons[i].gameObject);
