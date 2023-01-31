@@ -44,12 +44,14 @@ public class MapEditor : MonoBehaviour
     private Map map;
     public string MapName { get { return mapName; } }
     private string mapName;
+    private string tileName;
     public List<Vector3Int> EnemyRoad { get { return road; } }
     private List<Vector3Int> road;
     private CustomTile selectedTileInfo;
     #region Map Controller
-    public void Init(Map map, string mapName)
+    public void Init(Map map, string mapName, string tileName)
     {
+        this.tileName = tileName;
         this.mapName = mapName;
         if (map == null)
         {
@@ -64,7 +66,7 @@ public class MapEditor : MonoBehaviour
         foreach (var pos in map.tilemap.tiles.Keys)
         {
             TileInfo tileInfo = map.tilemap.tiles[pos];
-            TileBase tile = TileManager.GetTile(tileInfo.name);
+            TileBase tile = TileManager.GetTile(map.tilemap.tileName, tileInfo);
             mapTilemap.SetTile(pos, tile);
         }
 
@@ -91,12 +93,14 @@ public class MapEditor : MonoBehaviour
             {
                 mapTilemap.SetTile(tilePos, selectedTileInfo);
                 UpdateMap();
+                ClearInfo();
             }
 
             if (rclick)
             {
                 mapTilemap.SetTile(tilePos, null);
                 UpdateMap();
+                ClearInfo();
             }
         }
     }
@@ -162,9 +166,9 @@ public class MapEditor : MonoBehaviour
         UpdateMap();
         for (int i = 0; i < road.Count; i++)
         {
-            if (i == 0) routeTilemap.SetTile(road[i], TileManager.GetTile("STARTFLAG"));
-            else if (i == road.Count - 1) routeTilemap.SetTile(road[i], TileManager.GetTile("DESTFLAG"));
-            else routeTilemap.SetTile(road[i], TileManager.GetTile("CORNER"));
+            if (i == 0) routeTilemap.SetTile(road[i], TileManager.GetFlag("STARTFLAG"));
+            else if (i == road.Count - 1) routeTilemap.SetTile(road[i], TileManager.GetFlag("DESTFLAG"));
+            else routeTilemap.SetTile(road[i], TileManager.GetFlag("CORNER"));
         }
         return true;
     }
@@ -184,7 +188,7 @@ public class MapEditor : MonoBehaviour
                 {
                     string tn = tile.name.ToUpper();
                     bool b = (tn != "WALL" && tn != "ROAD" && tn != "START" && tn != "DEST");
-                    buildableTilemap.SetTile(pos, (b) ? TileManager.GetTile("BUILDABLE") : TileManager.GetTile("NOTBUILDABLE"));
+                    buildableTilemap.SetTile(pos, (b) ? TileManager.GetFlag("BUILDABLE") : TileManager.GetFlag("NOTBUILDABLE"));
                 }
             }
         }
@@ -210,7 +214,7 @@ public class MapEditor : MonoBehaviour
             }
         }
 
-        TilemapInfo tilemap = new TilemapInfo(mapTilemap.origin, mapTilemap.size, mapInfo);
+        TilemapInfo tilemap = new TilemapInfo(tileName, mapTilemap.origin, mapTilemap.size, mapInfo);
 
         if (FindRoute(tilemap) == false)
         {

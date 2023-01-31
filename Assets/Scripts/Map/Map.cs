@@ -20,28 +20,39 @@ public class Map
 
 public class TilemapInfo
 {
+    public string tileName;
     public Vector3Int origin;
     public Vector3Int size;
     public Dictionary<Vector3Int, TileInfo> tiles;
 
-    public TilemapInfo(Vector3Int origin, Vector3Int size, Dictionary<Vector3Int, TileInfo> tiles)
+    public TilemapInfo(TilemapInfoJson data)
     {
+        this.tileName = data.tileName;
+        this.origin = data.origin;
+        this.size = data.size;
+        this.tiles = new Dictionary<Vector3Int, TileInfo>(data.tiles);
+    }
+
+    public TilemapInfo(string tileName, Vector3Int origin, Vector3Int size, Dictionary<Vector3Int, TileInfo> tiles)
+    {
+        this.tileName = tileName;
         this.origin = origin;
         this.size = size;
         this.tiles = new Dictionary<Vector3Int, TileInfo>(tiles);
     }
 
-    public TilemapInfo(TilemapInfo info)
+    public TilemapInfo(TilemapInfo data)
     {
-        this.origin = info.origin;
-        this.size = info.size;
-        this.tiles = new Dictionary<Vector3Int, TileInfo>(info.tiles);
+        this.tileName = data.tileName;
+        this.origin = data.origin;
+        this.size = data.size;
+        this.tiles = new Dictionary<Vector3Int, TileInfo>(data.tiles);
     }
 
     public CustomTile GetTile(Vector3Int pos)
     {
         if (tiles.ContainsKey(pos) == false) return null;
-        return TileManager.GetTile(tiles[pos].name);
+        return TileManager.GetTile(tileName, tiles[pos]);
     }
 
     public bool Buildable(Vector3Int pos)
@@ -64,6 +75,31 @@ public struct TileInfo
     }
 }
 
+public class TilePalette
+{
+    public string tileName;
+    public Dictionary<string, CustomTile> buildable;
+    public Dictionary<string, CustomTile> notBuildable;
+    public Dictionary<string, CustomTile> roads;
+    public List<CustomTile> Tiles { get; private set; }
+
+    public TilePalette(string tileName, Dictionary<string, CustomTile> buildable, Dictionary<string, CustomTile> notBuildable, Dictionary<string, CustomTile> roads)
+    {
+        this.tileName = tileName;
+        this.buildable = buildable;
+        this.notBuildable = notBuildable;
+        this.roads = roads;
+
+        Tiles = new List<CustomTile>();
+        foreach (var tile in buildable.Values)
+            Tiles.Add(tile);
+        foreach (var tile in notBuildable.Values)
+            Tiles.Add(tile);
+        foreach (var tile in roads.Values)
+            Tiles.Add(tile);
+    }
+}
+
 public class CustomTile : Tile
 {
     public void SetData(string name, Sprite sprite)
@@ -77,6 +113,7 @@ public class CustomTile : Tile
 [Serializable]
 public class TilemapInfoJson : ISerializationCallbackReceiver
 {
+    public string tileName;
     public Vector3Int origin;
     public Vector3Int size;
     public List<Vector3Int> tileKeys = new List<Vector3Int>();
@@ -85,6 +122,7 @@ public class TilemapInfoJson : ISerializationCallbackReceiver
 
     public TilemapInfoJson(TilemapInfo info)
     {
+        this.tileName = info.tileName;
         this.origin = info.origin;
         this.size = info.size;
         this.tiles = info.tiles;

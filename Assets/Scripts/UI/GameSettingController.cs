@@ -37,7 +37,7 @@ public class GameSettingController : MonoBehaviour
         }
         mapIcons = new List<MapInfoIcon>();
 
-        while (MapManager.Maps == null || TileManager.Keys == null) await Task.Yield();
+        while (MapManager.Maps == null || TileManager.TilePaletteNames == null) await Task.Yield();
 
         for (int i = 0; i < MapManager.Maps.Count; i++)
         {

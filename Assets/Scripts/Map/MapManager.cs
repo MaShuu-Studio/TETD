@@ -129,7 +129,7 @@ public static class MapManager
     public static void SaveMap(string mapName, TilemapInfo info)
     {
         TilemapInfoJson data = new TilemapInfoJson(info);
-        DataManager.SerializeJson<TilemapInfoJson>(path, mapName, data);
+        DataManager.SerializeJson(path, mapName, data);
         if (maps.Contains(mapName) == false) maps.Add(mapName);
     }
 
@@ -138,7 +138,7 @@ public static class MapManager
         TilemapInfoJson data = await DataManager.DeserializeJson<TilemapInfoJson>(path, mapName);
         if (data == null) return null;
 
-        TilemapInfo info = new TilemapInfo(data.origin, data.size, data.tiles);
+        TilemapInfo info = new TilemapInfo(data);
         List<Vector3Int> road = FindRoute(info);
         if (road == null) return null;
 

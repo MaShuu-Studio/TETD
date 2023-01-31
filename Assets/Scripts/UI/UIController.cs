@@ -38,6 +38,7 @@ public class UIController : MonoBehaviour
     [Header("Title")]
     [SerializeField] private GameSettingController gameSetting;
     [SerializeField] private TMP_InputField mapNameInputfield;
+    [SerializeField] private TMP_Dropdown tilePaletteDropdown;
 
     [Space]
     [Header("Setting")]
@@ -84,6 +85,7 @@ public class UIController : MonoBehaviour
     public async Task Init()
     {
         optionUI.Init();
+
         await Title();
     }
 
@@ -109,7 +111,14 @@ public class UIController : MonoBehaviour
 
     public async Task Title()
     {
+        mapNameInputfield.text = "";
         await gameSetting.Init();
+
+        while (TileManager.TilePaletteNames == null) await Task.Yield();
+        tilePaletteDropdown.value = 0;
+        tilePaletteDropdown.options.Clear();
+        tilePaletteDropdown.AddOptions(TileManager.TilePaletteNames);
+
     }
 
     public void OpenSetting(bool b)
@@ -303,16 +312,20 @@ public class UIController : MonoBehaviour
     {
         return mapNameInputfield.text;
     }
-    public void EditMap(string mapName)
+
+    public string GetTileName()
     {
-        if (tiles != null) tiles.Clear();
+        return tilePaletteDropdown.options[tilePaletteDropdown.value].text;
+    }
+    public void EditMap(string mapName, string tileName)
+    {
         mapNameText.text = mapName;
-        LoadTiles();
+        LoadTiles(tileName);
         int count = Mathf.CeilToInt(tileList.childCount / 2);
         tileList.sizeDelta = new Vector2(300, 120 * count + 20 * (count - 1) + 30);
     }
 
-    public void LoadTiles()
+    public void LoadTiles(string tileName)
     {
         if (tiles != null)
         {
@@ -324,11 +337,10 @@ public class UIController : MonoBehaviour
         }
 
         tiles = new List<MapEditorTile>();
-        // юс╫ц©К 
-        string[] names = { "GRASS", "ROAD", "START", "DEST", "WALL" };
-        for (int i = 0; i < names.Length; i++)
+        TilePalette tilePalette = TileManager.GetTilePalette(tileName);
+        for (int i = 0; i < tilePalette.Tiles.Count; i++)
         {
-            CustomTile tile = TileManager.GetTile(names[i]);
+            CustomTile tile = tilePalette.Tiles[i];
             MapEditorTile metile = Instantiate(tilePrefab);
 
             metile.SetTile(tile);

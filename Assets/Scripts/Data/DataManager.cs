@@ -24,7 +24,6 @@ namespace Data
             string[] pathes =
             {
                 "/Data/Map/",
-                "/Sprites/Tile/",
                 "/Sounds/"
             };
             for (int i = 0; i < pathes.Length; i++)
@@ -80,6 +79,32 @@ namespace Data
             }
 
             return files;
+        }
+
+        // 윈도우 플랫폼에서만 작동함.
+        // Streaming Asset에서 Persistant Path로 파일을 통째로 이동시킬 방법을 찾을 필요가 있을 듯 함.
+        public static string[] GetDics(string path)
+        {
+            string[] dics = Directory.GetDirectories(path);
+            string[] names = new string[dics.Length];
+            for (int i = 0; i < dics.Length; i++)
+            {
+                names[i] = Path.GetFileName(dics[i]);
+            }
+            return names;
+        }
+
+        public static List<string> GetFileNames(string path)
+        {
+            string[] files = Directory.GetFiles(Application.streamingAssetsPath + path);
+            List<string> names = new List<string>();
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].Contains(".meta") || files[i].Contains(".txt")) continue;
+                names.Add(Path.GetFileName(files[i]));
+            }
+
+            return names;
         }
 
         public static void SerializeJson<T>(string path, string fileName, T obj)

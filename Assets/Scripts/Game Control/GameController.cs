@@ -98,12 +98,15 @@ public class GameController : MonoBehaviour
     public async void EditMap()
     {
         string mapName = UIController.Instance.GetMapName();
+        string tileName = UIController.Instance.GetTileName();
         if (string.IsNullOrEmpty(mapName)) return;
 
         Map map = await MapManager.LoadMap(mapName);
+        if (map != null) tileName = map.tilemap.tileName;
+
         List<SceneAction> actions = new List<SceneAction>();
-        actions.Add(new SceneAction(() => MapEditor.Instance.Init(map, mapName)));
-        actions.Add(new SceneAction(() => UIController.Instance.EditMap(mapName)));
+        actions.Add(new SceneAction(() => MapEditor.Instance.Init(map, mapName, tileName)));
+        actions.Add(new SceneAction(() => UIController.Instance.EditMap(mapName, tileName)));
         SceneController.Instance.ChangeScene("Map Editor", actions);
     }
 
