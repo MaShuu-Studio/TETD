@@ -101,7 +101,7 @@ public static class MapManager
                     nextPos = curPos + newDir[j];
 
                     nextTile = tilemap.GetTile(nextPos);
-                    if (nextTile != null && nextTile.name.ToUpper() == "ROAD")
+                    if (nextTile != null && (nextTile.name.ToUpper() == "ROAD" || nextTile.name.ToUpper() == "DEST"))
                     {
                         dir = newDir[j];
                         break;
@@ -109,11 +109,7 @@ public static class MapManager
                 }
                 // 모든 길이 막혀있다면 길이 없음.
                 if (dir == origin) break;
-                else
-                {
-                    road.Add(curPos);
-                    curPos = curPos + dir;
-                }
+                else road.Add(curPos);
             }
         }
 
