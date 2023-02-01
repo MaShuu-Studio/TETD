@@ -73,7 +73,6 @@
     <Compile Include="Assets\Scripts\Game Control\SoundController.cs" />
     <Compile Include="Assets\Scripts\Map\MapManager.cs" />
     <Compile Include="Assets\Scripts\Data\TowerManager.cs" />
-    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\FIndRouteButton.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfoPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\StartButton.cs" />
     <Compile Include="Assets\Scripts\UI\GameSettingController.cs" />

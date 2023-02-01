@@ -6,10 +6,9 @@ public class SaveMapButton : ScriptableButton
 {
     protected override void ClickEvent()
     {
-        TilemapInfo info = MapEditor.Instance.MakeMap();
-        bool savable = MapEditor.Instance.FindRoute(info);
-        if (savable)
+        if (MapEditor.Instance.CanSave)
         {
+            TilemapInfo info = MapEditor.Instance.MakeMap();
             MapManager.SaveMap(MapEditor.Instance.MapName, info);
             GameController.Instance.Title();
         }

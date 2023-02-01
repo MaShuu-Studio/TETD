@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -39,20 +40,33 @@ public class MapEditor : MonoBehaviour
     [SerializeField] private Tilemap mapTilemap;
     [SerializeField] private Tilemap buildableTilemap;
     [SerializeField] private Tilemap routeTilemap;
-    [SerializeField] private SpriteRenderer selectedTile;
+    [SerializeField] private SpriteRenderer selectedPosSprite;
     private Grid grid;
     private Map map;
+
     public string MapName { get { return mapName; } }
     private string mapName;
     private string tileName;
+
     public List<Vector3Int> EnemyRoad { get { return road; } }
     private List<Vector3Int> road;
-    private CustomTile selectedTileInfo;
+    private CustomTile selectedTile;
+    private CustomTile roadTile;
+
+    private bool start, dest;
+    private Vector3Int startPos, destPos;
+
+    public bool CanSave { get { return canSave; } }
+    private bool canSave;
+
     #region Map Controller
     public void Init(Map map, string mapName, string tileName)
     {
         this.tileName = tileName;
         this.mapName = mapName;
+
+        roadTile = TileManager.GetTilePalette(tileName).roads["ROAD"];
+
         if (map == null)
         {
             Clear();
@@ -66,12 +80,21 @@ public class MapEditor : MonoBehaviour
         foreach (var pos in map.tilemap.tiles.Keys)
         {
             TileInfo tileInfo = map.tilemap.tiles[pos];
-            TileBase tile = TileManager.GetTile(map.tilemap.tileName, tileInfo);
+            CustomTile tile = TileManager.GetTile(map.tilemap.tileName, tileInfo);
+            if (tile.name == "START")
+            {
+                start = true;
+                startPos = pos;
+            }
+            if (tile.name == "DEST")
+            {
+                dest = true;
+                destPos = pos;
+            }
             mapTilemap.SetTile(pos, tile);
         }
 
-        TilemapInfo info = MakeMap();
-        FindRoute(info);
+        FindRoute();
     }
 
     // Update is called once per frame
@@ -89,25 +112,34 @@ public class MapEditor : MonoBehaviour
 
         if (UIController.Instance.PointInTilePanel(mousePos) == false)
         {
-            if (click && selectedTileInfo != null)
+            if (click && selectedTile != null)
             {
-                mapTilemap.SetTile(tilePos, selectedTileInfo);
-                UpdateMap();
-                ClearInfo();
+                if (selectedTile.name == "START")
+                {
+                    if (start) mapTilemap.SetTile(startPos, roadTile);
+                    startPos = tilePos;
+                }
+                if (selectedTile.name == "DEST")
+                {
+                    if (dest) mapTilemap.SetTile(destPos, roadTile);
+                    destPos = tilePos;
+                }
+
+                mapTilemap.SetTile(tilePos, selectedTile);
+                FindRoute();
             }
 
             if (rclick)
             {
                 mapTilemap.SetTile(tilePos, null);
-                UpdateMap();
-                ClearInfo();
+                FindRoute();
             }
         }
     }
 
     public bool SelectTile(Vector3 worldPos)
     {
-        selectedTile.gameObject.SetActive(true);
+        selectedPosSprite.gameObject.SetActive(true);
 
         // 굳이 WorldPos를 GetTilePos를 한번 더 거쳐주는 이유는 작업의 실수를 최소화 하기 위함임.
         // 실제 위치와 타일의 위치가 약간 다름.
@@ -116,11 +148,11 @@ public class MapEditor : MonoBehaviour
 
         bool buildable = (map != null && map.tilemap.Buildable(tilePos));
 
-        if (buildable) selectedTile.color = new Color(0, 1, 0, 0.7f);
-        else selectedTile.color = new Color(1, 0, 0, 0.7f);
+        if (buildable) selectedPosSprite.color = new Color(0, 1, 0, 0.7f);
+        else selectedPosSprite.color = new Color(1, 0, 0, 0.7f);
 
         // 선택된 타일의 위치를 localPosition으로 조정하지 않으면 grid에서 위치가 어긋남.
-        selectedTile.transform.localPosition = pos;
+        selectedPosSprite.transform.localPosition = pos;
 
         return buildable;
     }
@@ -139,8 +171,8 @@ public class MapEditor : MonoBehaviour
     #endregion
     public void SelectTile(CustomTile tile)
     {
-        selectedTileInfo = tile;
-        selectedTile.sprite = tile.sprite;
+        selectedTile = tile;
+        selectedPosSprite.sprite = tile.sprite;
     }
 
     public void Clear()
@@ -156,27 +188,54 @@ public class MapEditor : MonoBehaviour
     }
 
     // 루트를 보여주는 용도
-    public bool FindRoute(TilemapInfo tilemap)
+    public void FindRoute()
     {
-        road = MapManager.FindRoute(tilemap);
+        TilemapInfo tilemap = MakeMap();
 
-        if (road == null) return false;
+        Tuple<bool, List<Vector3Int>> result = MapManager.FindRoute(tilemap);
+
+        canSave = result.Item1;
+        road = result.Item2;
 
         routeTilemap.ClearAllTiles();
         UpdateMap();
-        for (int i = 0; i < road.Count; i++)
+        routeTilemap.SetTile(road[0], TileManager.GetFlag("STARTFLAG"));
+        for (int i = 1; i < road.Count; i++)
         {
-            if (i == 0) routeTilemap.SetTile(road[i], TileManager.GetFlag("STARTFLAG"));
-            else if (i == road.Count - 1) routeTilemap.SetTile(road[i], TileManager.GetFlag("DESTFLAG"));
-            else routeTilemap.SetTile(road[i], TileManager.GetFlag("CORNER"));
+            Vector3Int dir = (road[i] - road[i - 1]);
+            CustomTile line = TileManager.GetFlag("HORIZONTAL");
+            if (dir.x == 0) line = TileManager.GetFlag("VERTICAL");
+
+            if (dir.x < 0) dir.x = -1;
+            else if (dir.x > 0) dir.x = 1;
+            if (dir.y < 0) dir.y = -1;
+            else if (dir.y > 0) dir.y = 1;
+
+            Vector3Int pos = road[i - 1] + dir;
+            while (pos != road[i])
+            {
+                routeTilemap.SetTile(pos, line);
+                pos += dir;
+            }
+
+            routeTilemap.SetTile(road[i], TileManager.GetFlag("CORNER"));
         }
-        return true;
+        if (canSave) routeTilemap.SetTile(road[road.Count - 1], TileManager.GetFlag("DESTFLAG"));
+        else
+        {
+#if UNITY_EDITOR
+            Debug.Log("[SYSTEM] CAN NOT MAKE MAP");
+#endif
+        }
     }
 
     // 빌드 가능한 곳을 단순히 보여주는 용도
     public void UpdateMap()
     {
         buildableTilemap.ClearAllTiles();
+
+        start = false;
+        dest = false;
 
         for (int y = mapTilemap.size.y; y >= 0; y--)
         {
@@ -187,6 +246,9 @@ public class MapEditor : MonoBehaviour
                 if (tile != null)
                 {
                     string tn = tile.name.ToUpper();
+                    if (tn == "START") start = true;
+                    if (tn == "DEST") dest = true;
+
                     bool b = (tn != "WALL" && tn != "ROAD" && tn != "START" && tn != "DEST");
                     buildableTilemap.SetTile(pos, (b) ? TileManager.GetFlag("BUILDABLE") : TileManager.GetFlag("NOTBUILDABLE"));
                 }
@@ -215,14 +277,6 @@ public class MapEditor : MonoBehaviour
         }
 
         TilemapInfo tilemap = new TilemapInfo(tileName, mapTilemap.origin, mapTilemap.size, mapInfo);
-
-        if (FindRoute(tilemap) == false)
-        {
-#if UNITY_EDITOR
-            Debug.Log("[SYSTEM] CAN NOT MAKE MAP");
-#endif
-            return null;
-        }
         return tilemap;
     }
 }

@@ -5748,7 +5748,7 @@ MonoBehaviour:
   mapTilemap: {fileID: 449632561}
   buildableTilemap: {fileID: 209521349}
   routeTilemap: {fileID: 1648960961}
-  selectedTile: {fileID: 1692137905}
+  selectedPosSprite: {fileID: 1692137905}
 --- !u!1 &1648960958
 GameObject:
   m_ObjectHideFlags: 0
@@ -5992,7 +5992,7 @@ GameObject:
   - component: {fileID: 1692137906}
   - component: {fileID: 1692137905}
   m_Layer: 0
-  m_Name: Selected Tile
+  m_Name: Selected Pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

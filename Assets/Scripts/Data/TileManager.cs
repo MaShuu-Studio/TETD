@@ -16,7 +16,7 @@ public static class TileManager
     private static string mapPath = "/Sprites/Tile/Maps/";
     private static string flagPath = "/Sprites/Tile/Flag/";
 
-    private static string[] flagNames = { "BUILDABLE", "NOTBUILDABLE", "STARTFLAG", "DESTFLAG", "CORNER" };
+    private static string[] flagNames = { "BUILDABLE", "NOTBUILDABLE", "STARTFLAG", "DESTFLAG", "CORNER", "HORIZONTAL", "VERTICAL" };
     private static string[] tileDics = { "/Buildable/", "/Not Buildable/" };
     private static string[] constTiles = { "ROAD", "START", "DEST" };
     public static async Task Init()

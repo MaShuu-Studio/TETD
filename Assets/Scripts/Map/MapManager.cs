@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Data;
+using System;
 using System.Threading.Tasks;
 
 public static class MapManager
@@ -26,7 +27,7 @@ public static class MapManager
 #endif
     }
 
-    public static List<Vector3Int> FindRoute(TilemapInfo tilemap)
+    public static Tuple<bool, List<Vector3Int>> FindRoute(TilemapInfo tilemap)
     {
         if (tilemap == null) return null;
 
@@ -56,7 +57,6 @@ public static class MapManager
                 }
             }
         }
-        if (!(finds && findd)) return null;
 
         List<Vector3Int> road = new List<Vector3Int>();
         Vector3Int[] dirArray = { Vector3Int.down, Vector3Int.right, Vector3Int.up, Vector3Int.left };
@@ -113,13 +113,9 @@ public static class MapManager
             }
         }
 
-        if (findRoute == false)
-        {
-            road.Clear();
-            road = null;
-        }
+        findRoute = finds && findd && road.Count > 1 && road[road.Count - 1] == dest;
 
-        return road;
+        return new Tuple<bool, List<Vector3Int>>(findRoute, road);
     }
 
     public static void SaveMap(string mapName, TilemapInfo info)
@@ -135,8 +131,9 @@ public static class MapManager
         if (data == null) return null;
 
         TilemapInfo info = new TilemapInfo(data);
-        List<Vector3Int> road = FindRoute(info);
-        if (road == null) return null;
+        Tuple<bool, List<Vector3Int>> resut = FindRoute(info);
+        List<Vector3Int> road = resut.Item2;
+        if (resut.Item1 == false) return null;
 
         return new Map(mapName, info, road);
     }
