@@ -19,6 +19,12 @@ namespace Data
         private const string fileListName = "FILELIST.txt";
         private const string fileListSplit = ",\n";
 
+        public static List<T> GetResources<T>(string path) where T : UnityEngine.Object
+        {
+            return Resources.LoadAll<T>(path).ToList();
+        }
+
+        #region Get Files
         public static void MakeFileNameList()
         {
             string[] pathes =
@@ -54,11 +60,6 @@ namespace Data
 
             return fileName;
         }
-        public static List<T> GetResources<T>(string path) where T : UnityEngine.Object
-        {
-            return Resources.LoadAll<T>(path).ToList();
-        }
-
         public static async Task<string[]> GetFiles(string path)
         {
             string[] files = null;
@@ -106,7 +107,9 @@ namespace Data
 
             return names;
         }
+        #endregion
 
+        #region Json
         public static void SerializeJson<T>(string path, string fileName, T obj)
         {
             string json = JsonUtility.ToJson(obj);
@@ -167,6 +170,51 @@ namespace Data
 
             return obj.list;
         }
+        #endregion
+
+        #region Data
+        private const string settingFile = "setting.ini";
+
+        public static void SaveSetting(Setting setting)
+        {
+            string path = Path.Combine(Application.persistentDataPath, settingFile);
+            string text = setting.ToString();
+
+            File.WriteAllText(path, text);
+        }
+
+        public static Setting LoadSetting()
+        {
+            string path = Path.Combine(Application.persistentDataPath, settingFile);
+
+            if (File.Exists(path) == false) return null;
+
+            Setting setting = new Setting();
+
+            StreamReader reader = new StreamReader(path);
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+
+                if (line != null)
+                {
+                    var trimStart = line.TrimStart();
+
+                    if (trimStart.Length > 0)
+                    {
+                        if (trimStart[0] != '[')
+                        {
+                            string key;
+                            int value;
+                            Setting.TrimingValue(line, out key, out value);
+                            setting.AddOption(key, value);
+                        }
+                    }
+                }
+            }
+
+            return setting;
+        }
 
         public static async Task<Sprite> LoadSprite(string path, Vector2 pivot, float pixelsPerUnit)
         {
@@ -216,5 +264,6 @@ namespace Data
 
             return clip;
         }
+        #endregion
     }
 }

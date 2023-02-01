@@ -13,7 +13,6 @@ public static class TileManager
     public static List<string> TilePaletteNames { get { return tilePaletteNames; } }
     private static List<string> tilePaletteNames;
 
-    private static string path = "/Sprites/Tile/";
     private static string mapPath = "/Sprites/Tile/Maps/";
     private static string flagPath = "/Sprites/Tile/Flag/";
 
