@@ -6,12 +6,12 @@ using UnityEngine.UI;
 public class MapEditorTile : ScriptableButton
 {
     [SerializeField] private Image tileImage;
-    private CustomTile data;
+    private CustomRuleTile data;
 
-    public void SetTile(CustomTile data)
+    public void SetTile(CustomRuleTile data)
     {
         this.data = data;
-        tileImage.sprite = data.sprite;
+        tileImage.sprite = data.Base.sprite;
     }
 
     protected override void ClickEvent()

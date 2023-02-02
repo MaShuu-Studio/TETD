@@ -25,6 +25,14 @@ public class TilemapInfo
     public Vector3Int size;
     public Dictionary<Vector3Int, TileInfo> tiles;
 
+    public TilemapInfo(string tileName)
+    {
+        this.tileName = tileName;
+        this.origin = Vector3Int.zero;
+        this.size = Vector3Int.zero;
+        this.tiles = new Dictionary<Vector3Int, TileInfo>();
+    }
+
     public TilemapInfo(TilemapInfoJson data)
     {
         this.tileName = data.tileName;
@@ -49,7 +57,7 @@ public class TilemapInfo
         this.tiles = new Dictionary<Vector3Int, TileInfo>(data.tiles);
     }
 
-    public CustomTile GetTile(Vector3Int pos)
+    public CustomRuleTile GetTile(Vector3Int pos)
     {
         if (tiles.ContainsKey(pos) == false) return null;
         return TileManager.GetTile(tileName, tiles[pos]);
@@ -78,19 +86,22 @@ public struct TileInfo
 public class TilePalette
 {
     public string tileName;
-    public Dictionary<string, CustomTile> buildable;
-    public Dictionary<string, CustomTile> notBuildable;
-    public Dictionary<string, CustomTile> roads;
-    public List<CustomTile> Tiles { get; private set; }
+    public Dictionary<string, CustomRuleTile> buildable;
+    public Dictionary<string, CustomRuleTile> notBuildable;
+    public Dictionary<string, CustomRuleTile> roads;
+    public List<CustomRuleTile> Tiles { get; private set; }
 
-    public TilePalette(string tileName, Dictionary<string, CustomTile> buildable, Dictionary<string, CustomTile> notBuildable, Dictionary<string, CustomTile> roads)
+    public TilePalette(string tileName, 
+        Dictionary<string, CustomRuleTile> buildable, 
+        Dictionary<string, CustomRuleTile> notBuildable, 
+        Dictionary<string, CustomRuleTile> roads)
     {
         this.tileName = tileName;
         this.buildable = buildable;
         this.notBuildable = notBuildable;
         this.roads = roads;
 
-        Tiles = new List<CustomTile>();
+        Tiles = new List<CustomRuleTile>();
         foreach (var tile in buildable.Values)
             Tiles.Add(tile);
         foreach (var tile in notBuildable.Values)
@@ -100,12 +111,75 @@ public class TilePalette
     }
 }
 
+public class CustomRuleTile
+{
+    // 1111 : 상 하 좌 우
+    // 비트 연산 활용
+    // 0000 : □
+    // 0001 : ⊂
+    // 0010 : ⊃
+    // 0011 : =
+    // 0100 : ∩
+    // 0101 : ┌
+    // 0110 : ┐
+    // 0111 : ─(위)
+    // 1000 : ∪
+    // 1001 : └
+    // 1010 : ┘
+    // 1011 : ─(아래)
+    // 1100 : ||
+    // 1101 :│  (좌)
+    // 1110 :  │(우)
+    // 1111 : X
+    // □⊂⊃=
+    // ∩┌┐─
+    // ∪└┘─
+    // ||││X
+
+    private CustomTile[] tiles;
+    public string name;
+
+    public CustomTile Base
+    {
+        get
+        {
+            if (tiles == null) return null;
+            return tiles[0];
+        }
+    }
+
+    public CustomRuleTile(string name, CustomTile[] tiles)
+    {
+        this.tiles = tiles;
+        this.name = name;
+    }
+
+    public CustomTile GetTile(string[] info)
+    {
+        // 상 하 좌 우
+        ushort index = 0;
+        for (int i = 0; i < 4; i++)
+        {
+            index = (ushort)(index << 1);
+
+            if ((name == info[i]) ||
+                (TileManager.IsConstTile(name) && TileManager.IsConstTile(info[i])))
+                index += 1;
+        }
+
+        return tiles[index];
+    }
+}
+
 public class CustomTile : Tile
 {
-    public void SetData(string name, Sprite sprite)
+    public bool buildable;
+
+    public void SetData(string name, Sprite sprite, bool buildable)
     {
         this.name = name;
         this.sprite = sprite;
+        this.buildable = buildable;
     }
 }
 

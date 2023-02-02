@@ -39,7 +39,7 @@ public static class MapManager
             for (int x = 0; x < tilemap.size.x; x++)
             {
                 Vector3Int pos = new Vector3Int(x, y) + tilemap.origin;
-                TileBase tile = tilemap.GetTile(pos);
+                CustomRuleTile tile = tilemap.GetTile(pos);
                 if (tile != null)
                 {
                     string tn = tile.name.ToUpper();
@@ -72,7 +72,7 @@ public static class MapManager
         {
             Vector3Int nextPos = curPos + dir;
 
-            TileBase nextTile = tilemap.GetTile(nextPos);
+            CustomRuleTile nextTile = tilemap.GetTile(nextPos);
 
             // 다음 스텝이 목적지라면 끝
             if (nextPos == dest)
@@ -109,7 +109,8 @@ public static class MapManager
                 }
                 // 모든 길이 막혀있다면 길이 없음.
                 if (dir == origin) break;
-                else road.Add(curPos);
+                else if (road[road.Count - 1] != curPos)
+                    road.Add(curPos);
             }
         }
 

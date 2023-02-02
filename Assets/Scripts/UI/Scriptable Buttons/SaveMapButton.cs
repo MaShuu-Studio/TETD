@@ -8,7 +8,7 @@ public class SaveMapButton : ScriptableButton
     {
         if (MapEditor.Instance.CanSave)
         {
-            TilemapInfo info = MapEditor.Instance.MakeMap();
+            TilemapInfo info = MapEditor.Instance.Tilemap;
             MapManager.SaveMap(MapEditor.Instance.MapName, info);
             GameController.Instance.Title();
         }

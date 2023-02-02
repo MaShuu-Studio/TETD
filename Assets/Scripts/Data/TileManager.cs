@@ -19,13 +19,30 @@ public static class TileManager
     private static string[] flagNames = { "BUILDABLE", "NOTBUILDABLE", "STARTFLAG", "DESTFLAG", "CORNER", "HORIZONTAL", "VERTICAL" };
     private static string[] tileDics = { "/Buildable/", "/Not Buildable/" };
     private static string[] constTiles = { "ROAD", "START", "DEST" };
+
+    public static bool IsConstTile(string str)
+    {
+        for (int i = 0; i < constTiles.Length; i++)
+        {
+            if (str == constTiles[i]) return true;
+        }
+        return false;
+    }
+
     public static async Task Init()
     {
         flags = new Dictionary<string, CustomTile>();
         for (int i = 0; i < flagNames.Length; i++)
         {
-            CustomTile tile = await InitTile(flagPath + flagNames[i] + ".png", DataManager.FileNameTriming(flagNames[i]));
-            if (tile == null) continue;
+            string path = flagPath + flagNames[i] + ".png";
+            string name = DataManager.FileNameTriming(flagNames[i]).ToUpper();
+
+            Sprite sprite = await DataManager.LoadSprite(path, Vector2.one / 2, 16);
+            if (sprite == null) continue;
+
+            sprite.name = name;
+            CustomTile tile = ScriptableObject.CreateInstance<CustomTile>();
+            tile.SetData(name, sprite, false);
 
             flags.Add(flagNames[i], tile);
         }
@@ -35,30 +52,35 @@ public static class TileManager
         for (int i = 0; i < tilePalettes.Length; i++)
         {
             string filePath = mapPath + tilePalettes[i];
-            Dictionary<string, CustomTile> buildable = new Dictionary<string, CustomTile>();
+
             List<string> fileNames = DataManager.GetFileNames(filePath + tileDics[0]);
+            Dictionary<string, CustomRuleTile> buildableTiles = new Dictionary<string, CustomRuleTile>();
+            bool buildable = true;
             for (int j = 0; j < fileNames.Count; j++)
             {
                 string name = DataManager.FileNameTriming(fileNames[j]);
-                CustomTile tile = await InitTile(filePath + tileDics[0] + fileNames[j], name);
+                CustomRuleTile tile = await DataManager.LoadTile(filePath + tileDics[0] + fileNames[j], name, buildable);
                 if (tile == null) continue;
 
-                buildable.Add(name, tile);
+                buildableTiles.Add(name, tile);
             }
-            Dictionary<string, CustomTile> notBuildable = new Dictionary<string, CustomTile>();
+
             fileNames = DataManager.GetFileNames(filePath + tileDics[1]);
+            Dictionary<string, CustomRuleTile> notBuildableTiles = new Dictionary<string, CustomRuleTile>();
+            buildable = false;
             for (int j = 0; j < fileNames.Count; j++)
             {
                 string name = DataManager.FileNameTriming(fileNames[j]);
-                CustomTile tile = await InitTile(filePath + tileDics[1] + fileNames[j], name);
+                CustomRuleTile tile = await DataManager.LoadTile(filePath + tileDics[1] + fileNames[j], name, buildable);
                 if (tile == null) continue;
 
-                notBuildable.Add(name, tile);
+                notBuildableTiles.Add(name, tile);
             }
-            Dictionary<string, CustomTile> roads = new Dictionary<string, CustomTile>();
+
+            Dictionary<string, CustomRuleTile> roads = new Dictionary<string, CustomRuleTile>();
             for (int j = 0; j < constTiles.Length; j++)
             {
-                CustomTile tile = await InitTile(filePath + "/" + constTiles[j] + ".png", constTiles[j]);
+                CustomRuleTile tile = await DataManager.LoadTile(filePath + "/" + constTiles[j] + ".png", constTiles[j], buildable);
                 if (tile == null) continue;
 
                 roads.Add(constTiles[j], tile);
@@ -66,7 +88,7 @@ public static class TileManager
 
             string tilePaletteName = tilePalettes[i].ToUpper();
 
-            TilePalette tilePalette = new TilePalette(tilePalettes[i], buildable, notBuildable, roads);
+            TilePalette tilePalette = new TilePalette(tilePalettes[i], buildableTiles, notBuildableTiles, roads);
             tiles.Add(tilePaletteName, tilePalette);
         }
         tilePaletteNames = tiles.Keys.ToList();
@@ -77,30 +99,16 @@ public static class TileManager
 #endif
     }
 
-    private static async Task<CustomTile> InitTile(string path, string name)
-    {
-        name = name.ToUpper();
-        Sprite sprite = await DataManager.LoadSprite(path, Vector2.one / 2, 16);
-
-        if (sprite == null) return null;
-
-        sprite.name = name;
-        CustomTile tile = ScriptableObject.CreateInstance<CustomTile>();
-        tile.SetData(name, sprite);
-
-        return tile;
-    }
-
     public static TilePalette GetTilePalette(string tilePaletteName)
     {
         if (tiles.ContainsKey(tilePaletteName)) return tiles[tilePaletteName];
         return null;
     }
 
-    public static CustomTile GetTile(string tilePaletteName, TileInfo tileInfo)
+    public static CustomRuleTile GetTile(string tilePaletteName, TileInfo tileInfo)
     {
         tilePaletteName = tilePaletteName.ToUpper();
-        CustomTile tile = null;
+        CustomRuleTile tile = null;
         if (tiles.ContainsKey(tilePaletteName))
         {
             string tileName = tileInfo.name.ToUpper();

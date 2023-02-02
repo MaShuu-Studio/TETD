@@ -55,9 +55,21 @@ public class MapController : MonoBehaviour
 
         foreach (var pos in map.tilemap.tiles.Keys)
         {
-            TileInfo tileInfo = map.tilemap.tiles[pos];
-            TileBase tile = TileManager.GetTile(map.tilemap.tileName, tileInfo);
-            tilemap.SetTile(pos, tile);
+            CustomRuleTile ruleTile = map.tilemap.GetTile(pos);
+            if (ruleTile != null)
+            {
+                string[] info = new string[4] { "", "", "", "" };
+                Vector3Int[] dir = new Vector3Int[4] { Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right };
+
+                for (int i = 0; i < 4; i++)
+                {
+                    CustomRuleTile aroundTile = map.tilemap.GetTile(pos + dir[i]);
+                    if (aroundTile != null) info[i] = aroundTile.name;
+                }
+                CustomTile tile = ruleTile.GetTile(info);
+
+                tilemap.SetTile(pos, tile);
+            }
         }
     }
     #region Tile

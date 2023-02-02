@@ -264,6 +264,36 @@ namespace Data
 
             return clip;
         }
+
+        public static async Task<CustomRuleTile> LoadTile(string path, string name, bool buildable)
+        {
+            CustomRuleTile ruleTile = null;
+
+            Sprite origin = await DataManager.LoadSprite(path, Vector2.one / 2, 64);
+
+            if (origin == null) return null;
+
+            CustomTile[] tiles = new CustomTile[16];
+            Texture2D texture = origin.texture;
+
+            int width = texture.width / 4;
+            int height = texture.height / 4;
+            for (int x = 0; x < 4; x++)
+            {
+                for (int y = 3; y >= 0; y--)
+                {
+                    CustomTile tile = ScriptableObject.CreateInstance<CustomTile>();
+                    Rect rect = new Rect(x * width, y * height, width, height);
+                    Sprite sprite = Sprite.Create(texture, rect, Vector2.one / 2, width);
+
+                    tile.SetData(name, sprite, buildable);
+                    tiles[x + 4 * (3 - y)] = tile;
+                }
+            }
+            ruleTile = new CustomRuleTile(name, tiles);
+
+            return ruleTile;
+        }
         #endregion
     }
 }

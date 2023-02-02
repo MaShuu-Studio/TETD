@@ -340,7 +340,7 @@ public class UIController : MonoBehaviour
         TilePalette tilePalette = TileManager.GetTilePalette(tileName);
         for (int i = 0; i < tilePalette.Tiles.Count; i++)
         {
-            CustomTile tile = tilePalette.Tiles[i];
+            CustomRuleTile tile = tilePalette.Tiles[i];
             MapEditorTile metile = Instantiate(tilePrefab);
 
             metile.SetTile(tile);
