@@ -12,7 +12,7 @@ public abstract class ObjectData
 
     public void UpdateName(Language lang, LanguageType type)
     {
-        name = lang.name[type];
+        name = lang.GetName(type);
     }
 }
 
@@ -32,7 +32,7 @@ public class Tower : ObjectData
     public Tower(TowerData data)
     {
         id = data.id;
-        name = data.name.ToUpper();
+        //name = data.name.ToUpper();
 
         grade = data.grade;
         element = data.element;
@@ -59,7 +59,7 @@ public class Tower : ObjectData
     public Tower(Tower data)
     {
         id = data.id;
-        name = data.name;
+        //name = data.name;
 
         grade = data.grade;
         element = data.element;

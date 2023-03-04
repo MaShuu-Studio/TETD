@@ -17,6 +17,7 @@ namespace Excel_To_Json
 
             try
             {
+                // 일반 데이터
                 foreach (Excel.Worksheet sheet in workBook.Worksheets)
                 {
                     string name = sheet.Name;
@@ -35,48 +36,63 @@ namespace Excel_To_Json
                     {
                         contents = string.Format(JsonFormat.contentsFormat, ParseRoundData(name, range));
                     }
-                    else contents = string.Format(JsonFormat.jsonFormat, ParseBasicData(name, range));
 
                     File.WriteAllText(Path.Combine(Environment.CurrentDirectory, filename), contents);
                 }
-
                 workBook.Close(true);
-                app.Quit();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                ReleaseObject(app);
-                ReleaseObject(workBook);
-            }
-            /*
-            path = Path.Combine(Environment.CurrentDirectory, "Round.xlsx");
 
-            app = new Excel.Application();
-            workBook = app.Workbooks.Open(path);
 
-            try
-            {
-                string filename = "Round.json";
-                string contents = "";
-                for (int i = 1; i <= workBook.Worksheets.Count; i++)
+                // 언어가 구분되어야 하는 데이터들 (Tower, Enemy)
+                string[] names =
                 {
-                    Excel.Worksheet sheet = workBook.Worksheets[i];
+                    "Tower", "Enemy"
+                };
 
-                    string name = sheet.Name;
-                    Excel.Range range = sheet.UsedRange;
+                for (int i = 0; i < names.Length; i++)
+                {
+                    // 0: data, 1: language
+                    string[] filename =
+                    {
+                        names[i] + ".json",
+                        names[i] + "Lang" + ".json"
+                    };
 
-                    Console.WriteLine($"Start Parsing {name.ToUpper()}");
-                    contents += string.Format(JsonFormat.contentsFormat, ParseRoundData(name, range));
+                    string contents = "";
+                    string langContents = "";
+                    Console.WriteLine($"Start Parsing {names[i].ToUpper()}");
 
-                    if (i < workBook.Worksheets.Count) contents += ",\n";
+                    path = Path.Combine(Environment.CurrentDirectory, names[i] + ".xlsx");
+                    workBook = app.Workbooks.Open(path);
+
+                    int j = 0;
+                    foreach (Excel.Worksheet sheet in workBook.Worksheets)
+                    {
+                        j++;
+                        string name = sheet.Name;
+                        Excel.Range range = sheet.UsedRange;
+
+                        Console.WriteLine($"Start Parsing {name.ToUpper()}");
+
+                        // 0: data, 1: language
+                        string[] data = ParseBasicData(name, range);
+
+                        if (j != 0)
+                        {
+                            if (data[0] != "") data[0] = ",\n" + data[0];
+                            if (data[1] != "") data[1] = ",\n" + data[1];
+                        }
+
+                        contents += data[0];
+                        langContents += data[1];
+                    }
+
+                    contents = string.Format(JsonFormat.jsonFormat, contents);
+                    langContents = string.Format(JsonFormat.jsonFormat, langContents);
+                    File.WriteAllText(Path.Combine(Environment.CurrentDirectory, filename[0]), contents);
+                    File.WriteAllText(Path.Combine(Environment.CurrentDirectory, filename[1]), langContents);
+                    workBook.Close(true);
                 }
-                contents = string.Format(JsonFormat.jsonFormat, contents);
-                File.WriteAllText(Path.Combine(Environment.CurrentDirectory, filename), contents);
-                workBook.Close(true);
+
                 app.Quit();
             }
             catch (Exception e)
@@ -88,35 +104,43 @@ namespace Excel_To_Json
                 ReleaseObject(app);
                 ReleaseObject(workBook);
             }
-            */
         }
 
-        private static string ParseBasicData(string dataName, Excel.Range range)
+        private static string[] ParseBasicData(string dataName, Excel.Range range)
         {
-            string contents = "";
+            // 0: data, 1: language
+            string[] contents = { "", "" };
             int count = 1;
 
             // 하나의 row는 하나의 데이터를 나타내고 있음.
             for (int row = 2; row <= range.Rows.Count; row++)
             {
-                string datas = "";
+                string[] datas = { "", "" };
 
                 for (int column = 1; column <= range.Columns.Count; column++)
                 {
                     object o = (range.Cells[row, column] as Excel.Range).Value2;
                     string type = (range.Cells[1, column] as Excel.Range).Value2;
-                    string tmp = ParseValue(type.ToLower(), o);
-                    if (tmp != null)
+                    string value = ParseValue(type.ToLower(), o);
+                    if (value != null)
                     {
-                        datas += tmp + ",\n";
+                        if (type.ToUpper() != "NAME") datas[0] += value + ",\n";
+                        if (type.ToUpper() == "ID" || type.ToUpper() == "NAME") datas[1] += value + ",\n";
+                    }
+
+                }
+
+                for (int i = 0; i < datas.Length; i++)
+                {
+                    if (datas[i] != "")
+                    {
+                        // 마지막에 붙은 ,와 \n 제거
+                        datas[i] = datas[i].Remove(datas[i].Length - 2);
+                        if (contents[i] != "") contents[i] += ",\n";
+                        contents[i] += string.Format(JsonFormat.contentsFormat, datas[i]);
                     }
                 }
-                if (datas != "")
-                {
-                    datas = datas.Remove(datas.Length - 2);
-                    if (contents != "") contents += ",\n";
-                    contents += string.Format(JsonFormat.contentsFormat, datas);
-                }
+
                 Console.WriteLine($"Progress {dataName.ToUpper()} {count++}");
             }
             return contents;

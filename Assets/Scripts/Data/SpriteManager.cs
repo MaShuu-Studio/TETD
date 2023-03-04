@@ -40,6 +40,7 @@ public static class SpriteManager
         string type = typeof(T).ToString();
 
         Sprite sprite = await DataManager.LoadSprite(path, pivot, pixelPerUnit);
+        if (sprite == null) return;
         sprite.name = id.ToString();
         sprites.Add(id, sprite);
     }

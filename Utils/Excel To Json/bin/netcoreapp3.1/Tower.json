@@ -1,197 +1,334 @@
 {
     "list": 
     [
-        
+        ,
+
 {
-    "id": 1001,
-"name": "TEST1",
+    "id": 1000000,
 "element": 0,
 "grade": 0,
 "cost": 150,
 "dmg": 1,
 "range": 2.5,
 "attackspeed": 2,
-"imgsrc": "/Sprites/Tower/1001.png",
-"pivot": { "x": 0.5, "y": 0.1875 },
-"pixelperunit": 20
+"imgsrc": "/Sprites/Tower/1000000.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
 },
 
 {
-    "id": 1002,
-"name": "TEST2",
+    "id": 1000001,
 "element": 0,
-"grade": 1,
-"cost": 200,
-"dmg": 2,
-"range": 3,
-"attackspeed": 1.5,
-"imgsrc": "/Sprites/Tower/1002.png",
-"pivot": { "x": 0.5, "y": 0.1875 },
-"pixelperunit": 20
-},
-
-{
-    "id": 1003,
-"name": "TEST3",
-"element": 0,
-"grade": 2,
-"cost": 400,
+"grade": 0,
+"cost": 150,
 "dmg": 1,
-"range": 4,
-"attackspeed": 5,
-    "ability": [ {"type": 5, "value": 1.5} ],
-"imgsrc": "/Sprites/Tower/1003.png",
-"pivot": { "x": 0.5, "y": 0.1875 },
-"pixelperunit": 20
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1000001.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
 },
 
 {
-    "id": 1004,
-"name": "TEST4",
+    "id": 1000002,
 "element": 0,
-"grade": 3,
-"cost": 700,
-"dmg": 3.5,
-"range": 4,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+    "ability": [ {"type": 5, "value": 1.5} ],
+"imgsrc": "/Sprites/Tower/1000002.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1000003,
+"element": 0,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
 "attackspeed": 2,
     "ability": [ {"type": 4, "value": 2},
 {"type": 6, "value": 2} ],
-"imgsrc": "/Sprites/Tower/1004.png",
-"pivot": { "x": 0.5, "y": 0.1875 },
-"pixelperunit": 20
+"imgsrc": "/Sprites/Tower/1000003.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
 },
 
 {
-    "id": 1005,
-"name": "TEST5",
-"element": 1,
+    "id": 1001004,
+"element": 0,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1001004.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1002005,
+"element": 0,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1002005.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1000006,
+"element": 0,
 "grade": 0,
 "cost": 150,
 "dmg": 1,
 "range": 2.5,
 "attackspeed": 2,
-"imgsrc": "/Sprites/Tower/1005.png",
-"pivot": { "x": 0.5, "y": 0.1875 },
-"pixelperunit": 20
+"imgsrc": "/Sprites/Tower/1000006.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
 },
 
 {
-    "id": 1006,
-"name": "TEST6",
-"element": 1,
+    "id": 1001007,
+"element": 0,
 "grade": 1,
-"cost": 200,
-"dmg": 2,
-"range": 3,
-"attackspeed": 1.5,
-    "ability": [ {"type": 7, "value": 10} ],
-"imgsrc": "/Sprites/Tower/1006.png",
-"pivot": { "x": 0.5, "y": 0.1875 },
-"pixelperunit": 20
-},
-
-{
-    "id": 1007,
-"name": "TEST7",
-"element": 1,
-"grade": 2,
-"cost": 400,
+"cost": 150,
 "dmg": 1,
-"range": 4,
-"attackspeed": 5,
-"imgsrc": "/Sprites/Tower/1007.png",
-"pivot": { "x": 0.5, "y": 0.1875 },
-"pixelperunit": 20
-},
-
-{
-    "id": 1008,
-"name": "TEST8",
-"element": 1,
-"grade": 3,
-"cost": 700,
-"dmg": 3.5,
-"range": 4,
+"range": 2.5,
 "attackspeed": 2,
-    "ability": [ {"type": 4, "value": 2},
-{"type": 7, "value": 30} ],
-"imgsrc": "/Sprites/Tower/1008.png",
-"pivot": { "x": 0.5, "y": 0.1875 },
-"pixelperunit": 20
+"imgsrc": "/Sprites/Tower/1001007.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
 },
 
 {
-    "id": 1009,
-"name": "TEST9",
-"element": 2,
+    "id": 1002008,
+"element": 0,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1002008.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1000009,
+"element": 0,
 "grade": 0,
 "cost": 150,
 "dmg": 1,
 "range": 2.5,
 "attackspeed": 2,
-"imgsrc": "/Sprites/Tower/1009.png",
-"pivot": { "x": 0.5, "y": 0.1875 },
-"pixelperunit": 20
+"imgsrc": "/Sprites/Tower/1000009.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
 },
 
 {
-    "id": 1010,
-"name": "TEST10",
-"element": 2,
+    "id": 1001010,
+"element": 0,
 "grade": 1,
-"cost": 200,
-"dmg": 2,
-"range": 3,
-"attackspeed": 1.5,
-    "ability": [ {"type": 7, "value": 15} ],
-"imgsrc": "/Sprites/Tower/1010.png",
-"pivot": { "x": 0.5, "y": 0.1875 },
-"pixelperunit": 20
-},
-
-{
-    "id": 1011,
-"name": "TEST11",
-"element": 2,
-"grade": 2,
-"cost": 400,
+"cost": 150,
 "dmg": 1,
-"range": 4,
-"attackspeed": 5,
-"imgsrc": "/Sprites/Tower/1011.png",
-"pivot": { "x": 0.5, "y": 0.1875 },
-"pixelperunit": 20
-},
-
-{
-    "id": 1012,
-"name": "TEST12",
-"element": 2,
-"grade": 3,
-"cost": 700,
-"dmg": 3.5,
-"range": 4,
+"range": 2.5,
 "attackspeed": 2,
-    "ability": [ {"type": 4, "value": 2},
-{"type": 5, "value": 1.5} ],
-"imgsrc": "/Sprites/Tower/1012.png",
-"pivot": { "x": 0.5, "y": 0.1875 },
-"pixelperunit": 20
+"imgsrc": "/Sprites/Tower/1001010.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
 },
 
 {
-    "id": 1013,
-"name": "TEST13",
-"element": 2,
+    "id": 1002011,
+"element": 0,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1002011.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1000012,
+"element": 0,
 "grade": 0,
 "cost": 150,
-"dmg": 0,
-"range": 0,
-"attackspeed": 0.5,
-    "ability": [ {"type": 3, "value": 30} ],
-"imgsrc": "/Sprites/Tower/1013.png",
-"pivot": { "x": 0.5, "y": 0.1875 },
-"pixelperunit": 20
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1000012.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1002013,
+"element": 0,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1002013.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1001014,
+"element": 0,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1001014.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1003015,
+"element": 0,
+"grade": 3,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1003015.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1000016,
+"element": 0,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1000016.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1001017,
+"element": 0,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1001017.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1002018,
+"element": 0,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1002018.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1001019,
+"element": 0,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1001019.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1002020,
+"element": 0,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1002020.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1003021,
+"element": 0,
+"grade": 3,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1003021.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1000022,
+"element": 0,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1000022.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1001023,
+"element": 0,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1001023.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
+
+{
+    "id": 1003024,
+"element": 0,
+"grade": 3,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1003024.png",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
 }
     ]
 }
