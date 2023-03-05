@@ -26,8 +26,10 @@ public class PlayerController : MonoBehaviour
     private int life;
     private int money;
 
-    private List<Tower> towers;
+    public List<int>[,] UsableTowers { get { return usableTowers; } }
+    private List<int>[,] usableTowers;
     public List<Tower> Towers { get { return towers; } }
+    private List<Tower> towers;
     public CharacterType Type { get { return character.Type; } }
     private Character character;
 
@@ -54,6 +56,17 @@ public class PlayerController : MonoBehaviour
         if (difficulties.Contains(DifficultyType.COST)) costDiff = 1.5f;
 
         towers = new List<Tower>();
+        usableTowers = new List<int>[EnumArray.Elements.Length, EnumArray.Grades.Length];
+
+        for (int i = 0; i < usableTowers.GetLength(0); i++)
+        {
+            for (int j = 0; j < usableTowers.GetLength(1); j++)
+            {
+                usableTowers[i, j] = new List<int>();
+                usableTowers[i, j].AddRange(TowerManager.EgTowerIds[i, j]);
+            }
+        }
+
         character = new Character(type);
 
         life = maxLife = 10;
@@ -101,6 +114,7 @@ public class PlayerController : MonoBehaviour
         if (towers.Count == 10) return false;
 
         towers.Add(tower);
+        usableTowers[(int)tower.element, (int)tower.grade].Remove(tower.id);
 
         return true;
     }

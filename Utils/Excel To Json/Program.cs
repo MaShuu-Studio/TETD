@@ -67,7 +67,6 @@ namespace Excel_To_Json
                     int j = 0;
                     foreach (Excel.Worksheet sheet in workBook.Worksheets)
                     {
-                        j++;
                         string name = sheet.Name;
                         Excel.Range range = sheet.UsedRange;
 
@@ -84,6 +83,7 @@ namespace Excel_To_Json
 
                         contents += data[0];
                         langContents += data[1];
+                        j++;
                     }
 
                     contents = string.Format(JsonFormat.jsonFormat, contents);
@@ -140,9 +140,9 @@ namespace Excel_To_Json
                         contents[i] += string.Format(JsonFormat.contentsFormat, datas[i]);
                     }
                 }
-
-                Console.WriteLine($"Progress {dataName.ToUpper()} {count++}");
+                count++;
             }
+            Console.WriteLine($"Progress {dataName.ToUpper()} {count}");
             return contents;
         }
 

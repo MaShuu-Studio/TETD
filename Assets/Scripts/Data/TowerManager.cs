@@ -11,6 +11,8 @@ public static class TowerManager
     private static string path = Application.streamingAssetsPath + "/Data/";
 
     private static Dictionary<int, Tower> towers;
+    // 0: elemental, 1: grade, List: Id
+    public static List<int>[,] EgTowerIds { get { return egTowerIds; } }
     private static List<int>[,] egTowerIds;
     public static List<int> Keys { get { return keys; } }
     private static List<int> keys;
@@ -43,17 +45,6 @@ public static class TowerManager
         if (towers.ContainsKey(id)) return towers[id];
 
         return null;
-    }
-
-    public static Tower GetRandomTower(int element, Grade grade)
-    {
-        if (element < 0) element = Random.Range(0, EnumArray.Elements.Length);
-
-        int count = egTowerIds[element, (int)grade].Count;
-        int rand = Random.Range(0, count);
-        int id = egTowerIds[element, (int)grade][rand];
-
-        return GetTower(id);
     }
 
     public static void UpdateLanguage(LanguageType type)

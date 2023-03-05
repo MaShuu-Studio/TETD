@@ -161,7 +161,7 @@ public class Enemy : ObjectData
     public Enemy(EnemyData data)
     {
         id = data.id;
-        name = data.name.ToUpper();
+        //name = data.name.ToUpper();
 
         element = data.element;
 
@@ -175,7 +175,7 @@ public class Enemy : ObjectData
     public Enemy(Enemy data)
     {
         id = data.id;
-        name = data.name;
+        //name = data.name;
 
         element = data.element;
 
