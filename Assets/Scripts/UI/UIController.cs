@@ -186,7 +186,7 @@ public class UIController : MonoBehaviour
 
     public void EnemyDamaged(Vector3 pos, float damage)
     {
-        damageUIPool.Pop(MapController.Instance.PosToScreen(pos), damage);
+        damageUIPool.Pop(CameraController.Instance.Cam.WorldToScreenPoint(pos), damage);
     }
 
     public void PushDamageUI(GameObject go)

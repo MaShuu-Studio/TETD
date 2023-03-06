@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(Grid))]
@@ -20,21 +19,10 @@ public class MapController : MonoBehaviour
 
         grid = GetComponent<Grid>();
 
-        cam = FindObjectOfType<Camera>();
-        pcam = cam.GetComponent<PixelPerfectCamera>();
-
-        float ratio = (float)1920 / Screen.width;
-
-        pcam.assetsPPU = Mathf.CeilToInt(81 / ratio);
-        pcam.refResolutionX = Screen.width;
-        pcam.refResolutionY = Screen.height;
-
         transform.position = Vector3.zero;
         OffSeletedTile();
     }
 
-    private Camera cam;
-    private PixelPerfectCamera pcam;
     [SerializeField] private SpriteRenderer selectedTile;
     [SerializeField] private Tilemap tilemap;
     private Grid grid;
@@ -76,10 +64,12 @@ public class MapController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (CameraController.Instance.Cam == null) return;
+
         bool click = Input.GetMouseButtonDown(0);
 
         Vector3 mousePos = Input.mousePosition;
-        Vector3 worldPos = cam.ScreenToWorldPoint(mousePos);
+        Vector3 worldPos = CameraController.Instance.Cam.ScreenToWorldPoint(mousePos);
         Vector3 pos = GetMapPos(worldPos);
 
         if (readyToBuild)
@@ -145,11 +135,6 @@ public class MapController : MonoBehaviour
         float y = Mathf.FloorToInt(pos.y) + grid.cellSize.y / 2;
 
         return new Vector3(x, y);
-    }
-
-    public Vector3 PosToScreen(Vector3 pos)
-    {
-        return cam.WorldToScreenPoint(pos);
     }
     #endregion
 }

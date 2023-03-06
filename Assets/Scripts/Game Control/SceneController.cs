@@ -98,6 +98,8 @@ public class SceneController : MonoBehaviour
             Progress(async.progress / (float)count);
             yield return null;
         }
+
+        CameraController.Instance.FindCamera();
         sceneLoaded = true;
     }
 
