@@ -89,6 +89,7 @@
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\TitleButton.cs" />
     <Compile Include="Assets\Scripts\Data\ObjectData.cs" />
     <Compile Include="Assets\Scripts\Game Control\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Game Control\CameraController.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\BuildTowerButton.cs" />
     <Compile Include="Assets\Scripts\Map\MapController.cs" />
     <Compile Include="Assets\Scripts\Game Control\RoundController.cs" />
@@ -115,7 +116,6 @@
     <Compile Include="Assets\Scripts\Map\MapEditor.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
-    <Compile Include="Assets\Scripts\Game Control\CameraController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
