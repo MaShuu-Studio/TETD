@@ -20,6 +20,7 @@ public class EnemyObject : Poolable
     public int Order { get; private set; }
     public float Hp { get { return hp; } }
 
+    private IEnumerator animCoroutine;
     private IEnumerator moveCoroutine;
     public float SlowAmount { get { return slowAmount; } }
     private float slowAmount;
@@ -60,6 +61,8 @@ public class EnemyObject : Poolable
         destRoad = 1;
 
         spriteRenderer.sortingOrder = Order = order;
+
+        Animate(AnimationType.IDLE, true);
         moveCoroutine = Move();
         StartCoroutine(moveCoroutine);
     }
@@ -164,7 +167,7 @@ public class EnemyObject : Poolable
         hp -= dmg;
         UpdateHp();
 #if UNITY_EDITOR
-        Debug.Log($"[SYSTEM] {name} Damaged {dmg} | HP: {hp}");
+        //Debug.Log($"[SYSTEM] {name} Damaged {dmg} | HP: {hp}");
 #endif
 
         if (hp <= 0)
@@ -196,5 +199,51 @@ public class EnemyObject : Poolable
     {
         return (((slx && transform.position.x <= road[destRoad].x) || (!slx && transform.position.x >= road[destRoad].x))
             && ((sly && transform.position.y <= road[destRoad].y) || (!sly && transform.position.y >= road[destRoad].y)));
+    }
+
+    private void Animate(AnimationType anim, bool loop = false)
+    {
+        if (data.animation.ContainsKey(anim) == false) return;
+        if (animCoroutine != null)
+        {
+            StopCoroutine(animCoroutine);
+            animCoroutine = null;
+        }
+
+        animCoroutine = Animation(anim, loop);
+        StartCoroutine(animCoroutine);
+    }
+
+    private IEnumerator Animation(AnimationType anim, bool loop)
+    {
+        int number = 0;
+        float time = 0;
+        // 한 프레임당 100ms
+        float frameTime = 0.1f;
+        while (true)
+        {
+            // 스프라이트 변경
+            spriteRenderer.sprite = data.animation[anim][number];
+
+            while (time < frameTime)
+            {
+                if (GameController.Instance.Paused)
+                {
+                    yield return null;
+                    continue;
+                }
+                time += Time.deltaTime;
+                yield return null;
+            }
+            time -= frameTime;
+            // 다음 애니메이션 스프라이트로 이동.
+            // 마지막 스프라이트일 때 loop라면 처음으로.
+            number++;
+            if (data.animation[anim].Length == number)
+            {
+                if (loop == false) break;
+                number = 0;
+            }
+        }
     }
 }

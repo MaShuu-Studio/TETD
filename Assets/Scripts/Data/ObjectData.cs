@@ -9,6 +9,7 @@ public abstract class ObjectData
 {
     public int id { get; protected set; }
     public string name { get; protected set; }
+    public Dictionary<AnimationType, Sprite[]> animation { get; protected set; }
 
     public void UpdateName(Language lang, LanguageType type)
     {
@@ -29,10 +30,12 @@ public class Tower : ObjectData
     private Dictionary<TowerStatType, float> stat;
     private Dictionary<TowerStatType, int> statLevel;
 
-    public Tower(TowerData data)
+    public Tower(TowerData data, Dictionary<AnimationType, Sprite[]> animation)
     {
         id = data.id;
         //name = data.name.ToUpper();
+
+        this.animation = animation;
 
         grade = data.grade;
         element = data.element;
@@ -60,6 +63,7 @@ public class Tower : ObjectData
     {
         id = data.id;
         //name = data.name;
+        animation = data.animation;
 
         grade = data.grade;
         element = data.element;
@@ -158,10 +162,11 @@ public class Enemy : ObjectData
     public float speed;
     public float dmg;
 
-    public Enemy(EnemyData data)
+    public Enemy(EnemyData data, Dictionary<AnimationType, Sprite[]> animation)
     {
         id = data.id;
         //name = data.name.ToUpper();
+        this.animation = animation;
 
         element = data.element;
 
@@ -176,6 +181,7 @@ public class Enemy : ObjectData
     {
         id = data.id;
         //name = data.name;
+        animation = data.animation;
 
         element = data.element;
 

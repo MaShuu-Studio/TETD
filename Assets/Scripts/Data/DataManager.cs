@@ -223,10 +223,10 @@ namespace Data
             using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(path))
             {
                 req.SendWebRequest();
-
                 try
                 {
                     while (!req.isDone) await Task.Yield();
+                    if (string.IsNullOrEmpty(req.error) == false) return null;
 
                     Texture2D texture = DownloadHandlerTexture.GetContent(req);
                     texture.filterMode = FilterMode.Point;
@@ -235,7 +235,9 @@ namespace Data
                 }
                 catch (Exception e)
                 {
+#if UNITY_EDITOR
                     Debug.Log($"{e}");
+#endif
                 }
             }
 
@@ -258,7 +260,9 @@ namespace Data
                 }
                 catch (Exception e)
                 {
+#if UNITY_EDITOR
                     Debug.Log($"{e}");
+#endif
                 }
             }
 

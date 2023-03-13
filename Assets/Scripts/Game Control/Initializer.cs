@@ -19,6 +19,7 @@ public class Initializer : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         Data.DataManager.MakeFileNameList();
+        EnumData.EnumArray.Init();
     }
 
     private void Start()
@@ -29,8 +30,6 @@ public class Initializer : MonoBehaviour
     private void Initialize()
     {
         List<SceneAction> actions = new List<SceneAction>();
-
-        actions.Add(new SceneAction(() => EnumData.EnumArray.Init()));
 
         actions.Add(new SceneAction(Translator.Init()));
         actions.Add(new SceneAction(SpriteManager.Init()));

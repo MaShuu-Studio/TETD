@@ -21,7 +21,8 @@ public static class EnemyManager
 
         foreach (var data in list)
         {
-            Enemy enemy = new Enemy(data);
+            Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
+            Enemy enemy = new Enemy(data, anim);
             enemies.Add(enemy.id, enemy);
             await SpriteManager.AddSprite<Enemy>(data.imgsrc, enemy.id, data.pivot, data.pixelperunit);
         }
@@ -30,6 +31,35 @@ public static class EnemyManager
 #if UNITY_EDITOR
         Debug.Log($"[SYSTEM] LOAD ENEMY {enemies.Count}");
 #endif
+    }
+    private static async Task<Dictionary<AnimationType, Sprite[]>> MakeAnimation(EnemyData data)
+    {
+        Dictionary<AnimationType, Sprite[]> anim = new Dictionary<AnimationType, Sprite[]>();
+
+        for (int i = 0; i < EnumArray.AnimationTypes.Length; i++)
+        {
+            AnimationType type = EnumArray.AnimationTypes[i];
+            string animationName = EnumArray.AnimationTypeStrings[type];
+            List<Sprite> sprites = new List<Sprite>();
+            while (true)
+            {
+                // IDLE0.png 와 같은 방식
+                string filename = animationName + sprites.Count + ".png";
+                Sprite sprite = await DataManager.LoadSprite(data.imgsrc + filename, data.pivot, data.pixelperunit);
+                if (sprite == null) break; // 이미지가 없다면 패스
+                sprites.Add(sprite);
+            }
+
+            if (sprites.Count > 0)
+            {
+                Sprite[] s = new Sprite[sprites.Count];
+                sprites.CopyTo(s);
+
+                anim.Add(type, s);
+            }
+        }
+
+        return anim;
     }
 
     public static Enemy GetEnemy(int id)

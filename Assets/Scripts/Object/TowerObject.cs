@@ -12,12 +12,15 @@ public class TowerObject : Poolable
     public Vector3 Pos { get; private set; }
     public Tower Data { get { return data; } }
     private Tower data;
+
+    private IEnumerator animCoroutine;
     private IEnumerator attackCoroutine;
     private IEnumerator miningCoroutine;
     private PriorityQueue<EnemyObject> enemies;
 
     private AttackPriority priority;
     public AttackPriority Priority { get { return priority; } }
+
 
     public override bool MakePrefab(int id)
     {
@@ -39,6 +42,7 @@ public class TowerObject : Poolable
         return true;
     }
 
+    #region Build
     public void Build(Vector3 pos)
     {
         Pos = pos;
@@ -57,8 +61,10 @@ public class TowerObject : Poolable
 
         priority = AttackPriority.FIRST;
 
+        Animate(AnimationType.IDLE, true);
         attackCoroutine = null;
         miningCoroutine = null;
+
         if (data.Stat(TowerStatType.GOLDMINE) != 0)
         {
             miningCoroutine = Mining();
@@ -86,6 +92,9 @@ public class TowerObject : Poolable
         }
     }
 
+    #endregion
+
+    #region Update Info
     public void UpdateLanguage(LanguageType lang)
     {
         data.UpdateName(Translator.GetLanguage(id), lang);
@@ -94,99 +103,6 @@ public class TowerObject : Poolable
     public void UpdateDistnace()
     {
         rangeUI.transform.localScale = range.transform.localScale = Vector3.one * (1 + data.Stat(TowerStatType.DISTANCE) * 2);
-    }
-
-    public void AddEnemy(EnemyObject enemy)
-    {
-        enemies.Enqueue(enemy, GetPriority(enemy));
-        if (attackCoroutine == null)
-        {
-            attackCoroutine = Attack();
-            StartCoroutine(Attack());
-        }
-    }
-    public void RemoveEnemy(EnemyObject enemy)
-    {
-        if (enemies.Contains(enemy))
-            enemies.Remove(enemy);
-    }
-
-    private IEnumerator Attack()
-    {
-        while (enemies.Count > 0)
-        {
-            int targetAmount = (int)data.Stat(TowerStatType.MULTISHOT);
-            if (targetAmount == 0) targetAmount = 1;
-            List<EnemyObject> target = enemies.Get(targetAmount);
-            // 전부 목록에서 제거
-            if (data.hasDebuff)
-            {
-                enemies.Dequeue();
-                for (int i = 1; i < target.Count; i++)
-                    enemies.Remove(target[i]);
-            }
-
-            SoundController.PlayAudio(id);
-            if (data.Stat(TowerStatType.SPLASH) != 0)
-            {
-                for (int i = 0; i < target.Count; i++)
-                {
-                    SplashPoint point = TowerController.Instance.PopSplash();
-                    point.transform.position = target[i].transform.position;
-                    point.SetData(data);
-                }
-            }
-            else EnemyController.Instance.EnemyAttacked(target, data);
-
-            if (data.hasDebuff)
-            {
-                for (int i = 0; i < target.Count; i++)
-                {
-                    // 살아있는 경우에만 추가
-                    if (target[i].gameObject.activeSelf)
-                    {
-                        enemies.Enqueue(target[i], GetPriority(target[i]));
-                    }
-                }
-            }
-
-            float delayTime = 0;
-            float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
-            while (delayTime < delay)
-            {
-                if (GameController.Instance.Paused)
-                {
-                    yield return null;
-                    continue;
-                }
-                delayTime += Time.deltaTime;
-                yield return null;
-            }
-            yield return null;
-        }
-        attackCoroutine = null;
-    }
-
-    private IEnumerator Mining()
-    {
-        while (true)
-        {
-            float delayTime = 0;
-            float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
-            while (delayTime < delay)
-            {
-                if (GameController.Instance.Paused)
-                {
-                    yield return null;
-                    continue;
-                }
-                delayTime += Time.deltaTime;
-                yield return null;
-            }
-            int value = (int)data.Stat(TowerStatType.GOLDMINE);
-            PlayerController.Instance.Reward(0, value);
-            yield return null;
-        }
     }
 
     private float Stat(TowerStatType type)
@@ -272,5 +188,151 @@ public class TowerObject : Poolable
         }
 
         return prior;
+    }
+    #endregion
+
+    #region Activate
+    public void AddEnemy(EnemyObject enemy)
+    {
+        enemies.Enqueue(enemy, GetPriority(enemy));
+        if (attackCoroutine == null)
+        {
+            attackCoroutine = Attack();
+            StartCoroutine(Attack());
+        }
+    }
+    public void RemoveEnemy(EnemyObject enemy)
+    {
+        if (enemies.Contains(enemy))
+            enemies.Remove(enemy);
+    }
+
+    private IEnumerator Attack()
+    {
+        while (enemies.Count > 0)
+        {
+            Animate(AnimationType.ATTACK, false);
+            int targetAmount = (int)data.Stat(TowerStatType.MULTISHOT);
+            if (targetAmount == 0) targetAmount = 1;
+            List<EnemyObject> target = enemies.Get(targetAmount);
+            // 전부 목록에서 제거
+            if (data.hasDebuff)
+            {
+                enemies.Dequeue();
+                for (int i = 1; i < target.Count; i++)
+                    enemies.Remove(target[i]);
+            }
+
+            SoundController.PlayAudio(id);
+            if (data.Stat(TowerStatType.SPLASH) != 0)
+            {
+                for (int i = 0; i < target.Count; i++)
+                {
+                    SplashPoint point = TowerController.Instance.PopSplash();
+                    point.transform.position = target[i].transform.position;
+                    point.SetData(data);
+                }
+            }
+            else EnemyController.Instance.EnemyAttacked(target, data);
+
+            if (data.hasDebuff)
+            {
+                for (int i = 0; i < target.Count; i++)
+                {
+                    // 살아있는 경우에만 추가
+                    if (target[i].gameObject.activeSelf)
+                    {
+                        enemies.Enqueue(target[i], GetPriority(target[i]));
+                    }
+                }
+            }
+
+            float delayTime = 0;
+            float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
+            while (delayTime < delay)
+            {
+                if (GameController.Instance.Paused)
+                {
+                    yield return null;
+                    continue;
+                }
+                delayTime += Time.deltaTime;
+                yield return null;
+            }
+            yield return null;
+        }
+        attackCoroutine = null;
+    }
+
+    private IEnumerator Mining()
+    {
+        while (true)
+        {
+            float delayTime = 0;
+            float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
+            while (delayTime < delay)
+            {
+                if (GameController.Instance.Paused)
+                {
+                    yield return null;
+                    continue;
+                }
+                delayTime += Time.deltaTime;
+                yield return null;
+            }
+            int value = (int)data.Stat(TowerStatType.GOLDMINE);
+            PlayerController.Instance.Reward(0, value);
+            yield return null;
+        }
+    }
+    #endregion
+    
+    private void Animate(AnimationType anim, bool loop = false)
+    {
+        if (data.animation.ContainsKey(anim) == false) return;
+        if (animCoroutine != null)
+        {
+            StopCoroutine(animCoroutine);
+            animCoroutine = null;
+        }
+
+        animCoroutine = Animation(anim, loop);
+        StartCoroutine(animCoroutine);
+    }
+
+    private IEnumerator Animation(AnimationType anim, bool loop)
+    {
+        int number = 0;
+        float time = 0;
+        // 한 프레임당 100ms
+        float frameTime = 0.1f;
+        while (true)
+        {
+            // 스프라이트 변경
+            spriteRenderer.sprite = data.animation[anim][number];
+
+            while (time < frameTime)
+            {
+                if (GameController.Instance.Paused)
+                {
+                    yield return null;
+                    continue;
+                }
+                time += Time.deltaTime;
+                yield return null;
+            }
+            time -= frameTime;
+            // 다음 애니메이션 스프라이트로 이동.
+            // 마지막 스프라이트일 때 loop라면 처음으로.
+            number++;
+            if (data.animation[anim].Length == number)
+            {
+                if (loop == false) break;
+                number = 0;
+            }
+        }
+
+        // 공격 애니메이션이 끝난 뒤에는 자동으로 IDLE로
+        if (anim == AnimationType.ATTACK) Animate(AnimationType.IDLE, true);
     }
 }
