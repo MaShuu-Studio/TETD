@@ -13,6 +13,7 @@ public class TowerObject : Poolable
     public Tower Data { get { return data; } }
     private Tower data;
 
+    private AnimationType curAnim;
     private IEnumerator animCoroutine;
     private IEnumerator attackCoroutine;
     private IEnumerator miningCoroutine;
@@ -40,6 +41,12 @@ public class TowerObject : Poolable
         rangeUI.transform.localPosition = range.transform.localPosition = Vector3.zero;
 
         return true;
+    }
+
+    private void Update()
+    {
+        // IDLE상태일 때(특수한 모션을 취하지 않을 때) 몹을 바라봄.
+        if (curAnim == AnimationType.IDLE) LookAtEnemy();
     }
 
     #region Build
@@ -91,7 +98,6 @@ public class TowerObject : Poolable
             miningCoroutine = null;
         }
     }
-
     #endregion
 
     #region Update Info
@@ -103,6 +109,19 @@ public class TowerObject : Poolable
     public void UpdateDistnace()
     {
         rangeUI.transform.localScale = range.transform.localScale = Vector3.one * (1 + data.Stat(TowerStatType.DISTANCE) * 2);
+    }
+
+    private void LookAtEnemy()
+    {
+        // 가장 앞에 있는 유닛에 따라 좌우반전
+        if (enemies.Count <= 0) return;
+
+        float enemyX = enemies.Get().transform.position.x;
+
+        if (enemyX < transform.position.x)
+            spriteRenderer.flipX = false;
+        else
+            spriteRenderer.flipX = true;
     }
 
     private float Stat(TowerStatType type)
@@ -290,6 +309,8 @@ public class TowerObject : Poolable
     private void Animate(AnimationType anim, bool loop = false)
     {
         if (data.animation.ContainsKey(anim) == false) return;
+        curAnim = anim;
+
         if (animCoroutine != null)
         {
             StopCoroutine(animCoroutine);
@@ -302,6 +323,9 @@ public class TowerObject : Poolable
 
     private IEnumerator Animation(AnimationType anim, bool loop)
     {
+        // 공격일 경우 방향전환이 없으므로 미리 방향전환을 해둠.
+        if (curAnim == AnimationType.ATTACK) LookAtEnemy();
+
         int number = 0;
         float time = 0;
         // 한 프레임당 100ms
