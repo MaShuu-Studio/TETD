@@ -9,12 +9,12 @@
 
 {
     "id": 1000001,
-    "name": [ "화염병","Molotov" ]
+    "name": [ "돌팔매","Sling" ]
 },
 
 {
     "id": 1000002,
-    "name": [ "돌팔매","Sling" ]
+    "name": [ "화염병","Molotov" ]
 },
 
 {

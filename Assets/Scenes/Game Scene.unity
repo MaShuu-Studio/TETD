@@ -390,7 +390,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 0000000039ec1d12a1fd14d1878956108fcfbd09
+  m_ApplyToSortingLayers: 0000000039ec1d1287895610a1fd14d119993b758fcfbd09
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -2723,7 +2723,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedTile: {fileID: 1532182761}
   tilemap: {fileID: 681961521}
-  grid: {fileID: 904932486}
 --- !u!1 &932917131
 GameObject:
   m_ObjectHideFlags: 0

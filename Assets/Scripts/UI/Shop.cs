@@ -21,6 +21,11 @@ public class Shop : MonoBehaviour
         originProb.Add(Grade.LEGENDARY, 5);
 
         prob = new Dictionary<Grade, float>(originProb);
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            items[i].Init();
+        }
     }
 
     public void UpdateProb()

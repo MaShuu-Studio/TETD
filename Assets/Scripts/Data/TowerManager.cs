@@ -11,6 +11,8 @@ public static class TowerManager
     private static string path = Application.streamingAssetsPath + "/Data/";
 
     private static Dictionary<int, Tower> towers;
+    public static Dictionary<int, Sprite[]> Projs { get { return projectiles; } }
+    private static Dictionary<int, Sprite[]> projectiles;
     // 0: elemental, 1: grade, List: Id
     public static List<int>[,] EgTowerIds { get { return egTowerIds; } }
     private static List<int>[,] egTowerIds;
@@ -20,6 +22,7 @@ public static class TowerManager
     public static async Task Init()
     {
         towers = new Dictionary<int, Tower>();
+        projectiles = new Dictionary<int, Sprite[]>();
         List<TowerData> list = await DataManager .DeserializeListJson<TowerData>(path, "Tower");
         egTowerIds = new List<int>[EnumArray.Elements.Length, EnumArray.Grades.Length];
         for (int i = 0; i < EnumArray.Elements.Length; i++)
@@ -33,6 +36,9 @@ public static class TowerManager
             towers.Add(tower.id, tower);
             egTowerIds[(int)tower.element, (int)tower.grade].Add(tower.id);
             await SpriteManager.AddSprite<Tower>(data.imgsrc, tower.id, data.pivot, data.pixelperunit);
+
+            Sprite[] proj = await MakeProjectile(data);
+            if (proj != null) projectiles.Add(tower.id, proj);
         }
         keys = towers.Keys.ToList();
 
@@ -69,6 +75,30 @@ public static class TowerManager
         }
 
         return anim;
+    }
+
+    private static async Task<Sprite[]> MakeProjectile(TowerData data)
+    {
+        // 투사체의 이름은 WEAPON*
+        Sprite[] s = null;
+
+        List<Sprite> sprites = new List<Sprite>();
+        while (true)
+        {
+            // IDLE0.png 와 같은 방식
+            string filename = "WEAPON" + sprites.Count + ".png";
+            Sprite sprite = await DataManager.LoadSprite(data.imgsrc + filename, data.pivot, data.pixelperunit);
+            if (sprite == null) break; // 이미지가 없다면 패스
+            sprites.Add(sprite);
+        }
+
+        if (sprites.Count > 0)
+        {
+            s = new Sprite[sprites.Count];
+            sprites.CopyTo(s);
+        }
+
+        return s;
     }
 
     public static Tower GetTower(int id)

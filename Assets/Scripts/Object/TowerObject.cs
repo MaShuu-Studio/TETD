@@ -234,6 +234,7 @@ public class TowerObject : Poolable
             int targetAmount = (int)data.Stat(TowerStatType.MULTISHOT);
             if (targetAmount == 0) targetAmount = 1;
             List<EnemyObject> target = enemies.Get(targetAmount);
+
             // 전부 목록에서 제거
             if (data.hasDebuff)
             {
@@ -265,6 +266,14 @@ public class TowerObject : Poolable
                     }
                 }
             }
+
+            // 투사체 발사
+            if (TowerManager.Projs.ContainsKey(id))
+                for (int i = 0; i < target.Count; i++)
+                {
+                    PoolController.Pop(id, transform.position, target[i].transform.position);
+                }
+
 
             float delayTime = 0;
             float delay = 1 / Stat(TowerStatType.ATTACKSPEED);

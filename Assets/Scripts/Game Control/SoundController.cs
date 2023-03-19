@@ -37,13 +37,16 @@ public class SoundController : MonoBehaviour
         {
             int id = 0;
             if (int.TryParse(SoundManager.Keys[i], out id) == false) continue;
-            GameObject go = Instantiate(soundBase.gameObject);
-            Poolable poolable = go.GetComponent<Poolable>();
-            if (poolable.MakePrefab(id) == false) continue;
 
-            GameObject poolObject = Instantiate(poolPrefab.gameObject, transform);
-            poolObject.name = id.ToString();
-            Pool poolComponent = poolObject.GetComponent<Pool>();
+            Poolable poolable = Instantiate(soundBase);
+            if (poolable.MakePrefab(id) == false)
+            {
+                Destroy(poolable.gameObject);
+                continue;
+            }
+
+            Pool poolComponent = Instantiate(poolPrefab, transform);
+            poolComponent.gameObject.name = id.ToString();
             poolComponent.Init(poolable);
 
             pool.Add(id, poolComponent);

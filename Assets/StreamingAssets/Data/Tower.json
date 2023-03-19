@@ -1,892 +1,892 @@
 {
-  "list": [
-    {
-      "id": 1000000,
-      "element": 0,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1000000/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1000001,
-      "element": 0,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1000001/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1000002,
-      "element": 0,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "ability": [{ "type": 5, "value": 1.5 }],
-      "imgsrc": "/Sprites/Tower/1000002/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1000003,
-      "element": 0,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "ability": [
-        { "type": 4, "value": 2 },
-        { "type": 6, "value": 2 }
-      ],
-      "imgsrc": "/Sprites/Tower/1000003/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1001003,
-      "element": 0,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1001003/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1002003,
-      "element": 0,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1002003/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1000004,
-      "element": 0,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1000004/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1001004,
-      "element": 0,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1001004/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1002004,
-      "element": 0,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1002004/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1000005,
-      "element": 0,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1000005/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1001005,
-      "element": 0,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1001005/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1002005,
-      "element": 0,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1002005/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1000006,
-      "element": 0,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1000006/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1001006,
-      "element": 0,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1001006/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1002006,
-      "element": 0,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1002006/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1003006,
-      "element": 0,
-      "grade": 3,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1003006/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1000007,
-      "element": 0,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1000007/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1001007,
-      "element": 0,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1001007/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1002007,
-      "element": 0,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1002007/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1001008,
-      "element": 0,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1001008/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1002008,
-      "element": 0,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1002008/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1003008,
-      "element": 0,
-      "grade": 3,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1003008/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1010000,
-      "element": 1,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1010000/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1011000,
-      "element": 1,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1011000/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1010001,
-      "element": 1,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1010001/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1011001,
-      "element": 1,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1011001/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1012001,
-      "element": 1,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1012001/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1010002,
-      "element": 1,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1010002/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1011002,
-      "element": 1,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1011002/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1012002,
-      "element": 1,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1012002/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1010003,
-      "element": 1,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1010003/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1011003,
-      "element": 1,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1011003/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1012003,
-      "element": 1,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1012003/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1011004,
-      "element": 1,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1011004/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1012004,
-      "element": 1,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1012004/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1010005,
-      "element": 1,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1010005/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1011005,
-      "element": 1,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1011005/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1012005,
-      "element": 1,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1012005/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1010006,
-      "element": 1,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1010006/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1011006,
-      "element": 1,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1011006/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1012006,
-      "element": 1,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1012006/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1013006,
-      "element": 1,
-      "grade": 3,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1013006/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1012007,
-      "element": 1,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1012007/",
-      "pivot": { "x": 0.5, "y": 0.05 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1013007,
-      "element": 1,
-      "grade": 3,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1013007/",
-      "pivot": { "x": 0.5, "y": 0.05 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1020000,
-      "element": 2,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1020000/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1021000,
-      "element": 2,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1021000/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1020001,
-      "element": 2,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1020001/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1021001,
-      "element": 2,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1021001/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1022001,
-      "element": 2,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1022001/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1020002,
-      "element": 2,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1020002/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1021002,
-      "element": 2,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1021002/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1022002,
-      "element": 2,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1022002/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1020003,
-      "element": 2,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1020003/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1021003,
-      "element": 2,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1021003/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1022003,
-      "element": 2,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1022003/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1020004,
-      "element": 2,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1020004/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1021004,
-      "element": 2,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1021004/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1022004,
-      "element": 2,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1022004/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1020005,
-      "element": 2,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1020005/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1021005,
-      "element": 2,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1021005/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1022005,
-      "element": 2,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1022005/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1020006,
-      "element": 2,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1020006/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1021006,
-      "element": 2,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1021006/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1020007,
-      "element": 2,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1020007/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1022007,
-      "element": 2,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1022007/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1020008,
-      "element": 2,
-      "grade": 0,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1020008/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1021008,
-      "element": 2,
-      "grade": 1,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1021008/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    },
-
-    {
-      "id": 1022008,
-      "element": 2,
-      "grade": 2,
-      "cost": 150,
-      "dmg": 1,
-      "range": 2.5,
-      "attackspeed": 2,
-      "imgsrc": "/Sprites/Tower/1022008/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24
-    }
-  ]
+    "list": 
+    [
+        
+{
+    "id": 1000000,
+"element": 0,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1000000/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1000001,
+"element": 0,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1000001/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1000002,
+"element": 0,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+    "ability": [ {"type": 5, "value": 1.5} ],
+"imgsrc": "/Sprites/Tower/1000002/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1000003,
+"element": 0,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+    "ability": [ {"type": 4, "value": 2},
+{"type": 6, "value": 2} ],
+"imgsrc": "/Sprites/Tower/1000003/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1001003,
+"element": 0,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1001003/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1002003,
+"element": 0,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1002003/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1000004,
+"element": 0,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1000004/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1001004,
+"element": 0,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1001004/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1002004,
+"element": 0,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1002004/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1000005,
+"element": 0,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1000005/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1001005,
+"element": 0,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1001005/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1002005,
+"element": 0,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1002005/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1000006,
+"element": 0,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1000006/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1001006,
+"element": 0,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1001006/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1002006,
+"element": 0,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1002006/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1003006,
+"element": 0,
+"grade": 3,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1003006/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1000007,
+"element": 0,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1000007/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1001007,
+"element": 0,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1001007/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1002007,
+"element": 0,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1002007/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1001008,
+"element": 0,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1001008/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1002008,
+"element": 0,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1002008/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1003008,
+"element": 0,
+"grade": 3,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1003008/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1010000,
+"element": 1,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1010000/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1011000,
+"element": 1,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1011000/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1010001,
+"element": 1,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1010001/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1011001,
+"element": 1,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1011001/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1012001,
+"element": 1,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1012001/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1010002,
+"element": 1,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1010002/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1011002,
+"element": 1,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1011002/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1012002,
+"element": 1,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1012002/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1010003,
+"element": 1,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1010003/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1011003,
+"element": 1,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1011003/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1012003,
+"element": 1,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1012003/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1011004,
+"element": 1,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1011004/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1012004,
+"element": 1,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1012004/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1010005,
+"element": 1,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1010005/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1011005,
+"element": 1,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1011005/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1012005,
+"element": 1,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1012005/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1010006,
+"element": 1,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1010006/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1011006,
+"element": 1,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1011006/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1012006,
+"element": 1,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1012006/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1013006,
+"element": 1,
+"grade": 3,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1013006/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1012007,
+"element": 1,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1012007/",
+"pivot": { "x": 0.5, "y": 0.05 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1013007,
+"element": 1,
+"grade": 3,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1013007/",
+"pivot": { "x": 0.5, "y": 0.05 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1020000,
+"element": 2,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1020000/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1021000,
+"element": 2,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1021000/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1020001,
+"element": 2,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1020001/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1021001,
+"element": 2,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1021001/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1022001,
+"element": 2,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1022001/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1020002,
+"element": 2,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1020002/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1021002,
+"element": 2,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1021002/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1022002,
+"element": 2,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1022002/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1020003,
+"element": 2,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1020003/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1021003,
+"element": 2,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1021003/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1022003,
+"element": 2,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1022003/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1020004,
+"element": 2,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1020004/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1021004,
+"element": 2,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1021004/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1022004,
+"element": 2,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1022004/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1020005,
+"element": 2,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1020005/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1021005,
+"element": 2,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1021005/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1022005,
+"element": 2,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1022005/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1020006,
+"element": 2,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1020006/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1021006,
+"element": 2,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1021006/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1020007,
+"element": 2,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1020007/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1022007,
+"element": 2,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1022007/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1020008,
+"element": 2,
+"grade": 0,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1020008/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1021008,
+"element": 2,
+"grade": 1,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1021008/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+},
+
+{
+    "id": 1022008,
+"element": 2,
+"grade": 2,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"imgsrc": "/Sprites/Tower/1022008/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 24
+}
+    ]
 }

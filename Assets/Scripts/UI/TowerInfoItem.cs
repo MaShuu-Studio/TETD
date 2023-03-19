@@ -11,9 +11,16 @@ public class TowerInfoItem : TowerInfo
     [SerializeField] private Image frameImage;
     [SerializeField] private Image gradeImage;
     [SerializeField] private TextMeshProUGUI costText;
+    [SerializeField] private TMP_Dropdown elementDropdown;
 
     public int SelectedElement { get { return selectedElement; } }
     private int selectedElement = -1;
+
+    public void Init()
+    {
+        selectedElement = -1;
+        if (elementDropdown != null) elementDropdown.value = 0;
+    }
 
     public override void SetData(Tower data)
     {

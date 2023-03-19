@@ -27,10 +27,9 @@ public class Pool : MonoBehaviour
 
     public void CreateObject()
     {
-        GameObject obj = Instantiate(objPrefab.gameObject);
-        Poolable poolable = obj.GetComponent<Poolable>();
+        Poolable poolable = Instantiate(objPrefab);
         poolable.MakePrefab(objPrefab.Id);
-        Push(obj);
+        Push(poolable.gameObject);
     }
 
     public void Push(GameObject obj)
