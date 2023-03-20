@@ -123,6 +123,7 @@ public class PoolController : MonoBehaviour
         GameObject obj = Instance.pool[id].Pop();
         return obj;
     }
+
     public static void PushProj(int id, GameObject obj)
     {
         if (Instance.projPool.ContainsKey(id) == false) return;
@@ -137,5 +138,4 @@ public class PoolController : MonoBehaviour
         GameObject obj = Instance.projPool[id].Pop(start, end);
         return obj;
     }
-
 }

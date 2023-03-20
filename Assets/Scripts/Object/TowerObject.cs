@@ -31,7 +31,7 @@ public class TowerObject : Poolable
 
         amount = 2;
 
-        gameObject.name = data.name;
+        gameObject.name = id.ToString();
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sortingLayerName = "Character";
@@ -228,6 +228,8 @@ public class TowerObject : Poolable
 
     private IEnumerator Attack()
     {
+        float delay = 1 / Stat(TowerStatType.ATTACKSPEED); // 공격속도 딜레이
+
         while (enemies.Count > 0)
         {
             Animate(AnimationType.ATTACK, false);
@@ -235,9 +237,47 @@ public class TowerObject : Poolable
             if (targetAmount == 0) targetAmount = 1;
             List<EnemyObject> target = enemies.Get(targetAmount);
 
-            // 전부 목록에서 제거
+            float time = 0;
+            // 공격이 진행되는 구간까지 대기
+            while (time < data.attackTime)
+            {
+                if (GameController.Instance.Paused)
+                {
+                    yield return null;
+                    continue;
+                }
+                time += Time.deltaTime;
+                yield return null;
+            }
+
+            // 이 후 공격관련 함수 전부 진행.
+
+            // 투사체 발사 
+            if (TowerManager.Projs.ContainsKey(id))
+            {
+                for (int i = 0; i < target.Count; i++)
+                {
+                    PoolController.Pop(id, transform.position, target[i].transform.position);
+                }
+
+                // 투사체가 날아가는 시간 대기.
+                while (time < Projectile.flyingTime + data.attackTime)
+                {
+                    if (GameController.Instance.Paused)
+                    {
+                        yield return null;
+                        continue;
+                    }
+                    time += Time.deltaTime;
+                    yield return null;
+                }
+            }
+
+            // 디버프의 우선순위는 공격시마다 갱신되어야 함.
+            // 전부 목록에서 제거, 추후 적이 살아있다면 추가하여 우선순위 재정렬.
             if (data.hasDebuff)
             {
+                // 가장 앞의 하나를 지운 뒤 이어서 삭제
                 enemies.Dequeue();
                 for (int i = 1; i < target.Count; i++)
                     enemies.Remove(target[i]);
@@ -267,24 +307,14 @@ public class TowerObject : Poolable
                 }
             }
 
-            // 투사체 발사
-            if (TowerManager.Projs.ContainsKey(id))
-                for (int i = 0; i < target.Count; i++)
-                {
-                    PoolController.Pop(id, transform.position, target[i].transform.position);
-                }
-
-
-            float delayTime = 0;
-            float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
-            while (delayTime < delay)
+            while (time < delay)
             {
                 if (GameController.Instance.Paused)
                 {
                     yield return null;
                     continue;
                 }
-                delayTime += Time.deltaTime;
+                time += Time.deltaTime;
                 yield return null;
             }
             yield return null;
@@ -314,7 +344,7 @@ public class TowerObject : Poolable
         }
     }
     #endregion
-    
+
     private void Animate(AnimationType anim, bool loop = false)
     {
         if (data.animation.ContainsKey(anim) == false) return;
@@ -337,8 +367,7 @@ public class TowerObject : Poolable
 
         int number = 0;
         float time = 0;
-        // 한 프레임당 100ms
-        float frameTime = 0.1f;
+        float frameTime = data.spf;
         while (true)
         {
             // 스프라이트 변경

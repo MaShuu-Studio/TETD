@@ -36,7 +36,7 @@ public class EnemyObject : Poolable
         amount = 2;
 
         this.data = new Enemy(data);
-        gameObject.name = data.name;
+        gameObject.name = id.ToString();
         tag = "Enemy";
 
         spriteRenderer = GetComponent<SpriteRenderer>();

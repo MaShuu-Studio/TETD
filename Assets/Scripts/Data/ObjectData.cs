@@ -24,6 +24,9 @@ public class Tower : ObjectData
 
     public int cost;
 
+    public float spf;
+    public float attackTime;
+
     public bool hasDebuff;
 
     public List<TowerStatType> StatTypes { get { return stat.Keys.ToList(); } }
@@ -33,14 +36,25 @@ public class Tower : ObjectData
     public Tower(TowerData data, Dictionary<AnimationType, Sprite[]> animation)
     {
         id = data.id;
-        //name = data.name.ToUpper();
 
         this.animation = animation;
 
-        grade = data.grade;
-        element = data.element;
+        /* id: ABBCDDD
+         * A: type
+         * B: element
+         * C: grade
+         * D: num 
+         */
+
+        int tmp = id / 1000; // ABBC
+        tmp %= 1000; // BBC
+        element = (Element)(tmp / 10); // BB
+        grade = (Grade)(tmp % 10); // C
 
         cost = data.cost;
+
+        spf = data.spf;
+        attackTime = data.attacktime;
 
         hasDebuff = false;
 
@@ -62,13 +76,15 @@ public class Tower : ObjectData
     public Tower(Tower data)
     {
         id = data.id;
-        //name = data.name;
         animation = data.animation;
 
         grade = data.grade;
         element = data.element;
 
         cost = data.cost;
+
+        spf = data.spf;
+        attackTime = data.attackTime;
 
         hasDebuff = data.hasDebuff;
 
@@ -162,13 +178,24 @@ public class Enemy : ObjectData
     public float speed;
     public float dmg;
 
+    public float spf;
+
     public Enemy(EnemyData data, Dictionary<AnimationType, Sprite[]> animation)
     {
         id = data.id;
-        //name = data.name.ToUpper();
         this.animation = animation;
 
-        element = data.element;
+        /* id: ABBCDDD
+         * A: type
+         * B: element
+         * C: grade
+         * D: num 
+         */
+
+        int tmp = id / 1000; // ABBC
+        tmp %= 1000; // BBC
+        element = (Element)(tmp / 10); // BB
+        //grade = (Grade)(tmp % 10); // C
 
         exp = data.exp;
         money = data.money;
@@ -176,11 +203,12 @@ public class Enemy : ObjectData
         hp = data.hp;
         speed = data.speed;
         dmg = data.dmg;
+
+        spf = data.spf;
     }
     public Enemy(Enemy data)
     {
         id = data.id;
-        //name = data.name;
         animation = data.animation;
 
         element = data.element;
@@ -191,6 +219,8 @@ public class Enemy : ObjectData
         hp = data.hp;
         speed = data.speed;
         dmg = data.dmg;
+
+        spf = data.spf;
     }
 
     public Element WeakElement()
@@ -233,6 +263,9 @@ public class TowerData : JsonData
     public float dmg;
     public float attackspeed;
     public float range;
+
+    public float spf;
+    public float attacktime;
 }
 
 [Serializable]
@@ -246,6 +279,8 @@ public class EnemyData : JsonData
     public float hp;
     public float speed;
     public float dmg;
+
+    public float spf;
 }
 
 [Serializable]

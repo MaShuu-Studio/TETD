@@ -7,6 +7,8 @@ public class Projectile : Poolable
 {
     private SpriteRenderer spriteRenderer;
     private Sprite[] sprites;
+    // 모든 투사체의 속도를 동일하게 세팅
+    public static float flyingTime { get; private set; } = 0.15f;
 
     public override bool MakePrefab(int id)
     {
@@ -32,8 +34,8 @@ public class Projectile : Poolable
     {
         int number = 0;
         float time = 0;
-        // 한 프레임당 40ms
-        float frameTime = 0.04f;
+        // 한 프레임당 30ms
+        float frameTime = 0.03f;
         while (true)
         {
             // 스프라이트 변경
@@ -61,9 +63,19 @@ public class Projectile : Poolable
         Vector3 dir = end - start;
         transform.position = start;
         float time = 0;
-        float total = 0.25f;
 
-        while (time < total)
+        /* 방향에 따라 투사체를 회전시킴.
+         * tan(rad) = y / x = dir.y / dir.x
+         * rad = atan(dir.y / dir.x)
+         */
+
+        // 정방향으로 돌려놓은 뒤 회전
+        transform.rotation = Quaternion.identity;
+
+        float degree = Mathf.Atan(dir.y / dir.x) * Mathf.Rad2Deg;
+        transform.Rotate(new Vector3(0, 0, degree));
+
+        while (time < flyingTime)
         {
             if (GameController.Instance.Paused)
             {
@@ -71,7 +83,7 @@ public class Projectile : Poolable
                 continue;
             }
             time += Time.deltaTime;
-            transform.position += dir / total * Time.deltaTime;
+            transform.position += dir / flyingTime * Time.deltaTime;
             yield return null;
         }
 
