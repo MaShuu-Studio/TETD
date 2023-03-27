@@ -303,6 +303,7 @@ public class UIController : MonoBehaviour
     public void Reroll(TowerInfoItem item)
     {
         shop.Reroll(item);
+        shop.UpdateAmount();
     }
     #endregion
     #endregion

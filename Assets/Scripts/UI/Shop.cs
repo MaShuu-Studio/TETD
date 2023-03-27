@@ -7,6 +7,7 @@ using TMPro;
 public class Shop : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI probText;
+    [SerializeField] private TextMeshProUGUI[] amountText;
     [SerializeField] private List<TowerInfoItem> items;
 
     private Dictionary<Grade, float> originProb;
@@ -26,6 +27,9 @@ public class Shop : MonoBehaviour
         {
             items[i].Init();
         }
+
+        UpdateProb();
+        UpdateAmount();
     }
 
     public void UpdateProb()
@@ -38,11 +42,23 @@ public class Shop : MonoBehaviour
 
         prob[Grade.NORMAL] = 100 - (prob[Grade.RARE] + prob[Grade.HEROIC] + prob[Grade.LEGENDARY]);
 
-        probText.text =
+        probText.text = 
             "NORMAL: " + string.Format("{0:0.##}", prob[Grade.NORMAL]) + "%\n" +
             "RARE: " + string.Format("{0:0.##}", prob[Grade.RARE]) + "%\n" +
             "HEROIC: " + string.Format("{0:0.##}", prob[Grade.HEROIC]) + "%\n" +
             "LEGENDARY: " + string.Format("{0:0.##}", prob[Grade.LEGENDARY]) + "%";
+    }
+
+    public void UpdateAmount()
+    {
+        for (int e = 0; e < EnumArray.Elements.Length; e++)
+        {
+            amountText[e].text = "";
+            for (int g = 0; g < EnumArray.Grades.Length; g++)
+            {
+                amountText[e].text += PlayerController.Instance.UsableTowers[e, g].Count + "\n";
+            }
+        }
     }
 
     public void RerollAll()
@@ -61,20 +77,33 @@ public class Shop : MonoBehaviour
         do
         {
             float gradeRand = Random.Range(0, 100f);
-            Grade grade = Grade.NORMAL;
-            if (gradeRand <= prob[Grade.LEGENDARY]) grade = Grade.LEGENDARY;
-            else if (gradeRand <= prob[Grade.LEGENDARY] + prob[Grade.HEROIC]) grade = Grade.HEROIC;
-            else if (gradeRand <= prob[Grade.LEGENDARY] + prob[Grade.HEROIC] + prob[Grade.RARE]) grade = Grade.RARE;
+            Grade grade = GetGrade(gradeRand);
 
             int element = item.SelectedElement;
             if (element < 0) element = Random.Range(0, EnumArray.Elements.Length);
             int count = PlayerController.Instance.UsableTowers[element, (int)grade].Count;
 
-            // 사용 가능한 타워가 없으면 등급 다운.
-            // 해당 부분은 실시간으로 표기가 필요할 듯.
             while (count == 0)
             {
-                grade--;
+                // 속성 선택을 하지 않은 경우 등급을 유지한 채로 속성을 변경함.
+                if (item.SelectedElement < 0)
+                {
+                    int e = element;
+                    while (element == e) e = Random.Range(0, EnumArray.Elements.Length);
+                    element = e;
+                }
+                else
+                {
+                    // 해당 등급의 타워가 없다면 리롤
+                    Grade g = grade;
+                    while (grade == g)
+                    {
+                        gradeRand = Random.Range(0, 100f);
+                        g = GetGrade(gradeRand);
+                    }
+                    grade = g;
+                }
+
                 count = PlayerController.Instance.UsableTowers[element, (int)grade].Count;
             }
 
@@ -96,6 +125,16 @@ public class Shop : MonoBehaviour
         } while (contains);
 
         item.SetData(tower);
+    }
+
+    private Grade GetGrade(float rand)
+    {
+        Grade grade = Grade.NORMAL;
+        if (rand <= prob[Grade.LEGENDARY]) grade = Grade.LEGENDARY;
+        else if (rand <= prob[Grade.LEGENDARY] + prob[Grade.HEROIC]) grade = Grade.HEROIC;
+        else if (rand <= prob[Grade.LEGENDARY] + prob[Grade.HEROIC] + prob[Grade.RARE]) grade = Grade.RARE;
+
+        return grade;
     }
 
     public void UpdateLanguage()
