@@ -25,7 +25,7 @@ public class Tower : ObjectData
     public int cost;
 
     public float spf;
-    public float attackTime;
+    public float[] attackTime;
 
     public bool hasDebuff;
 
@@ -54,7 +54,8 @@ public class Tower : ObjectData
         cost = data.cost;
 
         spf = data.spf;
-        attackTime = data.attacktime;
+        attackTime = new float[data.attacktime.Count];
+        data.attacktime.CopyTo(attackTime);
 
         hasDebuff = false;
 
@@ -84,7 +85,8 @@ public class Tower : ObjectData
         cost = data.cost;
 
         spf = data.spf;
-        attackTime = data.attackTime;
+        attackTime = new float[data.attackTime.Length];
+        data.attackTime.CopyTo(attackTime, 0);
 
         hasDebuff = data.hasDebuff;
 
@@ -265,7 +267,7 @@ public class TowerData : JsonData
     public float range;
 
     public float spf;
-    public float attacktime;
+    public List<float> attacktime;
 }
 
 [Serializable]

@@ -238,30 +238,13 @@ public class TowerObject : Poolable
             List<EnemyObject> target = enemies.Get(targetAmount);
 
             float time = 0;
-            // 공격이 진행되는 구간까지 대기
-            while (time < data.attackTime)
+
+            // attackTime 만큼 반복
+            for (int i = 0; i < data.attackTime.Length; i++)
             {
-                if (GameController.Instance.Paused)
-                {
-                    yield return null;
-                    continue;
-                }
-                time += Time.deltaTime;
-                yield return null;
-            }
-
-            // 이 후 공격관련 함수 전부 진행.
-
-            // 투사체 발사 
-            if (TowerManager.Projs.ContainsKey(id))
-            {
-                for (int i = 0; i < target.Count; i++)
-                {
-                    PoolController.Pop(id, transform.position, target[i].transform.position);
-                }
-
-                // 투사체가 날아가는 시간 대기.
-                while (time < Projectile.flyingTime + data.attackTime)
+                float progressTime = data.attackTime[i];
+                // 공격이 진행되는 구간까지 대기
+                while (time < progressTime)
                 {
                     if (GameController.Instance.Paused)
                     {
@@ -271,38 +254,63 @@ public class TowerObject : Poolable
                     time += Time.deltaTime;
                     yield return null;
                 }
-            }
 
-            // 디버프의 우선순위는 공격시마다 갱신되어야 함.
-            // 전부 목록에서 제거, 추후 적이 살아있다면 추가하여 우선순위 재정렬.
-            if (data.hasDebuff)
-            {
-                // 가장 앞의 하나를 지운 뒤 이어서 삭제
-                enemies.Dequeue();
-                for (int i = 1; i < target.Count; i++)
-                    enemies.Remove(target[i]);
-            }
+                // 이 후 공격관련 함수 전부 진행.
 
-            SoundController.PlayAudio(id);
-            if (data.Stat(TowerStatType.SPLASH) != 0)
-            {
-                for (int i = 0; i < target.Count; i++)
+                // 투사체 발사 
+                if (TowerManager.Projs.ContainsKey(id))
                 {
-                    SplashPoint point = TowerController.Instance.PopSplash();
-                    point.transform.position = target[i].transform.position;
-                    point.SetData(data);
-                }
-            }
-            else EnemyController.Instance.EnemyAttacked(target, data);
-
-            if (data.hasDebuff)
-            {
-                for (int i = 0; i < target.Count; i++)
-                {
-                    // 살아있는 경우에만 추가
-                    if (target[i].gameObject.activeSelf)
+                    for (int j = 0; j < target.Count; j++)
                     {
-                        enemies.Enqueue(target[i], GetPriority(target[i]));
+                        PoolController.Pop(id, transform.position, target[j].transform.position);
+                    }
+
+                    progressTime += Projectile.flyingTime;
+
+                    // 투사체가 날아가는 시간 대기.
+                    while (time < progressTime)
+                    {
+                        if (GameController.Instance.Paused)
+                        {
+                            yield return null;
+                            continue;
+                        }
+                        time += Time.deltaTime;
+                        yield return null;
+                    }
+                }
+
+                // 디버프의 우선순위는 공격시마다 갱신되어야 함.
+                // 전부 목록에서 제거, 추후 적이 살아있다면 추가하여 우선순위 재정렬.
+                if (data.hasDebuff)
+                {
+                    // 가장 앞의 하나를 지운 뒤 이어서 삭제
+                    enemies.Dequeue();
+                    for (int j = 1; j < target.Count; j++)
+                        enemies.Remove(target[j]);
+                }
+
+                SoundController.PlayAudio(id);
+                if (data.Stat(TowerStatType.SPLASH) != 0)
+                {
+                    for (int j = 0; j < target.Count; j++)
+                    {
+                        SplashPoint point = TowerController.Instance.PopSplash();
+                        point.transform.position = target[j].transform.position;
+                        point.SetData(data);
+                    }
+                }
+                else EnemyController.Instance.EnemyAttacked(target, data);
+
+                if (data.hasDebuff)
+                {
+                    for (int j = 0; j < target.Count; j++)
+                    {
+                        // 살아있는 경우에만 추가
+                        if (target[j].gameObject.activeSelf)
+                        {
+                            enemies.Enqueue(target[j], GetPriority(target[j]));
+                        }
                     }
                 }
             }

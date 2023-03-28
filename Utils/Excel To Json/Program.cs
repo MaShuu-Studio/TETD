@@ -216,10 +216,12 @@ namespace Excel_To_Json
 
             string s = value.ToString();
             int i;
+            float[] fa;
             float f, x, y;
             bool b;
             int[] types;
             float[] values;
+
             // 타입에 대한 체크
             if (int.TryParse(s, out i))
             {
@@ -234,7 +236,7 @@ namespace Excel_To_Json
             {
                 s = b.ToString().ToLower();
             }
-            // 
+            // ability class
             else if (TryParseAbility(s, out types, out values))
             {
                 string content = "";
@@ -244,6 +246,18 @@ namespace Excel_To_Json
                     if (a < types.Length - 1) content += ",\n";
                 }
 
+                s = string.Format(JsonFormat.listFormat, type, content);
+                return s;
+            }
+            // list
+            else if (TryParseArrayFloat(s, out fa))
+            {
+                string content = "";
+                for (int a = 0; a < fa.Length; a++)
+                {
+                    content += fa[a];
+                    if (a < fa.Length - 1) content += ",";
+                }
                 s = string.Format(JsonFormat.listFormat, type, content);
                 return s;
             }
@@ -272,6 +286,22 @@ namespace Excel_To_Json
             }
             return string.Format(JsonFormat.valueFormat, type, s);
         }
+
+        private static bool TryParseArrayFloat(string s, out float[] a)
+        {
+            string[] split = s.Split(";");
+            a = new float[split.Length - 1];
+
+            if (split.Length == 1) return false;
+
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (float.TryParse(split[i], out a[i]) == false) return false;
+            }
+
+            return true;
+        }
+
         private static bool TryParseVector2(string s, out float x, out float y)
         {
             string[] xy = s.Split(",");
@@ -299,6 +329,7 @@ namespace Excel_To_Json
             for (int i = 0; i < abilities.Length - 1; i++)
             {
                 string[] tv = abilities[i].Split(",");
+                if (tv.Length != 2) return false;
                 int.TryParse(tv[0], out types[i]);
                 float.TryParse(tv[1], out values[i]);
             }
