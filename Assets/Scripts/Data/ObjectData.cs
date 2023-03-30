@@ -22,10 +22,15 @@ public class Tower : ObjectData
     public Grade grade;
     public Element element;
 
+    public AttackType attackType;
+
     public int cost;
 
     public float spf;
     public float[] attackTime;
+
+    public float projspf;
+    public float projSpeed;
 
     public bool hasDebuff;
 
@@ -50,6 +55,10 @@ public class Tower : ObjectData
         tmp %= 1000; // BBC
         element = (Element)(tmp / 10); // BB
         grade = (Grade)(tmp % 10); // C
+
+        attackType = data.type;
+        projspf = data.projspf;
+        projSpeed = data.projspeed;
 
         cost = data.cost;
 
@@ -78,6 +87,10 @@ public class Tower : ObjectData
     {
         id = data.id;
         animation = data.animation;
+
+        attackType = data.attackType;
+        projspf = data.projspf;
+        projSpeed = data.projSpeed;
 
         grade = data.grade;
         element = data.element;
@@ -258,6 +271,8 @@ public class TowerData : JsonData
     public Grade grade;
     public Element element;
 
+    public AttackType type;
+
     public List<TowerAbility> ability;
 
     public int cost;
@@ -268,6 +283,9 @@ public class TowerData : JsonData
 
     public float spf;
     public List<float> attacktime;
+
+    public float projspf;
+    public float projspeed;
 }
 
 [Serializable]

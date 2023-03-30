@@ -12,6 +12,7 @@ namespace EnumData
   public enum CharacterStatType { ABILITY = 0, REWARD = 1, FIRE = 2, WATER = 3, NATURE = 4, }
   public enum AnimationType { IDLE = 0, ATTACK = 1, DEAD = 2, }
   public enum LanguageType { KOREAN = 0, ENGLISH = 1, }
+  public enum AttackType { PROMPT = 0, PROJECTILE = 1, POINT = 2, }
 
     public static class EnumArray
     {
@@ -24,6 +25,7 @@ public static TowerStatType[] TowerStatTypes { get; private set; } = (TowerStatT
 public static CharacterStatType[] CharacterStatTypes { get; private set; } = (CharacterStatType[])Enum.GetValues(typeof(CharacterStatType));
 public static AnimationType[] AnimationTypes { get; private set; } = (AnimationType[])Enum.GetValues(typeof(AnimationType));
 public static LanguageType[] LanguageTypes { get; private set; } = (LanguageType[])Enum.GetValues(typeof(LanguageType));
+public static AttackType[] AttackTypes { get; private set; } = (AttackType[])Enum.GetValues(typeof(AttackType));
 public static Dictionary<CharacterType,string> CharacterTypeStrings { get; private set; }
 public static Dictionary<DifficultyType,string> DifficultyTypeStrings { get; private set; }
 public static Dictionary<Element,string> ElementStrings { get; private set; }
@@ -33,6 +35,7 @@ public static Dictionary<TowerStatType,string> TowerStatTypeStrings { get; priva
 public static Dictionary<CharacterStatType,string> CharacterStatTypeStrings { get; private set; }
 public static Dictionary<AnimationType,string> AnimationTypeStrings { get; private set; }
 public static Dictionary<LanguageType,string> LanguageTypeStrings { get; private set; }
+public static Dictionary<AttackType,string> AttackTypeStrings { get; private set; }
 
 
         public static void Init()
@@ -99,6 +102,13 @@ public static Dictionary<LanguageType,string> LanguageTypeStrings { get; private
             {
                 LanguageType type = LanguageTypes[i];
                 LanguageTypeStrings.Add(type, type.ToString()); 
+            }
+
+            AttackTypeStrings = new Dictionary<AttackType, string>();
+            for (int i = 0; i < AttackTypes.Length; i++)
+            {
+                AttackType type = AttackTypes[i];
+                AttackTypeStrings.Add(type, type.ToString()); 
             }
 
         }

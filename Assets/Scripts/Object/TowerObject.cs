@@ -262,10 +262,19 @@ public class TowerObject : Poolable
                 {
                     for (int j = 0; j < target.Count; j++)
                     {
-                        PoolController.Pop(id, transform.position, target[j].transform.position);
+                        Vector3 start = transform.position;
+                        Vector3 end = target[j].transform.position;
+                        bool loop = true;
+
+                        if (data.attackType == AttackType.POINT)
+                        {
+                            start = end;
+                            loop = false;
+                        }
+                        PoolController.Pop(id, loop, data.projspf, data.projSpeed, start, end);
                     }
 
-                    progressTime += Projectile.flyingTime;
+                    progressTime += data.projSpeed;
 
                     // 투사체가 날아가는 시간 대기.
                     while (time < progressTime)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnumData;
 
 public class PoolController : MonoBehaviour
 {
@@ -124,18 +125,20 @@ public class PoolController : MonoBehaviour
         return obj;
     }
 
+    // 투사체 전용 Push
     public static void PushProj(int id, GameObject obj)
     {
         if (Instance.projPool.ContainsKey(id) == false) return;
 
         Instance.projPool[id].Push(obj);
     }
-
-    public static GameObject Pop(int id, Vector2 start, Vector2 end)
+    
+    // 투사체 전용 Pop
+    public static GameObject Pop(int id, bool loop, float projspf, float projspeed, Vector2 start, Vector2 end)
     {
         if (Instance.projPool.ContainsKey(id) == false) return null;
 
-        GameObject obj = Instance.projPool[id].Pop(start, end);
+        GameObject obj = Instance.projPool[id].Pop(loop, projspf, projspeed, start, end);
         return obj;
     }
 }
