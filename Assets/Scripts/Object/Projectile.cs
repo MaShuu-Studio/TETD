@@ -134,7 +134,6 @@ public class Projectile : Poolable
 
         bool loop = false;
 
-        //투사체형 공격
         if (se[0] == "T") loop = true;
 
         StartCoroutine(Animation(spf, loop));
