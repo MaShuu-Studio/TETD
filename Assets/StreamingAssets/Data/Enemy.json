@@ -1,42 +1,44 @@
 {
-  "list": [
-    {
-      "id": 2000000,
-      "element": 0,
-      "hp": 2,
-      "dmg": 1,
-      "exp": 2,
-      "money": 50,
-      "speed": 5,
-      "imgsrc": "/Sprites/Enemy/2000000/",
-      "pivot": { "x": 0.5, "y": 0.5 },
-      "pixelperunit": 36
-    },
+    "list": 
+    [
+        
+{
+    "id": 2000000,
+"element": 0,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2000000/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
 
-    {
-      "id": 2010000,
-      "element": 1,
-      "hp": 2,
-      "dmg": 1,
-      "exp": 2,
-      "money": 50,
-      "speed": 5,
-      "imgsrc": "/Sprites/Enemy/2010000/",
-      "pivot": { "x": 0.5, "y": 0.5 },
-      "pixelperunit": 36
-    },
+{
+    "id": 2010000,
+"element": 1,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2010000/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+},
 
-    {
-      "id": 2020000,
-      "element": 2,
-      "hp": 2,
-      "dmg": 1,
-      "exp": 2,
-      "money": 50,
-      "speed": 5,
-      "imgsrc": "/Sprites/Enemy/2020000/",
-      "pivot": { "x": 0.5, "y": 0.5 },
-      "pixelperunit": 36
-    }
-  ]
+{
+    "id": 2020000,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2020000/",
+"pivot": { "x": 0.5, "y": 0.0625 },
+"pixelperunit": 36
+}
+    ]
 }

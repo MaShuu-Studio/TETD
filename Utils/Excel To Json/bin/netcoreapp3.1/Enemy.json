@@ -11,7 +11,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2000000/",
-"pivot": { "x": 0.5, "y": 0.5 },
+"pivot": { "x": 0.5, "y": 0.0625 },
 "pixelperunit": 36
 },
 
@@ -24,7 +24,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2010000/",
-"pivot": { "x": 0.5, "y": 0.5 },
+"pivot": { "x": 0.5, "y": 0.0625 },
 "pixelperunit": 36
 },
 
@@ -37,7 +37,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2020000/",
-"pivot": { "x": 0.5, "y": 0.5 },
+"pivot": { "x": 0.5, "y": 0.0625 },
 "pixelperunit": 36
 }
     ]
