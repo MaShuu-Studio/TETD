@@ -9,6 +9,7 @@ public class TowerInfo : MonoBehaviour
     [SerializeField] protected Image elementImage;
     [SerializeField] protected Image iconImage;
     [SerializeField] protected TowerStatItem[] mainStats;
+    [SerializeField] protected TextMeshProUGUI attackAmount;
     [SerializeField] protected TowerStatItem[] abilities;
     [SerializeField] protected TextMeshProUGUI nameText;
 
@@ -30,6 +31,10 @@ public class TowerInfo : MonoBehaviour
             EnumData.TowerStatType type = (EnumData.TowerStatType)i;
             mainStats[i].Init(type);
         }
+
+        if (data.AttackAmount > 1) attackAmount.text = $"x{data.AttackAmount}";
+        else attackAmount.text = "";
+
         int abilIndex = 0;
         if (data.StatTypes.Count > 3)
         {

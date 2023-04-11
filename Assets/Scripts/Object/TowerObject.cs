@@ -271,12 +271,12 @@ public class TowerObject : Poolable
                             start = end;
                             loop = false;
                         }
-                        PoolController.Pop(id, loop, data.projspf, data.projSpeed, start, end);
+                        PoolController.Pop(id, loop, data.projspf, data.projTime, start, end);
                     }
 
-                    progressTime += data.projSpeed;
+                    progressTime += data.projAttackTime;
 
-                    // 투사체가 날아가는 시간 대기.
+                    // 투사체가 공격을 입히는 시간 대기.
                     while (time < progressTime)
                     {
                         if (GameController.Instance.Paused)

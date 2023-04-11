@@ -28,9 +28,11 @@ public class Tower : ObjectData
 
     public float spf;
     public float[] attackTime;
+    public int AttackAmount { get { return attackTime.Length; } }
 
     public float projspf;
-    public float projSpeed;
+    public float projAttackTime;
+    public float projTime;
 
     public bool hasDebuff;
 
@@ -58,7 +60,8 @@ public class Tower : ObjectData
 
         attackType = data.type;
         projspf = data.projspf;
-        projSpeed = data.projspeed;
+        projAttackTime = data.projattacktime;
+        projTime = data.projtime;
 
         cost = data.cost;
 
@@ -70,7 +73,9 @@ public class Tower : ObjectData
 
         stat = new Dictionary<TowerStatType, float>();
         stat.Add(TowerStatType.DAMAGE, data.dmg);
-        stat.Add(TowerStatType.ATTACKSPEED, data.attackspeed);
+        // 데이터에는 공격 딜레이를 저장해두기 때문에 로드 시에만 역수로
+        // 해당 로드 이후에는 공격속도로 변환됨.
+        stat.Add(TowerStatType.ATTACKSPEED, 1 / data.attackspeed);
         stat.Add(TowerStatType.DISTANCE, data.range);
         if (data.ability != null)
         {
@@ -90,7 +95,8 @@ public class Tower : ObjectData
 
         attackType = data.attackType;
         projspf = data.projspf;
-        projSpeed = data.projSpeed;
+        projAttackTime = data.projAttackTime;
+        projTime = data.projTime;
 
         grade = data.grade;
         element = data.element;
@@ -120,6 +126,7 @@ public class Tower : ObjectData
 
         return 0;
     }
+
     public int StatLevel(TowerStatType type)
     {
         if (statLevel.ContainsKey(type))
@@ -285,7 +292,8 @@ public class TowerData : JsonData
     public List<float> attacktime;
 
     public float projspf;
-    public float projspeed;
+    public float projattacktime;
+    public float projtime;
 }
 
 [Serializable]
