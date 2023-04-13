@@ -125,11 +125,6 @@ public class UIController : MonoBehaviour
 
     }
 
-    public void OpenLibrary()
-    {
-        library.Open(true);
-    }
-
     public void OpenSetting(bool b)
     {
         settingObject.SetActive(b);
@@ -151,6 +146,20 @@ public class UIController : MonoBehaviour
     {
         gameOverView.SetActive(true);
     }
+
+    #region Library
+
+    public void OpenLibrary()
+    {
+        library.Open(true);
+    }
+
+    public void UpdateLibrary()
+    {
+        library.UpdateLibrary();
+    }
+
+    #endregion
 
     #region Game Scene
     public void GameSetting(out CharacterType c, out List<DifficultyType> diff, out string map)
