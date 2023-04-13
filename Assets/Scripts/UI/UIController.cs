@@ -39,6 +39,8 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameSettingController gameSetting;
     [SerializeField] private TMP_InputField mapNameInputfield;
     [SerializeField] private TMP_Dropdown tilePaletteDropdown;
+    [Space]
+    [SerializeField] private Library library;
 
     [Space]
     [Header("Setting")]
@@ -86,6 +88,8 @@ public class UIController : MonoBehaviour
     {
         optionUI.Init();
 
+        await library.Init();
+        library.Open(false);
         await Title();
     }
 
@@ -119,6 +123,11 @@ public class UIController : MonoBehaviour
         tilePaletteDropdown.options.Clear();
         tilePaletteDropdown.AddOptions(TileManager.TilePaletteNames);
 
+    }
+
+    public void OpenLibrary()
+    {
+        library.Open(true);
     }
 
     public void OpenSetting(bool b)

@@ -43,8 +43,8 @@ public class Initializer : MonoBehaviour
         actions.Add(new SceneAction(RoundManager.Init()));
 
         actions.Add(new SceneAction(() => PoolController.Instance.Init()));
-        actions.Add(new SceneAction(UIController.Instance.Init()));
         actions.Add(new SceneAction(() => GameController.Instance.SetLanguage(0)));
+        actions.Add(new SceneAction(UIController.Instance.Init()));
         SceneController.Instance.ChangeScene("Title", actions);
     }
 }
