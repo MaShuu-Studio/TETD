@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\Object\SplashPoint.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ReinforceButton.cs" />
     <Compile Include="Assets\Scripts\Data\Round.cs" />
+    <Compile Include="Assets\Scripts\UI\LibraryFilterToggle.cs" />
     <Compile Include="Assets\Scripts\Game Control\SoundController.cs" />
     <Compile Include="Assets\Scripts\Map\MapManager.cs" />
     <Compile Include="Assets\Scripts\Data\TowerManager.cs" />
@@ -120,7 +121,6 @@
     <Compile Include="Assets\Scripts\Object\Projectile.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
-    <Compile Include="Assets\Scripts\UI\LibraryFilterToggle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -233,9 +233,6 @@ public class TowerObject : Poolable
         while (enemies.Count > 0)
         {
             Animate(AnimationType.ATTACK, false);
-            int targetAmount = (int)data.Stat(TowerStatType.MULTISHOT);
-            if (targetAmount == 0) targetAmount = 1;
-            List<EnemyObject> target = enemies.Get(targetAmount);
 
             float time = 0;
 
@@ -257,9 +254,15 @@ public class TowerObject : Poolable
 
                 // 이 후 공격관련 함수 전부 진행.
 
+                int targetAmount = (int)data.Stat(TowerStatType.MULTISHOT);
+                if (targetAmount == 0) targetAmount = 1;
+                List<EnemyObject> target = enemies.Get(targetAmount);
+                if (target == null || enemies.Count == 0) continue;
+
                 // 투사체 발사 
                 if (TowerManager.Projs.ContainsKey(id))
                 {
+                    // 실제 발사
                     for (int j = 0; j < target.Count; j++)
                     {
                         Vector3 start = transform.position;
@@ -275,7 +278,6 @@ public class TowerObject : Poolable
                     }
 
                     progressTime += data.projAttackTime;
-
                     // 투사체가 공격을 입히는 시간 대기.
                     while (time < progressTime)
                     {

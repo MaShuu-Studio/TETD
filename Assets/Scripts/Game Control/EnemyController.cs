@@ -65,6 +65,8 @@ public class EnemyController : MonoBehaviour
 
     public void RemoveEnemy(EnemyObject enemy)
     {
+        TowerController.Instance.RemoveEnemyObject(enemy);
+
         if (enemies.Contains(enemy) == false) return;
 
         enemies.Remove(enemy);
