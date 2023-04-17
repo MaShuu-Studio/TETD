@@ -160,11 +160,11 @@ public class PoolController : MonoBehaviour
     }
     
     // 투사체 전용 Pop
-    public static GameObject Pop(int id, bool loop, float projspf, float projtime, Vector2 start, Vector2 end)
+    public static GameObject Pop(int id, Vector2 start, Vector2 end)
     {
         if (Instance.projPool.ContainsKey(id) == false) return null;
 
-        GameObject obj = Instance.projPool[id].Pop(loop, projspf, projtime, start, end);
+        GameObject obj = Instance.projPool[id].Pop(start, end);
         return obj;
     }
 

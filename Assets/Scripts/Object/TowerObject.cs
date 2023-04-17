@@ -267,14 +267,11 @@ public class TowerObject : Poolable
                     {
                         Vector3 start = transform.position;
                         Vector3 end = target[j].transform.position;
-                        bool loop = true;
 
                         if (data.attackType == AttackType.POINT)
-                        {
                             start = end;
-                            loop = false;
-                        }
-                        PoolController.Pop(id, loop, data.projspf, data.projTime, start, end);
+
+                        PoolController.Pop(id, start, end);
                     }
 
                     progressTime += data.projAttackTime;

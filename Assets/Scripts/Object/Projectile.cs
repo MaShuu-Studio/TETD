@@ -8,6 +8,8 @@ public class Projectile : Poolable
 {
     private SpriteRenderer spriteRenderer;
     private Sprite[] sprites;
+    private float spf , remainTime;
+    private bool loop;
 
     public override bool MakePrefab(int id)
     {
@@ -18,18 +20,21 @@ public class Projectile : Poolable
         if (TowerManager.Projs.ContainsKey(id))
         {
             sprites = TowerManager.Projs[id];
+            Tower tower = TowerManager.GetTower(id);
+            spf = tower.projspf;
+            remainTime = tower.projTime;
+            loop = true;
+
+            if (tower.attackType == AttackType.POINT)
+                loop = false;
+
             return true;
         }
 
         return false;
     }
 
-    public void SetSprite(Sprite[] sprites)
-    {
-        this.sprites = sprites;
-    }
-
-    IEnumerator Animation(float spf, bool loop = false)
+    IEnumerator Animation()
     {
         int number = 0;
         float time = 0;
@@ -61,7 +66,7 @@ public class Projectile : Poolable
         }
     }
 
-    IEnumerator Attack(float remainTime, Vector2 start, Vector2 end)
+    IEnumerator Attack(Vector2 start, Vector2 end)
     {
         Vector3 dir = end - start;
         transform.position = start;
@@ -106,11 +111,8 @@ public class Projectile : Poolable
     {
         if (sprites == null) return;
 
-        // loop;spf;remainTime;start;end 형태
+        // start;end 형태
         string[] se = gameObject.name.Split(";");
-        float spf, remain;
-        float.TryParse(se[1], out spf);
-        float.TryParse(se[2], out remain);
 
         Vector2 start = Vector2.zero;
         Vector2 end = Vector2.zero;
@@ -121,7 +123,7 @@ public class Projectile : Poolable
 
         for (int i = 0; i < 2; i++)
         {
-            string[] xy = se[i + 3].Split(",");
+            string[] xy = se[i].Split(",");
             float x, y;
             float.TryParse(xy[0], out x);
             float.TryParse(xy[1], out y);
@@ -132,12 +134,8 @@ public class Projectile : Poolable
         start = pos[0];
         end = pos[1];
 
-        bool loop = false;
-
-        if (se[0] == "T") loop = true;
-
-        StartCoroutine(Animation(spf, loop));
-        StartCoroutine(Attack(remain, start, end));
+        StartCoroutine(Animation());
+        StartCoroutine(Attack(start, end));
     }
 
     private void OnDisable()

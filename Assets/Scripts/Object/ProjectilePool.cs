@@ -5,14 +5,12 @@ using EnumData;
 
 public class ProjectilePool : Pool
 {
-    public GameObject Pop(bool loop, float spf, float time, Vector2 start, Vector2 end)
+    public GameObject Pop(Vector2 start, Vector2 end)
     {
         if (pool.Count == 0) CreateObject();
 
         GameObject obj = pool.Pop();
-        if (loop) obj.name = "T;";
-        else obj.name = "F;";
-        obj.name += $"{spf};{time};{start.x},{start.y};{end.x},{end.y}";
+        obj.name = $"{start.x},{start.y};{end.x},{end.y}";
         obj.SetActive(true);
 
         return obj;
