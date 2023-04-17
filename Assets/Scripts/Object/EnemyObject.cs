@@ -4,10 +4,13 @@ using UnityEngine;
 using EnumData;
 
 [RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(SpriteMask))]
 public class EnemyObject : Poolable
 {
     [SerializeField] private GameObject hpGage;
+    [SerializeField] private SpriteRenderer effectSpriteRenderer;
     private SpriteRenderer spriteRenderer;
+    private SpriteMask spriteMask;
 
     public Enemy Data { get { return data; } }
     private Enemy data;
@@ -22,6 +25,8 @@ public class EnemyObject : Poolable
 
     private IEnumerator animCoroutine;
     private IEnumerator moveCoroutine;
+    private IEnumerator effectCoroutine;
+
     public float SlowAmount { get { return slowAmount; } }
     private float slowAmount;
     private Dictionary<int, IEnumerator> dotCoroutines;
@@ -43,6 +48,10 @@ public class EnemyObject : Poolable
         spriteRenderer.sortingLayerName = "Enemy";
         spriteRenderer.sprite = SpriteManager.GetSprite(id);
 
+        spriteMask = GetComponent<SpriteMask>();
+
+        effectSpriteRenderer.sprite = data.Mask;
+
         slowAmount = 0;
         dotCoroutines = new Dictionary<int, IEnumerator>();
         dotTime = new Dictionary<int, int>();
@@ -61,6 +70,7 @@ public class EnemyObject : Poolable
         destRoad = 1;
 
         spriteRenderer.sortingOrder = Order = order;
+        effectSpriteRenderer.color = new Color(0, 0, 0, 0);
 
         Animate(AnimationType.IDLE, true);
         moveCoroutine = Move();
@@ -99,7 +109,11 @@ public class EnemyObject : Poolable
         Element element = tower.element;
         float dmg = tower.Stat(TowerStatType.DAMAGE);
 
-        if (dmg != 0) Damaged(element, dmg);
+        if (dmg != 0)
+        {
+            Effect(tower.id, tower.effectColor);
+            Damaged(element, dmg);
+        }
 
         if (hp <= 0) return;
         // 공격력, 공격속도, 사거리 제외
@@ -155,6 +169,45 @@ public class EnemyObject : Poolable
         if (dotTime.ContainsKey(id)) return dotTime[id];
 
         return 0;
+    }
+
+    public void Effect(int id, Color c)
+    {
+        GameObject effect = PoolController.PopEffect(id);
+
+        if (effect != null)
+        {
+            effect.transform.parent = null;
+            effect.transform.position = transform.position;
+        }
+
+        if (effectCoroutine != null)
+        {
+            StopCoroutine(effectCoroutine);
+            effectCoroutine = null;
+        }
+
+        effectCoroutine = Effect(c);
+        StartCoroutine(effectCoroutine);
+    }
+
+    private IEnumerator Effect(Color c)
+    {
+        float time = .5f;
+        Color origin = c;
+        origin.a = 1;
+        c = origin;
+        while (time > 0)
+        {
+            effectSpriteRenderer.color = c;
+
+            time -= Time.deltaTime;
+            c.a = time * 2;
+
+            yield return null;
+        }
+        c.a = 0;
+        effectSpriteRenderer.color = c;
     }
 
     public void Damaged(Element element, float dmg)
@@ -222,7 +275,7 @@ public class EnemyObject : Poolable
         while (true)
         {
             // 스프라이트 변경
-            spriteRenderer.sprite = data.animation[anim][number];
+            spriteRenderer.sprite = spriteMask.sprite = data.animation[anim][number];
 
             while (time < frameTime)
             {

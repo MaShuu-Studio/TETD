@@ -25,6 +25,7 @@ public class PoolController : MonoBehaviour
     [SerializeField] private Transform towerParent;
     [SerializeField] private Transform enemyParent;
     [SerializeField] private Transform projParent;
+    [SerializeField] private Transform effectParent;
 
     [Header("Object")]
     [SerializeField] private Pool poolPrefab;
@@ -35,13 +36,18 @@ public class PoolController : MonoBehaviour
     [SerializeField] private ProjectilePool projPoolPrefab;
     [SerializeField] private Poolable projBase;
 
+    [Space]
+    [SerializeField] private Poolable effectBase;
+
     private Dictionary<int, Pool> pool;
     private Dictionary<int, ProjectilePool> projPool;
+    private Dictionary<int, Pool> effectPool;
 
     public void Init()
     {
         pool = new Dictionary<int, Pool>();
         projPool = new Dictionary<int, ProjectilePool>();
+        effectPool = new Dictionary<int, Pool>();
 
         for (int i = 0; i < TowerManager.Keys.Count; i++)
         {
@@ -67,14 +73,34 @@ public class PoolController : MonoBehaviour
                 if (proj.MakePrefab(id) == false)
                 {
                     Destroy(proj.gameObject);
-                    continue;
                 }
+                else
+                {
+                    ProjectilePool projPoolComponent = Instantiate(projPoolPrefab, projParent);
+                    projPoolComponent.gameObject.name = id.ToString();
+                    projPoolComponent.Init(proj);
 
-                ProjectilePool projPoolComponent = Instantiate(projPoolPrefab, projParent);
-                projPoolComponent.gameObject.name = id.ToString();
-                projPoolComponent.Init(proj);
+                    projPool.Add(id, projPoolComponent);
+                }
+            }
 
-                projPool.Add(id, projPoolComponent);
+            // 이펙트 추가부분
+            // 이펙트가 존재하는 유닛일 경우에만 추가
+            if (TowerManager.Effects.ContainsKey(id))
+            {
+                Poolable effect = Instantiate(effectBase);
+                if (effect.MakePrefab(id) == false)
+                {
+                    Destroy(effect.gameObject);
+                }
+                else
+                {
+                    Pool effectPoolComponent = Instantiate(poolPrefab, effectParent);
+                    effectPoolComponent.gameObject.name = id.ToString();
+                    effectPoolComponent.Init(effect);
+
+                    effectPool.Add(id, effectPoolComponent);
+                }
             }
         }
 
@@ -139,6 +165,23 @@ public class PoolController : MonoBehaviour
         if (Instance.projPool.ContainsKey(id) == false) return null;
 
         GameObject obj = Instance.projPool[id].Pop(loop, projspf, projtime, start, end);
+        return obj;
+    }
+
+    // 이펙트 전용 Push
+    public static void PushEffect(int id, GameObject obj)
+    {
+        if (Instance.effectPool.ContainsKey(id) == false) return;
+
+        Instance.effectPool[id].Push(obj);
+    }
+
+    // 이펙트 전용 Pop
+    public static GameObject PopEffect(int id)
+    {
+        if (Instance.effectPool.ContainsKey(id) == false) return null;
+
+        GameObject obj = Instance.effectPool[id].Pop();
         return obj;
     }
 }

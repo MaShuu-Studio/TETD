@@ -86,6 +86,7 @@
     <Compile Include="Assets\Scripts\UI\OptionUI.cs" />
     <Compile Include="Assets\Scripts\Object\Pool.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfoItem.cs" />
+    <Compile Include="Assets\Scripts\Object\EffectObject.cs" />
     <Compile Include="Assets\Scripts\Object\TowerAttackArea.cs" />
     <Compile Include="Assets\Scripts\Data\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\TitleButton.cs" />

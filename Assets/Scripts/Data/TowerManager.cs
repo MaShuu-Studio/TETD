@@ -13,6 +13,10 @@ public static class TowerManager
     private static Dictionary<int, Tower> towers;
     public static Dictionary<int, Sprite[]> Projs { get { return projectiles; } }
     private static Dictionary<int, Sprite[]> projectiles;
+
+    public static Dictionary<int, Sprite[]> Effects { get { return effects; } }
+    private static Dictionary<int, Sprite[]> effects;
+
     // 0: elemental, 1: grade, List: Id
     public static List<int>[,] EgTowerIds { get { return egTowerIds; } }
     private static List<int>[,] egTowerIds;
@@ -23,6 +27,8 @@ public static class TowerManager
     {
         towers = new Dictionary<int, Tower>();
         projectiles = new Dictionary<int, Sprite[]>();
+        effects = new Dictionary<int, Sprite[]>();
+
         List<TowerData> list = await DataManager .DeserializeListJson<TowerData>(path, "Tower");
         egTowerIds = new List<int>[EnumArray.Elements.Length, EnumArray.Grades.Length];
         for (int i = 0; i < EnumArray.Elements.Length; i++)
@@ -37,7 +43,10 @@ public static class TowerManager
             egTowerIds[(int)tower.element, (int)tower.grade].Add(tower.id);
             await SpriteManager.AddSprite<Tower>(data.imgsrc, tower.id, data.pivot, data.pixelperunit);
 
-            Sprite[] proj = await MakeProjectile(data);
+            Sprite[] effect = await MakeObjects(data, "EFFECT");
+            if (effect != null) effects.Add(tower.id, effect);
+
+            Sprite[] proj = await MakeObjects(data, "WEAPON");
             if (proj != null) projectiles.Add(tower.id, proj);
         }
         keys = towers.Keys.ToList();
@@ -77,16 +86,17 @@ public static class TowerManager
         return anim;
     }
 
-    private static async Task<Sprite[]> MakeProjectile(TowerData data)
+    private static async Task<Sprite[]> MakeObjects(TowerData data, string type)
     {
         // 투사체의 이름은 WEAPON*
+        // 이펙트의 이름은 EFFECT*
         Sprite[] s = null;
 
         List<Sprite> sprites = new List<Sprite>();
         while (true)
         {
             // IDLE0.png 와 같은 방식
-            string filename = "WEAPON" + sprites.Count + ".png";
+            string filename = type + sprites.Count + ".png";
             Sprite sprite = await DataManager.LoadSprite(data.imgsrc + filename, data.pivot, data.pixelperunit);
             if (sprite == null) break; // 이미지가 없다면 패스
             sprites.Add(sprite);

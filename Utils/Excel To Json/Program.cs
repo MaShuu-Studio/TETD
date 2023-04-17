@@ -261,6 +261,10 @@ namespace Excel_To_Json
                 s = string.Format(JsonFormat.listFormat, type, content);
                 return s;
             }
+            else if (TryParseColor(s, out values))
+            {
+                s = string.Format(JsonFormat.colorFormat, values[0], values[1], values[2], values[3]);
+            }
             // vector2
             else if (TryParseVector2(s, out x, out y))
             {
@@ -269,6 +273,7 @@ namespace Excel_To_Json
             // string
             else
             {
+                // Array와 일반 string으로 구분
                 string[] l = s.Split(",");
                 if (l.Length > 1)
                 {
@@ -309,11 +314,10 @@ namespace Excel_To_Json
             y = 0.5f;
             if (xy.Length != 2) return false;
 
-            bool xb = float.TryParse(xy[0], out x);
-            bool yb = float.TryParse(xy[1], out y);
+            if (float.TryParse(xy[0], out x) == false) return false;
+            if (float.TryParse(xy[1], out y) == false) return false;
 
-            if (xb && yb) return true;
-            return false;
+            return true;
         }
 
         private static bool TryParseAbility(string s, out int[] types, out float[] values)
@@ -330,12 +334,33 @@ namespace Excel_To_Json
             {
                 string[] tv = abilities[i].Split(",");
                 if (tv.Length != 2) return false;
-                int.TryParse(tv[0], out types[i]);
-                float.TryParse(tv[1], out values[i]);
+
+                if (int.TryParse(tv[0], out types[i]) == false) return false;
+                if (float.TryParse(tv[1], out values[i]) == false) return false;
             }
 
             return true;
         }
+        private static bool TryParseColor(string s, out float[] color)
+        {
+            // (1,1,1,1) 의 형태
+            s = s.Trim('(',')');
+            string[] rgba = s.Split(",");
+            color = null;
+            if (rgba.Length != 4) return false;
+
+            color = new float[4];
+            for (int i = 0; i < 4; i++)
+            {
+                if (float.TryParse(rgba[i], out color[i]) == false) return false;
+                // 색의 값은 0~1 사이의 실수
+                if (color[i] < 0) color[i] = 0;
+                if (color[i] > 1) color[i] = 1;
+            }
+
+            return true;
+        }
+
 
         private static void ReleaseObject(object obj)
         {

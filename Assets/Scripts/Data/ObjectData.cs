@@ -34,6 +34,9 @@ public class Tower : ObjectData
     public float projAttackTime;
     public float projTime;
 
+    public float effectspf;
+    public Color effectColor;
+
     public bool hasDebuff;
 
     public List<TowerStatType> StatTypes { get { return stat.Keys.ToList(); } }
@@ -62,6 +65,9 @@ public class Tower : ObjectData
         projspf = data.projspf;
         projAttackTime = data.projattacktime;
         projTime = data.projtime;
+
+        effectspf = data.effectspf;
+        effectColor = data.effectcolor;
 
         cost = data.cost;
 
@@ -97,6 +103,9 @@ public class Tower : ObjectData
         projspf = data.projspf;
         projAttackTime = data.projAttackTime;
         projTime = data.projTime;
+
+        effectspf = data.effectspf;
+        effectColor = data.effectColor;
 
         grade = data.grade;
         element = data.element;
@@ -201,11 +210,13 @@ public class Enemy : ObjectData
     public float dmg;
 
     public float spf;
+    public Sprite Mask { get; protected set; }
 
-    public Enemy(EnemyData data, Dictionary<AnimationType, Sprite[]> animation)
+    public Enemy(EnemyData data, Dictionary<AnimationType, Sprite[]> animation, Sprite mask)
     {
         id = data.id;
         this.animation = animation;
+        Mask = mask;
 
         /* id: ABBCDDD
          * A: type
@@ -232,6 +243,7 @@ public class Enemy : ObjectData
     {
         id = data.id;
         animation = data.animation;
+        Mask = data.Mask;
 
         element = data.element;
 
@@ -294,6 +306,9 @@ public class TowerData : JsonData
     public float projspf;
     public float projattacktime;
     public float projtime;
+
+    public float effectspf = 0.03f;
+    public Color effectcolor = Color.white;
 }
 
 [Serializable]

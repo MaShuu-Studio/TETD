@@ -11,6 +11,7 @@ public static class EnemyManager
     private static string path = Application.streamingAssetsPath + "/Data/";
 
     private static Dictionary<int, Enemy> enemies;
+
     public static List<int> Keys { get { return keys; } }
     private static List<int> keys;
 
@@ -22,9 +23,11 @@ public static class EnemyManager
         foreach (var data in list)
         {
             Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
-            Enemy enemy = new Enemy(data, anim);
+            await SpriteManager.AddSprite<Enemy>(data.imgsrc, data.id, data.pivot, data.pixelperunit);
+
+            Sprite mask = MakeMask(SpriteManager.GetSprite(data.id), data.pivot, data.pixelperunit);
+            Enemy enemy = new Enemy(data, anim, mask);
             enemies.Add(enemy.id, enemy);
-            await SpriteManager.AddSprite<Enemy>(data.imgsrc, enemy.id, data.pivot, data.pixelperunit);
         }
 
         keys = enemies.Keys.ToList();
@@ -53,6 +56,7 @@ public static class EnemyManager
             if (sprites.Count > 0)
             {
                 Sprite[] s = new Sprite[sprites.Count];
+
                 sprites.CopyTo(s);
 
                 anim.Add(type, s);
@@ -60,6 +64,21 @@ public static class EnemyManager
         }
 
         return anim;
+    }
+
+    public static Sprite MakeMask(Sprite origin, Vector2 pivot, float pixelsPerUnit)
+    {
+        Texture2D texture = new Texture2D(origin.texture.width, origin.texture.height);
+        for (int x = 0; x < texture.width; x++)
+        {
+            for (int y = 0; y < texture.height; y++)
+            {
+                texture.SetPixel(x, y, Color.white);
+            }
+        }
+        Sprite mask = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), pivot, pixelsPerUnit);
+
+        return mask;
     }
 
     public static Enemy GetEnemy(int id)
