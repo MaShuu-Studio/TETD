@@ -288,6 +288,8 @@ public class TowerObject : Poolable
                     }
                 }
 
+                Effect(target);
+
                 // 디버프의 우선순위는 공격시마다 갱신되어야 함.
                 // 전부 목록에서 제거, 추후 적이 살아있다면 추가하여 우선순위 재정렬.
                 if (data.hasDebuff)
@@ -321,8 +323,6 @@ public class TowerObject : Poolable
                         }
                     }
                 }
-
-                Effect(target);
             }
 
             while (time < delay)
