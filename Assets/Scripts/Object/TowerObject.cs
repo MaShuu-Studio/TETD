@@ -321,6 +321,8 @@ public class TowerObject : Poolable
                         }
                     }
                 }
+
+                Effect(target);
             }
 
             while (time < delay)
@@ -336,6 +338,26 @@ public class TowerObject : Poolable
             yield return null;
         }
         attackCoroutine = null;
+    }
+
+    public void Effect(List<EnemyObject> targets)
+    {
+        for (int i = 0; i < targets.Count; i++)
+        {
+            // 타겟이 죽었을 경우에도 스플래시 공격이라면 이펙트가 남아야 함.
+            // 반대로 타겟이 없고 스플래시 공격이 아니라면 이펙트가 남을 필요가 없음.
+            if (targets[i].gameObject.activeSelf == false
+                && data.Stat(TowerStatType.SPLASH) == 0) 
+                continue;
+            
+            GameObject effect = PoolController.PopEffect(data.id);
+
+            if (effect != null)
+            {
+                effect.transform.parent = null;
+                effect.transform.position = targets[i].transform.position;
+            }
+        }
     }
 
     private IEnumerator Mining()

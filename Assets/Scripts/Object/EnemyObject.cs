@@ -27,6 +27,8 @@ public class EnemyObject : Poolable
     private IEnumerator moveCoroutine;
     private IEnumerator effectCoroutine;
 
+    private Color damagedEffectColor;
+
     public float SlowAmount { get { return slowAmount; } }
     private float slowAmount;
     private Dictionary<int, IEnumerator> dotCoroutines;
@@ -70,7 +72,8 @@ public class EnemyObject : Poolable
         destRoad = 1;
 
         spriteRenderer.sortingOrder = Order = order;
-        effectSpriteRenderer.color = new Color(0, 0, 0, 0);
+        damagedEffectColor = new Color(0, 0, 0, 0);
+        effectSpriteRenderer.color = damagedEffectColor;
 
         Animate(AnimationType.IDLE, true);
         moveCoroutine = Move();
@@ -111,8 +114,7 @@ public class EnemyObject : Poolable
 
         if (dmg != 0)
         {
-            Effect(tower.id, tower.effectColor);
-            Damaged(element, dmg);
+            Damaged(element, dmg, tower.effectColor);
         }
 
         if (hp <= 0) return;
@@ -157,7 +159,18 @@ public class EnemyObject : Poolable
             }
             time -= 1;
             dotTime[id] -= 1;
-            Damaged(element, dmg);
+
+            Color c = Color.white;
+            switch(element)
+            {
+                case Element.FIRE: c = Color.red;
+                    break;
+                case Element.WATER: c = Color.blue;
+                    break;
+                case Element.NATURE: c = Color.green;
+                    break;
+            }
+            Damaged(element, dmg, c);
         }
 
         dotCoroutines.Remove(id);
@@ -171,15 +184,9 @@ public class EnemyObject : Poolable
         return 0;
     }
 
-    public void Effect(int id, Color c)
+    public void Effect(Color color)
     {
-        GameObject effect = PoolController.PopEffect(id);
-
-        if (effect != null)
-        {
-            effect.transform.parent = null;
-            effect.transform.position = transform.position;
-        }
+        damagedEffectColor = color;
 
         if (effectCoroutine != null)
         {
@@ -187,35 +194,37 @@ public class EnemyObject : Poolable
             effectCoroutine = null;
         }
 
-        effectCoroutine = Effect(c);
+        effectCoroutine = Effect();
         StartCoroutine(effectCoroutine);
     }
 
-    private IEnumerator Effect(Color c)
+    private IEnumerator Effect()
     {
-        float time = .5f;
-        Color origin = c;
+        float unit = 4f;
+        float time = 1 / unit;
+        Color origin = damagedEffectColor;
         origin.a = 1;
-        c = origin;
+        damagedEffectColor = origin;
         while (time > 0)
         {
-            effectSpriteRenderer.color = c;
+            effectSpriteRenderer.color = damagedEffectColor;
 
             time -= Time.deltaTime;
-            c.a = time * 2;
+            damagedEffectColor.a = time * unit;
 
             yield return null;
         }
-        c.a = 0;
-        effectSpriteRenderer.color = c;
+        damagedEffectColor.a = 0;
+        effectSpriteRenderer.color = damagedEffectColor;
     }
 
-    public void Damaged(Element element, float dmg)
+    public void Damaged(Element element, float dmg, Color damagedColor)
     {
         if (element == data.WeakElement()) dmg *= 1.5f;
         else if (element == data.StrongElement()) dmg *= 0.5f;
 
         UIController.Instance.EnemyDamaged(transform.position, dmg);
+        Effect(damagedColor);
 
         hp -= dmg;
         UpdateHp();
