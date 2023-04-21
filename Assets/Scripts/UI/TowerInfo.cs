@@ -36,15 +36,32 @@ public class TowerInfo : MonoBehaviour
         else attackAmount.text = "";
 
         int abilIndex = 0;
-        if (data.StatTypes.Count > 3)
+        if (data.StatTypes.Length > 3)
         {
-            for (; abilIndex < data.StatTypes.Count - 3; abilIndex++)
+            for (int i = 3; i < data.StatTypes.Length; i++, abilIndex++)
             {
-                EnumData.TowerStatType type = data.StatTypes[abilIndex + 3];
+                EnumData.TowerStatType type = data.StatTypes[i];
                 abilities[abilIndex].gameObject.SetActive(true);
                 abilities[abilIndex].Init(type);
             }
         }
+
+        if (data.BuffTypes != null)
+            for (int i = 0; i < data.BuffTypes.Length; i++, abilIndex++)
+            {
+                EnumData.BuffType type = data.BuffTypes[i];
+                abilities[abilIndex].gameObject.SetActive(true);
+                abilities[abilIndex].Init(type);
+            }
+
+        if (data.DebuffTypes != null)
+            for (int i = 0; i < data.DebuffTypes.Length; i++, abilIndex++)
+            {
+                EnumData.DebuffType type = data.DebuffTypes[i];
+                abilities[abilIndex].gameObject.SetActive(true);
+                abilities[abilIndex].Init(type);
+            }
+
         for (; abilIndex < abilities.Length; abilIndex++)
         {
             abilities[abilIndex].gameObject.SetActive(false);
@@ -60,14 +77,29 @@ public class TowerInfo : MonoBehaviour
             mainStats[i].SetData(data.Stat(type));
         }
 
-        if (data.StatTypes.Count > 3)
+        int abilIndex = 0;
+        if (data.StatTypes.Length > 3)
         {
-            for (int i = 0; i < data.StatTypes.Count - 3; i++)
+            for (int i = 3; i < data.StatTypes.Length; i++, abilIndex++)
             {
-                EnumData.TowerStatType type = data.StatTypes[i + 3];
-                abilities[i].SetData(data.Stat(type));
+                EnumData.TowerStatType type = data.StatTypes[i];
+                abilities[abilIndex].SetData(data.Stat(type));
             }
         }
+
+        if (data.BuffTypes != null)
+            for (int i = 0; i < data.BuffTypes.Length; i++, abilIndex++)
+            {
+                EnumData.BuffType type = data.BuffTypes[i];
+                abilities[abilIndex].SetData(data.Buff(type));
+            }
+
+        if (data.DebuffTypes != null)
+            for (int i = 0; i < data.DebuffTypes.Length; i++, abilIndex++)
+            {
+                EnumData.DebuffType type = data.DebuffTypes[i];
+                abilities[abilIndex].SetData(data.Debuff(type));
+            }
     }
 
     public void UpdateLanguage()

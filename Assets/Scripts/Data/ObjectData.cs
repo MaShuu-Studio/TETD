@@ -37,11 +37,16 @@ public class Tower : ObjectData
     public float effectspf;
     public Color effectColor;
 
-    public bool hasDebuff;
+    public bool HasDebuff { get { return debuffs != null; } }
 
-    public List<TowerStatType> StatTypes { get { return stat.Keys.ToList(); } }
+    public TowerStatType[] StatTypes { get; private set; }
+    public BuffType[] BuffTypes { get; private set; }
+    public DebuffType[] DebuffTypes { get; private set; }
+
     private Dictionary<TowerStatType, float> stat;
     private Dictionary<TowerStatType, int> statLevel;
+    private Dictionary<BuffType, float> buffs;
+    private Dictionary<DebuffType, float> debuffs;
 
     public Tower(TowerData data, Dictionary<AnimationType, Sprite[]> animation)
     {
@@ -75,8 +80,7 @@ public class Tower : ObjectData
         attackTime = new float[data.attacktime.Count];
         data.attacktime.CopyTo(attackTime);
 
-        hasDebuff = false;
-
+        // 스탯
         stat = new Dictionary<TowerStatType, float>();
         stat.Add(TowerStatType.DAMAGE, data.dmg);
         // 데이터에는 공격 딜레이를 저장해두기 때문에 로드 시에만 역수로
@@ -87,11 +91,32 @@ public class Tower : ObjectData
         {
             for (int i = 0; i < data.ability.Count; i++)
             {
-                if (data.ability[i].type >= TowerStatType.DOTDAMAGE) hasDebuff = true;
-
-                stat.Add(data.ability[i].type, data.ability[i].value);
+                stat.Add((TowerStatType)data.ability[i].type, data.ability[i].value);
             }
         }
+        StatTypes = stat.Keys.ToArray();
+
+        // 버프, 디버프
+        if (data.buffs != null)
+        {
+            buffs = new Dictionary<BuffType, float>();
+            for (int i = 0; i < data.buffs.Count; i++)
+            {
+                buffs.Add((BuffType)data.buffs[i].type, data.buffs[i].value);
+            }
+            BuffTypes = buffs.Keys.ToArray();
+        }
+
+        if (data.debuffs != null)
+        {
+            debuffs = new Dictionary<DebuffType, float>();
+            for (int i = 0; i < data.debuffs.Count; i++)
+            {
+                debuffs.Add((DebuffType)data.debuffs[i].type, data.debuffs[i].value);
+            }
+            DebuffTypes = debuffs.Keys.ToArray();
+        }
+
     }
 
     public Tower(Tower data)
@@ -116,23 +141,52 @@ public class Tower : ObjectData
         attackTime = new float[data.attackTime.Length];
         data.attackTime.CopyTo(attackTime, 0);
 
-        hasDebuff = data.hasDebuff;
-
+        // 스탯
         stat = new Dictionary<TowerStatType, float>(data.stat);
         statLevel = new Dictionary<TowerStatType, int>();
         foreach (TowerStatType stat in data.stat.Keys)
         {
             statLevel.Add(stat, 1);
         }
+        StatTypes = stat.Keys.ToArray();
+
+        // 버프, 디버프
+        if (data.buffs != null)
+        {
+            buffs = new Dictionary<BuffType, float>();
+            foreach (BuffType type in data.buffs.Keys)
+            {
+                buffs.Add(type, data.buffs[type]);
+            }
+            BuffTypes = buffs.Keys.ToArray();
+        }
+
+        if (data.debuffs != null)
+        {
+            debuffs = new Dictionary<DebuffType, float>();
+            foreach (DebuffType type in data.debuffs.Keys)
+            {
+                debuffs.Add(type, data.debuffs[type]);
+            }
+            DebuffTypes = debuffs.Keys.ToArray();
+        }
     }
 
     public float Stat(TowerStatType type)
     {
-        if (stat.ContainsKey(type))
-        {
-            return stat[type];
-        }
+        if (stat.ContainsKey(type)) return stat[type];
+        return 0;
+    }
 
+    public float Buff(BuffType type)
+    {
+        if (buffs.ContainsKey(type)) return buffs[type];
+        return 0;
+    }
+
+    public float Debuff(DebuffType type)
+    {
+        if (debuffs.ContainsKey(type)) return debuffs[type];
         return 0;
     }
 
@@ -293,6 +347,8 @@ public class TowerData : JsonData
     public AttackType type;
 
     public List<TowerAbility> ability;
+    public List<TowerAbility> buffs;
+    public List<TowerAbility> debuffs;
 
     public int cost;
 
@@ -329,6 +385,6 @@ public class EnemyData : JsonData
 [Serializable]
 public class TowerAbility
 {
-    public TowerStatType type;
+    public int type; // enumType을 전부 받을 수 있도록
     public float value;
 }

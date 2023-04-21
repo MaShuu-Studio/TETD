@@ -35,10 +35,10 @@ public class TowerInfoPanel : TowerInfo
         int index = (int)selectedTower.Priority;
         priorityToggles[index].isOn = true;
 
-        priorityToggles[(int)AttackPriority.DEBUFF].gameObject.SetActive(data.hasDebuff);
+        priorityToggles[(int)AttackPriority.DEBUFF].gameObject.SetActive(data.HasDebuff);
 
         int i = 0;
-        for (; i < data.StatTypes.Count; i++)
+        for (; i < data.StatTypes.Length; i++)
         {
             TowerStatType type = data.StatTypes[i];
             upgradeItems[i].gameObject.SetActive(true);

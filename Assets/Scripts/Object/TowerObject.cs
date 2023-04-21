@@ -72,7 +72,7 @@ public class TowerObject : Poolable
         attackCoroutine = null;
         miningCoroutine = null;
 
-        if (data.Stat(TowerStatType.GOLDMINE) != 0)
+        if (data.Buff(BuffType.GOLDMINE) != 0)
         {
             miningCoroutine = Mining();
             StartCoroutine(miningCoroutine);
@@ -190,16 +190,15 @@ public class TowerObject : Poolable
         }
         else if (priority == AttackPriority.DEBUFF)
         {
-            // 기본적으로 디버프 미부여 시 같은 우선순위 부여.
-            if (data.Stat(TowerStatType.SLOW) != 0)
+            foreach (DebuffType type in data.DebuffTypes)
             {
-                if (enemy.SlowAmount == 0) prior += 100;
-                else prior += (data.Stat(TowerStatType.SLOW) - enemy.SlowAmount);
-            }
-            if (data.Stat(TowerStatType.DOTDAMAGE) != 0)
-            {
-                int remainTime = enemy.RemainDotDmaage(data.id);
-                prior += (5 - remainTime) * 20;
+                int remainTime = enemy.DebuffRemainTime(type);
+                float value = enemy.DebuffValue(type);
+
+                // 남은 시간이 적을 수록
+                // 기존 값보다 더 강한 디버프 일 경우 더 높은 우선순위
+                prior += (5 - remainTime);
+                prior += data.Debuff(type) - value;
             }
 
             // 앞의 유닛이 더 높은 우선순위
@@ -292,7 +291,7 @@ public class TowerObject : Poolable
 
                 // 디버프의 우선순위는 공격시마다 갱신되어야 함.
                 // 전부 목록에서 제거, 추후 적이 살아있다면 추가하여 우선순위 재정렬.
-                if (data.hasDebuff)
+                if (data.HasDebuff)
                 {
                     // 가장 앞의 하나를 지운 뒤 이어서 삭제
                     enemies.Dequeue();
@@ -312,7 +311,8 @@ public class TowerObject : Poolable
                 }
                 else EnemyController.Instance.EnemyAttacked(target, data);
 
-                if (data.hasDebuff)
+                // 살아있는 적들을 추가함으로 우선순위 재정렬
+                if (data.HasDebuff)
                 {
                     for (int j = 0; j < target.Count; j++)
                     {
@@ -347,9 +347,9 @@ public class TowerObject : Poolable
             // 타겟이 죽었을 경우에도 스플래시 공격이라면 이펙트가 남아야 함.
             // 반대로 타겟이 없고 스플래시 공격이 아니라면 이펙트가 남을 필요가 없음.
             if (targets[i].gameObject.activeSelf == false
-                && data.Stat(TowerStatType.SPLASH) == 0) 
+                && data.Stat(TowerStatType.SPLASH) == 0)
                 continue;
-            
+
             GameObject effect = PoolController.PopEffect(data.id);
 
             if (effect != null)
@@ -376,7 +376,7 @@ public class TowerObject : Poolable
                 delayTime += Time.deltaTime;
                 yield return null;
             }
-            int value = (int)data.Stat(TowerStatType.GOLDMINE);
+            int value = (int)data.Buff(BuffType.GOLDMINE);
             PlayerController.Instance.Reward(0, value);
             yield return null;
         }

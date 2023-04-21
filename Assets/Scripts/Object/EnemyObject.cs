@@ -29,10 +29,16 @@ public class EnemyObject : Poolable
 
     private Color damagedEffectColor;
 
-    public float SlowAmount { get { return slowAmount; } }
-    private float slowAmount;
-    private Dictionary<int, IEnumerator> dotCoroutines;
-    private Dictionary<int, int> dotTime;
+    private Dictionary<DebuffType, EnemyDebuff> debuffs;
+
+    private class EnemyDebuff
+    {
+        public IEnumerator coroutine;
+        public float value;
+        public int time;
+    }
+
+    #region Init
 
     public override bool MakePrefab(int id)
     {
@@ -54,14 +60,13 @@ public class EnemyObject : Poolable
 
         effectSpriteRenderer.sprite = data.Mask;
 
-        slowAmount = 0;
-        dotCoroutines = new Dictionary<int, IEnumerator>();
-        dotTime = new Dictionary<int, int>();
+        debuffs = new Dictionary<DebuffType, EnemyDebuff>();
         return true;
     }
 
     public void Init(List<Vector3> road, int order, float hpDif, float speedDif)
     {
+        Reset();
         this.road = road;
 
         hp = maxHp = data.hp * hpDif;
@@ -80,6 +85,22 @@ public class EnemyObject : Poolable
         StartCoroutine(moveCoroutine);
     }
 
+    private void Reset()
+    {
+        if (moveCoroutine != null)
+        {
+            StopCoroutine(moveCoroutine);
+            moveCoroutine = null;
+        }
+
+        foreach (var debuff in debuffs.Values)
+        {
+            StopCoroutine(debuff.coroutine);
+        }
+        debuffs.Clear();
+    }
+    #endregion
+
     private IEnumerator Move()
     {
         while (destRoad < road.Count)
@@ -96,6 +117,8 @@ public class EnemyObject : Poolable
                     yield return null;
                     continue;
                 }
+                float slowAmount = 0;
+                if (debuffs.ContainsKey(DebuffType.SLOW)) slowAmount = debuffs[DebuffType.SLOW].value;
                 Vector3 moveAmount = v * speed * Time.deltaTime * (1 - slowAmount);
                 transform.position += moveAmount;
                 yield return null;
@@ -107,6 +130,14 @@ public class EnemyObject : Poolable
         EnemyController.Instance.EnemyArrive(this);
     }
 
+    // first, second, secondLargeX, secondLargeY
+    private bool CompareVector(Vector3 first, Vector3 second, bool slx, bool sly)
+    {
+        return (((slx && transform.position.x <= road[destRoad].x) || (!slx && transform.position.x >= road[destRoad].x))
+            && ((sly && transform.position.y <= road[destRoad].y) || (!sly && transform.position.y >= road[destRoad].y)));
+    }
+
+    #region Damaged
     public void Attacked(Tower tower)
     {
         Element element = tower.element;
@@ -118,104 +149,29 @@ public class EnemyObject : Poolable
         }
 
         if (hp <= 0) return;
-        // 공격력, 공격속도, 사거리 제외
-        for (int i = 3; i < tower.StatTypes.Count; i++)
+        // 디버프 추가
+        for (int i = 0; i < tower.DebuffTypes.Length; i++)
         {
-            TowerStatType type = tower.StatTypes[i];
-            float value = tower.Stat(type);
+            DebuffType type = tower.DebuffTypes[i];
+            float value = tower.Debuff(type);
 
-            if (type == TowerStatType.DOTDAMAGE)
+            if (debuffs.ContainsKey(type) == false)
             {
-                if (dotCoroutines.ContainsKey(tower.id) == false)
+                EnemyDebuff debuff = new EnemyDebuff
                 {
-                    dotTime.Add(tower.id, 5);
-                    dotCoroutines.Add(tower.id, DotDamage(tower.id, element, value));
-                    StartCoroutine(dotCoroutines[tower.id]);
-                }
-                else dotTime[tower.id] = 5;
+                    coroutine = Debuff(type, element),
+                    value = value,
+                    time = 5
+                };
+                debuffs.Add(type, debuff);
+                StartCoroutine(debuffs[type].coroutine);
             }
-            else if (type == TowerStatType.SLOW)
+            else
             {
-                if (slowAmount * 100 < value)
-                    slowAmount = value / 100;
+                if (debuffs[type].value < value) debuffs[type].value = value;
+                debuffs[type].time = 5;
             }
         }
-    }
-
-    public IEnumerator DotDamage(int id, Element element, float dmg)
-    {
-        float time = 0;
-        while (hp > 0 && dotTime[id] > 0)
-        {
-            while (time < 1)
-            {
-                if (GameController.Instance.Paused)
-                {
-                    yield return null;
-                    continue;
-                }
-                time += Time.deltaTime;
-                yield return null;
-            }
-            time -= 1;
-            dotTime[id] -= 1;
-
-            Color c = Color.white;
-            switch(element)
-            {
-                case Element.FIRE: c = Color.red;
-                    break;
-                case Element.WATER: c = Color.blue;
-                    break;
-                case Element.NATURE: c = Color.green;
-                    break;
-            }
-            Damaged(element, dmg, c);
-        }
-
-        dotCoroutines.Remove(id);
-        dotTime.Remove(id);
-    }
-
-    public int RemainDotDmaage(int id)
-    {
-        if (dotTime.ContainsKey(id)) return dotTime[id];
-
-        return 0;
-    }
-
-    public void Effect(Color color)
-    {
-        damagedEffectColor = color;
-
-        if (effectCoroutine != null)
-        {
-            StopCoroutine(effectCoroutine);
-            effectCoroutine = null;
-        }
-
-        effectCoroutine = Effect();
-        StartCoroutine(effectCoroutine);
-    }
-
-    private IEnumerator Effect()
-    {
-        float unit = 4f;
-        float time = 1 / unit;
-        Color origin = damagedEffectColor;
-        origin.a = 1;
-        damagedEffectColor = origin;
-        while (time > 0)
-        {
-            effectSpriteRenderer.color = damagedEffectColor;
-
-            time -= Time.deltaTime;
-            damagedEffectColor.a = time * unit;
-
-            yield return null;
-        }
-        damagedEffectColor.a = 0;
-        effectSpriteRenderer.color = damagedEffectColor;
     }
 
     public void Damaged(Element element, float dmg, Color damagedColor)
@@ -234,16 +190,7 @@ public class EnemyObject : Poolable
 
         if (hp <= 0)
         {
-            StopCoroutine(moveCoroutine);
-            foreach (var coroutine in dotCoroutines.Values)
-            {
-                StopCoroutine(coroutine);
-            }
-            moveCoroutine = null;
-            dotCoroutines.Clear();
-            dotTime.Clear();
-            slowAmount = 0;
-
+            Reset();
             PlayerController.Instance.Reward(data.exp, data.money);
             EnemyController.Instance.RemoveEnemy(this);
         }
@@ -254,14 +201,67 @@ public class EnemyObject : Poolable
         if (hp < 0) hp = 0;
         hpGage.transform.localScale = new Vector3(hp / maxHp, 1);
     }
+    #endregion
 
-    // first, second, secondLargeX, secondLargeY
-    private bool CompareVector(Vector3 first, Vector3 second, bool slx, bool sly)
+    #region Debuff
+    public IEnumerator Debuff(DebuffType type, Element element)
     {
-        return (((slx && transform.position.x <= road[destRoad].x) || (!slx && transform.position.x >= road[destRoad].x))
-            && ((sly && transform.position.y <= road[destRoad].y) || (!sly && transform.position.y >= road[destRoad].y)));
+        float time = 0;
+        while (hp > 0 && debuffs[type].time > 0)
+        {
+            while (time < 1)
+            {
+                if (GameController.Instance.Paused)
+                {
+                    yield return null;
+                    continue;
+                }
+                time += Time.deltaTime;
+                yield return null;
+            }
+            time -= 1;
+            debuffs[type].time -= 1;
+
+            Color c = Color.white;
+            switch (type)
+            {
+                case DebuffType.SLOW:
+                    c = Color.black;
+                    break;
+                case DebuffType.BURN:
+                    c = new Color(1, 0.5f, 0);
+                    break;
+                case DebuffType.POISON:
+                    c = Color.magenta;
+                    break;
+                case DebuffType.BLEED:
+                    c = Color.red;
+                    break;
+            }
+
+            float value = (type >= DebuffType.BURN) ? debuffs[type].value : 0;
+            Damaged(element, value, c);
+        }
+
+        debuffs.Remove(type);
     }
 
+    public int DebuffRemainTime(DebuffType type)
+    {
+        if (debuffs.ContainsKey(type)) return debuffs[type].time;
+
+        return 0;
+    }
+
+    public float DebuffValue(DebuffType type)
+    {
+        if (debuffs.ContainsKey(type)) return debuffs[type].value;
+
+        return 0;
+    }
+    #endregion
+
+    #region Animation
     private void Animate(AnimationType anim, bool loop = false)
     {
         if (data.animation.ContainsKey(anim) == false) return;
@@ -307,4 +307,42 @@ public class EnemyObject : Poolable
             }
         }
     }
+
+    #region Effect
+    public void Effect(Color color)
+    {
+        damagedEffectColor = color;
+
+        if (effectCoroutine != null)
+        {
+            StopCoroutine(effectCoroutine);
+            effectCoroutine = null;
+        }
+
+        effectCoroutine = Effect();
+        StartCoroutine(effectCoroutine);
+    }
+
+    private IEnumerator Effect()
+    {
+        float unit = 4f;
+        float time = 1 / unit;
+        Color origin = damagedEffectColor;
+        origin.a = 1;
+        damagedEffectColor = origin;
+        while (time > 0)
+        {
+            effectSpriteRenderer.color = damagedEffectColor;
+
+            time -= Time.deltaTime;
+            damagedEffectColor.a = time * unit;
+
+            yield return null;
+        }
+        damagedEffectColor.a = 0;
+        effectSpriteRenderer.color = damagedEffectColor;
+    }
+
+    #endregion
+    #endregion
 }

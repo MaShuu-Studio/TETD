@@ -31,6 +31,24 @@ public static class SpriteManager
             sprite.name = name;
             uiSprites.Add(name, sprite);
         }
+
+        for (int i = 0; i < EnumArray.BuffTypes.Length; i++)
+        {
+            string name = $"BuffType{i}";
+            Sprite sprite = await DataManager.LoadSprite("/Sprites/UI/" + name + ".png", Vector2.one / 2, 16);
+            if (sprite == null) continue;
+            sprite.name = name;
+            uiSprites.Add(name, sprite);
+        }
+
+        for (int i = 0; i < EnumArray.DebuffTypes.Length; i++)
+        {
+            string name = $"DebuffType{i}";
+            Sprite sprite = await DataManager.LoadSprite("/Sprites/UI/" + name + ".png", Vector2.one / 2, 16);
+            if (sprite == null) continue;
+            sprite.name = name;
+            uiSprites.Add(name, sprite);
+        }
     }
 
     public static async Task AddSprite<T>(string path, int id, Vector2 pivot, float pixelPerUnit)
