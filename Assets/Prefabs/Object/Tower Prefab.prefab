@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 163434383
-  m_SortingLayer: 4
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.39215687}
@@ -95,9 +95,11 @@ GameObject:
   - component: {fileID: 938526031245550644}
   - component: {fileID: 902848846694409510}
   - component: {fileID: 1975622453013394220}
+  - component: {fileID: 8024450906108218021}
+  - component: {fileID: 3561447138373027305}
   m_Layer: 0
   m_Name: Tower Prefab
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -158,7 +160,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -787153503
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d15878b0675318f4c9b7b19ada300f3c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -184,8 +186,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rangeUI: {fileID: 1524807141936596289}
-  range: {fileID: 4505241421374891674}
-  clip: {fileID: 8300000, guid: 8c256c408b6355549831d9318d91fc46, type: 3}
+  range: {fileID: 6590589400873527409}
+--- !u!50 &8024450906108218021
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2156919176567521254}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!61 &3561447138373027305
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2156919176567521254}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.49999997}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.1875}
+    oldSize: {x: 1.6, y: 1.6}
+    newSize: {x: 0.17, y: 0.29}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.6, y: 1.5999999}
+  m_EdgeRadius: 0
 --- !u!1 &4505241421374891674
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,4 +295,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2761b153934299f44ad42009567d355a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tower: {fileID: 1975622453013394220}

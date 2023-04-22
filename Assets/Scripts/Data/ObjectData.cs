@@ -38,6 +38,7 @@ public class Tower : ObjectData
     public Color effectColor;
 
     public bool HasDebuff { get { return debuffs != null; } }
+    public bool HasBuff { get { return buffs != null; } }
 
     public TowerStatType[] StatTypes { get; private set; }
     public BuffType[] BuffTypes { get; private set; }

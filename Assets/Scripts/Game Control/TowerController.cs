@@ -46,6 +46,26 @@ public class TowerController : MonoBehaviour
         return towers.ContainsKey(pos);
     }
 
+    public TowerObject FindTower(GameObject go)
+    {
+        foreach(TowerObject tower in towers.Values)
+        {
+            if (tower.gameObject == go)
+            {
+                return tower;
+            }
+        }
+        return null;
+    }
+
+    public void RemoveTowerObject(TowerObject obj)
+    {
+        foreach (var tower in towers.Values)
+        {
+            tower.RemoveTower(obj);
+        }
+    }
+
     public bool BuildTower(int id, Vector3 pos)
     {
         if (ContainsTower(pos)) return false;
@@ -100,7 +120,7 @@ public class TowerController : MonoBehaviour
         towers.Remove(selectedTower.Pos);
 
         PlayerController.Instance.Reward(0, value);
-        selectedTower.RemoveTower();
+        selectedTower.Reset();
         selectedTower = null;
 
         UIController.Instance.SelectTower(false);

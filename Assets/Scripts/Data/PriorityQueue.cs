@@ -134,6 +134,19 @@ public class PriorityQueue<T>
         }
     }
 
+    public void Clear()
+    {
+        count = 0;
+    }
+
+    public void CopyTo(T[] array)
+    {
+        for (int i = 0; i < array.Length && i < this.array.Length; i++)
+        {
+            array[i] = this.array[i].data;
+        }
+    }
+
     private bool Compare(Node<T> first, Node<T> second)
     {
         return first.priority > second.priority;

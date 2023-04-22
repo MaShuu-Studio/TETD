@@ -6,7 +6,7 @@ using EnumData;
 public class TowerObject : Poolable
 {
     [SerializeField] private GameObject rangeUI;
-    [SerializeField] private GameObject range;
+    [SerializeField] private TowerAttackArea range;
     private SpriteRenderer spriteRenderer;
 
     public Vector3 Pos { get; private set; }
@@ -15,13 +15,22 @@ public class TowerObject : Poolable
 
     private AnimationType curAnim;
     private IEnumerator animCoroutine;
-    private IEnumerator attackCoroutine;
-    private IEnumerator miningCoroutine;
+    private IEnumerator activateCoroutine;
+
     private PriorityQueue<EnemyObject> enemies;
+    private PriorityQueue<TowerObject> towers;
 
-    private AttackPriority priority;
     public AttackPriority Priority { get { return priority; } }
+    private AttackPriority priority;
+    public Dictionary<BuffType, TowerBuff> Buffs { get { return buffs; } }
+    private Dictionary<BuffType, TowerBuff> buffs;
 
+    public class TowerBuff
+    {
+        public IEnumerator coroutine;
+        public float value;
+        public float time;
+    }
 
     public override bool MakePrefab(int id)
     {
@@ -38,6 +47,13 @@ public class TowerObject : Poolable
 
         spriteRenderer.sprite = SpriteManager.GetSprite(id);
 
+        // 버프를 가졌을 경우 버프의 범위로도 Range가 작동하지만 
+        // 금광이 유일한 버프일 경우 (갯수가 1개이고 그게 금광일 경우)
+        // 버프의 범위로 사용되지 않음.
+        bool hasBuff =
+            data.HasBuff &&
+            !(data.BuffTypes.Length == 1 && data.BuffTypes[0] == BuffType.GOLDMINE);
+        range.Init(this, hasBuff);
         rangeUI.transform.localPosition = range.transform.localPosition = Vector3.zero;
 
         return true;
@@ -65,17 +81,19 @@ public class TowerObject : Poolable
         rangeUI.SetActive(false);
 
         enemies = new PriorityQueue<EnemyObject>();
+        towers = new PriorityQueue<TowerObject>();
 
         priority = AttackPriority.FIRST;
 
         Animate(AnimationType.IDLE, true);
-        attackCoroutine = null;
-        miningCoroutine = null;
+        activateCoroutine = null;
 
+        buffs = new Dictionary<BuffType, TowerBuff>();
+
+        // 금광의 경우 자버프 겸 자동 작동이므로 바로 추가
         if (data.Buff(BuffType.GOLDMINE) != 0)
         {
-            miningCoroutine = Mining();
-            StartCoroutine(miningCoroutine);
+            UpdateBuff(BuffType.GOLDMINE, data.Buff(BuffType.GOLDMINE), 99);
         }
     }
 
@@ -84,19 +102,21 @@ public class TowerObject : Poolable
         rangeUI.SetActive(b);
     }
 
-    public void RemoveTower()
+    public void Reset()
     {
         enemies = null;
-        if (attackCoroutine != null)
+        towers = null;
+        if (activateCoroutine != null)
         {
-            StopCoroutine(attackCoroutine);
-            attackCoroutine = null;
+            StopCoroutine(activateCoroutine);
+            activateCoroutine = null;
         }
-        if (miningCoroutine != null)
+        foreach (var buff in buffs.Values)
         {
-            StopCoroutine(miningCoroutine);
-            miningCoroutine = null;
+            StopCoroutine(buff.coroutine);
         }
+        buffs.Clear();
+        TowerController.Instance.RemoveTowerObject(this);
     }
     #endregion
 
@@ -135,19 +155,34 @@ public class TowerObject : Poolable
 
     public float BonusStat(TowerStatType type)
     {
-        float value;
+        float value = 0;
         int stat = 0;
 
-        if (type == TowerStatType.DAMAGE && PlayerController.Instance.Type == CharacterType.POWER)
-            stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
+        if (type == TowerStatType.DAMAGE)
+        {
+            if (PlayerController.Instance.Type == CharacterType.POWER)
+                stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
+            // 버프로 스탯 추가 증가
+            // 비율이 아닌 수치로 증가하기 때문에 value의 값을 변경
+            // 만약 비율 증가로 변경하게 되면 stat 값을 조정함. 상황에 따라 합계산, 곱계산 적용
+            if (buffs.ContainsKey(BuffType.DMG))
+                value += buffs[BuffType.DMG].value;
+        }
 
-        else if (type == TowerStatType.ATTACKSPEED && PlayerController.Instance.Type == CharacterType.ATTACKSPEED)
-            stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
+        else if (type == TowerStatType.ATTACKSPEED)
+        {
+            if (PlayerController.Instance.Type == CharacterType.ATTACKSPEED)
+                stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
+
+            if (buffs.ContainsKey(BuffType.ATKSPD))
+                value += buffs[BuffType.ATKSPD].value;
+        }
 
         stat += PlayerController.Instance.BonusElement(data.element);
 
+        // 스탯으로 증가한 보너스 스탯은 퍼센티지로 증가
         float percent = stat / 100f;
-        value = data.Stat(type) * percent;
+        value += data.Stat(type) * percent;
 
         return value;
     }
@@ -165,6 +200,22 @@ public class TowerObject : Poolable
 
         enemies = null;
         enemies = tmp;
+    }
+
+    #region Enemy
+    public void AddEnemy(EnemyObject enemy)
+    {
+        enemies.Enqueue(enemy, GetPriority(enemy));
+        if (activateCoroutine == null)
+        {
+            activateCoroutine = Activate();
+            StartCoroutine(activateCoroutine);
+        }
+    }
+    public void RemoveEnemy(EnemyObject enemy)
+    {
+        if (enemies.Contains(enemy))
+            enemies.Remove(enemy);
     }
 
     public float GetPriority(EnemyObject enemy)
@@ -209,28 +260,124 @@ public class TowerObject : Poolable
     }
     #endregion
 
-    #region Activate
-    public void AddEnemy(EnemyObject enemy)
+    #region Buff
+    public void AddTower(TowerObject tower)
     {
-        enemies.Enqueue(enemy, GetPriority(enemy));
-        if (attackCoroutine == null)
+        towers.Enqueue(tower, GetPriority(tower));
+
+        if (activateCoroutine == null)
         {
-            attackCoroutine = Attack();
-            StartCoroutine(Attack());
+            activateCoroutine = Activate();
+            StartCoroutine(activateCoroutine);
         }
     }
-    public void RemoveEnemy(EnemyObject enemy)
+
+    public void RemoveTower(TowerObject tower)
     {
-        if (enemies.Contains(enemy))
-            enemies.Remove(enemy);
+        if (data.HasBuff == false) return;
+
+        if (towers.Contains(tower))
+            towers.Remove(tower);
     }
 
-    private IEnumerator Attack()
+    public float GetPriority(TowerObject tower)
     {
-        float delay = 1 / Stat(TowerStatType.ATTACKSPEED); // 공격속도 딜레이
-
-        while (enemies.Count > 0)
+        float prior = 0;
+        foreach (BuffType type in data.BuffTypes)
         {
+            if (type == BuffType.GOLDMINE) continue;
+
+            float remainTime = 0;
+            float value = 0;
+            // 해당 타워가 버프를 갖고 있을 경우 추가 조정
+            if (tower.Buffs.ContainsKey(type))
+            {
+                remainTime = tower.Buffs[type].time;
+                value = tower.Buffs[type].value;
+            }
+
+            // 남은 시간이 적을 수록
+            // 기존 값보다 더 강한 버프 일 경우 더 높은 우선순위
+            prior += (5 - remainTime);
+            prior += data.Buff(type) - value;
+        }
+
+        return prior;
+    }
+
+    public void UpdateBuff(BuffType type, float value, float time)
+    {
+        // 이미 있는 버프일 경우 업데이트
+        if (buffs.ContainsKey(type))
+        {
+            // 더 큰 값이나 시간일 경우 업데이트
+            if (buffs[type].value < value) buffs[type].value = value;
+            if (buffs[type].time < time) buffs[type].time = time;
+        }
+        // 없을 경우 새롭게 추가
+        else
+        {
+            TowerBuff buff = new TowerBuff()
+            {
+                coroutine = Buff(type),
+                value = value,
+                time = time
+            };
+            buffs.Add(type, buff);
+            StartCoroutine(buffs[type].coroutine);
+        }
+    }
+
+    private IEnumerator Buff(BuffType type)
+    {
+        while (buffs[type].time > 0)
+        {
+            // 금광버프일 경우 일정 주기(공격 속도)마다 계속해서 골드 획득
+            // 버프가 사라지지 않으므로 시간 갱신 X
+            if (type == BuffType.GOLDMINE)
+            {
+                float delayTime = 0;
+                float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
+                while (delayTime < delay)
+                {
+                    if (GameController.Instance.Paused)
+                    {
+                        yield return null;
+                        continue;
+                    }
+                    delayTime += Time.deltaTime;
+                    yield return null;
+                }
+                PlayerController.Instance.Reward(0, (int)buffs[type].value);
+            }
+            // 그 외의 경우 버프에 따라 능력치 획득 (Bonus Stat에서 작동)
+            // 계속해서 시간이 갱신되며 0이 될 경우 버프 삭제
+            else
+            {
+                if (GameController.Instance.Paused)
+                {
+                    yield return null;
+                    continue;
+                }
+                buffs[type].time -= Time.deltaTime;
+                yield return null;
+            }
+            yield return null;
+        }
+
+        buffs.Remove(type);
+    }
+    #endregion
+    #endregion
+
+    #region Activate
+    private IEnumerator Activate()
+    {
+        while (true)
+        {
+            if (enemies.Count <= 0 && towers.Count <= 0) break;
+
+            float delay = 1 / Stat(TowerStatType.ATTACKSPEED); // 공격속도 딜레이
             Animate(AnimationType.ATTACK, false);
 
             float time = 0;
@@ -251,78 +398,11 @@ public class TowerObject : Poolable
                     yield return null;
                 }
 
-                // 이 후 공격관련 함수 전부 진행.
+                // 선딜이 후에는 작동
+                if (enemies.Count > 0) StartCoroutine(Attack());
+                if (towers.Count > 0) GiveBuff();
 
-                int targetAmount = (int)data.Stat(TowerStatType.MULTISHOT);
-                if (targetAmount == 0) targetAmount = 1;
-                List<EnemyObject> target = enemies.Get(targetAmount);
-                if (target == null || enemies.Count == 0) continue;
-
-                // 투사체 발사 
-                if (TowerManager.Projs.ContainsKey(id))
-                {
-                    // 실제 발사
-                    for (int j = 0; j < target.Count; j++)
-                    {
-                        Vector3 start = transform.position;
-                        Vector3 end = target[j].transform.position;
-
-                        if (data.attackType == AttackType.POINT)
-                            start = end;
-
-                        PoolController.Pop(id, start, end);
-                    }
-
-                    progressTime += data.projAttackTime;
-                    // 투사체가 공격을 입히는 시간 대기.
-                    while (time < progressTime)
-                    {
-                        if (GameController.Instance.Paused)
-                        {
-                            yield return null;
-                            continue;
-                        }
-                        time += Time.deltaTime;
-                        yield return null;
-                    }
-                }
-
-                Effect(target);
-
-                // 디버프의 우선순위는 공격시마다 갱신되어야 함.
-                // 전부 목록에서 제거, 추후 적이 살아있다면 추가하여 우선순위 재정렬.
-                if (data.HasDebuff)
-                {
-                    // 가장 앞의 하나를 지운 뒤 이어서 삭제
-                    enemies.Dequeue();
-                    for (int j = 1; j < target.Count; j++)
-                        enemies.Remove(target[j]);
-                }
-
-                SoundController.PlayAudio(id);
-                if (data.Stat(TowerStatType.SPLASH) != 0)
-                {
-                    for (int j = 0; j < target.Count; j++)
-                    {
-                        SplashPoint point = TowerController.Instance.PopSplash();
-                        point.transform.position = target[j].transform.position;
-                        point.SetData(data);
-                    }
-                }
-                else EnemyController.Instance.EnemyAttacked(target, data);
-
-                // 살아있는 적들을 추가함으로 우선순위 재정렬
-                if (data.HasDebuff)
-                {
-                    for (int j = 0; j < target.Count; j++)
-                    {
-                        // 살아있는 경우에만 추가
-                        if (target[j].gameObject.activeSelf)
-                        {
-                            enemies.Enqueue(target[j], GetPriority(target[j]));
-                        }
-                    }
-                }
+                yield return null;
             }
 
             while (time < delay)
@@ -337,7 +417,116 @@ public class TowerObject : Poolable
             }
             yield return null;
         }
-        attackCoroutine = null;
+        activateCoroutine = null;
+    }
+
+    // 공격 관련 코루틴
+    public IEnumerator Attack()
+    {
+        float time = 0;
+
+        // 이 후 공격관련 함수 전부 진행.
+        int targetAmount = (int)data.Stat(TowerStatType.MULTISHOT);
+        if (targetAmount == 0) targetAmount = 1;
+        List<EnemyObject> target = enemies.Get(targetAmount);
+        if (target != null && enemies.Count > 0)
+        {
+            // 투사체 발사 
+            if (TowerManager.Projs.ContainsKey(id))
+            {
+                // 실제 발사
+                for (int j = 0; j < target.Count; j++)
+                {
+                    Vector3 start = transform.position;
+                    Vector3 end = target[j].transform.position;
+
+                    if (data.attackType == AttackType.POINT)
+                        start = end;
+
+                    PoolController.Pop(id, start, end);
+                }
+
+                // 투사체가 공격을 입히는 시간 대기.
+                while (time < data.projAttackTime)
+                {
+                    if (GameController.Instance.Paused)
+                    {
+                        yield return null;
+                        continue;
+                    }
+                    time += Time.deltaTime;
+                    yield return null;
+                }
+            }
+
+            Effect(target);
+
+            // 디버프의 우선순위는 공격시마다 갱신되어야 함.
+            // 전부 목록에서 제거, 추후 적이 살아있다면 추가하여 우선순위 재정렬.
+            if (data.HasDebuff)
+            {
+                // 가장 앞의 하나를 지운 뒤 이어서 삭제
+                enemies.Dequeue();
+                for (int j = 1; j < target.Count; j++)
+                    enemies.Remove(target[j]);
+            }
+
+            SoundController.PlayAudio(id);
+            if (data.Stat(TowerStatType.SPLASH) != 0)
+            {
+                for (int j = 0; j < target.Count; j++)
+                {
+                    SplashPoint point = TowerController.Instance.PopSplash();
+                    point.transform.position = target[j].transform.position;
+                    point.SetData(data);
+                }
+            }
+            else EnemyController.Instance.EnemyAttacked(target, data);
+
+            // 살아있는 적들을 추가함으로 우선순위 재정렬
+            if (data.HasDebuff)
+            {
+                for (int j = 0; j < target.Count; j++)
+                {
+                    // 살아있는 경우에만 추가
+                    if (target[j].gameObject.activeSelf)
+                    {
+                        enemies.Enqueue(target[j], GetPriority(target[j]));
+                    }
+                }
+            }
+        }
+    }
+
+    // 버프 부여 함수
+    public void GiveBuff()
+    {
+        int targetAmount = (int)data.Stat(TowerStatType.MULTISHOT);
+        if (targetAmount == 0) targetAmount = 1;
+        List<TowerObject> target = towers.Get(targetAmount);
+        if (target != null && towers.Count > 0)
+        {
+            Effect(target);
+            for (int i = 0; i < target.Count; i++)
+            {
+                foreach (BuffType type in data.BuffTypes)
+                {
+                    if (type == BuffType.GOLDMINE) continue;
+                    target[i].UpdateBuff(type, data.Buff(type), 5);
+                }
+            }
+
+            // 버프의 우선순위는 전부 매 번 갱신해주어야함.
+            // 전부 목록에서 제거 및 재추가.
+            TowerObject[] tmp = new TowerObject[towers.Count];
+            towers.CopyTo(tmp);
+            towers.Clear();
+
+            for (int i = 0; i < tmp.Length; i++)
+            {
+                towers.Enqueue(tmp[i], GetPriority(tmp[i]));
+            }
+        }
     }
 
     public void Effect(List<EnemyObject> targets)
@@ -360,25 +549,18 @@ public class TowerObject : Poolable
         }
     }
 
-    private IEnumerator Mining()
+    // 버프 임시 이펙트
+    public void Effect(List<TowerObject> targets)
     {
-        while (true)
+        for (int i = 0; i < targets.Count; i++)
         {
-            float delayTime = 0;
-            float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
-            while (delayTime < delay)
+            GameObject effect = PoolController.PopEffect(data.id);
+
+            if (effect != null)
             {
-                if (GameController.Instance.Paused)
-                {
-                    yield return null;
-                    continue;
-                }
-                delayTime += Time.deltaTime;
-                yield return null;
+                effect.transform.parent = null;
+                effect.transform.position = targets[i].transform.position;
             }
-            int value = (int)data.Buff(BuffType.GOLDMINE);
-            PlayerController.Instance.Reward(0, value);
-            yield return null;
         }
     }
     #endregion
