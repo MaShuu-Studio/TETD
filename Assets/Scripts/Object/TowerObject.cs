@@ -13,6 +13,8 @@ public class TowerObject : Poolable
     public Tower Data { get { return data; } }
     private Tower data;
 
+    private float OriginAttackSpeed;
+
     private AnimationType curAnim;
     private IEnumerator animCoroutine;
     private IEnumerator activateCoroutine;
@@ -38,9 +40,11 @@ public class TowerObject : Poolable
         Tower data = TowerManager.GetTower(id);
         if (data == null) return false;
 
-        amount = 2;
+        amount = 5;
 
         gameObject.name = id.ToString();
+
+        OriginAttackSpeed = data.Stat(TowerStatType.ATTACKSPEED);
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sortingLayerName = "Character";
@@ -377,15 +381,22 @@ public class TowerObject : Poolable
         {
             if (enemies.Count <= 0 && towers.Count <= 0) break;
 
-            float delay = 1 / Stat(TowerStatType.ATTACKSPEED); // 공격속도 딜레이
-            Animate(AnimationType.ATTACK, false);
+            // Stat함수 자체가 연산이 진행되므로 값을 저장해둠
+            // 배속 정도 = 현재 공격속도 / 기본공속
+            // 공격속도 딜레이
+
+            float curASPD = Stat(TowerStatType.ATTACKSPEED);
+            float speedRatio = curASPD / OriginAttackSpeed;
+            float delay = 1 / curASPD;
+            Animate(AnimationType.ATTACK, false, speedRatio);
 
             float time = 0;
 
             // attackTime 만큼 반복
             for (int i = 0; i < data.attackTime.Length; i++)
             {
-                float progressTime = data.attackTime[i];
+                // 선딜
+                float progressTime = data.attackTime[i] / speedRatio;
                 // 공격이 진행되는 구간까지 대기
                 while (time < progressTime)
                 {
@@ -399,7 +410,7 @@ public class TowerObject : Poolable
                 }
 
                 // 선딜이 후에는 작동
-                if (enemies.Count > 0) StartCoroutine(Attack());
+                if (enemies.Count > 0) StartCoroutine(Attack(speedRatio));
                 if (towers.Count > 0) GiveBuff();
 
                 yield return null;
@@ -421,7 +432,7 @@ public class TowerObject : Poolable
     }
 
     // 공격 관련 코루틴
-    public IEnumerator Attack()
+    public IEnumerator Attack(float speedRatio)
     {
         float time = 0;
 
@@ -446,8 +457,10 @@ public class TowerObject : Poolable
                     PoolController.Pop(id, start, end);
                 }
 
+                float progressTime = data.projAttackTime / speedRatio;
+
                 // 투사체가 공격을 입히는 시간 대기.
-                while (time < data.projAttackTime)
+                while (time < progressTime)
                 {
                     if (GameController.Instance.Paused)
                     {
@@ -565,7 +578,7 @@ public class TowerObject : Poolable
     }
     #endregion
 
-    private void Animate(AnimationType anim, bool loop = false)
+    private void Animate(AnimationType anim, bool loop, float speedRatio = 1)
     {
         if (data.animation.ContainsKey(anim) == false) return;
         curAnim = anim;
@@ -576,18 +589,18 @@ public class TowerObject : Poolable
             animCoroutine = null;
         }
 
-        animCoroutine = Animation(anim, loop);
+        animCoroutine = Animation(anim, loop, speedRatio);
         StartCoroutine(animCoroutine);
     }
 
-    private IEnumerator Animation(AnimationType anim, bool loop)
+    private IEnumerator Animation(AnimationType anim, bool loop, float speedRatio)
     {
         // 공격일 경우 방향전환이 없으므로 미리 방향전환을 해둠.
         if (curAnim == AnimationType.ATTACK) LookAtEnemy();
 
         int number = 0;
         float time = 0;
-        float frameTime = data.spf;
+        float frameTime = data.spf / speedRatio;
         while (true)
         {
             // 스프라이트 변경
