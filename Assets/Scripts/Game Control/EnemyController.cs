@@ -20,7 +20,7 @@ public class EnemyController : MonoBehaviour
         instance = this;
     }
 
-    private Queue<Tuple<EnemyObject, Tower>> enemyAttackedQueue;
+    private Queue<Tuple<EnemyObject, Tower, float>> enemyAttackedQueue;
     private IEnumerator flushCoroutine;
 
     public int EnemyAmount { get { return enemies.Count; } }
@@ -39,7 +39,7 @@ public class EnemyController : MonoBehaviour
         if (difficulties.Contains(DifficultyType.HP)) hpDif = 1.5f;
         if (difficulties.Contains(DifficultyType.SPEED)) speedDif = 1.5f;
 
-        enemyAttackedQueue = new Queue<Tuple<EnemyObject, Tower>>();
+        enemyAttackedQueue = new Queue<Tuple<EnemyObject, Tower, float>>();
         enemies = new List<EnemyObject>();
         road = new List<Vector3>();
         for (int i = 0; i < map.enemyRoad.Count; i++)
@@ -92,9 +92,9 @@ public class EnemyController : MonoBehaviour
         return null;
     }
 
-    public void EnemyAttacked(EnemyObject enemy, Tower data)
+    public void EnemyAttacked(EnemyObject enemy, Tower data, float dmg)
     {
-        enemyAttackedQueue.Enqueue(new Tuple<EnemyObject, Tower>(enemy, data));
+        enemyAttackedQueue.Enqueue(new Tuple<EnemyObject, Tower, float>(enemy, data, dmg));
 
         if (flushCoroutine == null)
         {
@@ -102,13 +102,13 @@ public class EnemyController : MonoBehaviour
             StartCoroutine(flushCoroutine);
         }
     }
-    public void EnemyAttacked(List<EnemyObject> enemies, Tower data)
+    public void EnemyAttacked(List<EnemyObject> enemies, Tower data, float dmg)
     {
         if (enemies == null) return;
         for (int i = 0; i < enemies.Count; i++)
         {
             EnemyObject enemy = enemies[i];
-            EnemyAttacked(enemy, data);
+            EnemyAttacked(enemy, data, dmg);
         }
     }
 
@@ -119,14 +119,15 @@ public class EnemyController : MonoBehaviour
             int count = enemyAttackedQueue.Count;
             for (int i = 0; i < count; i++)
             {
-                Tuple<EnemyObject, Tower> tuple;
+                Tuple<EnemyObject, Tower, float> tuple;
                 if (enemyAttackedQueue.TryDequeue(out tuple) == false) continue;
 
                 EnemyObject enemy = tuple.Item1;
                 Tower data = tuple.Item2;
+                float dmg = tuple.Item3;
 
                 if (enemies.Contains(enemy) == false) continue;
-                enemy.Attacked(data);
+                enemy.Attacked(data, dmg);
             }
             yield return null;
         }

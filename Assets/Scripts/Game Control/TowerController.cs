@@ -29,14 +29,14 @@ public class TowerController : MonoBehaviour
         splashPool.Init(splashPoint);
     }
 
-    public SplashPoint PopSplash()
+    public SplashPoint PopSplashPoint()
     {
         GameObject point = splashPool.Pop();
 
         return point.GetComponent<SplashPoint>();
     }
 
-    public void PushSplash(GameObject obj)
+    public void PushSplashPoint(GameObject obj)
     {
         splashPool.Push(obj);
     }

@@ -138,10 +138,9 @@ public class EnemyObject : Poolable
     }
 
     #region Damaged
-    public void Attacked(Tower tower)
+    public void Attacked(Tower tower, float dmg)
     {
         Element element = tower.element;
-        float dmg = tower.Stat(TowerStatType.DAMAGE);
 
         if (dmg != 0)
         {

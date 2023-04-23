@@ -476,12 +476,12 @@ public class TowerObject : Poolable
             {
                 for (int j = 0; j < target.Count; j++)
                 {
-                    SplashPoint point = TowerController.Instance.PopSplash();
+                    SplashPoint point = TowerController.Instance.PopSplashPoint();
                     point.transform.position = target[j].transform.position;
-                    point.SetData(data);
+                    point.SetData(data, Stat(TowerStatType.DAMAGE));
                 }
             }
-            else EnemyController.Instance.EnemyAttacked(target, data);
+            else EnemyController.Instance.EnemyAttacked(target, data, Stat(TowerStatType.DAMAGE));
 
             // 살아있는 적들을 추가함으로 우선순위 재정렬
             if (data.HasDebuff)
