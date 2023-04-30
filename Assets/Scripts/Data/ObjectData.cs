@@ -294,6 +294,7 @@ public class Enemy : ObjectData
 
         spf = data.spf;
     }
+
     public Enemy(Enemy data)
     {
         id = data.id;

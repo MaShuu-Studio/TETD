@@ -4,17 +4,32 @@
         
 {
     "id": 2000000,
-    "name": [ "불슬라임","FIRE SLIME" ]
+    "name": [ "오크","Orc" ]
+},
+
+{
+    "id": 2000100,
+    "name": [ "다크엘프","Dark Elf" ]
 },
 
 {
     "id": 2010000,
-    "name": [ "물슬라임","WATER SLIME" ]
+    "name": [ "오크","Orc" ]
+},
+
+{
+    "id": 2010100,
+    "name": [ "다크엘프","Dark Elf" ]
 },
 
 {
     "id": 2020000,
-    "name": [ "풀슬라임","NATURE SLIME" ]
+    "name": [ "오크","Orc" ]
+},
+
+{
+    "id": 2020100,
+    "name": [ "다크엘프","Dark Elf" ]
 }
     ]
 }

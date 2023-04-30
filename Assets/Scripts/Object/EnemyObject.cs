@@ -80,7 +80,7 @@ public class EnemyObject : Poolable
         damagedEffectColor = new Color(0, 0, 0, 0);
         effectSpriteRenderer.color = damagedEffectColor;
 
-        Animate(AnimationType.IDLE, true);
+        Animate(AnimationType.MOVE, true);
         moveCoroutine = Move();
         StartCoroutine(moveCoroutine);
     }
@@ -109,6 +109,13 @@ public class EnemyObject : Poolable
             Vector3 v = Vector3.Normalize(road[destRoad] - road[curRoad]);
             bool destlargeX = road[destRoad].x > road[curRoad].x;
             bool destlargeY = road[destRoad].y > road[curRoad].y;
+
+            // 상하이동의 경우 스프라이트 flip 진행 X
+            if (road[destRoad].x != road[curRoad].x)
+            {
+                if (destlargeX) spriteRenderer.flipX = true;
+                else spriteRenderer.flipX = false;
+            }
 
             while (CompareVector(transform.position, road[destRoad], destlargeX, destlargeY))
             {

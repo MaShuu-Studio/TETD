@@ -12,7 +12,7 @@ namespace EnumData
     public enum BuffType { GOLDMINE = 0, DMG = 1, ATKSPD = 2, }
     public enum DebuffType { SLOW = 0, BURN = 1, POISON = 2, BLEED = 3, }
     public enum CharacterStatType { ABILITY = 0, REWARD = 1, FIRE = 2, WATER = 3, NATURE = 4, }
-    public enum AnimationType { IDLE = 0, ATTACK = 1, DEAD = 2, }
+    public enum AnimationType { IDLE = 0, ATTACK = 1, MOVE = 2, DEAD = 3, }
     public enum LanguageType { KOREAN = 0, ENGLISH = 1, }
     public enum AttackType { PROMPT = 0, PROJECTILE = 1, POINT = 2, }
 
