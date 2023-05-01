@@ -7,6 +7,7 @@ using EnumData;
 [RequireComponent(typeof(SpriteMask))]
 public class EnemyObject : Poolable
 {
+    [SerializeField] private GameObject hpBar;
     [SerializeField] private GameObject hpGage;
     [SerializeField] private SpriteRenderer effectSpriteRenderer;
     private SpriteRenderer spriteRenderer;
@@ -55,6 +56,8 @@ public class EnemyObject : Poolable
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sortingLayerName = "Enemy";
         spriteRenderer.sprite = SpriteManager.GetSprite(id);
+
+        hpBar.transform.localPosition = new Vector3(0, this.data.Height);
 
         spriteMask = GetComponent<SpriteMask>();
 

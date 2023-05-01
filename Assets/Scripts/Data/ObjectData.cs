@@ -265,13 +265,19 @@ public class Enemy : ObjectData
     public float dmg;
 
     public float spf;
-    public Sprite Mask { get; protected set; }
+    public Sprite Mask { get; private set; }
+    public float Height { get; private set; }
 
     public Enemy(EnemyData data, Dictionary<AnimationType, Sprite[]> animation, Sprite mask)
     {
         id = data.id;
         this.animation = animation;
         Mask = mask;
+
+        // 높이는 Mask Height / Pixel Per Unit 임.
+        // Mask Height = 스프라이트 전체 사이즈의 높이가 담겨있음.
+        // Pixel Per Unit = Scene에서의 1의 사이즈가 몇 픽셀인지 담겨 있음.
+        Height = Mask.texture.height / data.pixelperunit;
 
         /* id: ABBCDDD
          * A: type
@@ -300,6 +306,7 @@ public class Enemy : ObjectData
         id = data.id;
         animation = data.animation;
         Mask = data.Mask;
+        Height = data.Height;
 
         element = data.element;
 
