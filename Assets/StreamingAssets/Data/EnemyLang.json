@@ -55,6 +55,41 @@
 {
     "id": 2022005,
     "name": [ "오크 족장"," Chief Orc" ]
+},
+
+{
+    "id": 2020100,
+    "name": [ "다크엘프 검사"," Dark Elf Soldier" ]
+},
+
+{
+    "id": 2020101,
+    "name": [ "다크엘프 창술사"," Dark Elf Spearman" ]
+},
+
+{
+    "id": 2020102,
+    "name": [ "다크엘프 어쌔신"," Dark Elf Assassin" ]
+},
+
+{
+    "id": 2021102,
+    "name": [ "다크엘프 어쌔신"," Dark Elf Assassin" ]
+},
+
+{
+    "id": 2021103,
+    "name": [ "다크엘프 마법사"," Dark Elf Mage" ]
+},
+
+{
+    "id": 2021104,
+    "name": [ "다크엘프 마검사"," Dark Elf Magic Knight" ]
+},
+
+{
+    "id": 2022105,
+    "name": [ "다크엘프 로드"," Dark Elf Lord" ]
 }
     ]
 }
