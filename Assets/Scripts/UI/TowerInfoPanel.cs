@@ -8,10 +8,11 @@ using EnumData;
 public class TowerInfoPanel : TowerInfo
 {
     [Space]
+    [SerializeField] private Image gradeImage;
+
+    [Space]
     [SerializeField] private Toggle[] priorityToggles;
 
-    [SerializeField] private GameObject[] bonusStatObjects;
-    [SerializeField] private TextMeshProUGUI[] bonusStatTexts;
     [SerializeField] private TowerUpgradeItem[] upgradeItems;
     [SerializeField] private TextMeshProUGUI valueText;
 
@@ -30,6 +31,8 @@ public class TowerInfoPanel : TowerInfo
     {
         base.SetData(data);
 
+        gradeImage.color = data.GradeColor;
+
         selectedTower = TowerController.Instance.SelectedTower;
         valueText.text = "$ " + data.Value();
         int index = (int)selectedTower.Priority;
@@ -44,14 +47,15 @@ public class TowerInfoPanel : TowerInfo
             upgradeItems[i].gameObject.SetActive(true);
             UpdateUpgradeStat(i, type);
         }
+
         for (; i < upgradeItems.Length; i++)
         {
             upgradeItems[i].gameObject.SetActive(false);
         }
 
-        UpdateBonusStat();
+        //UpdateBonusStat();
     }
-
+    /*
     public void UpdateBonusStat()
     {
         for (int i = 0; i < bonusStatObjects.Length; i++)
@@ -66,6 +70,43 @@ public class TowerInfoPanel : TowerInfo
             }
         }
     }
+    */
+
+
+    public override void UpdateInfo()
+    {
+        if (selectedTower == null) return;
+
+        for (int i = 0; i < mainStats.Length; i++)
+        {
+            TowerStatType type = (TowerStatType)i;
+            mainStats[i].SetData(selectedTower.Stat(type));
+        }
+
+        int abilIndex = 0;
+        if (data.StatTypes.Length > 3)
+        {
+            for (int i = 3; i < data.StatTypes.Length; i++, abilIndex++)
+            {
+                TowerStatType type = data.StatTypes[i];
+                abilities[abilIndex].SetData(selectedTower.Stat(type));
+            }
+        }
+
+        if (data.BuffTypes != null)
+            for (int i = 0; i < data.BuffTypes.Length; i++, abilIndex++)
+            {
+                BuffType type = data.BuffTypes[i];
+                abilities[abilIndex].SetData(data.Buff(type));
+            }
+
+        if (data.DebuffTypes != null)
+            for (int i = 0; i < data.DebuffTypes.Length; i++, abilIndex++)
+            {
+                DebuffType type = data.DebuffTypes[i];
+                abilities[abilIndex].SetData(data.Debuff(type));
+            }
+    }
 
     public void Reinforce(int index, TowerStatType type)
     {
@@ -77,7 +118,7 @@ public class TowerInfoPanel : TowerInfo
 
             UpdateUpgradeStat(index, type);
             UpdateInfo();
-            UpdateBonusStat();
+            //UpdateBonusStat();
         }
     }
 
@@ -85,10 +126,8 @@ public class TowerInfoPanel : TowerInfo
     {
         int level = selectedTower.Data.StatLevel(type);
         int cost = PlayerController.Cost(selectedTower.Data.UpgradeCost(type));
-        float cur = selectedTower.Data.Stat(type);
-        float next = cur * 1.1f;
 
-        upgradeItems[index].SetData(index, type, level, cost, cur, next);
+        upgradeItems[index].SetData(index, type, level, cost);
     }
 
     // 토글 작동시 ValueChanged를 통해 조정

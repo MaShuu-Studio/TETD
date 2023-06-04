@@ -21,8 +21,6 @@ public class UIController : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
-
-        buildTowerButtons = new List<BuildTowerButton>();
         OpenSetting(false);
     }
 
@@ -66,9 +64,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bonusText;
 
     [Header("Tower Panel")]
-    [SerializeField] private Transform buildTowerButtonsParent;
-    [SerializeField] private BuildTowerButton buildTowerButtonPrefab;
-    private List<BuildTowerButton> buildTowerButtons;
+    [SerializeField] private List<BuildTowerButton> buildTowerButtons;
 
     [Header("Shop")]
     [SerializeField] private Shop shop;
@@ -176,19 +172,7 @@ public class UIController : MonoBehaviour
 
         for (int i = 0; i < buildTowerButtons.Count; i++)
         {
-            Destroy(buildTowerButtons[i].gameObject);
-        }
-        buildTowerButtons.Clear();
-
-        for (int i = 0; i < 10; i++)
-        {
-            Tower tower = null;
-
-            GameObject go = Instantiate(buildTowerButtonPrefab.gameObject, buildTowerButtonsParent);
-            BuildTowerButton button = go.GetComponent<BuildTowerButton>();
-
-            button.SetItem(tower);
-            buildTowerButtons.Add(button);
+            buildTowerButtons[i].SetItem(null);
         }
 
         damageUIPool.Init(damageUI);
@@ -235,7 +219,8 @@ public class UIController : MonoBehaviour
         }
         bonusText.text = string.Format("{0:#0}", c.BonusStat);
 
-        towerInfoPanel.UpdateBonusStat();
+        //towerInfoPanel.UpdateBonusStat();
+        towerInfoPanel.UpdateInfo();
     }
 
     public void NextRoundInfo(EachRound nextRoundInfo)
@@ -285,20 +270,27 @@ public class UIController : MonoBehaviour
     #endregion
 
     #region TowerInfoPanel
+
+    public void OffTowerInfoPanel()
+    {
+        // TowerController내에서는 1단위로 이루어져있기 때문에 100의자리 소숫점은 없음.
+        // 끄는 용도로 활용 가능.
+        TowerController.Instance.SelectTower(Vector3.one / 100);
+    }
     public void SelectTower(bool b, Tower tower = null)
     {
         towerInfoPanel.gameObject.SetActive(b);
         if (tower != null) towerInfoPanel.SetData(tower);
     }
-
+    
     public bool PointInTowerInfo(Vector2 point)
     {
         if (towerInfoPanel.gameObject.activeSelf == false) return false;
 
-        Rect rect = new Rect(towerInfoPanel.RectTransform.anchorMin, towerInfoPanel.RectTransform.rect.size);
+        Rect rect = new Rect(towerInfoPanel.RectTransform.anchoredPosition, towerInfoPanel.RectTransform.rect.size);
         return rect.Contains(point);
     }
-
+    
     public void ReinforceTower(int index, TowerStatType type)
     {
         towerInfoPanel.Reinforce(index, type);

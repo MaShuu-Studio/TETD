@@ -48,6 +48,23 @@ public class Tower : ObjectData
     private Dictionary<TowerStatType, int> statLevel;
     private Dictionary<BuffType, float> buffs;
     private Dictionary<DebuffType, float> debuffs;
+    public Color GradeColor
+    {
+        get
+        {
+            switch (grade)
+            {
+                case Grade.NORMAL:
+                    return new Color(.8f, .8f, .8f);
+                case Grade.RARE:
+                    return new Color(0.5f, 0.8f, 1);
+                case Grade.HEROIC:
+                    return new Color(0.7f, 0.4f, 1);
+                default:
+                    return new Color(1, 0.4f, 0.2f);
+            }
+        }
+    }
 
     public Tower(TowerData data, Dictionary<AnimationType, Sprite[]> animation)
     {
@@ -123,6 +140,7 @@ public class Tower : ObjectData
     public Tower(Tower data)
     {
         id = data.id;
+        name = data.name;
         animation = data.animation;
 
         attackType = data.attackType;

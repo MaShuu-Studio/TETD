@@ -148,7 +148,7 @@ public class TowerObject : Poolable
             spriteRenderer.flipX = true;
     }
 
-    private float Stat(TowerStatType type)
+    public float Stat(TowerStatType type)
     {
         float value = data.Stat(type);
 
@@ -157,7 +157,7 @@ public class TowerObject : Poolable
         return value;
     }
 
-    public float BonusStat(TowerStatType type)
+    private float BonusStat(TowerStatType type)
     {
         float value = 0;
         int stat = 0;
