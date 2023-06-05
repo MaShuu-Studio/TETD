@@ -9,6 +9,7 @@ public class GameSettingController : MonoBehaviour
 {
     [SerializeField] private List<GameSettingIcon> charIcons;
     [SerializeField] private List<GameSettingIcon> difficultIcons;
+    [SerializeField] private ScrollRect mapScrollRect;
     [SerializeField] private ToggleGroup mapInfos;
     [SerializeField] private MapInfoIcon mapIconPrefab;
     private List<MapInfoIcon> mapIcons;
@@ -39,8 +40,11 @@ public class GameSettingController : MonoBehaviour
 
         while (MapManager.Maps == null || TileManager.TilePaletteNames == null) await Task.Yield();
 
+        int size = 0;
         for (int i = 0; i < MapManager.Maps.Count; i++)
         {
+            if (i != 0) size += 50;
+
             string mapName = MapManager.Maps[i];
             Map map = await MapManager.LoadMap(mapName);
             MapInfoIcon mapIcon = Instantiate(mapIconPrefab);
@@ -49,10 +53,16 @@ public class GameSettingController : MonoBehaviour
             mapIcon.isOn = false;
 
             mapIcons.Add(mapIcon);
+
+            size += 400;
         }
 
         charIcons[0].isOn = true;
         mapIcons[0].isOn = true;
+
+        RectTransform infoRect = mapInfos.GetComponent<RectTransform>();
+        infoRect.sizeDelta = new Vector2(size, 450);
+        mapScrollRect.horizontalNormalizedPosition = 0;
     }
 
     public CharacterType SelectedCharacter()
