@@ -7,7 +7,9 @@ using TMPro;
 public class Shop : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI probText;
-    [SerializeField] private TextMeshProUGUI[] amountText;
+    [SerializeField] private Transform pubRemainParent;
+    [SerializeField] private ShopRemainInfo remainPrefab;
+    private List<ShopRemainInfo> remains;
     [SerializeField] private List<TowerInfoItem> items;
 
     private Dictionary<Grade, float> originProb;
@@ -28,6 +30,16 @@ public class Shop : MonoBehaviour
             items[i].Init();
         }
 
+        remains = new List<ShopRemainInfo>();
+        for (int e = 0; e < EnumArray.Elements.Length; e++)
+        {
+            ShopRemainInfo remain = Instantiate(remainPrefab);
+            remain.transform.SetParent(pubRemainParent);
+            remains.Add(remain);
+
+            remain.Init(e);
+        }
+        
         UpdateProb();
         UpdateAmount();
     }
@@ -51,13 +63,14 @@ public class Shop : MonoBehaviour
 
     public void UpdateAmount()
     {
-        for (int e = 0; e < EnumArray.Elements.Length; e++)
+        for (int e = 0; e < remains.Count; e++)
         {
-            amountText[e].text = "";
+            string str = "";
             for (int g = 0; g < EnumArray.Grades.Length; g++)
             {
-                amountText[e].text += PlayerController.Instance.UsableTowers[e, g].Count + "\n";
+                str += PlayerController.Instance.UsableTowers[e, g].Count + "\n";
             }
+            remains[e].SetData(str);
         }
     }
 
