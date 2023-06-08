@@ -362,7 +362,7 @@ public abstract class JsonData
 
     public string imgsrc;
     public Vector2 pivot;
-    public float pixelperunit;
+    public float pixelperunit = 24;
 }
 
 [Serializable]

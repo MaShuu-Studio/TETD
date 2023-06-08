@@ -121,6 +121,7 @@ namespace Excel_To_Json
                 {
                     object o = (range.Cells[row, column] as Excel.Range).Value2;
                     string type = (range.Cells[1, column] as Excel.Range).Value2;
+                    if (type == null || o == null) continue;
                     string value = ParseValue(type.ToLower(), o);
                     if (value != null)
                     {

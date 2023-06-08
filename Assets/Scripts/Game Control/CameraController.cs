@@ -51,8 +51,8 @@ public class CameraController : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         float scroll = Input.GetAxis("ScrollWheel");
 
-        if (scroll > 0 && pcam.assetsPPU < 120) scroll = 2;
-        else if (scroll < 0 && pcam.assetsPPU > 60) scroll = -2;
+        if (scroll > 0 && pcam.assetsPPU < 120) scroll = 8;
+        else if (scroll < 0 && pcam.assetsPPU > 72) scroll = -8;
         else scroll = 0;
 
         pcam.assetsPPU += (int)scroll;

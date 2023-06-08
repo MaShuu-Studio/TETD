@@ -273,7 +273,7 @@ namespace Data
         {
             CustomRuleTile ruleTile = null;
 
-            Sprite origin = await DataManager.LoadSprite(path, Vector2.one / 2, 64);
+            Sprite origin = await DataManager.LoadSprite(path, Vector2.one / 2, 24);
 
             if (origin == null) return null;
 

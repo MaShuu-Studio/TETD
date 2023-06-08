@@ -11,8 +11,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2000000/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -24,8 +23,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2000100/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -37,8 +35,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2010000/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -50,8 +47,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2010100/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -63,8 +59,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2020000/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -76,8 +71,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2020001/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -89,8 +83,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2020002/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -102,8 +95,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2021002/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -115,8 +107,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2021003/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -128,8 +119,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2021004/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -141,8 +131,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2022005/",
-"pivot": { "x": 0.5, "y": 0.05 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.05 }
 },
 
 {
@@ -154,8 +143,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2020100/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -167,8 +155,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2020101/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -180,8 +167,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2020102/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -193,8 +179,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2021102/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -206,8 +191,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2021103/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -219,8 +203,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2021104/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {
@@ -232,8 +215,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2022105/",
-"pivot": { "x": 0.5, "y": 0.0625 },
-"pixelperunit": 24
+"pivot": { "x": 0.5, "y": 0.0625 }
 }
     ]
 }

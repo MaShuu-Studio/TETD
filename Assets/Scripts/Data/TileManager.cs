@@ -37,7 +37,7 @@ public static class TileManager
             string path = flagPath + flagNames[i] + ".png";
             string name = DataManager.FileNameTriming(flagNames[i]).ToUpper();
 
-            Sprite sprite = await DataManager.LoadSprite(path, Vector2.one / 2, 16);
+            Sprite sprite = await DataManager.LoadSprite(path, Vector2.one / 2, 24);
             if (sprite == null) continue;
 
             sprite.name = name;
