@@ -245,16 +245,17 @@ public class TowerObject : Poolable
         }
         else if (priority == AttackPriority.DEBUFF)
         {
-            foreach (DebuffType type in data.DebuffTypes)
-            {
-                int remainTime = enemy.DebuffRemainTime(type);
-                float value = enemy.DebuffValue(type);
+            if (data.DebuffTypes != null)
+                foreach (DebuffType type in data.DebuffTypes)
+                {
+                    int remainTime = enemy.DebuffRemainTime(type);
+                    float value = enemy.DebuffValue(type);
 
-                // 남은 시간이 적을 수록
-                // 기존 값보다 더 강한 디버프 일 경우 더 높은 우선순위
-                prior += (5 - remainTime);
-                prior += data.Debuff(type) - value;
-            }
+                    // 남은 시간이 적을 수록
+                    // 기존 값보다 더 강한 디버프 일 경우 더 높은 우선순위
+                    prior += (5 - remainTime);
+                    prior += data.Debuff(type) - value;
+                }
 
             // 앞의 유닛이 더 높은 우선순위
             prior += enemy.Order / 10000f;

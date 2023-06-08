@@ -37,8 +37,8 @@ public class Tower : ObjectData
     public float effectspf;
     public Color effectColor;
 
-    public bool HasDebuff { get { return debuffs != null; } }
-    public bool HasBuff { get { return buffs != null; } }
+    public bool HasDebuff { get { return debuffs != null && debuffs.Count > 0; } }
+    public bool HasBuff { get { return buffs != null && buffs.Count > 0; } }
 
     public TowerStatType[] StatTypes { get; private set; }
     public BuffType[] BuffTypes { get; private set; }
@@ -115,9 +115,9 @@ public class Tower : ObjectData
         StatTypes = stat.Keys.ToArray();
 
         // 버프, 디버프
-        if (data.buffs != null)
+        buffs = new Dictionary<BuffType, float>();
+        if (data.buffs != null && data.buffs.Count > 0)
         {
-            buffs = new Dictionary<BuffType, float>();
             for (int i = 0; i < data.buffs.Count; i++)
             {
                 buffs.Add((BuffType)data.buffs[i].type, data.buffs[i].value);
@@ -125,9 +125,9 @@ public class Tower : ObjectData
             BuffTypes = buffs.Keys.ToArray();
         }
 
-        if (data.debuffs != null)
+        debuffs = new Dictionary<DebuffType, float>();
+        if (data.debuffs != null && data.debuffs.Count > 0)
         {
-            debuffs = new Dictionary<DebuffType, float>();
             for (int i = 0; i < data.debuffs.Count; i++)
             {
                 debuffs.Add((DebuffType)data.debuffs[i].type, data.debuffs[i].value);
@@ -170,9 +170,9 @@ public class Tower : ObjectData
         StatTypes = stat.Keys.ToArray();
 
         // 버프, 디버프
-        if (data.buffs != null)
+        buffs = new Dictionary<BuffType, float>();
+        if (data.buffs.Count > 0)
         {
-            buffs = new Dictionary<BuffType, float>();
             foreach (BuffType type in data.buffs.Keys)
             {
                 buffs.Add(type, data.buffs[type]);
@@ -180,9 +180,9 @@ public class Tower : ObjectData
             BuffTypes = buffs.Keys.ToArray();
         }
 
-        if (data.debuffs != null)
+        debuffs = new Dictionary<DebuffType, float>();
+        if (data.debuffs.Count > 0)
         {
-            debuffs = new Dictionary<DebuffType, float>();
             foreach (DebuffType type in data.debuffs.Keys)
             {
                 debuffs.Add(type, data.debuffs[type]);

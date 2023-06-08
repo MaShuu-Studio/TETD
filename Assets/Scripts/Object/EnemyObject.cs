@@ -159,26 +159,29 @@ public class EnemyObject : Poolable
 
         if (hp <= 0) return;
         // 디버프 추가
-        for (int i = 0; i < tower.DebuffTypes.Length; i++)
+        if (tower.DebuffTypes != null)
         {
-            DebuffType type = tower.DebuffTypes[i];
-            float value = tower.Debuff(type);
+            for (int i = 0; i < tower.DebuffTypes.Length; i++)
+            {
+                DebuffType type = tower.DebuffTypes[i];
+                float value = tower.Debuff(type);
 
-            if (debuffs.ContainsKey(type) == false)
-            {
-                EnemyDebuff debuff = new EnemyDebuff
+                if (debuffs.ContainsKey(type) == false)
                 {
-                    coroutine = Debuff(type, element),
-                    value = value,
-                    time = 5
-                };
-                debuffs.Add(type, debuff);
-                StartCoroutine(debuffs[type].coroutine);
-            }
-            else
-            {
-                if (debuffs[type].value < value) debuffs[type].value = value;
-                debuffs[type].time = 5;
+                    EnemyDebuff debuff = new EnemyDebuff
+                    {
+                        coroutine = Debuff(type, element),
+                        value = value,
+                        time = 5
+                    };
+                    debuffs.Add(type, debuff);
+                    StartCoroutine(debuffs[type].coroutine);
+                }
+                else
+                {
+                    if (debuffs[type].value < value) debuffs[type].value = value;
+                    debuffs[type].time = 5;
+                }
             }
         }
     }
