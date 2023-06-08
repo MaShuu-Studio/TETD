@@ -53,6 +53,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI roundInfo;
     [SerializeField] private DamageUI damageUI;
     [SerializeField] private DamagePool damageUIPool;
+    [SerializeField] private Image flashImage;
     private EachRound nextRound;
 
     [Header("Info Panel")]
@@ -158,6 +159,34 @@ public class UIController : MonoBehaviour
     #endregion
 
     #region Game Scene
+    IEnumerator flashCoroutine;
+    public void Flash(Color c, float time)
+    {
+        if (flashCoroutine != null)
+        {
+            StopCoroutine(flashCoroutine);
+            flashCoroutine = null;
+        }
+        c.a = 1 / 3;
+        flashImage.color = c;
+        flashCoroutine = Flashing(c, time);
+        StartCoroutine(flashCoroutine);
+    }
+
+    private IEnumerator Flashing(Color c, float time)
+    {
+        flashImage.gameObject.SetActive(true);
+        float origin = time;
+        while (time > 0)
+        {
+            time -= Time.deltaTime;
+            c.a = time / (origin * 3);
+            flashImage.color = c;
+            yield return null;
+        }
+        flashImage.gameObject.SetActive(false);
+    }
+
     public void GameSetting(out CharacterType c, out List<DifficultyType> diff, out string map)
     {
         c = gameSetting.SelectedCharacter();
@@ -282,7 +311,7 @@ public class UIController : MonoBehaviour
         towerInfoPanel.gameObject.SetActive(b);
         if (tower != null) towerInfoPanel.SetData(tower);
     }
-    
+
     public bool PointInTowerInfo(Vector2 point)
     {
         if (towerInfoPanel.gameObject.activeSelf == false) return false;
@@ -290,7 +319,7 @@ public class UIController : MonoBehaviour
         Rect rect = new Rect(towerInfoPanel.RectTransform.anchoredPosition, towerInfoPanel.RectTransform.rect.size);
         return rect.Contains(point);
     }
-    
+
     public void ReinforceTower(int index, TowerStatType type)
     {
         towerInfoPanel.Reinforce(index, type);

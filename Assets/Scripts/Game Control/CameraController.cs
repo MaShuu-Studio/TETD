@@ -10,7 +10,7 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance != null)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;
@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
     public Camera Cam { get { return cam; } }
     private Camera cam;
     private PixelPerfectCamera pcam;
-    
+
     private Rect boundary;
 
     public void FindCamera()
@@ -91,5 +91,49 @@ public class CameraController : MonoBehaviour
 
         if (rect.yMin < boundary.yMin) cam.transform.position -= new Vector3(0, rect.yMin - boundary.yMin);
         else if (rect.yMax > boundary.yMax) cam.transform.position -= new Vector3(0, rect.yMax - boundary.yMax);
+    }
+
+    //private Vector3 shakePos;
+    private float shaking;
+    private IEnumerator shakeCoroutine;
+
+    public void ShakeCamera(float time)
+    {
+        if (shakeCoroutine != null)
+        {
+            StopCoroutine(shakeCoroutine);
+            //cam.transform.localScale = Vector3.one;
+            shakeCoroutine = null;
+        }
+        shakeCoroutine = Shake(time);
+        StartCoroutine(shakeCoroutine);
+    }
+
+    public IEnumerator Shake(float max)
+    {
+        float time = 0;
+        //shakePos = Vector3.zero;
+        shaking = .98f;
+        while (time < max)
+        {
+            /*
+            int compare = (int)(time * 20);
+            // 0.05초 간격으로 쉐이크
+            if (compare == count)
+            {
+                cam.transform.position -= shakePos;
+                float x = Random.Range(-0.064f, 0.064f);
+                float y = Random.Range(-0.036f, 0.036f);
+                shakePos = new Vector3(x, 0);
+                cam.transform.position += shakePos;
+                count++;
+            }*/
+
+            shaking = .98f + (0.02f * (time / max));
+            cam.transform.localScale = Vector3.one * shaking;
+            time += Time.deltaTime;
+            yield return null;
+        }
+        cam.transform.localScale = Vector3.one;
     }
 }

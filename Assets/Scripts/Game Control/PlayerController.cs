@@ -79,6 +79,8 @@ public class PlayerController : MonoBehaviour
     public void Damaged(int damage)
     {
         life -= damage;
+        CameraController.Instance.ShakeCamera(0.1f);
+        UIController.Instance.Flash(new Color(0.5f, 0, 0), 0.2f);
         if (life < 0) life = 0;
         UpdateInfo();
     }
