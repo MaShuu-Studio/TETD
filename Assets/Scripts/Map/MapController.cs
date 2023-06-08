@@ -95,6 +95,7 @@ public class MapController : MonoBehaviour
     public void ReadyToBuild(int id)
     {
         this.id = id;
+        selectedTile.sprite = SpriteManager.GetSprite(id);
         readyToBuild = true;
     }
 

@@ -13,8 +13,9 @@ public class BuildTowerButton : ScriptableButton
     private Image gradeImage;
     private int id;
 
-    public void Start()
+    protected override void Awake()
     {
+        base.Awake();
         gradeImage = GetComponent<Image>();
     }
 
@@ -27,6 +28,7 @@ public class BuildTowerButton : ScriptableButton
             elementImage.gameObject.SetActive(false);
             image.gameObject.SetActive(false);
             costText.text = "";
+            gradeImage.color = Color.white;
             return;
         }
 

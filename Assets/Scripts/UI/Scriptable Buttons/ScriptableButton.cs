@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public abstract class ScriptableButton : MonoBehaviour
 {
     protected Button button;
-    protected void Awake()
+    protected virtual void Awake()
     {
         button = GetComponent<Button>();
         button.onClick.AddListener(() => ClickEvent());

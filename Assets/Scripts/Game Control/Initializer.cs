@@ -20,6 +20,8 @@ public class Initializer : MonoBehaviour
 
         Data.DataManager.MakeFileNameList();
         EnumData.EnumArray.Init();
+
+        Application.targetFrameRate = 60;
     }
 
     private void Start()
