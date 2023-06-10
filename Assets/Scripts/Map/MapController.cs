@@ -23,6 +23,7 @@ public class MapController : MonoBehaviour
         OffSeletedTile();
     }
 
+    [SerializeField] private SpriteRenderer[] backgrounds;
     [SerializeField] private SpriteRenderer selectedTile;
     [SerializeField] private Tilemap tilemap;
     private Grid grid;
@@ -40,6 +41,26 @@ public class MapController : MonoBehaviour
         tilemap.ClearAllTiles();
         tilemap.origin = map.tilemap.origin;
         tilemap.size = map.tilemap.size;
+
+        Sprite[] sprites = map.tilemap.GetBackGround();
+        for (int i = 0; i < backgrounds.Length; i++)
+        {
+            if (sprites[i] == null)
+            {
+                backgrounds[i].gameObject.SetActive(false);
+                continue;
+            }
+            // 전체사이즈가 640*360일 때 딱 맞게 되어있음.
+            // 이에 맞춰서 사이즈 조정
+
+            float x, y;
+            x = sprites[i].texture.width;
+            y = sprites[i].texture.height;
+
+            backgrounds[i].transform.localScale = new Vector3(640 / x, 360 / y);
+            backgrounds[i].sprite = sprites[i];
+            backgrounds[i].gameObject.SetActive(true);
+        }
 
         foreach (var pos in map.tilemap.tiles.Keys)
         {

@@ -34,6 +34,7 @@ public static class MapManager
         bool finds = false, findd = false;
         Vector3Int start = Vector3Int.zero;
         Vector3Int dest = Vector3Int.zero;
+
         for (int y = tilemap.size.y; y >= 0; y--)
         {
             for (int x = 0; x < tilemap.size.x; x++)

@@ -58,6 +58,9 @@ TagManager:
   - name: Projectile
     uniqueID: 1966840089
     locked: 0
+  - name: Map Upper Layer
+    uniqueID: 3100309813
+    locked: 0
   - name: UI
     uniqueID: 163434383
     locked: 0

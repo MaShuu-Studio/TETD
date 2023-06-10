@@ -63,6 +63,11 @@ public class TilemapInfo
         return TileManager.GetTile(tileName, tiles[pos]);
     }
 
+    public Sprite[] GetBackGround()
+    {
+        return TileManager.GetBackground(tileName);
+    }
+
     public bool Buildable(Vector3Int pos)
     {
         if (tiles.ContainsKey(pos) == false) return false;
@@ -86,6 +91,7 @@ public struct TileInfo
 public class TilePalette
 {
     public string tileName;
+    public Sprite[] backgrounds;
     public Dictionary<string, CustomRuleTile> buildable;
     public Dictionary<string, CustomRuleTile> notBuildable;
     public Dictionary<string, CustomRuleTile> roads;
@@ -94,7 +100,8 @@ public class TilePalette
     public TilePalette(string tileName, 
         Dictionary<string, CustomRuleTile> buildable, 
         Dictionary<string, CustomRuleTile> notBuildable, 
-        Dictionary<string, CustomRuleTile> roads)
+        Dictionary<string, CustomRuleTile> roads,
+        Sprite[] backgrounds)
     {
         this.tileName = tileName;
         this.buildable = buildable;
@@ -108,6 +115,9 @@ public class TilePalette
             Tiles.Add(tile);
         foreach (var tile in roads.Values)
             Tiles.Add(tile);
+
+        this.backgrounds = new Sprite[backgrounds.Length];
+        backgrounds.CopyTo(this.backgrounds, 0);
     }
 }
 

@@ -19,6 +19,7 @@ public static class TileManager
     private static string[] flagNames = { "BUILDABLE", "NOTBUILDABLE", "STARTFLAG", "DESTFLAG", "CORNER", "HORIZONTAL", "VERTICAL" };
     private static string[] tileDics = { "/Buildable/", "/Not Buildable/" };
     private static string[] constTiles = { "ROAD", "START", "DEST" };
+    private static string[] mapBackgrounds = { "LOWER", "UPPER" };
 
     public static bool IsConstTile(string str)
     {
@@ -86,9 +87,21 @@ public static class TileManager
                 roads.Add(constTiles[j], tile);
             }
 
+            Sprite[] backgrounds = new Sprite[mapBackgrounds.Length];
+            for (int j = 0; j < mapBackgrounds.Length; j++)
+            {
+                backgrounds[j] = await DataManager.LoadSprite(filePath + "/" + mapBackgrounds[j] + ".png", Vector2.one / 2, 24);               
+            }
+
             string tilePaletteName = tilePalettes[i].ToUpper();
 
-            TilePalette tilePalette = new TilePalette(tilePalettes[i], buildableTiles, notBuildableTiles, roads);
+            TilePalette tilePalette = 
+                new TilePalette(
+                    tilePalettes[i], 
+                    buildableTiles, 
+                    notBuildableTiles, 
+                    roads,
+                    backgrounds);
             tiles.Add(tilePaletteName, tilePalette);
         }
         tilePaletteNames = tiles.Keys.ToList();
@@ -133,6 +146,14 @@ public static class TileManager
     {
         name = name.ToUpper();
         if (flags.ContainsKey(name)) return flags[name];
+
+        return null;
+    }
+
+    public static Sprite[] GetBackground(string name)
+    {
+        name = name.ToUpper();
+        if (tiles.ContainsKey(name)) return tiles[name].backgrounds;
 
         return null;
     }

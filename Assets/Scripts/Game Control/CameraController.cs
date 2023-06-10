@@ -19,7 +19,12 @@ public class CameraController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         // 경계 강제 설정
-        boundary = new Rect(-16, -9, 32, 18);
+        // 1 = 24pixel
+        // 전체사이즈 = 640 * 360
+        // 26.67 * 15
+        float x = 640 / 24f;
+        float y = 360 / 24f;
+        boundary = new Rect(-x/2, -y/2, x, y);        
     }
 
     public Camera Cam { get { return cam; } }
@@ -42,23 +47,26 @@ public class CameraController : MonoBehaviour
         pcam.refResolutionY = Screen.height;
     }
 
+    float scroll;
+
     // Update is called once per frame
     void Update()
     {
         if (cam == null) return;
-
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        float scroll = Input.GetAxis("ScrollWheel");
+        
+        scroll = Input.GetAxis("ScrollWheel");
 
         if (scroll > 0 && pcam.assetsPPU < 120) scroll = 8;
         else if (scroll < 0 && pcam.assetsPPU > 72) scroll = -8;
         else scroll = 0;
 
         pcam.assetsPPU += (int)scroll;
-
+        
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
         // 변화가 없다면 스킵
-        if (horizontal == 0 && vertical == 0 && scroll == 0) return;
+        //if (horizontal == 0 && vertical == 0 && scroll == 0) return;
+
         Vector3 movement = new Vector3(horizontal, vertical) * 10 * Time.deltaTime;
         cam.transform.position += movement;
 
@@ -91,6 +99,7 @@ public class CameraController : MonoBehaviour
 
         if (rect.yMin < boundary.yMin) cam.transform.position -= new Vector3(0, rect.yMin - boundary.yMin);
         else if (rect.yMax > boundary.yMax) cam.transform.position -= new Vector3(0, rect.yMax - boundary.yMax);
+        
     }
 
     //private Vector3 shakePos;
