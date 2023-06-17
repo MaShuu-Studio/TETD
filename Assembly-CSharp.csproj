@@ -102,6 +102,8 @@
     <Compile Include="Assets\Scripts\UI\TowerStatItem.cs" />
     <Compile Include="Assets\Scripts\Data\Language.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\RerollButton.cs" />
+    <Compile Include="Assets\Scripts\UI\DescriptionIcon.cs" />
+    <Compile Include="Assets\Scripts\UI\DescriptionPopup.cs" />
     <Compile Include="Assets\Scripts\Map\Map.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ExitButton.cs" />
     <Compile Include="Assets\Scripts\Game Control\GameController.cs" />

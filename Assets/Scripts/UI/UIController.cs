@@ -37,6 +37,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameSettingController gameSetting;
     [SerializeField] private TMP_InputField mapNameInputfield;
     [SerializeField] private TMP_Dropdown tilePaletteDropdown;
+
     [Space]
     [SerializeField] private Library library;
 
@@ -72,6 +73,9 @@ public class UIController : MonoBehaviour
 
     [Header("Tower Info")]
     [SerializeField] private TowerInfoPanel towerInfoPanel;
+
+    [Header("ETC")]
+    [SerializeField] private DescriptionPopup descPopup;
 
     [Space]
     [Header("Map Editor")]
@@ -142,6 +146,16 @@ public class UIController : MonoBehaviour
     public void GameOver()
     {
         gameOverView.SetActive(true);
+    }
+
+    public void SetDescription(Vector3 pos, string str)
+    {
+        descPopup.SetDescription(pos, str);
+    }
+
+    public void MoveDescription(Vector3 pos)
+    {
+        descPopup.MoveDescription(pos);
     }
 
     #region Library
