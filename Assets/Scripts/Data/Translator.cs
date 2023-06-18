@@ -6,7 +6,7 @@ using Data;
 
 public static class Translator
 {
-    private static string path = Application.streamingAssetsPath + "/Data/";
+    private static string path = "/Data/";
 
     private static Dictionary<int, Language> languages;
 

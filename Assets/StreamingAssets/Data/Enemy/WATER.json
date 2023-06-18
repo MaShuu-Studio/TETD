@@ -1,0 +1,29 @@
+{
+    "list": 
+    [
+        
+{
+    "id": 2010000,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2010000/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2010100,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2010100/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+}
+    ]
+}

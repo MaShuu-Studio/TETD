@@ -147,8 +147,8 @@ namespace Data
 
         public static async Task<List<T>> DeserializeListJson<T>(string path, string fileName)
         {
-            fileName += ".json";
-            path = Path.Combine(path, fileName);
+            if (fileName.Contains(".json") == false) fileName += ".json";
+            path = Application.streamingAssetsPath + Path.Combine(path, fileName);
 
             SerializableList<T> obj = null;
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 public static class TowerManager
 {
-    private static string path = Application.streamingAssetsPath + "/Data/";
+    private static string path = "/Data/Tower/";
 
     private static Dictionary<int, Tower> towers;
     public static Dictionary<int, Sprite[]> Projs { get { return projectiles; } }
@@ -29,7 +29,13 @@ public static class TowerManager
         projectiles = new Dictionary<int, Sprite[]>();
         effects = new Dictionary<int, Sprite[]>();
 
-        List<TowerData> list = await DataManager .DeserializeListJson<TowerData>(path, "Tower");
+        List<string> files = DataManager.GetFileNames(path);
+        List<TowerData> list = new List<TowerData>();
+        foreach (string filename in files)
+        {
+            list.AddRange(await DataManager.DeserializeListJson<TowerData>(path, filename));
+        }
+
         egTowerIds = new List<int>[EnumArray.Elements.Length, EnumArray.Grades.Length];
         for (int i = 0; i < EnumArray.Elements.Length; i++)
             for (int j = 0; j < EnumArray.Grades.Length; j++)
@@ -120,7 +126,7 @@ public static class TowerManager
 
     public static void UpdateLanguage(LanguageType type)
     {
-        foreach(var tower in towers.Values)
+        foreach (var tower in towers.Values)
         {
             tower.UpdateName(Translator.GetLanguage(tower.id), type);
         }

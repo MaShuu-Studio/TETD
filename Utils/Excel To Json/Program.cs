@@ -22,7 +22,10 @@ namespace Excel_To_Json
                 {
                     string name = sheet.Name;
                     string filename = name + ".json";
+                    string langFilename = "";
                     string contents = "";
+                    string langContents = "";
+                    string directory = "";
                     Excel.Range range = sheet.UsedRange;
 
                     Console.WriteLine($"Start Parsing {name.ToUpper()}");
@@ -36,63 +39,29 @@ namespace Excel_To_Json
                     {
                         contents = string.Format(JsonFormat.contentsFormat, ParseRoundData(name, range));
                     }
-
-                    File.WriteAllText(Path.Combine(Environment.CurrentDirectory, filename), contents);
-                }
-                workBook.Close(true);
-
-
-                // 언어가 구분되어야 하는 데이터들 (Tower, Enemy)
-                string[] names =
-                {
-                    "Tower", "Enemy"
-                };
-
-                for (int i = 0; i < names.Length; i++)
-                {
-                    // 0: data, 1: language
-                    string[] filename =
+                    // AA @ BB
+                    // 데이터 내에서 추가 구분이 이루어지는 데이터들 (Tower, Enemey)
+                    else if(name.Contains("@"))
                     {
-                        names[i] + ".json",
-                        names[i] + "Lang" + ".json"
-                    };
-
-                    string contents = "";
-                    string langContents = "";
-                    Console.WriteLine($"Start Parsing {names[i].ToUpper()}");
-
-                    path = Path.Combine(Environment.CurrentDirectory, names[i] + ".xlsx");
-                    workBook = app.Workbooks.Open(path);
-
-                    int j = 0;
-                    foreach (Excel.Worksheet sheet in workBook.Worksheets)
-                    {
-                        string name = sheet.Name;
-                        Excel.Range range = sheet.UsedRange;
-
-                        Console.WriteLine($"Start Parsing {name.ToUpper()}");
-
                         // 0: data, 1: language
                         string[] data = ParseBasicData(name, range);
 
-                        if (j != 0)
-                        {
-                            if (data[0] != "") data[0] = ",\n" + data[0];
-                            if (data[1] != "") data[1] = ",\n" + data[1];
-                        }
+                        contents = string.Format(JsonFormat.jsonFormat, data[0]);
+                        langContents = string.Format(JsonFormat.jsonFormat, langContents);
 
-                        contents += data[0];
-                        langContents += data[1];
-                        j++;
+                        langFilename = name + ".json";
+
+                        string[] n = name.Split("@");
+                        directory = $"/{n[0]}";
+                        name = n[1];
+                        filename = n[1] + ".json";
                     }
 
-                    contents = string.Format(JsonFormat.jsonFormat, contents);
-                    langContents = string.Format(JsonFormat.jsonFormat, langContents);
-                    File.WriteAllText(Path.Combine(Environment.CurrentDirectory, filename[0]), contents);
-                    File.WriteAllText(Path.Combine(Environment.CurrentDirectory, filename[1]), langContents);
-                    workBook.Close(true);
+                    File.WriteAllText(Path.Combine(Environment.CurrentDirectory + directory, filename), contents);
+                    if (langContents != "")
+                        File.WriteAllText(Path.Combine(Environment.CurrentDirectory + "/Language/", langFilename), langContents);
                 }
-
+                workBook.Close(true);
                 app.Quit();
             }
             catch (Exception e)

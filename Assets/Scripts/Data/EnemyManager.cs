@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 public static class EnemyManager
 {
-    private static string path = Application.streamingAssetsPath + "/Data/";
+    private static string path = "/Data/Enemy/";
 
     private static Dictionary<int, Enemy> enemies;
 
@@ -18,7 +18,13 @@ public static class EnemyManager
     public static async Task Init()
     {
         enemies = new Dictionary<int, Enemy>();
-        List<EnemyData> list = await DataManager.DeserializeListJson<EnemyData>(path, "Enemy");
+
+        List<string> files = DataManager.GetFileNames(path);
+        List<EnemyData> list = new List<EnemyData>();
+        foreach (string filename in files)
+        {
+            list.AddRange(await DataManager.DeserializeListJson<EnemyData>(path, filename));
+        }
 
         foreach (var data in list)
         {
@@ -35,6 +41,7 @@ public static class EnemyManager
         Debug.Log($"[SYSTEM] LOAD ENEMY {enemies.Count}");
 #endif
     }
+
     private static async Task<Dictionary<AnimationType, Sprite[]>> MakeAnimation(EnemyData data)
     {
         Dictionary<AnimationType, Sprite[]> anim = new Dictionary<AnimationType, Sprite[]>();
