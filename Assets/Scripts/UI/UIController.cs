@@ -93,10 +93,9 @@ public class UIController : MonoBehaviour
     }
     public async Task Init()
     {
-        optionUI.Init();
-
         await library.Init();
         library.Open(false);
+        await optionUI.Init();
         CurProgress++;
 
         await Title();
@@ -144,6 +143,7 @@ public class UIController : MonoBehaviour
     {
         towerInfoPanel.UpdateLanguage();
         shop.UpdateLanguage();
+        library.UpdatePage();
         UpdateRoundInfo();
     }
 

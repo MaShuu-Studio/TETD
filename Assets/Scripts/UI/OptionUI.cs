@@ -15,7 +15,7 @@ public class OptionUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI sfxText;
     [SerializeField] private TMP_Dropdown languages;
 
-    public async void Init()
+    public async Task Init()
     {
         Setting setting = DataManager.LoadSetting();
         int bgm = 10;
@@ -41,6 +41,9 @@ public class OptionUI : MonoBehaviour
         languages.AddOptions(EnumData.EnumArray.LanguageTypeStrings.Values.ToList());
         languages.onValueChanged.AddListener(i => GameController.Instance.SetLanguage(i));
 
+        // 언어 세팅. 그 전에 Tower와 Enemy가 로드되기를 대기함.
+        while (TowerManager.Keys == null || EnemyManager.Keys == null) await Task.Yield();
+        GameController.Instance.SetLanguage(lang);
         languages.value = lang;
 
         bgmSlider.onValueChanged.AddListener(v => SetOption());

@@ -105,7 +105,7 @@ public class Library : MonoBehaviour
         UpdatePage();
     }
 
-    private void UpdatePage()
+    public void UpdatePage()
     {
         int i;
 

@@ -35,6 +35,7 @@ public class GameController : MonoBehaviour
 
         UIController.Instance.UpdateLanguage();
 
+        // 인게임이 아니라면 TowerController가 존재하지 않음.
         if (TowerController.Instance != null)
             TowerController.Instance.UpdateLanguage(currentLanguage);
     }
