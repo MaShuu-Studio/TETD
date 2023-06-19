@@ -10,11 +10,18 @@ public static class RoundManager
     private static string path = Application.streamingAssetsPath + "/Data/";
 
     private static Round round;
+    public static int CurProgress { get; private set; } = 0;
+    public static int TotalProgress { get; private set; }
+    public static void GetTotal()
+    {
+        TotalProgress = 1;
+    }
 
     public static async Task Init()
     {
         RoundData data = await DataManager.DeserializeJson<RoundData>(path, "Round");
         round = new Round(data);
+        CurProgress++;
 
 #if UNITY_EDITOR
         Debug.Log($"[SYSTEM] LOAD ROUND DATA");

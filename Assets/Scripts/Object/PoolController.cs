@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 using EnumData;
 
 public class PoolController : MonoBehaviour
@@ -43,11 +44,19 @@ public class PoolController : MonoBehaviour
     private Dictionary<int, ProjectilePool> projPool;
     private Dictionary<int, Pool> effectPool;
 
-    public void Init()
+    public static int CurProgress { get; private set; } = 0;
+    public static int TotalProgress { get; private set; }
+    public static void GetTotal()
+    {
+        TotalProgress = TowerManager.TotalProgress + EnemyManager.TotalProgress;
+    }
+    public async Task Init()
     {
         pool = new Dictionary<int, Pool>();
         projPool = new Dictionary<int, ProjectilePool>();
         effectPool = new Dictionary<int, Pool>();
+
+        while (TowerManager.Keys == null || EnemyManager.Keys == null) await Task.Yield();
 
         for (int i = 0; i < TowerManager.Keys.Count; i++)
         {
@@ -102,6 +111,8 @@ public class PoolController : MonoBehaviour
                     effectPool.Add(id, effectPoolComponent);
                 }
             }
+
+            CurProgress++;
         }
 
         for (int i = 0; i < EnemyManager.Keys.Count; i++)
@@ -119,6 +130,8 @@ public class PoolController : MonoBehaviour
             poolComponent.Init(poolable);
 
             pool.Add(id, poolComponent);
+
+            CurProgress++;
         }
 
         /* Poolable의 존재에 따라 자동으로 Object Pool에 넣어주는 시스템
@@ -158,7 +171,7 @@ public class PoolController : MonoBehaviour
 
         Instance.projPool[id].Push(obj);
     }
-    
+
     // 투사체 전용 Pop
     public static GameObject Pop(int id, Vector2 start, Vector2 end)
     {

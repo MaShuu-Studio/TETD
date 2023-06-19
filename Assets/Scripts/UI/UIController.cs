@@ -85,12 +85,20 @@ public class UIController : MonoBehaviour
     [SerializeField] private RectTransform[] sidePanel;
     private List<MapEditorTile> tiles;
 
+    public static int CurProgress { get; private set; } = 0;
+    public static int TotalProgress { get; private set; }
+    public static void GetTotal()
+    {
+        TotalProgress = 1;
+    }
     public async Task Init()
     {
         optionUI.Init();
 
         await library.Init();
         library.Open(false);
+        CurProgress++;
+
         await Title();
     }
 

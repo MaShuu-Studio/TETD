@@ -21,6 +21,9 @@ public static class TileManager
     private static string[] constTiles = { "ROAD", "START", "DEST" };
     private static string[] mapBackgrounds = { "LOWER", "UPPER" };
 
+    public static int CurProgress { get; private set; } = 0;
+    public static int TotalProgress { get; private set; }
+
     public static bool IsConstTile(string str)
     {
         for (int i = 0; i < constTiles.Length; i++)
@@ -30,9 +33,21 @@ public static class TileManager
         return false;
     }
 
+    public static void GetTotal()
+    {
+        string[] tilePalettes = DataManager.GetDics(Application.streamingAssetsPath + mapPath);
+
+        TotalProgress = flagNames.Length + tilePalettes.Length;
+    }
+
     public static async Task Init()
     {
         flags = new Dictionary<string, CustomTile>();
+        tiles = new Dictionary<string, TilePalette>();
+        string[] tilePalettes = DataManager.GetDics(Application.streamingAssetsPath + mapPath);
+
+
+
         for (int i = 0; i < flagNames.Length; i++)
         {
             string path = flagPath + flagNames[i] + ".png";
@@ -46,10 +61,10 @@ public static class TileManager
             tile.SetData(name, sprite, false);
 
             flags.Add(flagNames[i], tile);
+
+            CurProgress++;
         }
 
-        tiles = new Dictionary<string, TilePalette>();
-        string[] tilePalettes = DataManager.GetDics(Application.streamingAssetsPath + mapPath);
         for (int i = 0; i < tilePalettes.Length; i++)
         {
             string filePath = mapPath + tilePalettes[i];
@@ -90,19 +105,21 @@ public static class TileManager
             Sprite[] backgrounds = new Sprite[mapBackgrounds.Length];
             for (int j = 0; j < mapBackgrounds.Length; j++)
             {
-                backgrounds[j] = await DataManager.LoadSprite(filePath + "/" + mapBackgrounds[j] + ".png", Vector2.one / 2, 24);               
+                backgrounds[j] = await DataManager.LoadSprite(filePath + "/" + mapBackgrounds[j] + ".png", Vector2.one / 2, 24);
             }
 
             string tilePaletteName = tilePalettes[i].ToUpper();
 
-            TilePalette tilePalette = 
+            TilePalette tilePalette =
                 new TilePalette(
-                    tilePalettes[i], 
-                    buildableTiles, 
-                    notBuildableTiles, 
+                    tilePalettes[i],
+                    buildableTiles,
+                    notBuildableTiles,
                     roads,
                     backgrounds);
             tiles.Add(tilePaletteName, tilePalette);
+
+            CurProgress++;
         }
         tilePaletteNames = tiles.Keys.ToList();
 

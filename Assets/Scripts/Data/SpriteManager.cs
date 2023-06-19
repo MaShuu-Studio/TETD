@@ -9,6 +9,12 @@ public static class SpriteManager
 {
     private static Dictionary<int, Sprite> sprites;
     private static Dictionary<string, Sprite> uiSprites;
+    public static int CurProgress { get; private set; } = 0;
+    public static int TotalProgress { get; private set; }
+    public static void GetTotal()
+    {
+        TotalProgress = EnumArray.Elements.Length + EnumArray.TowerStatTypes.Length + EnumArray.BuffTypes.Length + EnumArray.DebuffTypes.Length;
+    }
 
     public static async Task Init()
     {
@@ -22,6 +28,8 @@ public static class SpriteManager
             Sprite sprite = await DataManager.LoadSprite("/Sprites/UI/" + name + ".png", Vector2.one / 2, 16);
             sprite.name = name;
             uiSprites.Add(name, sprite);
+
+            CurProgress++;
         }
 
         for (int i = 0; i < EnumArray.TowerStatTypes.Length; i++)
@@ -30,6 +38,8 @@ public static class SpriteManager
             Sprite sprite = await DataManager.LoadSprite("/Sprites/UI/" + name + ".png", Vector2.one / 2, 16);
             sprite.name = name;
             uiSprites.Add(name, sprite);
+
+            CurProgress++;
         }
 
         for (int i = 0; i < EnumArray.BuffTypes.Length; i++)
@@ -39,6 +49,8 @@ public static class SpriteManager
             if (sprite == null) continue;
             sprite.name = name;
             uiSprites.Add(name, sprite);
+
+            CurProgress++;
         }
 
         for (int i = 0; i < EnumArray.DebuffTypes.Length; i++)
@@ -48,7 +60,13 @@ public static class SpriteManager
             if (sprite == null) continue;
             sprite.name = name;
             uiSprites.Add(name, sprite);
+
+            CurProgress++;
         }
+
+#if UNITY_EDITOR
+        Debug.Log($"[SYSTEM] LOAD BASIC SPRITES");
+#endif
     }
 
     public static async Task AddSprite<T>(string path, int id, Vector2 pivot, float pixelPerUnit)

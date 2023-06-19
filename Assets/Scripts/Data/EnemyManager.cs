@@ -15,6 +15,20 @@ public static class EnemyManager
     public static List<int> Keys { get { return keys; } }
     private static List<int> keys;
 
+    public static int CurProgress { get; private set; } = 0;
+    public static int TotalProgress { get; private set; }
+    public static async Task GetTotal()
+    {
+        TotalProgress = 0;
+
+        List<string> files = DataManager.GetFileNames(path);
+        foreach (string filename in files)
+        {
+            List<EnemyData> list = await DataManager.DeserializeListJson<EnemyData>(path, filename);
+            TotalProgress += list.Count;
+        }
+    }
+
     public static async Task Init()
     {
         enemies = new Dictionary<int, Enemy>();
@@ -34,6 +48,7 @@ public static class EnemyManager
             Sprite mask = MakeMask(SpriteManager.GetSprite(data.id), data.pivot, data.pixelperunit);
             Enemy enemy = new Enemy(data, anim, mask);
             enemies.Add(enemy.id, enemy);
+            CurProgress++;
         }
 
         keys = enemies.Keys.ToList();

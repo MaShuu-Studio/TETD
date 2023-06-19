@@ -12,14 +12,24 @@ public static class MapManager
 
     public static List<string> Maps { get { return maps; } }
     private static List<string> maps;
+    public static int CurProgress { get; private set; } = 0;
+    public static int TotalProgress { get; private set; }
+
+    public static async Task GetTotal()
+    {
+        string[] files = await DataManager.GetFiles(path);
+        TotalProgress = files.Length;
+    }
 
     public static async Task Init()
     {
-        string[] files = await DataManager.GetFiles(path);
         maps = new List<string>();
+        string[] files = await DataManager.GetFiles(path);
+
         for (int i = 0; i < files.Length; i++)
         {
             maps.Add(DataManager.FileNameTriming(files[i]));
+            CurProgress++;
         }
 
 #if UNITY_EDITOR

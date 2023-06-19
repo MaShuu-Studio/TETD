@@ -41,6 +41,78 @@ public class SceneController : MonoBehaviour
         return -1;
     }
 
+    public async void Init()
+    {
+        // 각 Init Class들의 전체진행도를 구함.
+        await Translator.GetTotal();
+        SpriteManager.GetTotal();
+        await SoundManager.GetTotal();
+        await TowerManager.GetTotal();
+        await EnemyManager.GetTotal();
+        TileManager.GetTotal();
+        await MapManager.GetTotal();
+        RoundManager.GetTotal();
+        UIController.GetTotal();
+
+        int total =
+             Translator.TotalProgress +
+             SpriteManager.TotalProgress +
+             SoundManager.TotalProgress +
+             TowerManager.TotalProgress +
+             EnemyManager.TotalProgress +
+             TileManager.TotalProgress +
+             MapManager.TotalProgress +
+             RoundManager.TotalProgress +
+             PoolController.TotalProgress +
+             UIController.TotalProgress;
+
+        // 로딩창으로 넘김
+        UIController.Instance.StartLoading();
+
+        // 초기화 작업 진행.
+        IEnumerator co = InitProgress(total);
+        StartCoroutine(co);
+        await Translator.Init();
+        await SpriteManager.Init();
+        await SoundManager.Init();
+
+        await TowerManager.Init();
+        await EnemyManager.Init();
+
+        await TileManager.Init();
+        await MapManager.Init();
+        await RoundManager.Init();
+
+        await PoolController.Instance.Init();
+        await UIController.Instance.Init();
+
+        StopCoroutine(co);
+        ChangeScene("Title", null);
+        isLoading = false;
+    }
+
+    private IEnumerator InitProgress(int total)
+    {
+        int cur = 0;
+        while (total > cur)
+        {
+            cur =
+                Translator.CurProgress +
+                SpriteManager.CurProgress +
+                SoundManager.CurProgress +
+                TowerManager.CurProgress +
+                EnemyManager.CurProgress +
+                TileManager.CurProgress +
+                MapManager.CurProgress +
+                RoundManager.CurProgress +
+                PoolController.CurProgress +
+                UIController.CurProgress;
+
+            Progress((float)cur / total);
+            yield return null;
+        }
+    }
+
     public async void ChangeScene(string scene, List<SceneAction> actions)
     {
         int sceneNumber = FindScene(scene);
