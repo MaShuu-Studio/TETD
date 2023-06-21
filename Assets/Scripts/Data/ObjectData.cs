@@ -11,9 +11,9 @@ public abstract class ObjectData
     public string name { get; protected set; }
     public Dictionary<AnimationType, Sprite[]> animation { get; protected set; }
 
-    public void UpdateName(Language lang, LanguageType type)
+    public void UpdateName(Language lang)
     {
-        name = lang.GetName(type);
+        name = lang.name;
     }
 }
 

@@ -127,7 +127,7 @@ public class TowerObject : Poolable
     #region Update Info
     public void UpdateLanguage(LanguageType lang)
     {
-        data.UpdateName(Translator.GetLanguage(id), lang);
+        data.UpdateName(Translator.GetLanguage(id));
     }
 
     public void UpdateDistnace()

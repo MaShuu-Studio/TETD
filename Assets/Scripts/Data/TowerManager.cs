@@ -142,7 +142,7 @@ public static class TowerManager
     {
         foreach (var tower in towers.Values)
         {
-            tower.UpdateName(Translator.GetLanguage(tower.id), type);
+            tower.UpdateName(Translator.GetLanguage(tower.id));
         }
     }
 }

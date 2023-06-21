@@ -8,6 +8,8 @@ namespace Excel_To_Json
 {
     class Program
     {
+        private static List<string> langContents = new List<string>();
+        private static string[] langType = { "KOR", "ENG" };
         static void Main(string[] args)
         {
             string path = Path.Combine(Environment.CurrentDirectory, "Data.xlsx");
@@ -15,6 +17,10 @@ namespace Excel_To_Json
             Excel.Application app = new Excel.Application();
             Excel.Workbook workBook = app.Workbooks.Open(path);
 
+            for (int i = 0; i < langType.Length; i++)
+            {
+                langContents.Add("");
+            }
             try
             {
                 // 일반 데이터
@@ -22,9 +28,7 @@ namespace Excel_To_Json
                 {
                     string name = sheet.Name;
                     string filename = name + ".json";
-                    string langFilename = "";
                     string contents = "";
-                    string langContents = "";
                     string directory = "";
                     Excel.Range range = sheet.UsedRange;
 
@@ -41,15 +45,11 @@ namespace Excel_To_Json
                     }
                     // AA @ BB
                     // 데이터 내에서 추가 구분이 이루어지는 데이터들 (Tower, Enemey)
-                    else if(name.Contains("@"))
+                    else if (name.Contains("@"))
                     {
                         // 0: data, 1: language
-                        string[] data = ParseBasicData(name, range);
-
-                        contents = string.Format(JsonFormat.jsonFormat, data[0]);
-                        langContents = string.Format(JsonFormat.jsonFormat, data[1]);
-
-                        langFilename = name + ".json";
+                        string data = ParseBasicData(name, range);
+                        contents = string.Format(JsonFormat.jsonFormat, data);
 
                         string[] n = name.Split("@");
                         directory = $"/{n[0]}";
@@ -59,20 +59,18 @@ namespace Excel_To_Json
                     // 나머지 데이터들
                     else
                     {
-                        string[] data = ParseEtcData(name, range);
-
-                        contents = string.Format(JsonFormat.jsonFormat, data[0]);
-                        langContents = string.Format(JsonFormat.jsonFormat, data[1]);
-
-                        langFilename = name + ".json";
+                        string data = ParseIdData(name, range);
+                        contents = string.Format(JsonFormat.jsonFormat, data);
                     }
 
                     File.WriteAllText(Path.Combine(Environment.CurrentDirectory + directory, filename), contents);
-                    if (langContents != "")
-                        File.WriteAllText(Path.Combine(Environment.CurrentDirectory + "/Language/", langFilename), langContents);
                 }
-                workBook.Close(true);
-                app.Quit();
+                for (int i = 0; i < langContents.Count; i++)
+                {
+                    langContents[i] = langContents[i].Remove(langContents[i].Length - 2);
+                    string content = string.Format(JsonFormat.jsonFormat, langContents[i]);
+                    File.WriteAllText(Path.Combine(Environment.CurrentDirectory + "/Language/", langType[i] + ".json"), content);
+                }
             }
             catch (Exception e)
             {
@@ -80,6 +78,9 @@ namespace Excel_To_Json
             }
             finally
             {
+                workBook.Close(true);
+                app.Quit();
+
                 ReleaseObject(app);
                 ReleaseObject(workBook);
             }
@@ -87,17 +88,48 @@ namespace Excel_To_Json
 
         // 데이터의 정보가 Language만 있는 경우
         // Sprite를 불러오기 위해 저장하는 정보임.
-        private static string[] ParseEtcData(string dataName, Excel.Range range)
+        private static string ParseIdData(string dataName, Excel.Range range)
         {
-            // 0: data id, 1: language
-            string[] contents = { "", "" };
+            string contents = "";
+            int count = 1;
+
+            // 하나의 row는 하나의 데이터를 나타내고 있음.
+            for (int row = 2; row <= range.Rows.Count; row++)
+            {
+                string idData = "";
+                for (int column = 1; column <= range.Columns.Count; column++)
+                {
+                    object o = (range.Cells[row, column] as Excel.Range).Value2;
+                    string type = (range.Cells[1, column] as Excel.Range).Value2;
+                    if (type == null || o == null) continue;
+
+                    if (type.ToUpper() == "ID")
+                    {
+                        contents += o.ToString() + ",\n";
+                        idData = o.ToString();
+                    }
+
+                    if (type.ToUpper() == "NAME")
+                        ParseLanguage(idData, o.ToString());
+                }
+                count++;
+            }
+            // 마지막에 붙은 ,와 \n 제거
+            contents = contents.Remove(contents.Length - 2);
+            Console.WriteLine($"Progress {dataName.ToUpper()} {count}");
+            return contents;
+        }
+
+        private static string ParseBasicData(string dataName, Excel.Range range)
+        {
+            string contents = "";
             int count = 1;
 
             // 하나의 row는 하나의 데이터를 나타내고 있음.
             for (int row = 2; row <= range.Rows.Count; row++)
             {
                 string data = "";
-
+                string idData = "";
                 for (int column = 1; column <= range.Columns.Count; column++)
                 {
                     object o = (range.Cells[row, column] as Excel.Range).Value2;
@@ -106,8 +138,13 @@ namespace Excel_To_Json
                     string value = ParseValue(type.ToLower(), o);
                     if (value != null)
                     {
-                        if (type.ToUpper() == "ID") contents[0] += o.ToString() + ",\n";
-                        if (type.ToUpper() == "ID" || type.ToUpper() == "NAME") data += value + ",\n";
+                        if (type.ToUpper() == "ID")
+                            idData = o.ToString();
+
+                        if (type.ToUpper() == "NAME")
+                            ParseLanguage(idData, o.ToString());
+
+                        if (type.ToUpper() != "NAME") data += value + ",\n";
                     }
                 }
 
@@ -115,55 +152,28 @@ namespace Excel_To_Json
                 {
                     // 마지막에 붙은 ,와 \n 제거
                     data = data.Remove(data.Length - 2);
-                    if (contents[1] != "") contents[1] += ",\n";
-                    contents[1] += string.Format(JsonFormat.contentsFormat, data);
+                    if (contents != "") contents += ",\n";
+                    contents += string.Format(JsonFormat.contentsFormat, data);
                 }
                 count++;
             }
-            // 마지막에 붙은 ,와 \n 제거
-            contents[0] = contents[0].Remove(contents[0].Length - 2);
             Console.WriteLine($"Progress {dataName.ToUpper()} {count}");
             return contents;
         }
 
-        private static string[] ParseBasicData(string dataName, Excel.Range range)
+        private static void ParseLanguage(string id, string n)
         {
-            // 0: data, 1: language
-            string[] contents = { "", "" };
-            int count = 1;
-
-            // 하나의 row는 하나의 데이터를 나타내고 있음.
-            for (int row = 2; row <= range.Rows.Count; row++)
+            // Array와 일반 string으로 구분
+            string[] names = n.Split(",");
+            if (n.Length > 1)
             {
-                string[] datas = { "", "" };
-
-                for (int column = 1; column <= range.Columns.Count; column++)
+                for (int i = 0; i < names.Length; i++)
                 {
-                    object o = (range.Cells[row, column] as Excel.Range).Value2;
-                    string type = (range.Cells[1, column] as Excel.Range).Value2;
-                    if (type == null || o == null) continue;
-                    string value = ParseValue(type.ToLower(), o);
-                    if (value != null)
-                    {
-                        if (type.ToUpper() != "NAME") datas[0] += value + ",\n";
-                        if (type.ToUpper() == "ID" || type.ToUpper() == "NAME") datas[1] += value + ",\n";
-                    }
-                }
+                    string str = ParseValue("id", id) + "," + ParseValue("name", names[i]);
 
-                for (int i = 0; i < datas.Length; i++)
-                {
-                    if (datas[i] != "")
-                    {
-                        // 마지막에 붙은 ,와 \n 제거
-                        datas[i] = datas[i].Remove(datas[i].Length - 2);
-                        if (contents[i] != "") contents[i] += ",\n";
-                        contents[i] += string.Format(JsonFormat.contentsFormat, datas[i]);
-                    }
+                    langContents[i] += string.Format(JsonFormat.contentsFormat, str) + ",\n";
                 }
-                count++;
             }
-            Console.WriteLine($"Progress {dataName.ToUpper()} {count}");
-            return contents;
         }
 
         private static string ParseRoundData(string mapName, Excel.Range range)
@@ -364,7 +374,7 @@ namespace Excel_To_Json
         private static bool TryParseColor(string s, out float[] color)
         {
             // (1,1,1,1) 의 형태
-            s = s.Trim('(',')');
+            s = s.Trim('(', ')');
             string[] rgba = s.Split(",");
             color = null;
             if (rgba.Length != 4) return false;

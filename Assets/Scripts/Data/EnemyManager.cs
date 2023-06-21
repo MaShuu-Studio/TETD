@@ -113,7 +113,7 @@ public static class EnemyManager
     {
         foreach (var enemy in enemies.Values)
         {
-            enemy.UpdateName(Translator.GetLanguage(enemy.id), type);
+            enemy.UpdateName(Translator.GetLanguage(enemy.id));
         }
     }
 }

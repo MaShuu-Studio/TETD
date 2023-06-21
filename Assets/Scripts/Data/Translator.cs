@@ -3,52 +3,68 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using Data;
+using EnumData;
 
 public static class Translator
 {
-    private static string path = "/Data/";
+    private static string path = "/Data/Language/";
 
-    private static Dictionary<int, Language> languages;
+    private static Dictionary<int, Language>[] languages;
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
 
     public static async Task GetTotal()
     {
-        List<LanguageData> towers = await DataManager.DeserializeListJson<LanguageData>(path, "TowerLang");
-        List<LanguageData> enemys = await DataManager.DeserializeListJson<LanguageData>(path, "EnemyLang");
+        TotalProgress = 0;
 
-        TotalProgress = towers.Count + enemys.Count;
+        List<string> langs = DataManager.GetFileNames(path);
+
+        for (int i = 0; i < langs.Count; i++)
+        {
+            List<LanguageData> l = await DataManager.DeserializeListJson<LanguageData>(path, langs[i]);
+            TotalProgress += l.Count;
+        }
     }
     public static async Task Init()
     {
-        languages = new Dictionary<int, Language>();
-        List<LanguageData> towers = await DataManager.DeserializeListJson<LanguageData>(path, "TowerLang");
-        List<LanguageData> enemys = await DataManager.DeserializeListJson<LanguageData>(path, "EnemyLang");
-
-        foreach (var data in towers)
+        List<string> langs = DataManager.GetFileNames(path);
+        languages = new Dictionary<int, Language>[langs.Count];
+        for (int i = 0; i < langs.Count; i++)
         {
-            Language lang = new Language(data);
-            languages.Add(lang.id, lang);
+            List<LanguageData> l = await DataManager.DeserializeListJson<LanguageData>(path, langs[i]);
+            languages[i] = new Dictionary<int, Language>();
 
-            CurProgress++;
-        }
-
-        foreach (var data in enemys)
-        {
-            Language lang = new Language(data);
-            languages.Add(lang.id, lang);
-
+            foreach (var data in l)
+            {
+                Language lang = new Language(data);
+                languages[i].Add(lang.id, lang);
+            }
             CurProgress++;
         }
 
 #if UNITY_EDITOR
-        Debug.Log($"[SYSTEM] LOAD LANGUAGES {languages.Count}");
+        Debug.Log($"[SYSTEM] LOAD LANGUAGES {CurProgress}");
 #endif
+    }
+    private static LanguageType currentLanguage;
+
+    public static void SetLanguage(int lang)
+    {
+        currentLanguage = (LanguageType)lang;
+        TowerManager.UpdateLanguage(currentLanguage);
+        EnemyManager.UpdateLanguage(currentLanguage);
+
+        UIController.Instance.UpdateLanguage();
+
+        // 인게임이 아니라면 TowerController가 존재하지 않음.
+        if (TowerController.Instance != null)
+            TowerController.Instance.UpdateLanguage(currentLanguage);
     }
 
     public static Language GetLanguage(int id)
     {
-        if (languages.ContainsKey(id)) return languages[id];
+        int cur = (int)currentLanguage;
+        if (languages[cur].ContainsKey(id)) return languages[cur][id];
         return null;
     }
 }

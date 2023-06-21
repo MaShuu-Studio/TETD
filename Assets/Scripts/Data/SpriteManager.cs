@@ -39,7 +39,7 @@ public static class SpriteManager
                 - A: INFO
                     - 0: Public
                     - 1: Character
-                    - 2: Tower
+                    - 2: Tower¤µ
                     - 3: Enemy
                 - B: Type
                     - A: 0 (Public)

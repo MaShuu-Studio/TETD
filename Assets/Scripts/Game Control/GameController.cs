@@ -25,21 +25,6 @@ public class GameController : MonoBehaviour
     public bool Paused { get { return paused; } }
     private bool paused;
 
-    private LanguageType currentLanguage;
-
-    public void SetLanguage(int index)
-    {
-        currentLanguage = (LanguageType)index;
-        TowerManager.UpdateLanguage(currentLanguage);
-        EnemyManager.UpdateLanguage(currentLanguage);
-
-        UIController.Instance.UpdateLanguage();
-
-        // 인게임이 아니라면 TowerController가 존재하지 않음.
-        if (TowerController.Instance != null)
-            TowerController.Instance.UpdateLanguage(currentLanguage);
-    }
-
     private void Update()
     {
         if (SceneController.Instance.IsLoading == false)

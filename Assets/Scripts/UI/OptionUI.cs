@@ -39,11 +39,11 @@ public class OptionUI : MonoBehaviour
         while (EnumData.EnumArray.LanguageTypeStrings == null) await Task.Yield();
         languages.options.Clear();
         languages.AddOptions(EnumData.EnumArray.LanguageTypeStrings.Values.ToList());
-        languages.onValueChanged.AddListener(i => GameController.Instance.SetLanguage(i));
+        languages.onValueChanged.AddListener(i => Translator.SetLanguage(i));
 
         // 언어 세팅. 그 전에 Tower와 Enemy가 로드되기를 대기함.
         while (TowerManager.Keys == null || EnemyManager.Keys == null) await Task.Yield();
-        GameController.Instance.SetLanguage(lang);
+        Translator.SetLanguage(lang);
         languages.value = lang;
 
         bgmSlider.onValueChanged.AddListener(v => SetOption());
