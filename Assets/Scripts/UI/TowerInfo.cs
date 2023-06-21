@@ -24,7 +24,7 @@ public class TowerInfo : MonoBehaviour
         iconImage.sprite = SpriteManager.GetSprite(data.id);
 
         // UI Icon들도 id를 붙이고 SpriteManager에서 관리 예정
-        elementImage.sprite = SpriteManager.GetSprite($"Element{(int)data.element}");
+        elementImage.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT,(int)data.element);
 
         for (int i = 0; i < mainStats.Length; i++)
         {

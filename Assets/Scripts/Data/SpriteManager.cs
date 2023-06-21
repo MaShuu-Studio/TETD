@@ -8,64 +8,78 @@ using System.Threading.Tasks;
 public static class SpriteManager
 {
     private static Dictionary<int, Sprite> sprites;
-    private static Dictionary<string, Sprite> uiSprites;
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
-    public static void GetTotal()
+    public static async Task GetTotal()
     {
-        TotalProgress = EnumArray.Elements.Length + EnumArray.TowerStatTypes.Length + EnumArray.BuffTypes.Length + EnumArray.DebuffTypes.Length;
+        TotalProgress = 0;
+        foreach (string dataName in datas)
+        {
+            List<int> list = await DataManager.DeserializeListJson<int>(dataPath, dataName);
+            TotalProgress += list.Count;
+        }
+    }
+
+    private static string dataPath = "/Data/";
+    private static string path = "/Sprites/";
+
+    private static string[] datas = { "Stat" };
+
+    // 기본 넘버만으로 데이터를 로드할 수 있도록 합해서 id를 뽑을 수 있는 고유 넘버를 보관
+    public enum ETCDataNumber {
+        TYPE = 3000000, ELEMENT = 3001000, GRADE = 3002000, BUFF = 3003000, DEBUFF = 3004000,
+        CHARSTAT = 3100000, DIFF = 3101000,
+        TOWERSTAT = 3200000, APRIORITY = 3201000,
     }
 
     public static async Task Init()
     {
+        /* ETC Data id 넘버링
+            - STAT: 3ABBCCC
+                - A: INFO
+                    - 0: Public
+                    - 1: Character
+                    - 2: Tower
+                    - 3: Enemy
+                - B: Type
+                    - A: 0 (Public)
+                        - 0: Type (Tower or Enemy)
+                        - 1: ELEMENT
+                        - 2: Grade
+                        - 3: BUFF
+                        - 4: DEBUFF
+                    - A: 1 (Character)
+                        - 0: CHARACTER STAT
+                        - 1: Difficulty
+                        - 
+                    - A: 2 (Tower)
+                        - 0: TOWERSTAT
+                        - 1: ATTACKPRIORITY
+                    - A: 3 (Enemy)
+                - C: 번호
+
+            - UI: 4AABBBB
+                - A: UI에서는 Scene으로 구분. 0: basic, 1: Title, 2: InGame
+                - B: 번호
+         */
         sprites = new Dictionary<int, Sprite>();
-        uiSprites = new Dictionary<string, Sprite>();
 
-        // UI를 ID로 넘기게 되면 조정
-        for (int i = 0; i < EnumArray.Elements.Length; i++)
+        // etc로 분류된 데이터들의 스프라이트 유무를 체크하여 가져옴.
+        foreach (string dataName in datas)
         {
-            string name = $"Element{i}";
-            Sprite sprite = await DataManager.LoadSprite("/Sprites/UI/" + name + ".png", Vector2.one / 2, 16);
-            sprite.name = name;
-            uiSprites.Add(name, sprite);
+            List<int> list = await DataManager.DeserializeListJson<int>(dataPath, dataName);
 
-            CurProgress++;
-        }
-
-        for (int i = 0; i < EnumArray.TowerStatTypes.Length; i++)
-        {
-            string name = $"TowerStatType{i}";
-            Sprite sprite = await DataManager.LoadSprite("/Sprites/UI/" + name + ".png", Vector2.one / 2, 16);
-            sprite.name = name;
-            uiSprites.Add(name, sprite);
-
-            CurProgress++;
-        }
-
-        for (int i = 0; i < EnumArray.BuffTypes.Length; i++)
-        {
-            string name = $"BuffType{i}";
-            Sprite sprite = await DataManager.LoadSprite("/Sprites/UI/" + name + ".png", Vector2.one / 2, 16);
-            if (sprite == null) continue;
-            sprite.name = name;
-            uiSprites.Add(name, sprite);
-
-            CurProgress++;
-        }
-
-        for (int i = 0; i < EnumArray.DebuffTypes.Length; i++)
-        {
-            string name = $"DebuffType{i}";
-            Sprite sprite = await DataManager.LoadSprite("/Sprites/UI/" + name + ".png", Vector2.one / 2, 16);
-            if (sprite == null) continue;
-            sprite.name = name;
-            uiSprites.Add(name, sprite);
-
-            CurProgress++;
+            foreach(int id in list)
+            {
+                Sprite sprite = await DataManager.LoadSprite(path + dataName + "/" + id + ".png", Vector2.one / 2, 16);
+                CurProgress++;
+                if (sprite == null) continue;
+                sprites.Add(id, sprite);
+            }
         }
 
 #if UNITY_EDITOR
-        Debug.Log($"[SYSTEM] LOAD BASIC SPRITES");
+        Debug.Log($"[SYSTEM] LOAD ETC SPRITES");
 #endif
     }
 
@@ -88,10 +102,9 @@ public static class SpriteManager
         return null;
     }
 
-    public static Sprite GetSprite(string name)
+    public static Sprite GetSpriteWithNumber(ETCDataNumber data, int number)
     {
-        if (uiSprites.ContainsKey(name)) return uiSprites[name];
-
-        return null;
+        int id = (int)data + number;
+        return GetSprite(id);
     }
 }

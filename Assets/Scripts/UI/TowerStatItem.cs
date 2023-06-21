@@ -12,18 +12,15 @@ public class TowerStatItem : MonoBehaviour
 
     public void Init(TowerStatType type)
     {
-        string name = $"TowerStatType{(int)type}";
-        icon.sprite = SpriteManager.GetSprite(name);
+        icon.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.TOWERSTAT,(int)type);
     }
     public void Init(BuffType type)
     {
-        string name = $"BuffType{(int)type}";
-        icon.sprite = SpriteManager.GetSprite(name);
+        icon.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.BUFF,(int)type);
     }
     public void Init(DebuffType type)
     {
-        string name = $"DebuffType{(int)type}";
-        icon.sprite = SpriteManager.GetSprite(name);
+        icon.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.DEBUFF,(int)type);
     }
     public void SetData(float value)
     {

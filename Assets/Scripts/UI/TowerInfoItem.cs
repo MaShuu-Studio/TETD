@@ -25,7 +25,7 @@ public class TowerInfoItem : TowerInfoCard
             {
                 Element e = EnumArray.Elements[i];
                 string oName = EnumArray.ElementStrings[e].ToUpper();
-                Sprite oSprite = SpriteManager.GetSprite($"Element{i}");
+                Sprite oSprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT, i);
                 TMP_Dropdown.OptionData option = new TMP_Dropdown.OptionData(oName, oSprite);
                 options.Add(option);
             }

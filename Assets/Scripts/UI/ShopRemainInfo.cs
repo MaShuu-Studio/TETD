@@ -11,9 +11,7 @@ public class ShopRemainInfo : MonoBehaviour
 
     public void Init(int elementNumber)
     {
-        string spriteName = $"Element{elementNumber}";
-
-        Sprite sprite = SpriteManager.GetSprite(spriteName);
+        Sprite sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT, elementNumber);
         elementImage.sprite = sprite;
     }
 

@@ -21,8 +21,7 @@ public class TowerUpgradeItem : MonoBehaviour
         this.index = index;
         this.type = type;
 
-        string name = $"TowerStatType{(int)type}";
-        iconImage.sprite = SpriteManager.GetSprite(name);
+        iconImage.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.TOWERSTAT,(int)type);
 
         SetInfo(level, cost);
     }
