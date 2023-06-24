@@ -19,6 +19,8 @@ public class UIController : MonoBehaviour
             return;
         }
 
+        StartLoading();
+
         instance = this;
         DontDestroyOnLoad(gameObject);
         OpenSetting(false);

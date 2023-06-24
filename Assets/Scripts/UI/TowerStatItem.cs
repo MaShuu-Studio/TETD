@@ -22,6 +22,10 @@ public class TowerStatItem : MonoBehaviour
     {
         icon.SetIcon((int)SpriteManager.ETCDataNumber.DEBUFF + (int)type);
     }
+    public void Init(EnemyStatType type)
+    {
+        icon.SetIcon((int)SpriteManager.ETCDataNumber.ENEMYSTAT + (int)type);
+    }
     public void SetData(float value)
     {
         valueText.text = string.Format("{0:0.#}", value);

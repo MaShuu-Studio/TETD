@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 using Data;
 using EnumData;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public static class EnemyManager
 {
@@ -14,6 +13,9 @@ public static class EnemyManager
 
     public static List<int> Keys { get { return keys; } }
     private static List<int> keys;
+    // 0: elemental, 1: grade, List: Id
+    public static List<int>[,] EgEnemyIds { get { return egEnemyIds; } }
+    private static List<int>[,] egEnemyIds;
 
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
@@ -32,6 +34,10 @@ public static class EnemyManager
     public static async Task Init()
     {
         enemies = new Dictionary<int, Enemy>();
+        egEnemyIds = new List<int>[EnumArray.Elements.Length, EnumArray.EnemyGrades.Length];
+        for (int i = 0; i < EnumArray.Elements.Length; i++)
+            for (int j = 0; j < EnumArray.EnemyGrades.Length; j++)
+                egEnemyIds[i, j] = new List<int>();
 
         List<string> files = DataManager.GetFileNames(path);
         List<EnemyData> list = new List<EnemyData>();
@@ -48,6 +54,7 @@ public static class EnemyManager
             Sprite mask = MakeMask(SpriteManager.GetSprite(data.id), data.pivot, data.pixelperunit);
             Enemy enemy = new Enemy(data, anim, mask);
             enemies.Add(enemy.id, enemy);
+            egEnemyIds[(int)enemy.element, (int)enemy.grade].Add(enemy.id);
             CurProgress++;
         }
 

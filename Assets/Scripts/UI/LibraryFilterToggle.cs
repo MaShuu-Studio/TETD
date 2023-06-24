@@ -10,6 +10,7 @@ public class LibraryFilterToggle : Toggle
     public void Init(int type, int num)
     {
         img = GetComponent<Image>();
+        img.sprite = SpriteManager.GetSprite(type + num);
         onValueChanged.AddListener(isOn => Event(isOn));
     }
 

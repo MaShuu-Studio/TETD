@@ -115,7 +115,8 @@ namespace Excel_To_Json
                 count++;
             }
             // 마지막에 붙은 ,와 \n 제거
-            contents = contents.Remove(contents.Length - 2);
+            if (contents != "")
+                contents = contents.Remove(contents.Length - 2);
             Console.WriteLine($"Progress {dataName.ToUpper()} {count}");
             return contents;
         }

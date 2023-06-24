@@ -30,6 +30,7 @@ public static class SpriteManager
         TYPE = 3000000, ELEMENT = 3001000, GRADE = 3002000, BUFF = 3003000, DEBUFF = 3004000,
         CHARSTAT = 3100000, DIFF = 3101000,
         TOWERSTAT = 3200000, APRIORITY = 3201000,
+        ENEMYSTAT = 3300000, ENEMYGRADE = 3301000,
     }
 
     public static async Task Init()
@@ -56,6 +57,8 @@ public static class SpriteManager
                         - 0: TOWERSTAT
                         - 1: ATTACKPRIORITY
                     - A: 3 (Enemy)
+                        - 0: ENEMYSTAT
+                        - 1: ENEMYGRADE
                 - C: ¹øÈ£
 
             - UI: 4AABBBB

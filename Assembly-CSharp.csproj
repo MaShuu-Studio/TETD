@@ -67,7 +67,7 @@
     <Compile Include="Assets\Scripts\UI\ShopRemainInfo.cs" />
     <Compile Include="Assets\Scripts\UI\MapInfoIcon.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ScriptableButton.cs" />
-    <Compile Include="Assets\Scripts\UI\TowerInfoCard.cs" />
+    <Compile Include="Assets\Scripts\UI\LibraryCard.cs" />
     <Compile Include="Assets\Scripts\Data\DataManager.cs" />
     <Compile Include="Assets\Scripts\Object\SplashPoint.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ReinforceButton.cs" />

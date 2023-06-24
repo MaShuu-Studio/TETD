@@ -7,16 +7,15 @@ using TMPro;
 
 public class Library : MonoBehaviour
 {
-    public enum LibraryFilterType { TYPE = 0, GRADE = 1, ELEMENT = 2 }
-
-    [SerializeField] private TowerInfoCard[] items;
+    [SerializeField] private LibraryCard[] items;
 
     [SerializeField] private Button prevButton;
     [SerializeField] private Button nextButton;
 
     [SerializeField] private LibraryFilterToggle[] typeFilterToggles;
-    [SerializeField] private LibraryFilterToggle[] gradeFilterToggles;
     [SerializeField] private LibraryFilterToggle[] elementFilterToggles;
+    [SerializeField] private LibraryFilterToggle[] gradeFilterToggles;
+    [SerializeField] private LibraryFilterToggle[] enemyGradeFilterToggles;
 
     [SerializeField] private TextMeshProUGUI pageText;
 
@@ -37,22 +36,26 @@ public class Library : MonoBehaviour
         nextButton.onClick.AddListener(() => MovePage(true));
 
         // 타워가 전부 로드될 때까지 잠시 대기
-        while (TowerManager.Keys == null) await Task.Yield();
+        while (TowerManager.Keys == null || EnemyManager.Keys == null) await Task.Yield();
 
         // 각 필터 토글 초기화
         // 후에 프리팹을 활용해 등급, 속성의 갯수에 따라 자동으로 생성되면 좋을 듯.
 
         for (int i = 0; i < typeFilterToggles.Length; i++)
         {
-            typeFilterToggles[i].Init((int)LibraryFilterType.TYPE, i + 1);
-        }
-        for (int i = 0; i < gradeFilterToggles.Length; i++)
-        {
-            gradeFilterToggles[i].Init((int)LibraryFilterType.GRADE, i + 1);
+            typeFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.TYPE, i);
         }
         for (int i = 0; i < elementFilterToggles.Length; i++)
         {
-            elementFilterToggles[i].Init((int)LibraryFilterType.ELEMENT, i + 1);
+            elementFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.ELEMENT, i);
+        }
+        for (int i = 0; i < gradeFilterToggles.Length; i++)
+        {
+            gradeFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.GRADE, i);
+        }
+        for (int i = 0; i < enemyGradeFilterToggles.Length; i++)
+        {
+            enemyGradeFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.ENEMYGRADE, i);
         }
 
         UpdateLibrary();
@@ -76,18 +79,41 @@ public class Library : MonoBehaviour
         // 전체 삭제 후 통째로 추가.
         ids.Clear();
 
-        // 토글의 온오프를 체크하여 순서대로 추가
-        for (int e = 0; e < elementFilterToggles.Length; e++)
+        if (typeFilterToggles[0].isOn)
         {
-            if (elementFilterToggles[e].isOn == false) continue;
-
-            for (int g = 0; g < gradeFilterToggles.Length; g++)
+            // 토글의 온오프를 체크하여 순서대로 추가
+            for (int e = 0; e < elementFilterToggles.Length; e++)
             {
-                if (gradeFilterToggles[g].isOn == false) continue;
+                if (elementFilterToggles[e].isOn == false) continue;
 
-                for (int i = 0; i < TowerManager.EgTowerIds[e, g].Count; i++)
+                for (int g = 0; g < gradeFilterToggles.Length; g++)
                 {
-                    ids.Add(TowerManager.EgTowerIds[e, g][i]);
+                    if (gradeFilterToggles[g].isOn == false) continue;
+
+                    for (int i = 0; i < TowerManager.EgTowerIds[e, g].Count; i++)
+                    {
+                        ids.Add(TowerManager.EgTowerIds[e, g][i]);
+                    }
+                }
+            }
+        }
+
+        if (typeFilterToggles[1].isOn)
+        {
+            // 토글의 온오프를 체크하여 순서대로 추가 
+            // enemy가 뒤로가도록 배치
+            for (int e = 0; e < elementFilterToggles.Length; e++)
+            {
+                if (elementFilterToggles[e].isOn == false) continue;
+
+                for (int g = 0; g < enemyGradeFilterToggles.Length; g++)
+                {
+                    if (enemyGradeFilterToggles[g].isOn == false) continue;
+
+                    for (int i = 0; i < EnemyManager.EgEnemyIds[e, g].Count; i++)
+                    {
+                        ids.Add(EnemyManager.EgEnemyIds[e, g][i]);
+                    }
                 }
             }
         }
@@ -117,9 +143,18 @@ public class Library : MonoBehaviour
             // 페이지에 따라 index 조정
             int index = i + (currentPage - 1) * cardUnitinPage;
             if (index >= ids.Count) break;
+            int id = ids[index];
 
-            Tower tower = TowerManager.GetTower(ids[index]);
-            items[i].SetData(tower);
+            if (id / 1000000 == 1)
+            {
+                Tower tower = TowerManager.GetTower(id);
+                items[i].SetData(tower);
+            }
+            else if (id / 1000000 == 2)
+            {
+                Enemy enemy = EnemyManager.GetEnemy(id);
+                items[i].SetData(enemy);
+            }
         }
 
         for (; i < cardUnitinPage; i++)

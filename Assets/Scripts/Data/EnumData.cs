@@ -6,8 +6,10 @@ namespace EnumData
     public enum CharacterType { POWER = 0, ATTACKSPEED = 1, COST = 2, PROB = 3, }
     public enum DifficultyType { HP = 0, SPEED = 1, AMOUNT = 2, TIME = 3, COST = 4, PROB = 5, }
     public enum Element { FIRE = 0, WATER = 1, NATURE = 2, }
+    public enum EnemyGrade { NORMAL = 0, ELITE = 1, BOSS = 2, }
     public enum Grade { NORMAL = 0, RARE = 1, HEROIC = 2, LEGENDARY = 3, }
     public enum AttackPriority { FIRST = 0, LAST = 1, STRONG = 2, WEAK = 3, ELEMENT = 4, DEBUFF = 5, }
+    public enum EnemyStatType { HP = 0, SPEED = 1, EXP = 2, }
     public enum TowerStatType { DAMAGE = 0, ATTACKSPEED = 1, DISTANCE = 2, MULTISHOT = 3, SPLASH = 4, }
     public enum BuffType { GOLDMINE = 0, DMG = 1, ATKSPD = 2, }
     public enum DebuffType { SLOW = 0, BURN = 1, POISON = 2, BLEED = 3, }
@@ -21,8 +23,10 @@ namespace EnumData
         public static CharacterType[] CharacterTypes { get; private set; } = (CharacterType[])Enum.GetValues(typeof(CharacterType));
         public static DifficultyType[] DifficultyTypes { get; private set; } = (DifficultyType[])Enum.GetValues(typeof(DifficultyType));
         public static Element[] Elements { get; private set; } = (Element[])Enum.GetValues(typeof(Element));
+        public static EnemyGrade[] EnemyGrades { get; private set; } = (EnemyGrade[])Enum.GetValues(typeof(EnemyGrade));
         public static Grade[] Grades { get; private set; } = (Grade[])Enum.GetValues(typeof(Grade));
         public static AttackPriority[] AttackPrioritys { get; private set; } = (AttackPriority[])Enum.GetValues(typeof(AttackPriority));
+        public static EnemyStatType[] EnemyStatTypes { get; private set; } = (EnemyStatType[])Enum.GetValues(typeof(EnemyStatType));
         public static TowerStatType[] TowerStatTypes { get; private set; } = (TowerStatType[])Enum.GetValues(typeof(TowerStatType));
         public static BuffType[] BuffTypes { get; private set; } = (BuffType[])Enum.GetValues(typeof(BuffType));
         public static DebuffType[] DebuffTypes { get; private set; } = (DebuffType[])Enum.GetValues(typeof(DebuffType));
@@ -33,8 +37,10 @@ namespace EnumData
         public static Dictionary<CharacterType, string> CharacterTypeStrings { get; private set; }
         public static Dictionary<DifficultyType, string> DifficultyTypeStrings { get; private set; }
         public static Dictionary<Element, string> ElementStrings { get; private set; }
+        public static Dictionary<EnemyGrade, string> EnemyGradeStrings { get; private set; }
         public static Dictionary<Grade, string> GradeStrings { get; private set; }
         public static Dictionary<AttackPriority, string> AttackPriorityStrings { get; private set; }
+        public static Dictionary<EnemyStatType, string> EnemyStatTypeStrings { get; private set; }
         public static Dictionary<TowerStatType, string> TowerStatTypeStrings { get; private set; }
         public static Dictionary<BuffType, string> BuffTypeStrings { get; private set; }
         public static Dictionary<DebuffType, string> DebuffTypeStrings { get; private set; }
@@ -68,6 +74,13 @@ namespace EnumData
                 ElementStrings.Add(type, type.ToString());
             }
 
+            EnemyGradeStrings = new Dictionary<EnemyGrade, string>();
+            for (int i = 0; i < EnemyGrades.Length; i++)
+            {
+                EnemyGrade type = EnemyGrades[i];
+                EnemyGradeStrings.Add(type, type.ToString());
+            }
+
             GradeStrings = new Dictionary<Grade, string>();
             for (int i = 0; i < Grades.Length; i++)
             {
@@ -80,6 +93,13 @@ namespace EnumData
             {
                 AttackPriority type = AttackPrioritys[i];
                 AttackPriorityStrings.Add(type, type.ToString());
+            }
+
+            EnemyStatTypeStrings = new Dictionary<EnemyStatType, string>();
+            for (int i = 0; i < EnemyStatTypes.Length; i++)
+            {
+                EnemyStatType type = EnemyStatTypes[i];
+                EnemyStatTypeStrings.Add(type, type.ToString());
             }
 
             TowerStatTypeStrings = new Dictionary<TowerStatType, string>();

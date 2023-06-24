@@ -274,6 +274,7 @@ public class Tower : ObjectData
 public class Enemy : ObjectData
 {
     public Element element;
+    public EnemyGrade grade;
 
     public int money;
     public int exp;
@@ -307,7 +308,7 @@ public class Enemy : ObjectData
         int tmp = id / 1000; // ABBC
         tmp %= 1000; // BBC
         element = (Element)(tmp / 10); // BB
-        //grade = (Grade)(tmp % 10); // C
+        grade = (EnemyGrade)(tmp % 10); // C
 
         exp = data.exp;
         money = data.money;
@@ -327,6 +328,7 @@ public class Enemy : ObjectData
         Height = data.Height;
 
         element = data.element;
+        grade = data.grade;
 
         exp = data.exp;
         money = data.money;
