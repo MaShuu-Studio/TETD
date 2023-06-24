@@ -7,7 +7,7 @@ using EnumData;
 
 public class TowerUpgradeItem : MonoBehaviour
 {
-    [SerializeField] private Image iconImage;
+    [SerializeField] private DescriptionIcon icon;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI costText;
     [SerializeField] private Button button;
@@ -21,7 +21,7 @@ public class TowerUpgradeItem : MonoBehaviour
         this.index = index;
         this.type = type;
 
-        iconImage.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.TOWERSTAT,(int)type);
+        icon.SetIcon((int)SpriteManager.ETCDataNumber.TOWERSTAT + (int)type);
 
         SetInfo(level, cost);
     }

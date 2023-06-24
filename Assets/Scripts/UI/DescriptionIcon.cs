@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
+[RequireComponent(typeof(Image))]
 public class DescriptionIcon : MonoBehaviour
 {
-    // 추후 UI를 데이터로 관리하게 되면 빠질 부분
-    [SerializeField] private string infoString;
+    [SerializeField] private int iconId;
+    
+    private Image image;
     private Rect rect;
     private bool isOn;
 
@@ -14,10 +17,29 @@ public class DescriptionIcon : MonoBehaviour
     private Vector3 mousePos;
     private bool contains;
 
+    private void Awake()
+    {
+        image = GetComponent<Image>();
+    }
     private void Start()
     {
         isOn = false;
         isInitialized = false;
+    }
+
+    public void SetIcon(int id)
+    {
+        if (image == null)
+            image = GetComponent<Image>();
+
+        iconId = id;
+        Sprite sprite = SpriteManager.GetSprite(id);
+        if (sprite != null)
+        {
+            image.sprite = SpriteManager.GetSprite(id);
+            image.color = Color.white;
+        }
+        else image.color = new Color(0, 0, 0, 0);
     }
 
     void Update()
@@ -52,7 +74,7 @@ public class DescriptionIcon : MonoBehaviour
         {
             if (isOn == false)
             {
-                UIController.Instance.SetDescription(mousePos, infoString);
+                UIController.Instance.SetDescription(mousePos, Translator.GetLanguage(iconId).name);
                 isOn = true;
             }
             else

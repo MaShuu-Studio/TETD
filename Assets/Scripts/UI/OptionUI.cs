@@ -36,9 +36,9 @@ public class OptionUI : MonoBehaviour
         sfxSlider.value = sfx;
         SetSound();
 
-        while (EnumData.EnumArray.LanguageTypeStrings == null) await Task.Yield();
+        while (Translator.Langs == null) await Task.Yield();
         languages.options.Clear();
-        languages.AddOptions(EnumData.EnumArray.LanguageTypeStrings.Values.ToList());
+        languages.AddOptions(Translator.Langs);
         languages.onValueChanged.AddListener(i => Translator.SetLanguage(i));
 
         // 언어 세팅. 그 전에 Tower와 Enemy가 로드되기를 대기함.

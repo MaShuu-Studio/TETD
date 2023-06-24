@@ -7,7 +7,7 @@ using TMPro;
 public class DescriptionPopup : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI descText;
-    private const int maxWidth = 150;
+    private const int maxWidth = 175;
     private RectTransform rect;
     private void Awake()
     {

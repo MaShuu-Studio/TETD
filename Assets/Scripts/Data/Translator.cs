@@ -10,6 +10,8 @@ public static class Translator
     private static string path = "/Data/Language/";
 
     private static Dictionary<int, Language>[] languages;
+    public static List<string> Langs { get { return langs; } }
+    private static List<string> langs;
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
 
@@ -17,17 +19,17 @@ public static class Translator
     {
         TotalProgress = 0;
 
-        List<string> langs = DataManager.GetFileNames(path);
+        langs = DataManager.GetFileNames(path);
 
         for (int i = 0; i < langs.Count; i++)
         {
+            langs[i] = langs[i].Split(".")[0];
             List<LanguageData> l = await DataManager.DeserializeListJson<LanguageData>(path, langs[i]);
             TotalProgress += l.Count;
         }
     }
     public static async Task Init()
     {
-        List<string> langs = DataManager.GetFileNames(path);
         languages = new Dictionary<int, Language>[langs.Count];
         for (int i = 0; i < langs.Count; i++)
         {

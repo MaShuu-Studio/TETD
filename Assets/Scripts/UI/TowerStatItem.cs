@@ -7,20 +7,20 @@ using EnumData;
 
 public class TowerStatItem : MonoBehaviour
 {
-    [SerializeField] private Image icon;
+    [SerializeField] private DescriptionIcon icon;
     [SerializeField] private TextMeshProUGUI valueText;
 
     public void Init(TowerStatType type)
     {
-        icon.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.TOWERSTAT,(int)type);
+        icon.SetIcon((int)SpriteManager.ETCDataNumber.TOWERSTAT + (int)type);
     }
     public void Init(BuffType type)
     {
-        icon.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.BUFF,(int)type);
+        icon.SetIcon((int)SpriteManager.ETCDataNumber.BUFF + (int)type);
     }
     public void Init(DebuffType type)
     {
-        icon.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.DEBUFF,(int)type);
+        icon.SetIcon((int)SpriteManager.ETCDataNumber.DEBUFF + (int)type);
     }
     public void SetData(float value)
     {
