@@ -4,14 +4,12 @@ using UnityEngine;
 using EnumData;
 
 [RequireComponent(typeof(SpriteRenderer))]
-[RequireComponent(typeof(SpriteMask))]
 public class EnemyObject : Poolable
 {
     [SerializeField] private GameObject hpBar;
     [SerializeField] private GameObject hpGage;
-    [SerializeField] private SpriteRenderer effectSpriteRenderer;
     private SpriteRenderer spriteRenderer;
-    private SpriteMask spriteMask;
+    private Material material;
 
     public Enemy Data { get { return data; } }
     private Enemy data;
@@ -27,8 +25,6 @@ public class EnemyObject : Poolable
     private IEnumerator animCoroutine;
     private IEnumerator moveCoroutine;
     private IEnumerator effectCoroutine;
-
-    private Color damagedEffectColor;
 
     private Dictionary<DebuffType, EnemyDebuff> debuffs;
 
@@ -57,11 +53,9 @@ public class EnemyObject : Poolable
         spriteRenderer.sortingLayerName = "Enemy";
         spriteRenderer.sprite = SpriteManager.GetSprite(id);
 
+        material = spriteRenderer.material;
+
         hpBar.transform.localPosition = new Vector3(0, this.data.Height);
-
-        spriteMask = GetComponent<SpriteMask>();
-
-        effectSpriteRenderer.sprite = data.Mask;
 
         debuffs = new Dictionary<DebuffType, EnemyDebuff>();
         return true;
@@ -80,8 +74,6 @@ public class EnemyObject : Poolable
         destRoad = 1;
 
         spriteRenderer.sortingOrder = Order = order;
-        damagedEffectColor = new Color(0, 0, 0, 0);
-        effectSpriteRenderer.color = damagedEffectColor;
 
         Animate(AnimationType.MOVE, true);
         moveCoroutine = Move();
@@ -101,6 +93,7 @@ public class EnemyObject : Poolable
             StopCoroutine(debuff.coroutine);
         }
         debuffs.Clear();
+        material.SetFloat("_FlashAmount", 0);
     }
     #endregion
 
@@ -295,9 +288,7 @@ public class EnemyObject : Poolable
         float frameTime = 0.1f;
         while (true)
         {
-            // 스프라이트 변경
-            spriteRenderer.sprite = spriteMask.sprite = data.animation[anim][number];
-
+            spriteRenderer.sprite = data.animation[anim][number];
             while (time < frameTime)
             {
                 if (GameController.Instance.Paused)
@@ -323,7 +314,7 @@ public class EnemyObject : Poolable
     #region Effect
     public void Effect(Color color)
     {
-        damagedEffectColor = color;
+        material.SetColor("Flash Color", color);
 
         if (effectCoroutine != null)
         {
@@ -339,20 +330,13 @@ public class EnemyObject : Poolable
     {
         float unit = 4f;
         float time = 1 / unit;
-        Color origin = damagedEffectColor;
-        origin.a = 1;
-        damagedEffectColor = origin;
         while (time > 0)
         {
-            effectSpriteRenderer.color = damagedEffectColor;
-
+            material.SetFloat("_FlashAmount", time * unit);
             time -= Time.deltaTime;
-            damagedEffectColor.a = time * unit;
-
             yield return null;
         }
-        damagedEffectColor.a = 0;
-        effectSpriteRenderer.color = damagedEffectColor;
+        material.SetFloat("_FlashAmount", 0);
     }
 
     #endregion
