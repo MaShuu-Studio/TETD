@@ -275,19 +275,115 @@
 },
 
 {
-    "id": 2000000,"name": "Orc"
+    "id": 2000000,"name": "Fire Orc"
 },
 
 {
-    "id": 2000100,"name": "Dark Elf"
+    "id": 2000001,"name": "Fire Orc Solider"
 },
 
 {
-    "id": 2010000,"name": "Orc"
+    "id": 2000002,"name": "Fire Orc Axe Soldier"
 },
 
 {
-    "id": 2010100,"name": "Dark Elf"
+    "id": 2001002,"name": " Elite Fire Orc Axe Solider"
+},
+
+{
+    "id": 2001003,"name": " Giant Fire Orc"
+},
+
+{
+    "id": 2001004,"name": " Shaman Fire Orc"
+},
+
+{
+    "id": 2002005,"name": " Chief Fire Orc"
+},
+
+{
+    "id": 2000100,"name": "Fire Dark Elf Soldier"
+},
+
+{
+    "id": 2000101,"name": "Fire Dark Elf Spearman"
+},
+
+{
+    "id": 2000102,"name": "Fire Dark Elf Assassin"
+},
+
+{
+    "id": 2001102,"name": "Fire Dark Elf Assassin"
+},
+
+{
+    "id": 2001103,"name": "Fire Dark Elf Mage"
+},
+
+{
+    "id": 2001104,"name": "Fire Dark Elf Magic Knight"
+},
+
+{
+    "id": 2002105,"name": "Fire Dark Elf Lord"
+},
+
+{
+    "id": 2010000,"name": "Ice Orc"
+},
+
+{
+    "id": 2010001,"name": "Ice Orc Solider"
+},
+
+{
+    "id": 2010002,"name": "Ice Orc Axe Soldier"
+},
+
+{
+    "id": 2011002,"name": " Elite Ice Orc Axe Solider"
+},
+
+{
+    "id": 2011003,"name": " Giant Ice Orc"
+},
+
+{
+    "id": 2011004,"name": " Shaman Ice Orc"
+},
+
+{
+    "id": 2012005,"name": " Chief Ice Orc"
+},
+
+{
+    "id": 2010100,"name": "Ice Dark Elf Soldier"
+},
+
+{
+    "id": 2010101,"name": "Ice Dark Elf Spearman"
+},
+
+{
+    "id": 2010102,"name": "Ice Dark Elf Assassin"
+},
+
+{
+    "id": 2011102,"name": "Ice Dark Elf Assassin"
+},
+
+{
+    "id": 2011103,"name": "Ice Dark Elf Mage"
+},
+
+{
+    "id": 2011104,"name": "Ice Dark Elf Magic Knight"
+},
+
+{
+    "id": 2012105,"name": "Ice Dark Elf Lord"
 },
 
 {

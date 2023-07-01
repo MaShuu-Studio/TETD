@@ -15,6 +15,78 @@
 },
 
 {
+    "id": 2010001,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2010001/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2010002,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2010002/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2011002,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2011002/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2011003,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2011003/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2011004,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2011004/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2012005,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2012005/",
+"pivot": { "x": 0.5, "y": 0.05 }
+},
+
+{
     "id": 2010100,
 "element": 2,
 "hp": 2,
@@ -23,6 +95,78 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2010100/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2010101,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2010101/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2010102,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2010102/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2011102,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2011102/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2011103,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2011103/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2011104,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2011104/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2012105,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2012105/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 }
     ]
