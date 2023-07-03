@@ -37,6 +37,8 @@ public class MapEditor : MonoBehaviour
     private Camera cam;
     private PixelPerfectCamera pcam;
 
+    [SerializeField] private SpriteRenderer[] backgrounds;
+
     [SerializeField] private Tilemap mapTilemap;
     [SerializeField] private Tilemap buildableTilemap;
     [SerializeField] private Tilemap routeTilemap;
@@ -58,6 +60,7 @@ public class MapEditor : MonoBehaviour
 
     private bool start, dest;
     private Vector3Int startPos, destPos;
+    private bool drawFlag;
 
     public bool CanSave { get { return canSave; } }
     private bool canSave;
@@ -74,6 +77,26 @@ public class MapEditor : MonoBehaviour
 
         if (map == null) tilemap = new TilemapInfo(tileName);
         else tilemap = new TilemapInfo(map.tilemap);
+
+        Sprite[] sprites = tilemap.GetBackGround();
+        for (int i = 0; i < backgrounds.Length; i++)
+        {
+            if (sprites[i] == null)
+            {
+                backgrounds[i].gameObject.SetActive(false);
+                continue;
+            }
+            // 전체사이즈가 640*360일 때 딱 맞게 되어있음.
+            // 이에 맞춰서 사이즈 조정
+
+            float x, y;
+            x = sprites[i].texture.width;
+            y = sprites[i].texture.height;
+
+            backgrounds[i].transform.localScale = new Vector3(640 / x, 360 / y);
+            backgrounds[i].sprite = sprites[i];
+            backgrounds[i].gameObject.SetActive(true);
+        }
 
         UpdateMap();
         FindRoute();
@@ -154,65 +177,72 @@ public class MapEditor : MonoBehaviour
         return new Vector3(x, y);
     }
     #endregion
-    public void SelectTile(CustomRuleTile tile)
+    public void SelectTile(CustomRuleTile tile, bool isFlag)
     {
         selectedTile = tile;
         selectedPosSprite.sprite = tile.Base.sprite;
+        drawFlag = isFlag;
     }
-
 
     #region Map
     private void SetTile(Vector3Int pos, CustomRuleTile tile)
     {
-        bool update = true;
-        if (tilemap.tiles.ContainsKey(pos))
+        if (drawFlag)
         {
-            if (tilemap.tiles[pos].name == "START") start = false;
-            if (tilemap.tiles[pos].name == "DEST") dest = false;
-
-            if (tile == null)
-            {
-                tilemap.tiles.Remove(pos);
-            }
-            else if (tilemap.tiles[pos].name != tile.name)
-                tilemap.tiles[pos] = new TileInfo(tile.name, tile.Base.buildable);
-            else update = false;
+            routeTilemap.SetTile(pos, tile.Base);
         }
         else
         {
-            if (tilemap.tiles.Count == 0)
+            bool update = true;
+            if (tilemap.tiles.ContainsKey(pos))
             {
-                tilemap.origin = pos;
-                tilemap.size = new Vector3Int(1, 1);
+                if (tilemap.tiles[pos].name == "START") start = false;
+                if (tilemap.tiles[pos].name == "DEST") dest = false;
+
+                if (tile == null)
+                {
+                    tilemap.tiles.Remove(pos);
+                }
+                else if (tilemap.tiles[pos].name != tile.name)
+                    tilemap.tiles[pos] = new TileInfo(tile.name, tile.Base.buildable);
+                else update = false;
             }
-            if (tile != null)
-                tilemap.tiles.Add(pos, new TileInfo(tile.name, tile.Base.buildable));
-        }
+            else
+            {
+                if (tilemap.tiles.Count == 0)
+                {
+                    tilemap.origin = pos;
+                    tilemap.size = new Vector3Int(1, 1);
+                }
+                if (tile != null)
+                    tilemap.tiles.Add(pos, new TileInfo(tile.name, tile.Base.buildable));
+            }
 
-        int x = tilemap.origin.x;
-        int y = tilemap.origin.y;
+            int x = tilemap.origin.x;
+            int y = tilemap.origin.y;
 
-        if (x > pos.x)
-        {
-            tilemap.size.x += x - pos.x;
-            tilemap.origin.x = pos.x;
-        }
-        else if (x + (tilemap.size.x - 1) < pos.x)
-        {
-            tilemap.size.x = pos.x - x + 1;
-        }
+            if (x > pos.x)
+            {
+                tilemap.size.x += x - pos.x;
+                tilemap.origin.x = pos.x;
+            }
+            else if (x + (tilemap.size.x - 1) < pos.x)
+            {
+                tilemap.size.x = pos.x - x + 1;
+            }
 
-        if (y > pos.y)
-        {
-            tilemap.size.y += y - pos.y;
-            tilemap.origin.y = pos.y;
-        }
-        else if (y + (tilemap.size.y - 1) < pos.y)
-        {
-            tilemap.size.y = pos.y - y + 1;
-        }
+            if (y > pos.y)
+            {
+                tilemap.size.y += y - pos.y;
+                tilemap.origin.y = pos.y;
+            }
+            else if (y + (tilemap.size.y - 1) < pos.y)
+            {
+                tilemap.size.y = pos.y - y + 1;
+            }
 
-        if (update) UpdateMap(pos);
+            if (update) UpdateMap(pos);
+        }
     }
     public void Clear()
     {
@@ -237,12 +267,12 @@ public class MapEditor : MonoBehaviour
         road = result.Item2;
 
         routeTilemap.ClearAllTiles();
-        routeTilemap.SetTile(road[0], TileManager.GetFlag("STARTFLAG"));
+        routeTilemap.SetTile(road[0], TileManager.GetFlag("STARTFLAG").Base);
         for (int i = 1; i < road.Count; i++)
         {
             Vector3Int dir = (road[i] - road[i - 1]);
-            CustomTile line = TileManager.GetFlag("HORIZONTAL");
-            if (dir.x == 0) line = TileManager.GetFlag("VERTICAL");
+            CustomTile line = TileManager.GetFlag("CORNER").Base;
+            if (dir.x == 0) line = TileManager.GetFlag("CORNER").Base;
 
             if (dir.x < 0) dir.x = -1;
             else if (dir.x > 0) dir.x = 1;
@@ -256,9 +286,9 @@ public class MapEditor : MonoBehaviour
                 pos += dir;
             }
 
-            routeTilemap.SetTile(road[i], TileManager.GetFlag("CORNER"));
+            routeTilemap.SetTile(road[i], TileManager.GetFlag("CORNER").Base);
         }
-        if (canSave) routeTilemap.SetTile(road[road.Count - 1], TileManager.GetFlag("DESTFLAG"));
+        if (canSave) routeTilemap.SetTile(road[road.Count - 1], TileManager.GetFlag("DESTFLAG").Base);
         else
         {
 #if UNITY_EDITOR
@@ -289,7 +319,7 @@ public class MapEditor : MonoBehaviour
                 }
 
                 tile = ruleTile.GetTile(info);
-                buildableFlag = (tile.buildable) ? TileManager.GetFlag("BUILDABLE") : TileManager.GetFlag("NOTBUILDABLE");
+                buildableFlag = (tile.buildable) ? TileManager.GetFlag("BUILDABLE").Base : TileManager.GetFlag("NOTBUILDABLE").Base;
             }
 
             mapTilemap.SetTile(pos, tile);
@@ -324,7 +354,7 @@ public class MapEditor : MonoBehaviour
                 bool b = tile.buildable;
 
                 mapTilemap.SetTile(pos, tile);
-                buildableTilemap.SetTile(pos, (b) ? TileManager.GetFlag("BUILDABLE") : TileManager.GetFlag("NOTBUILDABLE"));
+                buildableTilemap.SetTile(pos, (b) ? TileManager.GetFlag("BUILDABLE").Base : TileManager.GetFlag("NOTBUILDABLE").Base);
 
                 string tn = tile.name.ToUpper();
                 if (tn == "START")

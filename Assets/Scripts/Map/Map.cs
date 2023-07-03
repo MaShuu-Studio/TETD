@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
-
+using System.Linq;
 public class Map
 {
     public string name;
@@ -95,6 +95,9 @@ public class TilePalette
     public Dictionary<string, CustomRuleTile> buildable;
     public Dictionary<string, CustomRuleTile> notBuildable;
     public Dictionary<string, CustomRuleTile> roads;
+    public List<CustomRuleTile> Buildable { get; private set; }
+    public List<CustomRuleTile> NotBuildable { get; private set; }
+    public List<CustomRuleTile> Roads { get; private set; }
     public List<CustomRuleTile> Tiles { get; private set; }
 
     public TilePalette(string tileName, 
@@ -107,6 +110,10 @@ public class TilePalette
         this.buildable = buildable;
         this.notBuildable = notBuildable;
         this.roads = roads;
+
+        Buildable = buildable.Values.ToList();
+        NotBuildable = notBuildable.Values.ToList();
+        Roads = roads.Values.ToList();
 
         Tiles = new List<CustomRuleTile>();
         foreach (var tile in buildable.Values)

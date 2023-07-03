@@ -85,6 +85,7 @@ public class GameController : MonoBehaviour
     {
         string mapName = UIController.Instance.GetMapName();
         string tileName = UIController.Instance.GetTileName();
+
         if (string.IsNullOrEmpty(mapName)) return;
 
         Map map = await MapManager.LoadMap(mapName);

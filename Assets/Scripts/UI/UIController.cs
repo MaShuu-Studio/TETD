@@ -82,10 +82,7 @@ public class UIController : MonoBehaviour
     [Space]
     [Header("Map Editor")]
     [SerializeField] private TextMeshProUGUI mapNameText;
-    [SerializeField] private MapEditorTile tilePrefab;
-    [SerializeField] private RectTransform tileList;
-    [SerializeField] private RectTransform[] sidePanel;
-    private List<MapEditorTile> tiles;
+    [SerializeField] private MapEditorPanel mapEditorPanel;
 
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
@@ -384,43 +381,15 @@ public class UIController : MonoBehaviour
     public void EditMap(string mapName, string tileName)
     {
         mapNameText.text = mapName;
-        LoadTiles(tileName);
+        mapEditorPanel.Init(tileName);
+        /*
         int count = Mathf.CeilToInt(tileList.childCount / 2);
-        tileList.sizeDelta = new Vector2(300, 120 * count + 20 * (count - 1) + 30);
+        tileList.sizeDelta = new Vector2(300, 120 * count + 20 * (count - 1) + 30);*/
     }
 
-    public void LoadTiles(string tileName)
-    {
-        if (tiles != null)
-        {
-            foreach (var tile in tiles)
-            {
-                Destroy(tile.gameObject);
-            }
-            tiles.Clear();
-        }
-
-        tiles = new List<MapEditorTile>();
-        TilePalette tilePalette = TileManager.GetTilePalette(tileName);
-        for (int i = 0; i < tilePalette.Tiles.Count; i++)
-        {
-            CustomRuleTile tile = tilePalette.Tiles[i];
-            MapEditorTile metile = Instantiate(tilePrefab);
-
-            metile.SetTile(tile);
-            metile.transform.SetParent(tileList);
-            tiles.Add(metile);
-        }
-    }
     public bool PointInTilePanel(Vector2 point)
     {
-        for (int i = 0; i < sidePanel.Length; i++)
-        {
-            Vector2 pos = sidePanel[i].position;
-            Rect rect = new Rect(pos + sidePanel[i].offsetMin, sidePanel[i].rect.size);
-            if (rect.Contains(point)) return true;
-        }
-        return false;
+        return mapEditorPanel.PointInTilePanel(point);
     }
 
     #endregion

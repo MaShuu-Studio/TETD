@@ -8,15 +8,17 @@ using System.Threading.Tasks;
 
 public static class TileManager
 {
-    private static Dictionary<string, CustomTile> flags;
+    private static Dictionary<string, CustomRuleTile> flags;
     private static Dictionary<string, TilePalette> tiles;
+
+    public static string[] FlagNames { get { return flagNames; } }
     public static List<string> TilePaletteNames { get { return tilePaletteNames; } }
     private static List<string> tilePaletteNames;
 
     private static string mapPath = "/Sprites/Tile/Maps/";
     private static string flagPath = "/Sprites/Tile/Flag/";
 
-    private static string[] flagNames = { "BUILDABLE", "NOTBUILDABLE", "STARTFLAG", "DESTFLAG", "CORNER", "HORIZONTAL", "VERTICAL" };
+    private static string[] flagNames = { "BUILDABLE", "NOTBUILDABLE", "STARTFLAG", "DESTFLAG", "CORNER" };
     private static string[] tileDics = { "/Buildable/", "/Not Buildable/" };
     private static string[] constTiles = { "ROAD", "START", "DEST" };
     private static string[] mapBackgrounds = { "LOWER", "UPPER" };
@@ -42,23 +44,15 @@ public static class TileManager
 
     public static async Task Init()
     {
-        flags = new Dictionary<string, CustomTile>();
+        flags = new Dictionary<string, CustomRuleTile>();
         tiles = new Dictionary<string, TilePalette>();
         string[] tilePalettes = DataManager.GetDics(Application.streamingAssetsPath + mapPath);
-
-
 
         for (int i = 0; i < flagNames.Length; i++)
         {
             string path = flagPath + flagNames[i] + ".png";
-            string name = DataManager.FileNameTriming(flagNames[i]).ToUpper();
-
-            Sprite sprite = await DataManager.LoadSprite(path, Vector2.one / 2, 24);
-            if (sprite == null) continue;
-
-            sprite.name = name;
-            CustomTile tile = ScriptableObject.CreateInstance<CustomTile>();
-            tile.SetData(name, sprite, false);
+            CustomRuleTile tile = await DataManager.LoadTile(path, flagNames[i], false);
+            if (tile == null) continue; // 게임 실행에 오류가 생기므로 아예 게임을 종료시키는게 나음.
 
             flags.Add(flagNames[i], tile);
 
@@ -135,6 +129,19 @@ public static class TileManager
         return null;
     }
 
+    public static List<CustomRuleTile>[] GetTiles(string tilePaletteName)
+    {
+        if (tiles.ContainsKey(tilePaletteName))
+        {
+            List<CustomRuleTile>[] list = new List<CustomRuleTile>[3];
+            list[0] = tiles[tilePaletteName].Buildable;
+            list[1] = tiles[tilePaletteName].NotBuildable;
+            list[2] = tiles[tilePaletteName].Roads;
+            return list;
+        }
+        return null;
+    }
+
     public static CustomRuleTile GetTile(string tilePaletteName, TileInfo tileInfo)
     {
         tilePaletteName = tilePaletteName.ToUpper();
@@ -159,7 +166,7 @@ public static class TileManager
         return tile;
     }
 
-    public static CustomTile GetFlag(string name)
+    public static CustomRuleTile GetFlag(string name)
     {
         name = name.ToUpper();
         if (flags.ContainsKey(name)) return flags[name];
