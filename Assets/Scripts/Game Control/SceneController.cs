@@ -108,7 +108,7 @@ public class SceneController : MonoBehaviour
                 PoolController.CurProgress +
                 UIController.CurProgress;
 
-            Progress((float)cur / total);
+            Progress((float)cur / total, $"데이터를 불러오는 중 {cur} / {total}");
             yield return null;
         }
     }
@@ -175,9 +175,9 @@ public class SceneController : MonoBehaviour
         sceneLoaded = true;
     }
 
-    private void Progress(float value)
+    private void Progress(float value, string progress = "")
     {
-        UIController.Instance.Loading(value);
+        UIController.Instance.Loading(value, progress);
     }
 }
 

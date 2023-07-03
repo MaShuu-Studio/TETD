@@ -33,6 +33,7 @@ public class UIController : MonoBehaviour
     [Space]
     [Header("Loading Scene")]
     [SerializeField] private Slider loadingGage;
+    [SerializeField] private TextMeshProUGUI loadingProgressText;
 
     [Space]
     [Header("Title")]
@@ -105,9 +106,10 @@ public class UIController : MonoBehaviour
         loadingScene.SetActive(true);
     }
 
-    public void Loading(float value)
+    public void Loading(float value, string progress)
     {
         loadingGage.value = value;
+        loadingProgressText.text = progress;
     }
 
     public void ChangeScene(int index)
