@@ -6,12 +6,14 @@ using UnityEngine.UI;
 public class MapEditorPanel : MonoBehaviour
 {
     [SerializeField] private MapEditorTile tilePrefab;
+    [SerializeField] private MapEditorBackgroundTile backgroundTilePrefab;
     // 0: Buildable, 1: Not Buildable, 2: Route Flag
     [SerializeField] private Transform[] toggles;
     [SerializeField] private GameObject[] palettes;
-    // 0: Buildable, 1: Not Buildable, 2: Road, 3: Route Flag
-    [SerializeField] private RectTransform[] tileLists;
+    // 0: Buildable, 1: Not Buildable, 2: Road, 3: Route Flag, 4: Backgrounds
+    [SerializeField] private Transform[] tileLists;
     private List<MapEditorTile>[] tiles;
+    private List<MapEditorBackgroundTile> backgrounds;
 
     private RectTransform rectTransform;
 
@@ -21,6 +23,7 @@ public class MapEditorPanel : MonoBehaviour
         tiles = new List<MapEditorTile>[4];
         for (int i = 0; i < tiles.Length; i++)
             tiles[i] = new List<MapEditorTile>();
+        backgrounds = new List<MapEditorBackgroundTile>();
     }
 
     public void Init()
@@ -38,7 +41,7 @@ public class MapEditorPanel : MonoBehaviour
         if (tilelist != null)
         {
             // flag는 제외 따로 추가.
-            for (int i = 0; i < tilelist.Length; i++) 
+            for (int i = 0; i < tilelist.Length; i++)
             {
                 for (int j = 0; j < tilelist[i].Count; j++)
                 {
@@ -61,6 +64,18 @@ public class MapEditorPanel : MonoBehaviour
             metile.SetTile(tile, true);
             metile.transform.SetParent(tileLists[3]);
             tiles[3].Add(metile);
+        }
+
+        // Background Tiles
+        for (int i = 0; i < TileManager.BackgroundNames.Length; i++)
+        {
+            string name = TileManager.BackgroundNames[i];
+            Sprite[] bg = TileManager.GetBackground(name);
+            MapEditorBackgroundTile bgTile = Instantiate(backgroundTilePrefab);
+
+            bgTile.SetTile(name, bg);
+            bgTile.transform.SetParent(tileLists[4]);
+            backgrounds.Add(bgTile);
         }
 
         LoadPalette(0);

@@ -14,6 +14,8 @@ public static class TileManager
     private static Dictionary<string, Sprite[]> backgrounds;
 
     public static string[] FlagNames { get { return flagNames; } }
+    public static string[] BackgroundNames { get { return backgroundNames; } }
+    private static string[] backgroundNames;
 
     private static string tilePath = "/Sprites/Tile/";
     private static string flagPath = "/Sprites/Tile/Flag/";
@@ -69,27 +71,29 @@ public static class TileManager
                 if (tile == null) continue;
 
                 tiles[i].Add(name, tile);
-                Debug.Log(name);
             }
         }
 
         backgrounds = new Dictionary<string, Sprite[]>();
-        string[] backgroundNames = DataManager.GetDics(Application.streamingAssetsPath + backgroundPath);
+        string[] names = DataManager.GetDics(Application.streamingAssetsPath + backgroundPath);
 
-        for (int i = 0; i < backgroundNames.Length; i++)
+        for (int i = 0; i < names.Length; i++)
         {
             CurProgress++;
             Sprite[] b = new Sprite[mapBackgrounds.Length];
-            string name = backgroundNames[i].ToUpper();
+            string name = names[i].ToUpper();
             for (int j = 0; j < mapBackgrounds.Length; j++)
             {
-                b[j] = await DataManager.LoadSprite(backgroundPath + backgroundNames[i] + "/" + mapBackgrounds[j] + ".png", Vector2.one / 2, 24);
+                b[j] = await DataManager.LoadSprite(backgroundPath + names[i] + "/" + mapBackgrounds[j] + ".png", Vector2.one / 2, 24);
             }
             backgrounds.Add(name, b);
         }
 
+        backgroundNames = backgrounds.Keys.ToArray();
+
 #if UNITY_EDITOR
-        Debug.Log($"[SYSTEM] LOAD TILEMAP {tiles[0].Count + tiles[1].Count + tiles[2].Count}");
+        Debug.Log($"[SYSTEM] LOAD TILE {tiles[0].Count + tiles[1].Count + tiles[2].Count}");
+        Debug.Log($"[SYSTEM] LOAD BACKGROUND {backgrounds.Count}");
         Debug.Log($"[SYSTEM] LOAD TILE FLAG {flags.Count}");
 #endif
     }
