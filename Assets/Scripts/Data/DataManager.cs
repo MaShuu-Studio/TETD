@@ -269,7 +269,7 @@ namespace Data
             return clip;
         }
 
-        public static async Task<CustomRuleTile> LoadTile(string path, string name, bool buildable)
+        public static async Task<CustomRuleTile> LoadTile(string path, string name, string type, bool buildable)
         {
             CustomRuleTile ruleTile = null;
 
@@ -294,7 +294,7 @@ namespace Data
                     tiles[x + 4 * (3 - y)] = tile;
                 }
             }
-            ruleTile = new CustomRuleTile(name, tiles);
+            ruleTile = new CustomRuleTile(name, type, tiles);
 
             return ruleTile;
         }

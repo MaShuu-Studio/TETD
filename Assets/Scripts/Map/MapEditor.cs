@@ -315,7 +315,7 @@ public class MapEditor : MonoBehaviour
                 for (int j = 0; j < 4; j++)
                 {
                     CustomRuleTile aroundTile = tilemap.GetTile(pos + dir[j]);
-                    if (aroundTile != null) info[j] = aroundTile.name;
+                    if (aroundTile != null) info[j] = aroundTile.type;
                 }
 
                 tile = ruleTile.GetTile(info);
@@ -347,7 +347,7 @@ public class MapEditor : MonoBehaviour
                 for (int i = 0; i < 4; i++)
                 {
                     CustomRuleTile aroundTile = tilemap.GetTile(pos + dir[i]);
-                    if (aroundTile != null) info[i] = aroundTile.name;
+                    if (aroundTile != null) info[i] = aroundTile.type;
                 }
 
                 CustomTile tile = ruleTile.GetTile(info);

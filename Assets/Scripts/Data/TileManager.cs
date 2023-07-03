@@ -20,28 +20,18 @@ public static class TileManager
     private static string backgroundPath = "/Sprites/Tile/Backgrounds/";
 
     private static string[] flagNames = { "BUILDABLE", "NOTBUILDABLE", "STARTFLAG", "DESTFLAG", "CORNER" };
-    private static string[] tileDics = { "Buildable/", "Not Buildable/", "Road/" };
-    private static string[] constTiles = { "ROAD", "START", "DEST" };
+    private static string[] tileTypes = { "BUILDABLE", "NOT BUILDABLE", "ROAD" };
     private static string[] mapBackgrounds = { "LOWER", "UPPER" };
 
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
 
-    public static bool IsConstTile(string str)
-    {
-        for (int i = 0; i < constTiles.Length; i++)
-        {
-            if (str == constTiles[i]) return true;
-        }
-        return false;
-    }
-
     public static void GetTotal()
     {
         List<string> files = new List<string>();
-        foreach (var path in tileDics)
+        foreach (var path in tileTypes)
         {
-            files.AddRange(DataManager.GetFileNames(tilePath + path));
+            files.AddRange(DataManager.GetFileNames(tilePath + "/" + path));
         }
         string[] backgroundNames = DataManager.GetDics(Application.streamingAssetsPath + backgroundPath);
 
@@ -56,7 +46,7 @@ public static class TileManager
         {
             CurProgress++;
             string path = flagPath + flagNames[i] + ".png";
-            CustomRuleTile tile = await DataManager.LoadTile(path, flagNames[i], false);
+            CustomRuleTile tile = await DataManager.LoadTile(path, flagNames[i], "FLAG", false);
             if (tile == null) continue; // 게임 실행에 오류가 생기므로 아예 게임을 종료시키는게 나음.
 
             flags.Add(flagNames[i], tile);
@@ -67,7 +57,7 @@ public static class TileManager
         for (int i = 0; i < tiles.Length; i++)
         {
             tiles[i] = new Dictionary<string, CustomRuleTile>();
-            string filePath = tilePath + tileDics[i];
+            string filePath = tilePath + "/" + tileTypes[i] + "/";
 
             List<string> fileNames = DataManager.GetFileNames(filePath);
             bool buildable = (i == 0); // buildable의 경우에만 true
@@ -75,7 +65,7 @@ public static class TileManager
             {
                 CurProgress++;
                 string name = DataManager.FileNameTriming(fileNames[j]).ToUpper();
-                CustomRuleTile tile = await DataManager.LoadTile(filePath + fileNames[j], name, buildable);
+                CustomRuleTile tile = await DataManager.LoadTile(filePath + fileNames[j], name, tileTypes[i], buildable);
                 if (tile == null) continue;
 
                 tiles[i].Add(name, tile);

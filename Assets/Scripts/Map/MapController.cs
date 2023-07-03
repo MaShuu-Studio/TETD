@@ -73,7 +73,7 @@ public class MapController : MonoBehaviour
                 for (int i = 0; i < 4; i++)
                 {
                     CustomRuleTile aroundTile = map.tilemap.GetTile(pos + dir[i]);
-                    if (aroundTile != null) info[i] = aroundTile.name;
+                    if (aroundTile != null) info[i] = aroundTile.type;
                 }
                 CustomTile tile = ruleTile.GetTile(info);
 

@@ -107,6 +107,7 @@ public class CustomRuleTile
     // ||¦¢¦¢X
 
     private CustomTile[] tiles;
+    public string type;
     public string name;
 
     public CustomTile Base
@@ -118,10 +119,11 @@ public class CustomRuleTile
         }
     }
 
-    public CustomRuleTile(string name, CustomTile[] tiles)
+    public CustomRuleTile(string name, string type, CustomTile[] tiles)
     {
         this.tiles = tiles;
         this.name = name;
+        this.type = type;
     }
 
     public CustomTile GetTile(string[] info)
@@ -132,9 +134,7 @@ public class CustomRuleTile
         {
             index = (ushort)(index << 1);
 
-            if ((name == info[i]) ||
-                (TileManager.IsConstTile(name) && TileManager.IsConstTile(info[i])))
-                index += 1;
+            if (type == info[i]) index += 1;
         }
 
         return tiles[index];
