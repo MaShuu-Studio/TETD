@@ -28,8 +28,9 @@ public static class MapManager
 
         for (int i = 0; i < files.Length; i++)
         {
-            maps.Add(DataManager.FileNameTriming(files[i]));
             CurProgress++;
+
+            maps.Add(DataManager.FileNameTriming(files[i]));
         }
 
 #if UNITY_EDITOR

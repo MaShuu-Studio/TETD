@@ -19,9 +19,9 @@ public static class RoundManager
 
     public static async Task Init()
     {
+        CurProgress++;
         RoundData data = await DataManager.DeserializeJson<RoundData>(path, "Round");
         round = new Round(data);
-        CurProgress++;
 
 #if UNITY_EDITOR
         Debug.Log($"[SYSTEM] LOAD ROUND DATA");

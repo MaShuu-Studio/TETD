@@ -9,17 +9,18 @@ using System.Threading.Tasks;
 public static class TileManager
 {
     private static Dictionary<string, CustomRuleTile> flags;
-    private static Dictionary<string, TilePalette> tiles;
+    // 0: buildable, 1: notbuildable, 2: roads
+    private static Dictionary<string, CustomRuleTile>[] tiles;
+    private static Dictionary<string, Sprite[]> backgrounds;
 
     public static string[] FlagNames { get { return flagNames; } }
-    public static List<string> TilePaletteNames { get { return tilePaletteNames; } }
-    private static List<string> tilePaletteNames;
 
-    private static string mapPath = "/Sprites/Tile/Maps/";
+    private static string tilePath = "/Sprites/Tile/";
     private static string flagPath = "/Sprites/Tile/Flag/";
+    private static string backgroundPath = "/Sprites/Tile/Backgrounds/";
 
     private static string[] flagNames = { "BUILDABLE", "NOTBUILDABLE", "STARTFLAG", "DESTFLAG", "CORNER" };
-    private static string[] tileDics = { "/Buildable/", "/Not Buildable/" };
+    private static string[] tileDics = { "Buildable/", "Not Buildable/", "Road/" };
     private static string[] constTiles = { "ROAD", "START", "DEST" };
     private static string[] mapBackgrounds = { "LOWER", "UPPER" };
 
@@ -37,129 +38,90 @@ public static class TileManager
 
     public static void GetTotal()
     {
-        string[] tilePalettes = DataManager.GetDics(Application.streamingAssetsPath + mapPath);
+        List<string> files = new List<string>();
+        foreach (var path in tileDics)
+        {
+            files.AddRange(DataManager.GetFileNames(tilePath + path));
+        }
+        string[] backgroundNames = DataManager.GetDics(Application.streamingAssetsPath + backgroundPath);
 
-        TotalProgress = flagNames.Length + tilePalettes.Length;
+        TotalProgress = flagNames.Length + files.Count + backgroundNames.Length;
     }
 
     public static async Task Init()
     {
         flags = new Dictionary<string, CustomRuleTile>();
-        tiles = new Dictionary<string, TilePalette>();
-        string[] tilePalettes = DataManager.GetDics(Application.streamingAssetsPath + mapPath);
 
         for (int i = 0; i < flagNames.Length; i++)
         {
+            CurProgress++;
             string path = flagPath + flagNames[i] + ".png";
             CustomRuleTile tile = await DataManager.LoadTile(path, flagNames[i], false);
             if (tile == null) continue; // 게임 실행에 오류가 생기므로 아예 게임을 종료시키는게 나음.
 
             flags.Add(flagNames[i], tile);
-
-            CurProgress++;
         }
 
-        for (int i = 0; i < tilePalettes.Length; i++)
+        tiles = new Dictionary<string, CustomRuleTile>[3];
+
+        for (int i = 0; i < tiles.Length; i++)
         {
-            string filePath = mapPath + tilePalettes[i];
+            tiles[i] = new Dictionary<string, CustomRuleTile>();
+            string filePath = tilePath + tileDics[i];
 
-            List<string> fileNames = DataManager.GetFileNames(filePath + tileDics[0]);
-            Dictionary<string, CustomRuleTile> buildableTiles = new Dictionary<string, CustomRuleTile>();
-            bool buildable = true;
+            List<string> fileNames = DataManager.GetFileNames(filePath);
+            bool buildable = (i == 0); // buildable의 경우에만 true
             for (int j = 0; j < fileNames.Count; j++)
             {
-                string name = DataManager.FileNameTriming(fileNames[j]);
-                CustomRuleTile tile = await DataManager.LoadTile(filePath + tileDics[0] + fileNames[j], name, buildable);
+                CurProgress++;
+                string name = DataManager.FileNameTriming(fileNames[j]).ToUpper();
+                CustomRuleTile tile = await DataManager.LoadTile(filePath + fileNames[j], name, buildable);
                 if (tile == null) continue;
 
-                buildableTiles.Add(name, tile);
+                tiles[i].Add(name, tile);
+                Debug.Log(name);
             }
+        }
 
-            fileNames = DataManager.GetFileNames(filePath + tileDics[1]);
-            Dictionary<string, CustomRuleTile> notBuildableTiles = new Dictionary<string, CustomRuleTile>();
-            buildable = false;
-            for (int j = 0; j < fileNames.Count; j++)
-            {
-                string name = DataManager.FileNameTriming(fileNames[j]);
-                CustomRuleTile tile = await DataManager.LoadTile(filePath + tileDics[1] + fileNames[j], name, buildable);
-                if (tile == null) continue;
+        backgrounds = new Dictionary<string, Sprite[]>();
+        string[] backgroundNames = DataManager.GetDics(Application.streamingAssetsPath + backgroundPath);
 
-                notBuildableTiles.Add(name, tile);
-            }
-
-            Dictionary<string, CustomRuleTile> roads = new Dictionary<string, CustomRuleTile>();
-            for (int j = 0; j < constTiles.Length; j++)
-            {
-                CustomRuleTile tile = await DataManager.LoadTile(filePath + "/" + constTiles[j] + ".png", constTiles[j], buildable);
-                if (tile == null) continue;
-
-                roads.Add(constTiles[j], tile);
-            }
-
-            Sprite[] backgrounds = new Sprite[mapBackgrounds.Length];
+        for (int i = 0; i < backgroundNames.Length; i++)
+        {
+            CurProgress++;
+            Sprite[] b = new Sprite[mapBackgrounds.Length];
+            string name = backgroundNames[i].ToUpper();
             for (int j = 0; j < mapBackgrounds.Length; j++)
             {
-                backgrounds[j] = await DataManager.LoadSprite(filePath + "/" + mapBackgrounds[j] + ".png", Vector2.one / 2, 24);
+                b[j] = await DataManager.LoadSprite(backgroundPath + backgroundNames[i] + "/" + mapBackgrounds[j] + ".png", Vector2.one / 2, 24);
             }
-
-            string tilePaletteName = tilePalettes[i].ToUpper();
-
-            TilePalette tilePalette =
-                new TilePalette(
-                    tilePalettes[i],
-                    buildableTiles,
-                    notBuildableTiles,
-                    roads,
-                    backgrounds);
-            tiles.Add(tilePaletteName, tilePalette);
-
-            CurProgress++;
+            backgrounds.Add(name, b);
         }
-        tilePaletteNames = tiles.Keys.ToList();
 
 #if UNITY_EDITOR
-        Debug.Log($"[SYSTEM] LOAD TILEMAP {tiles.Count}");
+        Debug.Log($"[SYSTEM] LOAD TILEMAP {tiles[0].Count + tiles[1].Count + tiles[2].Count}");
         Debug.Log($"[SYSTEM] LOAD TILE FLAG {flags.Count}");
 #endif
     }
 
-    public static TilePalette GetTilePalette(string tilePaletteName)
+    public static List<CustomRuleTile>[] GetTiles()
     {
-        if (tiles.ContainsKey(tilePaletteName)) return tiles[tilePaletteName];
-        return null;
+        List<CustomRuleTile>[] list = new List<CustomRuleTile>[3];
+        list[0] = tiles[0].Values.ToList();
+        list[1] = tiles[1].Values.ToList();
+        list[2] = tiles[2].Values.ToList();
+        return list;
     }
 
-    public static List<CustomRuleTile>[] GetTiles(string tilePaletteName)
+    public static CustomRuleTile GetTile(TileInfo tileInfo)
     {
-        if (tiles.ContainsKey(tilePaletteName))
-        {
-            List<CustomRuleTile>[] list = new List<CustomRuleTile>[3];
-            list[0] = tiles[tilePaletteName].Buildable;
-            list[1] = tiles[tilePaletteName].NotBuildable;
-            list[2] = tiles[tilePaletteName].Roads;
-            return list;
-        }
-        return null;
-    }
-
-    public static CustomRuleTile GetTile(string tilePaletteName, TileInfo tileInfo)
-    {
-        tilePaletteName = tilePaletteName.ToUpper();
         CustomRuleTile tile = null;
-        if (tiles.ContainsKey(tilePaletteName))
+        string tileName = tileInfo.name.ToUpper();
+        for (int i = 0; i < tiles.Length; i++)
         {
-            string tileName = tileInfo.name.ToUpper();
-            if (tiles[tilePaletteName].roads.ContainsKey(tileName))
+            if (tiles[i].ContainsKey(tileName))
             {
-                tile = tiles[tilePaletteName].roads[tileName];
-            }
-            else if (tileInfo.buildable && tiles[tilePaletteName].buildable.ContainsKey(tileName))
-            {
-                tile = tiles[tilePaletteName].buildable[tileName];
-            }
-            else if (tileInfo.buildable == false && tiles[tilePaletteName].notBuildable.ContainsKey(tileName))
-            {
-                tile = tiles[tilePaletteName].notBuildable[tileName];
+                tile = tiles[i][tileName];
             }
         }
 
@@ -176,8 +138,10 @@ public static class TileManager
 
     public static Sprite[] GetBackground(string name)
     {
+        if (string.IsNullOrEmpty(name)) return null;
+
         name = name.ToUpper();
-        if (tiles.ContainsKey(name)) return tiles[name].backgrounds;
+        if (backgrounds.ContainsKey(name)) return backgrounds[name];
 
         return null;
     }

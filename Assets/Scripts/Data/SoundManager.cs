@@ -27,9 +27,9 @@ public static class SoundManager
 
         for (int i = 0; i < fileNames.Length; i++)
         {
+            CurProgress++;
             AudioClip clip = await DataManager.LoadSound(fileNames[i], AudioType.WAV);
             sounds.Add(DataManager.FileNameTriming(fileNames[i]).ToUpper(), clip);
-            CurProgress++;
         }
         keys = sounds.Keys.ToList();
 

@@ -23,9 +23,9 @@ public class MapEditorPanel : MonoBehaviour
             tiles[i] = new List<MapEditorTile>();
     }
 
-    public void Init(string tileName)
+    public void Init()
     {
-        foreach (var list in this.tiles)
+        foreach (var list in tiles)
         {
             foreach (var tile in list)
             {
@@ -34,20 +34,20 @@ public class MapEditorPanel : MonoBehaviour
             list.Clear();
         }
 
-        List<CustomRuleTile>[] tiles = TileManager.GetTiles(tileName);
-        if (tiles != null)
+        List<CustomRuleTile>[] tilelist = TileManager.GetTiles();
+        if (tilelist != null)
         {
             // flag는 제외 따로 추가.
-            for (int i = 0; i < tiles.Length - 1; i++) 
+            for (int i = 0; i < tilelist.Length; i++) 
             {
-                for (int j = 0; j < tiles[i].Count; j++)
+                for (int j = 0; j < tilelist[i].Count; j++)
                 {
-                    CustomRuleTile tile = tiles[i][j];
+                    CustomRuleTile tile = tilelist[i][j];
                     MapEditorTile metile = Instantiate(tilePrefab);
 
                     metile.SetTile(tile);
                     metile.transform.SetParent(tileLists[i]);
-                    this.tiles[i].Add(metile);
+                    tiles[i].Add(metile);
                 }
             }
         }
@@ -60,7 +60,7 @@ public class MapEditorPanel : MonoBehaviour
 
             metile.SetTile(tile, true);
             metile.transform.SetParent(tileLists[3]);
-            this.tiles[3].Add(metile);
+            tiles[3].Add(metile);
         }
 
         LoadPalette(0);

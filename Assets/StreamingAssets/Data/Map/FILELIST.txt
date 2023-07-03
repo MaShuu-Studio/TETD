@@ -1,5 +1,5 @@
 /Data/Map/RTD.json,
 /Data/Map/SNAKE.json,
-/Data/Map/T1.json,
-/Data/Map/T2.json,
-/Data/Map/T3.json
+/Data/Map/t1.json,
+/Data/Map/t2.json,
+/Data/Map/t3.json

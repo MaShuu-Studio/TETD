@@ -39,7 +39,6 @@ public class UIController : MonoBehaviour
     [Header("Title")]
     [SerializeField] private GameSettingController gameSetting;
     [SerializeField] private TMP_InputField mapNameInputfield;
-    [SerializeField] private TMP_Dropdown tilePaletteDropdown;
 
     [Space]
     [SerializeField] private Library library;
@@ -96,8 +95,9 @@ public class UIController : MonoBehaviour
         await library.Init();
         library.Open(false);
         await optionUI.Init();
-        CurProgress++;
+        mapEditorPanel.Init();
 
+        CurProgress++;
         await Title();
     }
 
@@ -126,12 +126,6 @@ public class UIController : MonoBehaviour
     {
         mapNameInputfield.text = "";
         await gameSetting.Init();
-
-        while (TileManager.TilePaletteNames == null) await Task.Yield();
-        tilePaletteDropdown.value = 0;
-        tilePaletteDropdown.options.Clear();
-        tilePaletteDropdown.AddOptions(TileManager.TilePaletteNames);
-
     }
 
     public void OpenSetting(bool b)
@@ -376,14 +370,9 @@ public class UIController : MonoBehaviour
         return mapNameInputfield.text;
     }
 
-    public string GetTileName()
-    {
-        return tilePaletteDropdown.options[tilePaletteDropdown.value].text;
-    }
-    public void EditMap(string mapName, string tileName)
+    public void EditMap(string mapName)
     {
         mapNameText.text = mapName;
-        mapEditorPanel.Init(tileName);
         /*
         int count = Mathf.CeilToInt(tileList.childCount / 2);
         tileList.sizeDelta = new Vector2(300, 120 * count + 20 * (count - 1) + 30);*/

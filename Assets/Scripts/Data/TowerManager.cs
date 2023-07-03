@@ -55,6 +55,8 @@ public static class TowerManager
 
         foreach (var data in list)
         {
+            CurProgress++;
+
             Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
             Tower tower = new Tower(data, anim);
             towers.Add(tower.id, tower);
@@ -66,8 +68,6 @@ public static class TowerManager
 
             Sprite[] proj = await MakeObjects(data, "WEAPON");
             if (proj != null) projectiles.Add(tower.id, proj);
-
-            CurProgress++;
         }
         keys = towers.Keys.ToList();
 

@@ -60,6 +60,8 @@ public class PoolController : MonoBehaviour
 
         for (int i = 0; i < TowerManager.Keys.Count; i++)
         {
+            CurProgress++;
+
             int id = TowerManager.Keys[i];
             Poolable poolable = Instantiate(towerBase);
             if (poolable.MakePrefab(id) == false)
@@ -111,12 +113,12 @@ public class PoolController : MonoBehaviour
                     effectPool.Add(id, effectPoolComponent);
                 }
             }
-
-            CurProgress++;
         }
 
         for (int i = 0; i < EnemyManager.Keys.Count; i++)
         {
+            CurProgress++;
+
             int id = EnemyManager.Keys[i];
             Poolable poolable = Instantiate(enemyBase);
             if (poolable.MakePrefab(id) == false)
@@ -130,8 +132,6 @@ public class PoolController : MonoBehaviour
             poolComponent.Init(poolable);
 
             pool.Add(id, poolComponent);
-
-            CurProgress++;
         }
 
         /* Poolable의 존재에 따라 자동으로 Object Pool에 넣어주는 시스템
@@ -147,6 +147,9 @@ public class PoolController : MonoBehaviour
             pool.Add(objName.ToUpper(), poolComponent);
         }
         */
+#if UNITY_EDITOR
+        Debug.Log($"[SYSTEM] LOAD POOLABLE OBJECT {CurProgress}");
+#endif
     }
 
     public static void Push(int id, GameObject obj)

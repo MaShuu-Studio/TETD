@@ -33,6 +33,8 @@ public static class Translator
         languages = new Dictionary<int, Language>[langs.Count];
         for (int i = 0; i < langs.Count; i++)
         {
+            CurProgress++;
+
             List<LanguageData> l = await DataManager.DeserializeListJson<LanguageData>(path, langs[i]);
             languages[i] = new Dictionary<int, Language>();
 
@@ -41,7 +43,6 @@ public static class Translator
                 Language lang = new Language(data);
                 languages[i].Add(lang.id, lang);
             }
-            CurProgress++;
         }
 
 #if UNITY_EDITOR

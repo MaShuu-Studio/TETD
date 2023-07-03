@@ -1,5 +1,5 @@
 {
-  "tileName": "TEST",
+  "backgroundName":"FOREST",
   "origin": { "x": -7, "y": -7, "z": 0 },
   "size": { "x": 14, "y": 14, "z": 1 },
   "tileKeys": [

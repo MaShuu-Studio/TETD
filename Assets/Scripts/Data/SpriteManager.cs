@@ -74,8 +74,8 @@ public static class SpriteManager
 
             foreach(int id in list)
             {
-                Sprite sprite = await DataManager.LoadSprite(path + dataName + "/" + id + ".png", Vector2.one / 2, 16);
                 CurProgress++;
+                Sprite sprite = await DataManager.LoadSprite(path + dataName + "/" + id + ".png", Vector2.one / 2, 16);
                 if (sprite == null) continue;
                 sprites.Add(id, sprite);
             }

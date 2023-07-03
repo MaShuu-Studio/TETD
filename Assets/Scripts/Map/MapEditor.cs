@@ -48,7 +48,6 @@ public class MapEditor : MonoBehaviour
 
     public string MapName { get { return mapName; } }
     private string mapName;
-    private string tileName;
 
     public TilemapInfo Tilemap { get { return tilemap; } }
     private TilemapInfo tilemap;
@@ -66,36 +65,37 @@ public class MapEditor : MonoBehaviour
     private bool canSave;
 
     #region Map Controller
-    public void Init(Map map, string mapName, string tileName)
+    public void Init(Map map, string mapName)
     {
         Clear();
 
-        this.tileName = tileName;
         this.mapName = mapName;
 
-        roadTile = TileManager.GetTilePalette(tileName).roads["ROAD"];
+        roadTile = TileManager.GetTiles()[2][0]; // Road에 대한 임시조치.
 
-        if (map == null) tilemap = new TilemapInfo(tileName);
+        if (map == null) tilemap = new TilemapInfo("");
         else tilemap = new TilemapInfo(map.tilemap);
 
         Sprite[] sprites = tilemap.GetBackGround();
-        for (int i = 0; i < backgrounds.Length; i++)
+        backgrounds[0].gameObject.SetActive(false);
+        backgrounds[1].gameObject.SetActive(false);
+        if (sprites != null)
         {
-            if (sprites[i] == null)
+            for (int i = 0; i < backgrounds.Length; i++)
             {
-                backgrounds[i].gameObject.SetActive(false);
-                continue;
+                if (sprites[i] == null) continue;
+
+                // 전체사이즈가 640*360일 때 딱 맞게 되어있음.
+                // 이에 맞춰서 사이즈 조정
+
+                float x, y;
+                x = sprites[i].texture.width;
+                y = sprites[i].texture.height;
+
+                backgrounds[i].transform.localScale = new Vector3(640 / x, 360 / y);
+                backgrounds[i].sprite = sprites[i];
+                backgrounds[i].gameObject.SetActive(true);
             }
-            // 전체사이즈가 640*360일 때 딱 맞게 되어있음.
-            // 이에 맞춰서 사이즈 조정
-
-            float x, y;
-            x = sprites[i].texture.width;
-            y = sprites[i].texture.height;
-
-            backgrounds[i].transform.localScale = new Vector3(640 / x, 360 / y);
-            backgrounds[i].sprite = sprites[i];
-            backgrounds[i].gameObject.SetActive(true);
         }
 
         UpdateMap();

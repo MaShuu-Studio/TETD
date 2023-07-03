@@ -48,6 +48,7 @@ public static class EnemyManager
 
         foreach (var data in list)
         {
+            CurProgress++;
             Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
             await SpriteManager.AddSprite<Enemy>(data.imgsrc, data.id, data.pivot, data.pixelperunit);
 
@@ -55,7 +56,6 @@ public static class EnemyManager
             Enemy enemy = new Enemy(data, anim, mask);
             enemies.Add(enemy.id, enemy);
             egEnemyIds[(int)enemy.element, (int)enemy.grade].Add(enemy.id);
-            CurProgress++;
         }
 
         keys = enemies.Keys.ToList();
