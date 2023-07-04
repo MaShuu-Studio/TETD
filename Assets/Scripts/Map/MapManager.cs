@@ -37,7 +37,7 @@ public static class MapManager
         Debug.Log($"[SYSTEM] LOAD MAP {maps.Count}");
 #endif
     }
-
+    /*
     public static Tuple<bool, List<Vector3Int>> FindRoute(TilemapInfo tilemap)
     {
         if (tilemap == null) return null;
@@ -130,7 +130,7 @@ public static class MapManager
 
         return new Tuple<bool, List<Vector3Int>>(findRoute, road);
     }
-
+    */
     public static void SaveMap(string mapName, TilemapInfo info)
     {
         TilemapInfoJson data = new TilemapInfoJson(info);
@@ -144,10 +144,7 @@ public static class MapManager
         if (data == null) return null;
 
         TilemapInfo info = new TilemapInfo(data);
-        Tuple<bool, List<Vector3Int>> resut = FindRoute(info);
-        List<Vector3Int> road = resut.Item2;
-        if (resut.Item1 == false) return null;
 
-        return new Map(mapName, info, road);
+        return new Map(mapName, info);
     }
 }

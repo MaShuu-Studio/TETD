@@ -7,7 +7,7 @@ public class MapEditorPanel : MonoBehaviour
 {
     [SerializeField] private MapEditorTile tilePrefab;
     [SerializeField] private MapEditorBackgroundTile backgroundTilePrefab;
-    // 0: Buildable, 1: Not Buildable, 2: Route Flag
+    // 0: Buildable, 1: Not Buildable, 2: Road, 3: Backgrounds
     [SerializeField] private Transform[] toggles;
     [SerializeField] private GameObject[] palettes;
     // 0: Buildable, 1: Not Buildable, 2: Road, 3: Route Flag, 4: Backgrounds
@@ -55,10 +55,11 @@ public class MapEditorPanel : MonoBehaviour
             }
         }
 
-        // BUILDABLE, NOTBUILDABLE 제외.
-        for (int i = 2; i < TileManager.FlagNames.Length; i++)
+        // STARTFLAG와 DESTFLAG만 추가
+        string[] flags = { "STARTFLAG", "DESTFLAG" };
+        for (int i = 0; i < flags.Length; i++)
         {
-            CustomRuleTile tile = TileManager.GetFlag(TileManager.FlagNames[i]);
+            CustomRuleTile tile = TileManager.GetFlag(flags[i]);
             MapEditorTile metile = Instantiate(tilePrefab);
 
             metile.SetTile(tile, true);
@@ -83,6 +84,8 @@ public class MapEditorPanel : MonoBehaviour
 
     public bool PointInTilePanel(Vector2 point)
     {
+        if (gameObject.activeSelf == false) return false;
+
         Vector2 pos = rectTransform.position;
         Rect rect = new Rect(pos + rectTransform.offsetMin, rectTransform.rect.size);
         if (rect.Contains(point)) return true;

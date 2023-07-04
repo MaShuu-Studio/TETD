@@ -48,7 +48,9 @@ public static class TileManager
         {
             CurProgress++;
             string path = flagPath + flagNames[i] + ".png";
-            CustomRuleTile tile = await DataManager.LoadTile(path, flagNames[i], "FLAG", false);
+            string tag = "FLAG";
+            if (flagNames[i].Contains("BUILDABLE")) tag = "BUILDABLE";
+            CustomRuleTile tile = await DataManager.LoadTile(path, flagNames[i], tag, false);
             if (tile == null) continue; // 게임 실행에 오류가 생기므로 아예 게임을 종료시키는게 나음.
 
             flags.Add(flagNames[i], tile);
@@ -111,6 +113,21 @@ public static class TileManager
     {
         CustomRuleTile tile = null;
         string tileName = tileInfo.name.ToUpper();
+        if (flags.ContainsKey(tileName)) tile = flags[tileName];
+        for (int i = 0; i < tiles.Length; i++)
+        {
+            if (tiles[i].ContainsKey(tileName))
+            {
+                tile = tiles[i][tileName];
+            }
+        }
+
+        return tile;
+    }
+    public static CustomRuleTile GetTile(string tileName)
+    {
+        CustomRuleTile tile = null;
+        if (flags.ContainsKey(tileName)) tile = flags[tileName];
         for (int i = 0; i < tiles.Length; i++)
         {
             if (tiles[i].ContainsKey(tileName))

@@ -1,5 +1,5 @@
 {
-  "backgroundName":"FOREST",
+  "backgroundName": "FOREST",
   "origin": { "x": -7, "y": -7, "z": 0 },
   "size": { "x": 14, "y": 14, "z": 1 },
   "tileKeys": [
@@ -397,5 +397,15 @@
     { "name": "WALL", "buildable": false },
     { "name": "WALL", "buildable": false },
     { "name": "WALL", "buildable": false }
+  ],
+  "enemyRoad": [
+    { "x": -6, "y": 5, "z": 0 },
+    { "x": -6, "y": -6, "z": 0 },
+    { "x": -2, "y": -6, "z": 0 },
+    { "x": -2, "y": 5, "z": 0 },
+    { "x": 1, "y": 5, "z": 0 },
+    { "x": 1, "y": -6, "z": 0 },
+    { "x": 5, "y": -6, "z": 0 },
+    { "x": 5, "y": 5, "z": 0 }
   ]
 }

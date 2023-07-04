@@ -9,13 +9,11 @@ public class Map
 {
     public string name;
     public TilemapInfo tilemap;
-    public List<Vector3Int> enemyRoad;
 
-    public Map(string name, TilemapInfo info, List<Vector3Int> road)
+    public Map(string name, TilemapInfo info)
     {
         this.name = name;
         tilemap = new TilemapInfo(info);
-        enemyRoad = new List<Vector3Int>(road);
     }
 }
 
@@ -25,6 +23,7 @@ public class TilemapInfo
     public Vector3Int origin;
     public Vector3Int size;
     public Dictionary<Vector3Int, TileInfo> tiles;
+    public List<Vector3Int> enemyRoad;
 
     public TilemapInfo(string backgroundName)
     {
@@ -32,6 +31,7 @@ public class TilemapInfo
         this.origin = Vector3Int.zero;
         this.size = Vector3Int.zero;
         this.tiles = new Dictionary<Vector3Int, TileInfo>();
+        enemyRoad = new List<Vector3Int>();
     }
 
     public TilemapInfo(TilemapInfoJson data)
@@ -40,6 +40,9 @@ public class TilemapInfo
         this.origin = data.origin;
         this.size = data.size;
         this.tiles = new Dictionary<Vector3Int, TileInfo>(data.tiles);
+
+        if (data.enemyRoad != null) enemyRoad = data.enemyRoad;
+        else enemyRoad = new List<Vector3Int>();
     }
 
     public TilemapInfo(TilemapInfo data)
@@ -48,6 +51,9 @@ public class TilemapInfo
         this.origin = data.origin;
         this.size = data.size;
         this.tiles = new Dictionary<Vector3Int, TileInfo>(data.tiles);
+
+        if (data.enemyRoad != null) enemyRoad = data.enemyRoad;
+        else enemyRoad = new List<Vector3Int>();
     }
 
     public CustomRuleTile GetTile(Vector3Int pos)
@@ -163,6 +169,7 @@ public class TilemapInfoJson : ISerializationCallbackReceiver
     public List<Vector3Int> tileKeys = new List<Vector3Int>();
     public List<TileInfo> tileValues = new List<TileInfo>();
     public Dictionary<Vector3Int, TileInfo> tiles;
+    public List<Vector3Int> enemyRoad;
 
     public TilemapInfoJson(TilemapInfo info)
     {
@@ -170,6 +177,7 @@ public class TilemapInfoJson : ISerializationCallbackReceiver
         this.origin = info.origin;
         this.size = info.size;
         this.tiles = info.tiles;
+        this.enemyRoad = info.enemyRoad;
     }
 
     public void OnBeforeSerialize()
