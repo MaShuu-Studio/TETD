@@ -20,8 +20,8 @@ public static class SpriteManager
         }
     }
 
-    private static string dataPath = "/Data/";
-    private static string path = "/Sprites/";
+    public static string dataPath { get; private set; } = "/Data/";
+    public static string path { get; private set; } = "/Sprites/";
 
     private static string[] datas = { "Stat" };
 
@@ -93,7 +93,11 @@ public static class SpriteManager
         string type = typeof(T).ToString();
 
         Sprite sprite = await DataManager.LoadSprite(path + "IDLE.png", pivot, pixelPerUnit);
-        if (sprite == null) return;
+        if (sprite == null)
+        {
+            sprite = await DataManager.LoadSprite(path + "IDLE0.png", pivot, pixelPerUnit);
+            if (sprite == null) return;
+        }
         sprite.name = id.ToString();
         sprites.Add(id, sprite);
     }

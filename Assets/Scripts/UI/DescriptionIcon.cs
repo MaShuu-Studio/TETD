@@ -74,7 +74,9 @@ public class DescriptionIcon : MonoBehaviour
         {
             if (isOn == false)
             {
-                UIController.Instance.SetDescription(mousePos, Translator.GetLanguage(iconId).name);
+                Language lang = Translator.GetLanguage(iconId);
+                if (lang != null)
+                    UIController.Instance.SetDescription(mousePos, lang.name);
                 isOn = true;
             }
             else

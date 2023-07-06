@@ -56,8 +56,11 @@
     <Analyzer Include="D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Editor\MapControllerEditor.cs" />
-    <Compile Include="Assets\Editor\MapMakerEditor.cs" />
+    <Compile Include="Assets\Scripts\Editor\UnitEditor.cs" />
+    <Compile Include="Assets\Scripts\Editor\UnitEditorUnitIcon.cs" />
+    <Compile Include="Assets\Scripts\Editor\UnitEditorStatItem.cs" />
+    <Compile Include="Assets\Scripts\Editor\UnitEditorElement.cs" />
+    <Compile Include="Assets\Scripts\Editor\UnitEditorImageIcon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

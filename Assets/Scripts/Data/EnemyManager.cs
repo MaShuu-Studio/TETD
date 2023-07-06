@@ -7,12 +7,14 @@ using UnityEngine;
 
 public static class EnemyManager
 {
-    private static string path = "/Data/Enemy/";
-
+    public static string path { get; private set; } = "/Data/Enemy/";
     private static Dictionary<int, Enemy> enemies;
 
     public static List<int> Keys { get { return keys; } }
     private static List<int> keys;
+    public static List<int> CustomDataKeys { get { return customDataKeys; } }
+    private static List<int> customDataKeys;
+
     // 0: elemental, 1: grade, List: Id
     public static List<int>[,] EgEnemyIds { get { return egEnemyIds; } }
     private static List<int>[,] egEnemyIds;
@@ -34,6 +36,8 @@ public static class EnemyManager
     public static async Task Init()
     {
         enemies = new Dictionary<int, Enemy>();
+        customDataKeys = new List<int>();
+
         egEnemyIds = new List<int>[EnumArray.Elements.Length, EnumArray.EnemyGrades.Length];
         for (int i = 0; i < EnumArray.Elements.Length; i++)
             for (int j = 0; j < EnumArray.EnemyGrades.Length; j++)
@@ -52,10 +56,11 @@ public static class EnemyManager
             Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
             await SpriteManager.AddSprite<Enemy>(data.imgsrc, data.id, data.pivot, data.pixelperunit);
 
-            Sprite mask = MakeMask(SpriteManager.GetSprite(data.id), data.pivot, data.pixelperunit);
-            Enemy enemy = new Enemy(data, anim, mask);
+            Enemy enemy = new Enemy(data, anim);
             enemies.Add(enemy.id, enemy);
             egEnemyIds[(int)enemy.element, (int)enemy.grade].Add(enemy.id);
+
+            if (data.id.ToString()[0] == '5') customDataKeys.Add(data.id);
         }
 
         keys = enemies.Keys.ToList();
@@ -95,27 +100,13 @@ public static class EnemyManager
         return anim;
     }
 
-    public static Sprite MakeMask(Sprite origin, Vector2 pivot, float pixelsPerUnit)
-    {
-        Texture2D texture = new Texture2D(origin.texture.width, origin.texture.height);
-        for (int x = 0; x < texture.width; x++)
-        {
-            for (int y = 0; y < texture.height; y++)
-            {
-                texture.SetPixel(x, y, Color.white);
-            }
-        }
-        Sprite mask = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), pivot, pixelsPerUnit);
-
-        return mask;
-    }
-
     public static Enemy GetEnemy(int id)
     {
         if (enemies.ContainsKey(id)) return enemies[id];
 
         return null;
     }
+
     public static void UpdateLanguage(LanguageType type)
     {
         foreach (var enemy in enemies.Values)

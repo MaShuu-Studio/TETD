@@ -284,8 +284,7 @@ public class EnemyObject : Poolable
     {
         int number = 0;
         float time = 0;
-        // 한 프레임당 100ms
-        float frameTime = 0.1f;
+        float frameTime = data.spf;
         while (true)
         {
             spriteRenderer.sprite = data.animation[anim][number];

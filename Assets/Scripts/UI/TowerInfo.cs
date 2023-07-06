@@ -7,7 +7,7 @@ using TMPro;
 public class TowerInfo : MonoBehaviour
 {
     [SerializeField] protected Image elementImage;
-    //[SerializeField] protected RectTransform iconSlot;
+    [SerializeField] protected RectTransform iconSlot;
     [SerializeField] protected Image iconImage;
     [SerializeField] protected TowerStatItem[] mainStats;
     [SerializeField] protected TextMeshProUGUI attackAmount;
@@ -23,7 +23,10 @@ public class TowerInfo : MonoBehaviour
 
         nameText.text = data.name;
         iconImage.sprite = SpriteManager.GetSprite(data.id);
-        //iconSlot.sizeDelta = new Vector2(iconImage.sprite.texture.width, iconImage.sprite.texture.height) / 24 * 100;
+        if (iconSlot != null)
+        {
+            iconSlot.sizeDelta = new Vector2(iconImage.sprite.texture.width, iconImage.sprite.texture.height) / 24 * 100;
+        }
 
         // UI Icon들도 id를 붙이고 SpriteManager에서 관리 예정
         elementImage.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT,(int)data.element);
@@ -104,7 +107,7 @@ public class TowerInfo : MonoBehaviour
             }
     }
 
-    public void UpdateLanguage()
+    public virtual void UpdateLanguage()
     {
         if (data != null) nameText.text = data.name;
     }

@@ -84,6 +84,10 @@ public class UIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI mapNameText;
     [SerializeField] private MapEditorPanel mapEditorPanel;
 
+    [Space]
+    [Header("Unit Editor")]
+    [SerializeField] private UnitEditor unitEditor;
+
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
     public static void GetTotal()
@@ -92,10 +96,14 @@ public class UIController : MonoBehaviour
     }
     public async Task Init()
     {
+        for (int i = 0; i < scenes.Count; i++)
+            scenes[i].SetActive(true);
+
         await library.Init();
         library.Open(false);
         await optionUI.Init();
         mapEditorPanel.Init();
+        unitEditor.Init();
 
         CurProgress++;
         await Title();
@@ -139,6 +147,7 @@ public class UIController : MonoBehaviour
         towerInfoPanel.UpdateLanguage();
         shop.UpdateLanguage();
         library.UpdatePage();
+        unitEditor.UpdateLanguage();
         UpdateRoundInfo();
     }
 
@@ -383,5 +392,25 @@ public class UIController : MonoBehaviour
         return mapEditorPanel.PointInTilePanel(point);
     }
 
+    #endregion
+
+    #region Unit Editor
+    public void EditUnit()
+    {
+        unitEditor.EditUnit();
+    }
+
+    public void UpdatePoster(Tower data)
+    {
+        unitEditor.UpdatePoster(data);
+    }
+
+    public void UpdatePoster(Enemy data)
+    {
+        unitEditor.UpdatePoster(data);
+    }
+    #endregion
+
+    #region Round Editor
     #endregion
 }

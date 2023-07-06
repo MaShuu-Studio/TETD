@@ -79,7 +79,6 @@ public class MapEditor : MonoBehaviour
         SetBackground(tilemap.backgroundName);
 
         UpdateMap();
-        //FindRoute();
     }
 
     // Update is called once per frame
@@ -376,52 +375,6 @@ public class MapEditor : MonoBehaviour
         routeTilemap.ClearAllTiles();
     }
 
-    /*
-    // 루트를 보여주는 용도
-    public void FindRoute()
-    {
-        if (start == false) return;
-
-        Tuple<bool, List<Vector3Int>> result = MapManager.FindRoute(tilemap);
-
-        canSave = result.Item1;
-        road = result.Item2;
-
-        routeTilemap.ClearAllTiles();
-        routeTilemap.SetTile(road[0], TileManager.GetFlag("STARTFLAG").Base);
-        for (int i = 1; i < road.Count; i++)
-        {
-            Vector3Int dir = (road[i] - road[i - 1]);
-            CustomTile line = TileManager.GetFlag("CORNER").Base;
-            if (dir.x == 0) line = TileManager.GetFlag("CORNER").Base;
-
-            if (dir.x < 0) dir.x = -1;
-            else if (dir.x > 0) dir.x = 1;
-            if (dir.y < 0) dir.y = -1;
-            else if (dir.y > 0) dir.y = 1;
-
-            Vector3Int pos = road[i - 1] + dir;
-            while (pos != road[i])
-            {
-                routeTilemap.SetTile(pos, line);
-                pos += dir;
-            }
-
-            routeTilemap.SetTile(road[i], TileManager.GetFlag("CORNER").Base);
-        }
-        if (canSave)
-        {
-            routeTilemap.SetTile(road[road.Count - 1], TileManager.GetFlag("DESTFLAG").Base);
-            tilemap.enemyRoad = result.Item2;
-        }
-        else
-        {
-#if UNITY_EDITOR
-            Debug.Log("[SYSTEM] CAN NOT MAKE MAP");
-#endif
-        }
-    }
-    */
     private void UpdateMap(Vector3Int selectedPos)
     {
         Vector3Int[] dir = new Vector3Int[5] { Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right, Vector3Int.zero };

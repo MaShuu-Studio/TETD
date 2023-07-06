@@ -60,72 +60,80 @@
     <Compile Include="Assets\Scripts\Data\TileManager.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\TowerReinforceButton.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\SaveMapButton.cs" />
-    <Compile Include="Assets\Scripts\UI\Shop.cs" />
     <Compile Include="Assets\Scripts\Object\TowerObject.cs" />
-    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\SellButton.cs" />
     <Compile Include="Assets\Scripts\Data\PriorityQueue.cs" />
-    <Compile Include="Assets\Scripts\UI\ShopRemainInfo.cs" />
-    <Compile Include="Assets\Scripts\UI\MapInfoIcon.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ScriptableButton.cs" />
     <Compile Include="Assets\Scripts\UI\LibraryCard.cs" />
     <Compile Include="Assets\Scripts\Data\DataManager.cs" />
-    <Compile Include="Assets\Scripts\Object\SplashPoint.cs" />
-    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ReinforceButton.cs" />
-    <Compile Include="Assets\Scripts\Data\Round.cs" />
-    <Compile Include="Assets\Scripts\UI\LibraryFilterToggle.cs" />
     <Compile Include="Assets\Scripts\Game Control\SoundController.cs" />
-    <Compile Include="Assets\Scripts\Map\MapManager.cs" />
-    <Compile Include="Assets\Scripts\Data\TowerManager.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\CustomDropdown.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfoPanel.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\UnitEditorSetImageIcon.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\StartButton.cs" />
     <Compile Include="Assets\Scripts\UI\MapEditorPanel.cs" />
     <Compile Include="Assets\Scripts\UI\GameSettingController.cs" />
     <Compile Include="Assets\Scripts\Data\SpriteManager.cs" />
     <Compile Include="Assets\Scripts\Game Control\TowerController.cs" />
-    <Compile Include="Assets\Scripts\UI\GameSettingIcon.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\EditMapButton.cs" />
-    <Compile Include="Assets\Scripts\Object\Poolable.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\UnitEditorPoster.cs" />
     <Compile Include="Assets\Scripts\UI\OptionUI.cs" />
     <Compile Include="Assets\Scripts\Object\Pool.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfoItem.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\UnitEditorAdvancedOption.cs" />
     <Compile Include="Assets\Scripts\Object\EffectObject.cs" />
     <Compile Include="Assets\Scripts\Object\TowerAttackArea.cs" />
-    <Compile Include="Assets\Scripts\Data\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\TitleButton.cs" />
     <Compile Include="Assets\Scripts\UI\Library.cs" />
-    <Compile Include="Assets\Scripts\Data\ObjectData.cs" />
     <Compile Include="Assets\Scripts\Game Control\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\Game Control\CameraController.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\BuildTowerButton.cs" />
     <Compile Include="Assets\Scripts\Map\MapEditorBackgroundTile.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\UnitEditor.cs" />
+    <Compile Include="Assets\Scripts\Data\Language.cs" />
+    <Compile Include="Assets\Scripts\Map\Map.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ExitButton.cs" />
+    <Compile Include="Assets\Scripts\UI\DamagePool.cs" />
+    <Compile Include="Assets\Scripts\Data\Translator.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\GetTowerButton.cs" />
+    <Compile Include="Assets\Scripts\Game Control\EnemyController.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\UnitEditorUnitIcon.cs" />
+    <Compile Include="Assets\Scripts\UI\TowerInfo.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\EditUnitButton.cs" />
+    <Compile Include="Assets\Scripts\Map\MapEditorTile.cs" />
+    <Compile Include="Assets\Scripts\UI\DamageUI.cs" />
+    <Compile Include="Assets\Scripts\Game Control\SceneController.cs" />
+    <Compile Include="Assets\Scripts\Map\MapEditor.cs" />
+    <Compile Include="Assets\Scripts\UI\UIController.cs" />
+    <Compile Include="Assets\Scripts\UI\Shop.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\SellButton.cs" />
+    <Compile Include="Assets\Scripts\UI\ShopRemainInfo.cs" />
+    <Compile Include="Assets\Scripts\UI\MapInfoIcon.cs" />
+    <Compile Include="Assets\Scripts\Object\SplashPoint.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ReinforceButton.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\CustomDropdownItem.cs" />
+    <Compile Include="Assets\Scripts\Data\Round.cs" />
+    <Compile Include="Assets\Scripts\UI\LibraryFilterToggle.cs" />
+    <Compile Include="Assets\Scripts\Map\MapManager.cs" />
+    <Compile Include="Assets\Scripts\Data\TowerManager.cs" />
+    <Compile Include="Assets\Scripts\UI\GameSettingIcon.cs" />
+    <Compile Include="Assets\Scripts\Object\Poolable.cs" />
+    <Compile Include="Assets\Scripts\Data\EnemyManager.cs" />
+    <Compile Include="Assets\Scripts\Data\ObjectData.cs" />
+    <Compile Include="Assets\Scripts\Game Control\CameraController.cs" />
     <Compile Include="Assets\Scripts\Map\MapController.cs" />
     <Compile Include="Assets\Scripts\Game Control\RoundController.cs" />
     <Compile Include="Assets\Scripts\Game Control\Initializer.cs" />
     <Compile Include="Assets\Scripts\UI\TowerStatItem.cs" />
-    <Compile Include="Assets\Scripts\Data\Language.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\RerollButton.cs" />
     <Compile Include="Assets\Scripts\UI\DescriptionIcon.cs" />
     <Compile Include="Assets\Scripts\UI\DescriptionPopup.cs" />
-    <Compile Include="Assets\Scripts\Map\Map.cs" />
-    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ExitButton.cs" />
     <Compile Include="Assets\Scripts\Game Control\GameController.cs" />
-    <Compile Include="Assets\Scripts\UI\DamagePool.cs" />
-    <Compile Include="Assets\Scripts\Data\Translator.cs" />
     <Compile Include="Assets\Scripts\Sound\CustomAudioSource.cs" />
-    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\GetTowerButton.cs" />
     <Compile Include="Assets\Scripts\Data\RoundManager.cs" />
     <Compile Include="Assets\Scripts\UI\TowerUpgradeItem.cs" />
-    <Compile Include="Assets\Scripts\Game Control\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Data\EnumData.cs" />
     <Compile Include="Assets\Scripts\Object\ProjectilePool.cs" />
-    <Compile Include="Assets\Scripts\UI\TowerInfo.cs" />
-    <Compile Include="Assets\Scripts\Map\MapEditorTile.cs" />
     <Compile Include="Assets\Scripts\Object\PoolController.cs" />
-    <Compile Include="Assets\Scripts\UI\DamageUI.cs" />
-    <Compile Include="Assets\Scripts\Game Control\SceneController.cs" />
-    <Compile Include="Assets\Scripts\Map\MapEditor.cs" />
     <Compile Include="Assets\Scripts\Object\Projectile.cs" />
-    <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -407,14 +415,17 @@
     <Reference Include="Unity.Burst.Cecil.Pdb">
       <HintPath>Library\PackageCache\com.unity.burst@1.8.2\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>Assets\Plugins\System.Windows.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Burst.Cecil">
       <HintPath>Library\PackageCache\com.unity.burst@1.8.2\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Burst.Cecil.Rocks">
-      <HintPath>Library\PackageCache\com.unity.burst@1.8.2\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.8\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil.Rocks">
+      <HintPath>Library\PackageCache\com.unity.burst@1.8.2\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.0.2\Runtime\Newtonsoft.Json.dll</HintPath>

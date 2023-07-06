@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 public static class TowerManager
 {
-    private static string path = "/Data/Tower/";
+    public static string path { get; private set; } = "/Data/Tower/";
 
     private static Dictionary<int, Tower> towers;
     public static Dictionary<int, Sprite[]> Projs { get { return projectiles; } }
@@ -22,6 +22,10 @@ public static class TowerManager
     private static List<int>[,] egTowerIds;
     public static List<int> Keys { get { return keys; } }
     private static List<int> keys;
+
+    public static List<int> CustomDataKeys { get { return customDataKeys; } }
+    private static List<int> customDataKeys;
+
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
     public static async Task GetTotal()
@@ -40,6 +44,7 @@ public static class TowerManager
         towers = new Dictionary<int, Tower>();
         projectiles = new Dictionary<int, Sprite[]>();
         effects = new Dictionary<int, Sprite[]>();
+        customDataKeys = new List<int>();
 
         egTowerIds = new List<int>[EnumArray.Elements.Length, EnumArray.Grades.Length];
         for (int i = 0; i < EnumArray.Elements.Length; i++)
@@ -68,6 +73,8 @@ public static class TowerManager
 
             Sprite[] proj = await MakeObjects(data, "WEAPON");
             if (proj != null) projectiles.Add(tower.id, proj);
+
+            if (data.id.ToString()[0] == '4') customDataKeys.Add(data.id);
         }
         keys = towers.Keys.ToList();
 

@@ -95,6 +95,18 @@ public class GameController : MonoBehaviour
         SceneController.Instance.ChangeScene("Map Editor", actions);
     }
 
+    public void EditUnit()
+    {
+        List<SceneAction> actions = new List<SceneAction>();
+        actions.Add(new SceneAction(() => UIController.Instance.EditUnit()));
+        SceneController.Instance.ChangeScene("Unit Editor", actions);
+    }
+
+    public void EditRound()
+    {
+
+    }
+
     public void Clear()
     {
         UIController.Instance.Clear();

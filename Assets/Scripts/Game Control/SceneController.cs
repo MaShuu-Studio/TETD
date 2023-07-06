@@ -23,7 +23,7 @@ public class SceneController : MonoBehaviour
     }
 
     private string[] SceneNames { get; }
-    = { "Title", "Game Scene", "Map Editor" };
+    = { "Title", "Game Scene", "Map Editor", "Unit Editor", "Round Editor"};
 
     private const string LoadingScene = "Loading";
     public bool IsLoading { get { return isLoading; } }

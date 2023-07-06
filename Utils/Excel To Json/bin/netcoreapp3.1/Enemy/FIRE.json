@@ -83,7 +83,7 @@
 "money": 50,
 "speed": 5,
 "imgsrc": "/Sprites/Enemy/2002005/",
-"pivot": { "x": 0.5, "y": 0.05 }
+"pivot": { "x": 0.5, "y": 0.0625 }
 },
 
 {

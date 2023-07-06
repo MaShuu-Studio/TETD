@@ -275,6 +275,58 @@
 },
 
 {
+    "id": 4000000,"name": "Torch"
+},
+
+{
+    "id": 4000001,"name": "Sling"
+},
+
+{
+    "id": 4000002,"name": "Molotov"
+},
+
+{
+    "id": 4000003,"name": "Sword"
+},
+
+{
+    "id": 4010000,"name": "Viking"
+},
+
+{
+    "id": 4010001,"name": "Pirate"
+},
+
+{
+    "id": 4011001,"name": "Pirate"
+},
+
+{
+    "id": 4012001,"name": "Captain"
+},
+
+{
+    "id": 4010002,"name": "Spear"
+},
+
+{
+    "id": 4020000,"name": "Dart"
+},
+
+{
+    "id": 4020001,"name": "Trapper"
+},
+
+{
+    "id": 4020002,"name": "Satyr"
+},
+
+{
+    "id": 4020005,"name": "Elf Archer"
+},
+
+{
     "id": 2000000,"name": "Fire Orc"
 },
 
@@ -440,6 +492,62 @@
 
 {
     "id": 2022105,"name": " Dark Elf Lord"
+},
+
+{
+    "id": 5020000,"name": "Orc"
+},
+
+{
+    "id": 5020001,"name": " Orc Solider"
+},
+
+{
+    "id": 5020002,"name": " Orc Axe Soldier"
+},
+
+{
+    "id": 5021002,"name": " Elite Orc Axe Solider"
+},
+
+{
+    "id": 5021003,"name": " Giant Orc"
+},
+
+{
+    "id": 5021004,"name": " Shaman Orc"
+},
+
+{
+    "id": 5022005,"name": " Chief Orc"
+},
+
+{
+    "id": 5020100,"name": " Dark Elf Soldier"
+},
+
+{
+    "id": 5020101,"name": " Dark Elf Spearman"
+},
+
+{
+    "id": 5020102,"name": " Dark Elf Assassin"
+},
+
+{
+    "id": 5021102,"name": " Dark Elf Assassin"
+},
+
+{
+    "id": 5021103,"name": " Dark Elf Mage"
+},
+
+{
+    "id": 5021104,"name": " Dark Elf Magic Knight"
+},
+
+{
+    "id": 5022105,"name": " Dark Elf Lord"
 },
 
 {

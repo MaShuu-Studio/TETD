@@ -19,6 +19,8 @@ public abstract class ObjectData
 
 public class Tower : ObjectData
 {
+    public Vector2 pivot;
+
     public Grade grade;
     public Element element;
 
@@ -65,10 +67,25 @@ public class Tower : ObjectData
             }
         }
     }
+    public static Color Color(Grade grade)
+    {
+        switch (grade)
+        {
+            case Grade.NORMAL:
+                return new Color(.8f, .8f, .8f);
+            case Grade.RARE:
+                return new Color(0.5f, 0.8f, 1);
+            case Grade.HEROIC:
+                return new Color(0.7f, 0.4f, 1);
+            default:
+                return new Color(1, 0.4f, 0.2f);
+        }
+    }
 
     public Tower(TowerData data, Dictionary<AnimationType, Sprite[]> animation)
     {
         id = data.id;
+        pivot = data.pivot;
 
         this.animation = animation;
 
@@ -79,10 +96,12 @@ public class Tower : ObjectData
          * D: num 
          */
 
-        int tmp = id / 1000; // ABBC
-        tmp %= 1000; // BBC
-        element = (Element)(tmp / 10); // BB
-        grade = (Grade)(tmp % 10); // C
+        string checker = id.ToString().Substring(1, 3); // BBC
+        string e = checker.Substring(0, 2);
+        element = (Element)(int.Parse(e));
+
+        string g = checker.Substring(2, 1);
+        grade = (Grade)(int.Parse(g));
 
         attackType = data.type;
         projspf = data.projspf;
@@ -142,6 +161,8 @@ public class Tower : ObjectData
         id = data.id;
         name = data.name;
         animation = data.animation;
+
+        pivot = data.pivot;
 
         attackType = data.attackType;
         projspf = data.projspf;
@@ -276,6 +297,8 @@ public class Enemy : ObjectData
     public Element element;
     public EnemyGrade grade;
 
+    public Vector2 pivot;
+
     public int money;
     public int exp;
 
@@ -286,17 +309,45 @@ public class Enemy : ObjectData
     public float spf;
     public Sprite Mask { get; private set; }
     public float Height { get; private set; }
+    public Color GradeColor
+    {
+        get
+        {
+            switch (grade)
+            {
+                case EnemyGrade.NORMAL:
+                    return new Color(.8f, .8f, .8f);
+                case EnemyGrade.ELITE:
+                    return new Color(0.7f, 0.4f, 1);
+                default:
+                    return new Color(1, 0.2f, 0.2f);
+            }
+        }
+    }
+    public static Color Color(EnemyGrade grade)
+    {
+        switch (grade)
+        {
+            case EnemyGrade.NORMAL:
+                return new Color(.8f, .8f, .8f);
+            case EnemyGrade.ELITE:
+                return new Color(0.7f, 0.4f, 1);
+            default:
+                return new Color(1, 0.2f, 0.2f);
+        }
+    }
 
-    public Enemy(EnemyData data, Dictionary<AnimationType, Sprite[]> animation, Sprite mask)
+    public Enemy(EnemyData data, Dictionary<AnimationType, Sprite[]> animation)
     {
         id = data.id;
         this.animation = animation;
-        Mask = mask;
+
+        pivot = data.pivot;
 
         // 높이는 Mask Height / Pixel Per Unit 임.
         // Mask Height = 스프라이트 전체 사이즈의 높이가 담겨있음.
         // Pixel Per Unit = Scene에서의 1의 사이즈가 몇 픽셀인지 담겨 있음.
-        Height = Mask.texture.height / data.pixelperunit;
+        Height = animation[AnimationType.MOVE][0].texture.height / data.pixelperunit;
 
         /* id: ABBCDDD
          * A: type
@@ -305,10 +356,12 @@ public class Enemy : ObjectData
          * D: num 
          */
 
-        int tmp = id / 1000; // ABBC
-        tmp %= 1000; // BBC
-        element = (Element)(tmp / 10); // BB
-        grade = (EnemyGrade)(tmp % 10); // C
+        string checker = id.ToString().Substring(1, 3); // BBC
+        string e = checker.Substring(0, 2);
+        element = (Element)(int.Parse(e));
+
+        string g = checker.Substring(2, 1);
+        grade = (EnemyGrade)(int.Parse(g));
 
         exp = data.exp;
         money = data.money;
@@ -317,6 +370,7 @@ public class Enemy : ObjectData
         speed = data.speed;
         dmg = data.dmg;
 
+        if (data.spf == 0) data.spf = 0.1f;
         spf = data.spf;
     }
 
@@ -324,8 +378,9 @@ public class Enemy : ObjectData
     {
         id = data.id;
         animation = data.animation;
-        Mask = data.Mask;
         Height = data.Height;
+
+        pivot = data.pivot;
 
         element = data.element;
         grade = data.grade;

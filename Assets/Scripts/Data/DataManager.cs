@@ -1,11 +1,11 @@
 using System;
-using System.Linq;
-using System.IO;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Threading.Tasks;
 
 namespace Data
 {
@@ -35,13 +35,13 @@ namespace Data
             for (int i = 0; i < pathes.Length; i++)
             {
                 string content = FileList(pathes[i]);
-                File.WriteAllText(Application.streamingAssetsPath + pathes[i] + fileListName, content);
+                File.WriteAllText(UnityEngine.Application.streamingAssetsPath + pathes[i] + fileListName, content);
             }
         }
         public static string FileList(string path)
         {
             string text = "";
-            string[] files = Directory.GetFiles(Application.streamingAssetsPath + path);
+            string[] files = Directory.GetFiles(UnityEngine.Application.streamingAssetsPath + path);
             for (int i = 0; i < files.Length; i++)
             {
                 if (files[i].Contains(".meta") || files[i].Contains(".txt")) continue;
@@ -97,7 +97,7 @@ namespace Data
 
         public static List<string> GetFileNames(string path)
         {
-            string[] files = Directory.GetFiles(Application.streamingAssetsPath + path);
+            string[] files = Directory.GetFiles(UnityEngine.Application.streamingAssetsPath + path);
             List<string> names = new List<string>();
             for (int i = 0; i < files.Length; i++)
             {
@@ -113,6 +113,7 @@ namespace Data
         public static void SerializeJson<T>(string path, string fileName, T obj)
         {
             string json = JsonUtility.ToJson(obj);
+
             if (fileName.Contains(".json") == false) fileName += ".json";
             path = Path.Combine(path, fileName);
 
@@ -148,7 +149,7 @@ namespace Data
         public static async Task<List<T>> DeserializeListJson<T>(string path, string fileName)
         {
             if (fileName.Contains(".json") == false) fileName += ".json";
-            path = Application.streamingAssetsPath + Path.Combine(path, fileName);
+            path = UnityEngine.Application.streamingAssetsPath + Path.Combine(path, fileName);
 
             SerializableList<T> obj = null;
 
@@ -177,7 +178,7 @@ namespace Data
 
         public static void SaveSetting(Setting setting)
         {
-            string path = Path.Combine(Application.persistentDataPath, settingFile);
+            string path = Path.Combine(UnityEngine.Application.persistentDataPath, settingFile);
             string text = setting.ToString();
 
             File.WriteAllText(path, text);
@@ -185,7 +186,7 @@ namespace Data
 
         public static Setting LoadSetting()
         {
-            string path = Path.Combine(Application.persistentDataPath, settingFile);
+            string path = Path.Combine(UnityEngine.Application.persistentDataPath, settingFile);
 
             if (File.Exists(path) == false) return null;
 
@@ -216,9 +217,61 @@ namespace Data
             return setting;
         }
 
+        public static async Task<List<Sprite>> FindSprites()
+        {
+            List<Sprite> sprites = new List<Sprite>();
+
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = "c:\\";
+                openFileDialog.Filter = "image files(*.png, *.jpg)|*.png;*.jpg";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.Multiselect = true;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (var path in openFileDialog.FileNames)
+                    {
+                        Sprite sprite = await LoadSprite(path);
+                        if (sprite != null) sprites.Add(sprite);
+                    }
+                }
+            }
+
+            return sprites;
+        }
+
+        private static async Task<Sprite> LoadSprite(string path)
+        {
+            Sprite sprite = null;
+            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(path))
+            {
+                req.SendWebRequest();
+                try
+                {
+                    while (!req.isDone) await Task.Yield();
+                    if (string.IsNullOrEmpty(req.error))
+                    {
+                        Texture2D texture = DownloadHandlerTexture.GetContent(req);
+                        texture.filterMode = FilterMode.Point;
+
+                        sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one / 2, 24);
+                    }
+                }
+                catch (Exception e)
+                {
+#if UNITY_EDITOR
+                    Debug.Log($"{e}");
+#endif
+                }
+            }
+            return sprite;
+        }
+
         public static async Task<Sprite> LoadSprite(string path, Vector2 pivot, float pixelsPerUnit)
         {
-            path = Application.streamingAssetsPath + path;
+            path = UnityEngine.Application.streamingAssetsPath + path;
             Sprite sprite = null;
             using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(path))
             {
@@ -245,7 +298,7 @@ namespace Data
         }
         public static async Task<AudioClip> LoadSound(string path, AudioType type)
         {
-            path = Application.streamingAssetsPath + path;
+            path = UnityEngine.Application.streamingAssetsPath + path;
 
             AudioClip clip = null;
             using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(path, type))
