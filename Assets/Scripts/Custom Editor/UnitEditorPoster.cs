@@ -25,7 +25,8 @@ public class UnitEditorPoster : LibraryCard
             }
         }
     }
-    public void UpdatePoster(bool isTower, string name, int element, int grade)
+
+    public void UpdatePoster(bool isTower, string name, int element, int grade, string cost)
     {
         nameText.text = name;
         elementImage.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT, element);
@@ -37,6 +38,8 @@ public class UnitEditorPoster : LibraryCard
 
         if (gradeImage == null) gradeImage = GetComponent<Image>();
         gradeImage.color = c;
+
+        costText.text = cost;
     }
 
     public void UpdateStat(float[] stats)

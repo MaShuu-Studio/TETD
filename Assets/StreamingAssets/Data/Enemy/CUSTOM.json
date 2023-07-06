@@ -12,19 +12,7 @@
       "pivot": { "x": 0.5, "y": 0.0625 }
     },
 
-    {
-      "id": 5020001,
-      "name": "오크병사",
-      "imgsrc": "/Sprites/Enemy/5020001/",
-      "pivot": { "x": 0.5, "y": 0.0625 },
-      "pixelperunit": 24.0,
-      "element": 0,
-      "money": 0,
-      "exp": 2,
-      "hp": 2.0,
-      "speed": 5.0,
-      "dmg": 0.0
-    },
+    {"id":5020001,"name":"오크병사","imgsrc":"/Sprites/Enemy/5020001/","pivot":{"x":0.5,"y":0.0625},"pixelperunit":24.0,"element":0,"money":150,"exp":2,"hp":2.0,"speed":5.0,"dmg":0.0,"spf":0.10000000149011612},
 
     {
       "id": 5020002,

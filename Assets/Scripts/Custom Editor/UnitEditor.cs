@@ -48,6 +48,8 @@ public class UnitEditor : MonoBehaviour
     [SerializeField] private TMP_Dropdown gradeDropdown;
     [SerializeField] private GameObject enemyGradeObject;
     [SerializeField] private TMP_Dropdown enemyGradeDropdown;
+    [SerializeField] private TextMeshProUGUI costText;
+    [SerializeField] private TMP_InputField costInput;
 
     [Space]
     [SerializeField] private Image[] statImages;
@@ -113,6 +115,7 @@ public class UnitEditor : MonoBehaviour
         elementDropdown.onValueChanged.AddListener(i => UpdateDataToPosterBasicData());
         gradeDropdown.onValueChanged.AddListener(i => UpdateDataToPosterBasicData());
         enemyGradeDropdown.onValueChanged.AddListener(i => UpdateDataToPosterBasicData());
+        costInput.onValueChanged.AddListener(i => UpdateDataToPosterBasicData());
 
         for (int i = 0; i < statInputs.Length; i++)
             statInputs[i].onValueChanged.AddListener(s => UpdateDataToPosterStat());
@@ -218,7 +221,7 @@ public class UnitEditor : MonoBehaviour
             }
 
             float width = ((options.Count >= 5) ? 5 : options.Count) * 87.5f;
-            float height = (100f / 3f * 2f) * (1 + (int)(options.Count / 5));
+            float height = (100f / 3f * 2f) * (1 + (int)(options.Count / 5)) + 25;
 
             for (int i = 0; i < towerAbilityDropdowns.Length; i++)
             {
@@ -355,6 +358,8 @@ public class UnitEditor : MonoBehaviour
             gradeObject.gameObject.SetActive(true);
             enemyGradeObject.gameObject.SetActive(false);
 
+            costText.text = "COST:";
+
             animationTexts[0].text = "IDLE";
             animationTexts[1].text = "ATTACK";
 
@@ -375,6 +380,8 @@ public class UnitEditor : MonoBehaviour
             gradeObject.gameObject.SetActive(false);
             enemyGradeObject.gameObject.SetActive(true);
 
+            costText.text = "REWARD:";
+
             animationTexts[0].text = "IDLE";
             animationTexts[1].text = "MOVE";
 
@@ -394,6 +401,113 @@ public class UnitEditor : MonoBehaviour
 
     public void SaveUnit()
     {
+        /*
+         * 
+[Serializable]
+public class TowerData : JsonData
+{
+    public Grade grade;
+    public Element element;
+
+    public AttackType type;
+
+    public List<TowerAbility> ability;
+    public List<TowerAbility> buffs;
+    public List<TowerAbility> debuffs;
+
+    public int cost;
+
+    public float dmg;
+    public float attackspeed;
+    public float range;
+
+    public float spf;
+    public List<float> attacktime;
+
+    public float projspf;
+    public float projattacktime;
+    public float projtime;
+
+    public float effectspf = 0.03f;
+    public Color effectcolor = Color.white;
+}
+         */
+        string unitId = idInput.text;
+
+        string name = nameInput.text;
+        int element = elementDropdown.value;
+        int grade = (isTower) ? gradeDropdown.value : enemyGradeDropdown.value;
+
+        int id = typeInfo;
+        id = id * 100 + element;
+        id = id * 10 + grade;
+
+        string idStr = id.ToString() + unitId;
+
+        if (int.TryParse(idStr, out id))
+        {
+            string dataPath = Application.streamingAssetsPath + ((isTower) ? TowerManager.path : EnemyManager.path) + "CUSTOM.json";
+            string imgsrc = SpriteManager.path + ((isTower) ? "Tower/" : "Enemy/") + id.ToString() + "/";
+
+            Vector2 pivot;
+            float.TryParse(pivotInputs[0].text, out pivot.x);
+            float.TryParse(pivotInputs[1].text, out pivot.y);
+
+            int cost;
+            
+            int.TryParse(costInput.text, out cost);
+
+            float[] stats = new float[3];
+
+            for (int i = 0; i < 3; i++)
+                float.TryParse(statInputs[i].text, out stats[i]);
+            float spf;
+
+            float.TryParse(spfInput.text, out spf);
+
+            if (isTower)
+            {
+                TowerData data = new TowerData()
+                {
+                    id = id,
+                    name = name,
+
+                    imgsrc = imgsrc,
+                    pivot = pivot,
+                    spf = spf,
+
+                    cost = cost,
+                };
+            }
+            else
+            {
+                EnemyData data = new EnemyData()
+                {
+                    id = id,
+                    name = name,
+
+                    imgsrc = imgsrc,
+                    pivot = pivot,
+                    spf = spf,
+
+                    hp = stats[0],
+                    speed = stats[1],
+                    exp = (int)stats[2],
+                    money = cost,
+                };
+
+                // 이미지 폴더 통으로 삭제 후 재저장.
+                // 이미지 폴더는 imgsrc로 위치를 남겨뒀음.
+                string json = DataManager.SerializeJson(data);
+
+                Dictionary<string, List<Sprite>> sprites = new Dictionary<string, List<Sprite>>();
+                for (int i = 0; i < animationTexts.Length; i++)
+                {
+                    sprites.Add(animationTexts[i].text, imageIcons[i].Sprites);
+                }
+                DataManager.SaveCustomData(data, dataPath, sprites);
+            }
+        }
     }
 
     #region Update Data
@@ -452,6 +566,10 @@ public class UnitEditor : MonoBehaviour
             string name = data.name;
             Element element = data.element;
             Grade grade = data.grade;
+            int cost = data.cost;
+
+            costInput.text = cost.ToString();
+
             string[] stat = new string[3];
             stat[0] = string.Format("{0:0.#}", data.Stat(TowerStatType.DAMAGE));
             stat[1] = string.Format("{0:0.#}", data.Stat(TowerStatType.ATTACKSPEED));
@@ -575,6 +693,9 @@ public class UnitEditor : MonoBehaviour
             string name = data.name;
             Element element = data.element;
             EnemyGrade grade = data.grade;
+            int money = data.money;
+
+            costInput.text = money.ToString();
             string[] stat = new string[3];
             stat[0] = string.Format("{0:0.#}", data.hp);
             stat[1] = string.Format("{0:0.#}", data.speed);
@@ -615,8 +736,9 @@ public class UnitEditor : MonoBehaviour
         string name = nameInput.text;
         int element = elementDropdown.value;
         int grade = (isTower) ? gradeDropdown.value : enemyGradeDropdown.value;
+        string cost = costInput.text;
 
-        poster.UpdatePoster(isTower, name, element, grade);
+        poster.UpdatePoster(isTower, name, element, grade, cost);
 
         int id = typeInfo;
         id = id * 100 + element;
