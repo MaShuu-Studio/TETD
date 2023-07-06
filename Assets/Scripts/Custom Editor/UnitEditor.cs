@@ -37,6 +37,7 @@ public class UnitEditor : MonoBehaviour
     [Header("Adjust Data")]
     [SerializeField] private TMP_InputField idInput;
     [SerializeField] private TMP_InputField nameInput;
+    [SerializeField] private TMP_Dropdown nameDropdown;
     [SerializeField] private UnitEditorSetImageIcon[] imageIcons;
     [SerializeField] private TextMeshProUGUI[] animationTexts;
     [SerializeField] private TMP_InputField[] pivotInputs;
@@ -96,7 +97,6 @@ public class UnitEditor : MonoBehaviour
     [SerializeField] private TMP_InputField projAttackTimeInput;
 
     private bool isTower;
-    private bool isNew;
     private int typeInfo;
 
     #region Init
@@ -108,6 +108,9 @@ public class UnitEditor : MonoBehaviour
         #region Adjust Data
         idInput.onValueChanged.AddListener(s => UpdateDataToPosterBasicData());
         nameInput.onValueChanged.AddListener(s => UpdateDataToPosterBasicData());
+
+        nameInput.onValueChanged.AddListener(s => nameDropdown.options[nameDropdown.value].text = s);
+        nameDropdown.onValueChanged.AddListener(i => nameInput.text = nameDropdown.options[nameDropdown.value].text);
 
         for (int i = 0; i < pivotInputs.Length; i++)
             pivotInputs[i].onValueChanged.AddListener(s => PivotDataChanged());
@@ -283,22 +286,29 @@ public class UnitEditor : MonoBehaviour
 
     private void Update()
     {
+        float value;
+        float.TryParse(statInputs[1].text, out value);
+
+        if (value < 0 || value >= 10)
+        {
+            value = Mathf.Clamp(value, 0, 9.9f);
+            statInputs[1].text = string.Format("{0:0.#}", value);
+        }
+
         if (isTower)
         {
-            float value;
-            float.TryParse(statInputs[1].text, out value);
+            float.TryParse(statInputs[2].text, out value);
 
             if (value < 0 || value >= 10)
             {
                 value = Mathf.Clamp(value, 0, 9.9f);
-                statInputs[1].text = string.Format("{0:0.#}", value);
+                statInputs[2].text = string.Format("{0:0.#}", value);
             }
         }
     }
 
     public void NewUnit()
     {
-        isNew = true;
         isTower = towerPanel.activeSelf;
         if (isTower) typeInfo = 4;
         else typeInfo = 5;
@@ -351,8 +361,17 @@ public class UnitEditor : MonoBehaviour
         UpdateDataToPosterBasicData();
     }
 
-    public void ChangeEditor()
+    public void ChangeEditor(int id = -1)
     {
+        if (Translator.Keys.Contains(id))
+        {
+            Language[] langs = Translator.GetLanguages(id);
+            for (int i = 0; i < nameDropdown.options.Count; i++)
+            {
+                nameDropdown.options[i].text = langs[i].name;
+            }
+            nameDropdown.value = (int)Translator.CurrentLanguage;
+        }
         if (isTower)
         {
             gradeObject.gameObject.SetActive(true);
@@ -367,9 +386,8 @@ public class UnitEditor : MonoBehaviour
             towerAdvancedOption.SetActive(true);
             //enemyAbilityParent.SetActive(false);
 
-            statInputs[1].characterValidation = TMP_InputField.CharacterValidation.Decimal;
-            ((TextMeshProUGUI)(statInputs[1].placeholder)).text = "1.0";
-            statInputs[1].characterLimit = 3;
+            statInputs[2].characterValidation = TMP_InputField.CharacterValidation.Decimal;
+            ((TextMeshProUGUI)(statInputs[2].placeholder)).text = "1.0";
 
             UpdateStatImage();
             for (int i = 0; i < units.Length; i++)
@@ -389,9 +407,8 @@ public class UnitEditor : MonoBehaviour
             towerAdvancedOption.SetActive(false);
             towerAdvancedPopup.SetActive(false);
 
-            statInputs[1].characterValidation = TMP_InputField.CharacterValidation.Decimal;
-            ((TextMeshProUGUI)(statInputs[1].placeholder)).text = "0";
-            statInputs[1].characterLimit = 1;
+            statInputs[2].characterValidation = TMP_InputField.CharacterValidation.Digit;
+            ((TextMeshProUGUI)(statInputs[2].placeholder)).text = "000";
 
             UpdateStatImage();
             for (int i = 0; i < units.Length; i++)
@@ -401,37 +418,6 @@ public class UnitEditor : MonoBehaviour
 
     public void SaveUnit()
     {
-        /*
-         * 
-[Serializable]
-public class TowerData : JsonData
-{
-    public Grade grade;
-    public Element element;
-
-    public AttackType type;
-
-    public List<TowerAbility> ability;
-    public List<TowerAbility> buffs;
-    public List<TowerAbility> debuffs;
-
-    public int cost;
-
-    public float dmg;
-    public float attackspeed;
-    public float range;
-
-    public float spf;
-    public List<float> attacktime;
-
-    public float projspf;
-    public float projattacktime;
-    public float projtime;
-
-    public float effectspf = 0.03f;
-    public Color effectcolor = Color.white;
-}
-         */
         string unitId = idInput.text;
 
         string name = nameInput.text;
@@ -454,37 +440,146 @@ public class TowerData : JsonData
             float.TryParse(pivotInputs[1].text, out pivot.y);
 
             int cost;
-            
             int.TryParse(costInput.text, out cost);
 
             float[] stats = new float[3];
-
             for (int i = 0; i < 3; i++)
                 float.TryParse(statInputs[i].text, out stats[i]);
-            float spf;
 
+            float spf;
             float.TryParse(spfInput.text, out spf);
 
+            Dictionary<string, List<Sprite>> sprites = new Dictionary<string, List<Sprite>>();
+            for (int i = 0; i < animationTexts.Length; i++)
+            {
+                sprites.Add(animationTexts[i].text, imageIcons[i].Sprites);
+            }
+
+            JsonData data;
             if (isTower)
             {
-                TowerData data = new TowerData()
+                int attackAmount;
+                int.TryParse(attackAmountInput.text, out attackAmount);
+                List<float> attacktimes = new List<float>();
+
+                for (int i = 0; i < attackAmount; i++)
+                {
+                    float time;
+                    float.TryParse(attackTimeInputs[i].text, out time);
+                    attacktimes.Add(time);
+                }
+
+                // 어빌리티
+                List<TowerAbility> abils = new List<TowerAbility>();
+                List<TowerAbility> buffs = new List<TowerAbility>();
+                List<TowerAbility> debuffs = new List<TowerAbility>();
+
+                int statAmount = EnumArray.TowerStatTypes.Length - 3;
+                int buffAmount = EnumArray.BuffTypes.Length;
+                int debuffAmount = EnumArray.DebuffTypes.Length;
+
+                for (int i = 0; i < towerAbilities.Length; i++)
+                {
+                    TowerAbility ability = new TowerAbility();
+                    int index = towerAbilityDropdowns[i].value;
+                    float.TryParse(towerAbilityInputs[i].text, out ability.value);
+
+                    if (index == 0) continue;
+                    else if (index < 1 + statAmount)
+                    {
+                        ability.type = (index + statAmount);
+                        abils.Add(ability);
+                    }
+                    else if (index < 1 + statAmount + buffAmount)
+                    {
+                        ability.type = (index - statAmount - 1);
+                        buffs.Add(ability);
+                    }
+                    else
+                    {
+                        ability.type = (index - buffAmount - statAmount - 1);
+                        debuffs.Add(ability);
+                    }
+                }
+
+                AttackType attackType = AttackType.PROMPT;
+                for (int i = 0; i < typeToggles.Length; i++)
+                {
+                    if (typeToggles[i].isOn)
+                    {
+                        attackType = (AttackType)i;
+                        break;
+                    }
+                }
+
+                float projspf = 0;
+                float projattackTime = 0;
+                float projTime = 0;
+
+                float effectspf;
+                Color effectColor = effectColorIcon.color;
+
+                float.TryParse(effectSpfInput.text, out effectspf);
+                if (effectImageIcon.isEmpty == false)
+                {
+                    sprites.Add("EFFECT", effectImageIcon.Sprites);
+                }
+
+
+                // 투사체 공격이나 지점 공격 시 투사체 세팅.
+                if (attackType != AttackType.PROMPT)
+                {
+                    float.TryParse(projSpfInput.text, out projspf);
+                    float.TryParse(projAttackTimeInput.text, out projattackTime);
+                    float.TryParse(projRemainTimeInput.text, out projTime);
+
+                    if (projImageIcon.isEmpty == false)
+                    {
+                        sprites.Add("WEAPON", projImageIcon.Sprites);
+                    }
+                }
+
+                data = new TowerData()
                 {
                     id = id,
-                    name = name,
 
                     imgsrc = imgsrc,
                     pivot = pivot,
                     spf = spf,
 
                     cost = cost,
+
+                    dmg = stats[0],
+                    attackspeed = 1 / stats[1],
+                    range = stats[2],
+
+                    attacktime = attacktimes,
+
+                    ability = abils,
+                    buffs = buffs,
+                    debuffs = debuffs,
+
+                    type = attackType,
+
+                    effectspf = effectspf,
+                    effectcolor = effectColor,
+
+                    projspf = projspf,
+                    projattacktime = projattackTime,
+                    projtime = projTime
                 };
+
+                Dictionary<AnimationType, List<Sprite>> dataAnims = new Dictionary<AnimationType, List<Sprite>>();
+                dataAnims.Add(AnimationType.IDLE, imageIcons[0].Sprites);
+                dataAnims.Add(AnimationType.ATTACK, imageIcons[1].Sprites);
+
+                TowerManager.AddData((TowerData)data, dataAnims);
             }
             else
             {
-                EnemyData data = new EnemyData()
+                data = new EnemyData()
                 {
                     id = id,
-                    name = name,
 
                     imgsrc = imgsrc,
                     pivot = pivot,
@@ -496,19 +591,29 @@ public class TowerData : JsonData
                     money = cost,
                 };
 
-                // 이미지 폴더 통으로 삭제 후 재저장.
-                // 이미지 폴더는 imgsrc로 위치를 남겨뒀음.
-                string json = DataManager.SerializeJson(data);
+                Dictionary<AnimationType, List<Sprite>> dataAnims = new Dictionary<AnimationType, List<Sprite>>();
+                dataAnims.Add(AnimationType.IDLE, imageIcons[0].Sprites);
+                dataAnims.Add(AnimationType.MOVE, imageIcons[1].Sprites);
 
-                Dictionary<string, List<Sprite>> sprites = new Dictionary<string, List<Sprite>>();
-                for (int i = 0; i < animationTexts.Length; i++)
-                {
-                    sprites.Add(animationTexts[i].text, imageIcons[i].Sprites);
-                }
-                DataManager.SaveCustomData(data, dataPath, sprites);
+                EnemyManager.AddData((EnemyData)data, dataAnims);
             }
+
+            Language[] langs = Translator.GetLanguages(id);
+            if (langs == null)
+            {
+                langs = new Language[Translator.Langs.Count];
+                for (int i = 0; i < nameDropdown.options.Count; i++)
+                {
+                    langs[i] = new Language(id, nameDropdown.options[i].text);
+                }
+            }
+            Translator.AddData(id, langs);
+
+            DataManager.SaveCustomData(data, dataPath, sprites, langs);
         }
     }
+
+    private int selectedId;
 
     #region Update Data
     private void UpdateStatImage()
@@ -531,6 +636,8 @@ public class TowerData : JsonData
 
     public void UpdatePoster(Tower data)
     {
+        selectedId = data.id;
+
         string id = data.id.ToString();
         typeInfo = id[0] - '0';
 
@@ -538,13 +645,15 @@ public class TowerData : JsonData
         saveButtonText.text = $"SAVE {data.id}";
 
         isTower = true;
-        ChangeEditor();
+        ChangeEditor(data.id);
 
         UpdatePosterToData();
     }
 
     public void UpdatePoster(Enemy data)
     {
+        selectedId = data.id;
+
         string id = data.id.ToString();
         typeInfo = id[0] - '0';
 
@@ -552,7 +661,7 @@ public class TowerData : JsonData
         saveButtonText.text = $"SAVE {data.id}";
 
         isTower = false;
-        ChangeEditor();
+        ChangeEditor(data.id);
 
         UpdatePosterToData();
     }
@@ -800,6 +909,9 @@ public class TowerData : JsonData
     }
     #endregion
 
+    #region valueChanged
+
+
     // 0: Stats, 1: Buff, 2: Debuff
     private int ChangeStatToValue(int type, int index)
     {
@@ -824,7 +936,6 @@ public class TowerData : JsonData
         return value;
     }
 
-    #region valueChanged
     private void ChangeAttackAmount(string s)
     {
         int value;
@@ -924,10 +1035,10 @@ public class TowerData : JsonData
         foreach (var c in str)
         {
             char ch = 'F';
-            if (c <= 'a' && c >= 'z')
+            if (c >= 'a' && c <= 'f')
                 ch = (char)(c - ('a' - 'A'));
 
-            if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z'))
+            if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))
                 ch = c;
 
             hex[(index++) / 2] += ch;
@@ -999,6 +1110,7 @@ public class TowerData : JsonData
     public void UpdateLanguage()
     {
         poster.UpdateLanguage();
+        nameDropdown.value = (int)Translator.CurrentLanguage;
     }
 
     public void Alert(string str)

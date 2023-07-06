@@ -19,6 +19,15 @@ public class UnitEditorSetImageIcon : MonoBehaviour
     public List<Sprite> Sprites { get { return sprites; } }
     private List<Sprite> sprites;
     private float spf = 0.1f;
+
+    public bool isEmpty
+    {
+        get
+        {
+            return sprites == null || sprites.Count == 0 || sprites[0] == null;
+        }
+    }
+
     private IEnumerator coroutine;
 
     private void Awake()

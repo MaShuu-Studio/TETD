@@ -222,72 +222,122 @@ namespace Data
 
             return setting;
         }
-        public static void SaveCustomData(JsonData data, string dataPath, Dictionary<string, List<Sprite>> sprites)
+        public static void SaveCustomData(JsonData data, string dataPath, Dictionary<string, List<Sprite>> sprites, Language[] langs)
         {
             try
             {
-                string imagePath = UnityEngine.Application.streamingAssetsPath + data.imgsrc;
-
-                // 폴더가 있으면 안의 파일 전부 삭제 후 재생성
-                if (Directory.Exists(imagePath))
+                // Data
                 {
-                    DirectoryInfo dir = new DirectoryInfo(imagePath);
-                    foreach (var file in dir.GetFiles())
+                    string imagePath = UnityEngine.Application.streamingAssetsPath + data.imgsrc;
+
+                    // 폴더가 있으면 안의 파일 전부 삭제 후 재생성
+                    if (Directory.Exists(imagePath))
                     {
-                        file.Delete();
+                        DirectoryInfo dir = new DirectoryInfo(imagePath);
+                        foreach (var file in dir.GetFiles())
+                        {
+                            file.Delete();
+                        }
+                    }
+                    // 없으면 폴더 생성
+                    else Directory.CreateDirectory(imagePath);
+
+                    foreach (string type in sprites.Keys)
+                    {
+                        for (int i = 0; i < sprites[type].Count; i++)
+                        {
+                            string fileName = type.ToUpper() + i.ToString() + ".png";
+                            Sprite sprite = sprites[type][i];
+
+                            File.WriteAllBytes(imagePath + fileName, ImageConversion.EncodeToPNG(sprite.texture));
+
+                            // IDLE의 첫번쨰라면 따로 하나 더 저장
+                            if (type.ToUpper() == "IDLE" && i == 0)
+                                File.WriteAllBytes(imagePath + type.ToUpper() + ".png", ImageConversion.EncodeToPNG(sprite.texture));
+                        }
+                    }
+
+                    // 데이터 파일 수정
+                    string json = File.ReadAllText(dataPath);
+                    string content = SerializeJson(data);
+
+                    string findString = data.id.ToString(); // 해당 블록을 탐색하는 데에 활용
+                    string idString = "\"id\""; // 블록의 끝을 탐색하기 위해 다음 블록을 탐색하는 데에 활용.
+
+                    int idIndex = json.IndexOf(findString);
+                    if (idIndex > 0)
+                    {
+                        /* 하나의 블록은 { }으로 이루어져 있음.
+                         * 다만, 블록 내에서도 { }가 존재하기 떄문에 이를 이용해서는 탐색할 수 없음.
+                         * 대신, id는 하나만 존재하며 블록 내에 단 하나만 존재함.
+                         * 따라서 id를 기입해 해당되는 블록을 탐색하고 앞 쪽의 {를 찾으면 블록의 시작이 탐색됨.
+                         * 다음 id가 존재하는 index를 탐색하면 다음 블록을 찾을 수 있음.
+                         * 다음 블록의 앞 쪽 방향으로 }를 탐색하면 해당 블록의 끝을 찾을 수 있음.
+                         */
+
+                        int nextIndex = json.IndexOf(idString, idIndex + 1);
+                        if (nextIndex < 0) nextIndex = json.LastIndexOf("]");
+
+                        int startIndex = json.LastIndexOf("{", idIndex);
+                        int lastIndex = json.LastIndexOf("}", nextIndex);
+
+                        json = json.Remove(startIndex, lastIndex - startIndex + 1).Insert(startIndex, content);
+                    }
+                    else
+                    {
+                        int startIndex = json.LastIndexOf("]");
+                        json = json.Insert(startIndex, "," + content);
+                    }
+
+                    File.WriteAllText(dataPath, json);
+                }
+
+                // Language
+                {
+                    List<string> langPath = new List<string>();
+
+                    langPath = GetFileNames(Translator.path);
+
+                    for (int i = 0; i < langPath.Count; i++)
+                    {
+                        langPath[i] = UnityEngine.Application.streamingAssetsPath + Translator.path + langPath[i];
+
+                        // 데이터 파일 수정
+                        string json = File.ReadAllText(langPath[i]);
+                        string content = SerializeJson(langs[i]);
+
+
+                        string findString = data.id.ToString(); // 해당 블록을 탐색하는 데에 활용
+                        string idString = "\"id\""; // 블록의 끝을 탐색하기 위해 다음 블록을 탐색하는 데에 활용.
+
+                        int idIndex = json.IndexOf(findString);
+                        if (idIndex > 0)
+                        {
+                            /* 하나의 블록은 { }으로 이루어져 있음.
+                             * 다만, 블록 내에서도 { }가 존재하기 떄문에 이를 이용해서는 탐색할 수 없음.
+                             * 대신, id는 하나만 존재하며 블록 내에 단 하나만 존재함.
+                             * 따라서 id를 기입해 해당되는 블록을 탐색하고 앞 쪽의 {를 찾으면 블록의 시작이 탐색됨.
+                             * 다음 id가 존재하는 index를 탐색하면 다음 블록을 찾을 수 있음.
+                             * 다음 블록의 앞 쪽 방향으로 }를 탐색하면 해당 블록의 끝을 찾을 수 있음.
+                             */
+
+                            int nextIndex = json.IndexOf(idString, idIndex + 1);
+                            if (nextIndex < 0) nextIndex = json.LastIndexOf("]");
+
+                            int startIndex = json.LastIndexOf("{", idIndex);
+                            int lastIndex = json.LastIndexOf("}", nextIndex);
+
+                            json = json.Remove(startIndex, lastIndex - startIndex + 1).Insert(startIndex, content);
+                        }
+                        else
+                        {
+                            int startIndex = json.LastIndexOf("]");
+                            json = json.Insert(startIndex, "," + content);
+                        }
+
+                        File.WriteAllText(langPath[i], json);
                     }
                 }
-                // 없으면 폴더 생성
-                else Directory.CreateDirectory(imagePath);
-
-                foreach (string type in sprites.Keys)
-                {
-                    for (int i = 0; i < sprites[type].Count; i++)
-                    {
-                        string fileName = type.ToUpper() + i.ToString() + ".png";
-                        Sprite sprite = sprites[type][i];
-
-                        File.WriteAllBytes(imagePath + fileName, ImageConversion.EncodeToPNG(sprite.texture));
-
-                        // IDLE의 첫번쨰라면 따로 하나 더 저장
-                        if (type.ToUpper() == "IDLE" && i == 0)
-                            File.WriteAllBytes(imagePath + type.ToUpper() + ".png", ImageConversion.EncodeToPNG(sprite.texture));
-                    }
-                }
-
-                // 데이터 파일 수정
-                string json = File.ReadAllText(dataPath);
-                string content = SerializeJson(data);
-
-                string findString = data.id.ToString(); // 해당 블록을 탐색하는 데에 활용
-                string idString = "\"id\""; // 블록의 끝을 탐색하기 위해 다음 블록을 탐색하는 데에 활용.
-
-                int idIndex = json.IndexOf(findString);
-                if (idIndex > 0)
-                {
-
-                    /* 하나의 블록은 { }으로 이루어져 있음.
-                     * 다만, 블록 내에서도 { }가 존재하기 떄문에 이를 이용해서는 탐색할 수 없음.
-                     * 대신, id는 하나만 존재하며 블록 내에 단 하나만 존재함.
-                     * 따라서 id를 기입해 해당되는 블록을 탐색하고 앞 쪽의 {를 찾으면 블록의 시작이 탐색됨.
-                     * 다음 id가 존재하는 index를 탐색하면 다음 블록을 찾을 수 있음.
-                     * 다음 블록의 앞 쪽 방향으로 }를 탐색하면 해당 블록의 끝을 찾을 수 있음.
-                     */
-
-                    int nextIndex = json.IndexOf(idString, idIndex + 1);
-
-                    int startIndex = json.LastIndexOf("{", idIndex);
-                    int lastIndex = json.LastIndexOf("}", nextIndex);
-
-                    json = json.Remove(startIndex, lastIndex - startIndex + 1).Insert(startIndex, content);
-                }
-                else
-                {
-                    int startIndex = json.LastIndexOf("]");
-                    json = json.Insert(startIndex, "," + content);
-                }
-
-                File.WriteAllText(dataPath, json);
             }
             catch (Exception e)
             {
@@ -297,25 +347,32 @@ namespace Data
             }
         }
 
+        private static OpenFileDialog openFileDialog =
+            new OpenFileDialog()
+            {
+                InitialDirectory = "c:\\",
+                Filter = "image files(*.png, *.jpg)|*.png;*.jpg",
+                Title = "Find Image",
+                FilterIndex = 1,
+                Multiselect = true,
+                RestoreDirectory = true
+            };
+
+        private static string lastDir = "c:\\";
         public static async Task<List<Sprite>> FindSprites()
         {
             List<Sprite> sprites = new List<Sprite>();
 
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            openFileDialog.InitialDirectory = lastDir;
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Filter = "image files(*.png, *.jpg)|*.png;*.jpg";
-                openFileDialog.FilterIndex = 1;
-                openFileDialog.Multiselect = true;
-                openFileDialog.RestoreDirectory = true;
+                if (openFileDialog.FileNames.Length > 0)
+                    lastDir = Path.GetDirectoryName(openFileDialog.FileNames[0]);
 
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                foreach (var path in openFileDialog.FileNames)
                 {
-                    foreach (var path in openFileDialog.FileNames)
-                    {
-                        Sprite sprite = await LoadSprite(path);
-                        if (sprite != null) sprites.Add(sprite);
-                    }
+                    Sprite sprite = await LoadSprite(path);
+                    if (sprite != null) sprites.Add(sprite);
                 }
             }
 

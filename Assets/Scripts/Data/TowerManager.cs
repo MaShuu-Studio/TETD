@@ -152,4 +152,23 @@ public static class TowerManager
             tower.UpdateName(Translator.GetLanguage(tower.id));
         }
     }
+
+    public static void AddData(TowerData data, Dictionary<AnimationType, List<Sprite>> anims)
+    {
+        Dictionary<AnimationType, Sprite[]> anim = new Dictionary<AnimationType, Sprite[]>();
+        foreach (AnimationType key in anim.Keys)
+        {
+            Sprite[] sprites = new Sprite[anim[key].Length];
+            for (int i = 0; i < anims[key].Count; i++)
+                sprites[i] = anim[key][i];
+
+            anim.Add(key, sprites);
+        }
+
+        Tower newData = new Tower(data, anim);
+        if (towers.ContainsKey(data.id))
+            towers[data.id] = newData;        
+        else
+            towers.Add(newData.id, newData);
+    }
 }

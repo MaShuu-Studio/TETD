@@ -114,4 +114,23 @@ public static class EnemyManager
             enemy.UpdateName(Translator.GetLanguage(enemy.id));
         }
     }
+
+    public static void AddData(EnemyData data, Dictionary<AnimationType, List<Sprite>> anims)
+    {
+        Dictionary<AnimationType, Sprite[]> anim = new Dictionary<AnimationType, Sprite[]>();
+        foreach (AnimationType key in anim.Keys)
+        {
+            Sprite[] sprites = new Sprite[anim[key].Length];
+            for (int i = 0; i < anims[key].Count; i++)
+                sprites[i] = anim[key][i];
+
+            anim.Add(key, sprites);
+        }
+
+        Enemy newData = new Enemy(data, anim);
+        if (enemies.ContainsKey(data.id))
+            enemies[data.id] = newData;
+        else
+            enemies.Add(newData.id, newData);
+    }
 }

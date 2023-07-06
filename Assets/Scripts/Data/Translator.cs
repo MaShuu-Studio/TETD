@@ -1,17 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using EnumData;
 
 public static class Translator
 {
-    private static string path = "/Data/Language/";
+    public static string path { get; private set; } = "/Data/Language/";
 
     private static Dictionary<int, Language>[] languages;
     public static List<string> Langs { get { return langs; } }
     private static List<string> langs;
+
+    public static List<int> Keys { get { return keys; } }
+    private static List<int> keys;
+    public static LanguageType CurrentLanguage { get { return currentLanguage; } }
+    private static LanguageType currentLanguage;
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
 
@@ -44,12 +50,11 @@ public static class Translator
                 languages[i].Add(lang.id, lang);
             }
         }
-
+        keys = languages[0].Keys.ToList();
 #if UNITY_EDITOR
         Debug.Log($"[SYSTEM] LOAD LANGUAGES {CurProgress}");
 #endif
     }
-    private static LanguageType currentLanguage;
 
     public static void SetLanguage(int lang)
     {
@@ -69,5 +74,36 @@ public static class Translator
         int cur = (int)currentLanguage;
         if (languages[cur].ContainsKey(id)) return languages[cur][id];
         return null;
+    }
+    public static Language[] GetLanguages(int id)
+    {
+        if (languages[0].ContainsKey(id))
+        {
+            Language[] arr = new Language[langs.Count];
+            for (int i = 0; i < langs.Count; i++)
+            {
+                arr[i] = languages[i][id];
+            }
+            return arr;
+        }
+        return null;
+    }
+
+    public static void AddData(int id, Language[] langs)
+    {
+        if (languages[0].ContainsKey(id))
+        {
+            for (int i = 0; i < langs.Length; i++)
+            {
+                languages[i][id] = langs[i];
+            }
+        }
+        else
+        {
+            for (int i = 0; i < langs.Length; i++)
+            {
+                languages[i].Add(id, langs[i]);
+            }
+        }
     }
 }
