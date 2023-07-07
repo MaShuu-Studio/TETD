@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Inspector
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 22
+  controlID: 42
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 122
+  controlID: 43
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -164,8 +164,8 @@ MonoBehaviour:
     y: 0
     width: 1084
     height: 420
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 201, y: 221}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 15}
   m_Panes:
   - {fileID: 15}
@@ -703,9 +703,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 945.267, y: 576.58374, z: 0.08911984}
+    m_Target: {x: 1470.8628, y: 659.35767, z: -0.48582092}
     speed: 2
-    m_Value: {x: 945.267, y: 576.58374, z: 0.08911984}
+    m_Value: {x: 1470.8628, y: 659.35767, z: -0.48582092}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -756,16 +756,16 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 109.668335
+    m_Target: 119.29378
     speed: 2
-    m_Value: 109.668335
+    m_Value: 119.29378
   m_Ortho:
     m_Target: 1
     speed: 2
     m_Value: 1
   m_CameraSettings:
-    m_Speed: 1
-    m_SpeedNormalized: 0.5
+    m_Speed: 0.9851009
+    m_SpeedNormalized: 0.49000046
     m_SpeedMin: 0.01
     m_SpeedMax: 2
     m_EasingEnabled: 1
@@ -776,7 +776,7 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 1
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
+  m_LastSceneViewRotation: {x: -0.13064322, y: 0.82662654, z: -0.21442966, w: -0.50362915}
   m_LastSceneViewOrtho: 0
   m_ReplacementShader: {fileID: 0}
   m_ReplacementString: 
@@ -877,7 +877,7 @@ MonoBehaviour:
     m_SaveData: []
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 47470
+  m_LastSelectedObjectID: 40120
 --- !u!114 &18
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -943,24 +943,24 @@ MonoBehaviour:
     m_SaveData: []
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 180}
-      m_SelectedIDs: 6eb90000
-      m_LastClickedID: 47470
-      m_ExpandedIDs: 6873f6ffa693feff24fbfffff4ffffff6e900000eeab00006eb90000aedb000032fe0000e60201009e1b01001a200100b628010090470100ec48010040490100
+      scrollPos: {x: 0, y: 0}
+      m_SelectedIDs: d27a0000
+      m_LastClickedID: 31442
+      m_ExpandedIDs: 68faf8ff9ce5ffff24fbfffff4ffffff72900000b89c000036a7000004ac000036b5000084b90000fcbb000056c7000072d40000c4db000048fe000046010100fc020100520c01004e130100b41b0100cc280100ae290100f62d010030340100963c0100a647010056490100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: Text Area
+        m_OriginalName: Text Area
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: 51672
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 11}
       m_SearchString: 
@@ -1005,7 +1005,7 @@ MonoBehaviour:
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
   m_LastInspectedObjectInstanceID: -1
-  m_LastVerticalScrollValue: 0
+  m_LastVerticalScrollValue: 378
   m_GlobalObjectId: 
   m_InspectorMode: 0
   m_LockTracker:
@@ -1108,22 +1108,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Sprites/UI/Windows
+    - Assets/Sprites/UI/Icons
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Sprites/UI/Windows
+  - Assets/Sprites/UI/Icons
   m_LastFoldersGridSize: -1
   m_LastProjectPath: E:\Unity\TETD
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 201}
-    m_SelectedIDs: a0540200
-    m_LastClickedID: 152736
-    m_ExpandedIDs: 000000006e52010070520100725201007452010076520100785201007a5201007c5201007e520100805201008452010086520100885201008a5201008c5201008e520100905201002844020000ca9a3b
+    m_SelectedIDs: f0520100
+    m_LastClickedID: 86768
+    m_ExpandedIDs: 000000008452010086520100885201008a5201008c5201008e52010090520100925201009452010096520100985201009a5201009c5201009e520100a0520100a2520100a4520100a652010000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1151,7 +1151,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000006e52010070520100725201007452010076520100785201007a5201007c5201007e52010080520100825201008452010086520100885201008a5201008c5201008e52010090520100
+    m_ExpandedIDs: 000000008452010086520100885201008a5201008c5201008e52010090520100925201009452010096520100985201009a5201009c5201009e520100a0520100a2520100a4520100a6520100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1176,10 +1176,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 6873f6ff
-    m_LastClickedInstanceID: -625816
+    m_SelectedInstanceIDs: 8cfaf8ff
+    m_LastClickedInstanceID: -460148
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c6230000ea6b0000a8c00000a0c9fbff027dfbff4279010046360100e68c000060060100be3e01002a8d0600ec8a000000000000
+    m_ExpandedInstanceIDs: c6230000ea6b0000a8c00000a0c9fbff027dfbff4279010046360100e68c000060060100be3e01002a8d0600ec8a0000000000002a4f0100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

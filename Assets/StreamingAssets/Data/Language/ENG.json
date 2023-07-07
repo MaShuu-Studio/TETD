@@ -291,19 +291,7 @@
 },
 
 {
-    "id": 4010000,"name": "Viking"
-},
-
-{
     "id": 4010001,"name": "Pirate"
-},
-
-{
-    "id": 4011001,"name": "Pirate"
-},
-
-{
-    "id": 4012001,"name": "Captain"
 },
 
 {
@@ -316,14 +304,6 @@
 
 {
     "id": 4020001,"name": "Trapper"
-},
-
-{
-    "id": 4020002,"name": "Satyr"
-},
-
-{
-    "id": 4020005,"name": "Elf Archer"
 },
 
 {
@@ -721,5 +701,5 @@
 {
     "id": 3301002,"name": "BOSS"
 }
-    ,{"id":400112312,"name":"test"}]
+    ,{"id":402076867,"name":"gocheoyo"}]
 }

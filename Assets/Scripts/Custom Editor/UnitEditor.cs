@@ -243,6 +243,14 @@ public class UnitEditor : MonoBehaviour
         alertObject.SetActive(false);
         gameObject.SetActive(true);
 
+        LoadUnitData();
+
+        UpdatePoster(TowerManager.GetTower(TowerManager.Keys[0]));
+        SelectType(true);
+    }
+
+    public void LoadUnitData()
+    {
         // TowerPanel √ ±‚»≠
         foreach (var icon in towerIcons)
         {
@@ -252,10 +260,10 @@ public class UnitEditor : MonoBehaviour
 
         for (int i = 0; i < TowerManager.CustomDataKeys.Count; i++)
         {
-            int id = TowerManager.Keys[i];
+            int id = TowerManager.CustomDataKeys[i];
 
             UnitEditorUnitIcon icon = Instantiate(unitIconPrefab);
-            icon.Init(TowerManager.Keys[i]);
+            icon.Init(id);
             icon.transform.SetParent(towerViewPort);
             towerIcons.Add(icon);
         }
@@ -270,17 +278,14 @@ public class UnitEditor : MonoBehaviour
 
         for (int i = 0; i < EnemyManager.CustomDataKeys.Count; i++)
         {
-            int id = EnemyManager.Keys[i];
+            int id = EnemyManager.CustomDataKeys[i];
 
             UnitEditorUnitIcon icon = Instantiate(unitIconPrefab);
-            icon.Init(EnemyManager.Keys[i]);
+            icon.Init(id);
             icon.transform.SetParent(enemyViewPort);
             enemyIcons.Add(icon);
         }
         enemyViewPort.sizeDelta = new Vector2(475, (int)((enemyIcons.Count + 1) / 2) * 275 + 25);
-
-        UpdatePoster(TowerManager.GetTower(TowerManager.Keys[0]));
-        SelectType(true);
     }
     #endregion
 
@@ -372,6 +377,7 @@ public class UnitEditor : MonoBehaviour
             }
             nameDropdown.value = (int)Translator.CurrentLanguage;
         }
+
         if (isTower)
         {
             gradeObject.gameObject.SetActive(true);
@@ -420,7 +426,6 @@ public class UnitEditor : MonoBehaviour
     {
         string unitId = idInput.text;
 
-        string name = nameInput.text;
         int element = elementDropdown.value;
         int grade = (isTower) ? gradeDropdown.value : enemyGradeDropdown.value;
 
@@ -434,6 +439,8 @@ public class UnitEditor : MonoBehaviour
         {
             string dataPath = Application.streamingAssetsPath + ((isTower) ? TowerManager.path : EnemyManager.path) + "CUSTOM.json";
             string imgsrc = SpriteManager.path + ((isTower) ? "Tower/" : "Enemy/") + id.ToString() + "/";
+
+            if (id != selectedId) RemoveUnit();
 
             Vector2 pivot;
             float.TryParse(pivotInputs[0].text, out pivot.x);
@@ -519,9 +526,12 @@ public class UnitEditor : MonoBehaviour
                 float effectspf;
                 Color effectColor = effectColorIcon.color;
 
+                Dictionary<string, List<Sprite>> efprojs = new Dictionary<string, List<Sprite>>();
+
                 float.TryParse(effectSpfInput.text, out effectspf);
                 if (effectImageIcon.isEmpty == false)
                 {
+                    efprojs.Add("EFFECT", effectImageIcon.Sprites);
                     sprites.Add("EFFECT", effectImageIcon.Sprites);
                 }
 
@@ -535,6 +545,7 @@ public class UnitEditor : MonoBehaviour
 
                     if (projImageIcon.isEmpty == false)
                     {
+                        efprojs.Add("WEAPON", projImageIcon.Sprites);
                         sprites.Add("WEAPON", projImageIcon.Sprites);
                     }
                 }
@@ -573,7 +584,7 @@ public class UnitEditor : MonoBehaviour
                 dataAnims.Add(AnimationType.IDLE, imageIcons[0].Sprites);
                 dataAnims.Add(AnimationType.ATTACK, imageIcons[1].Sprites);
 
-                TowerManager.AddData((TowerData)data, dataAnims);
+                TowerManager.AddData((TowerData)data, element, grade, dataAnims, efprojs);
             }
             else
             {
@@ -595,25 +606,52 @@ public class UnitEditor : MonoBehaviour
                 dataAnims.Add(AnimationType.IDLE, imageIcons[0].Sprites);
                 dataAnims.Add(AnimationType.MOVE, imageIcons[1].Sprites);
 
-                EnemyManager.AddData((EnemyData)data, dataAnims);
+                EnemyManager.AddData((EnemyData)data, element, grade, dataAnims);
             }
 
-            Language[] langs = Translator.GetLanguages(id);
-            if (langs == null)
+            Language[] langs = new Language[Translator.Langs.Count];
+            for (int i = 0; i < nameDropdown.options.Count; i++)
             {
-                langs = new Language[Translator.Langs.Count];
-                for (int i = 0; i < nameDropdown.options.Count; i++)
-                {
-                    langs[i] = new Language(id, nameDropdown.options[i].text);
-                }
+                langs[i] = new Language(id, nameDropdown.options[i].text);
             }
             Translator.AddData(id, langs);
+            if (isTower) TowerManager.UpdateLanguage(Translator.CurrentLanguage);
+            else EnemyManager.UpdateLanguage(Translator.CurrentLanguage);
 
+            SpriteManager.AddData(id, sprites["IDLE"][0]);
             DataManager.SaveCustomData(data, dataPath, sprites, langs);
+            LoadUnitData();
         }
     }
 
     private int selectedId;
+    public void RemoveUnit(bool onlyRemove = false)
+    {
+        string dataPath = Application.streamingAssetsPath + ((isTower) ? TowerManager.path : EnemyManager.path) + "CUSTOM.json";
+        string imgPath = Application.streamingAssetsPath + SpriteManager.path + ((isTower) ? "Tower/" : "Enemy/") + selectedId.ToString() + "/";
+        
+        string id = selectedId.ToString().Substring(1, 3);
+        int element;
+        int.TryParse(id.Substring(0, 2), out element);
+
+        int grade;
+        int.TryParse(id.Substring(2, 1), out grade);
+
+        Translator.RemoveData(selectedId);
+        SpriteManager.RemoveData(selectedId);
+        if (isTower)
+            TowerManager.RemoveData(selectedId, element, grade);
+        else
+            EnemyManager.RemoveData(selectedId, element, grade);
+
+        DataManager.RemoveCustomData(selectedId, dataPath, imgPath);
+
+        if (onlyRemove)
+        {
+            NewPoster();
+            LoadUnitData();
+        }
+    }
 
     #region Update Data
     private void UpdateStatImage()

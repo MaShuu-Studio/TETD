@@ -114,4 +114,13 @@ public static class SpriteManager
         int id = (int)data + number;
         return GetSprite(id);
     }
+
+    public static void AddData(int id, Sprite sprite)
+    {
+        sprites.Add(id, sprite);
+    }
+    public static void RemoveData(int id)
+    {
+        sprites.Remove(id);
+    }
 }

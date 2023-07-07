@@ -115,22 +115,37 @@ public static class EnemyManager
         }
     }
 
-    public static void AddData(EnemyData data, Dictionary<AnimationType, List<Sprite>> anims)
+    public static void AddData(EnemyData data, int element, int grade, Dictionary<AnimationType, List<Sprite>> anims)
     {
         Dictionary<AnimationType, Sprite[]> anim = new Dictionary<AnimationType, Sprite[]>();
-        foreach (AnimationType key in anim.Keys)
+        foreach (AnimationType key in anims.Keys)
         {
-            Sprite[] sprites = new Sprite[anim[key].Length];
+            Sprite[] sprites = new Sprite[anims[key].Count];
             for (int i = 0; i < anims[key].Count; i++)
-                sprites[i] = anim[key][i];
+                sprites[i] = anims[key][i];
 
             anim.Add(key, sprites);
         }
 
         Enemy newData = new Enemy(data, anim);
-        if (enemies.ContainsKey(data.id))
-            enemies[data.id] = newData;
+        if (enemies.ContainsKey(newData.id))
+            enemies[newData.id] = newData;
         else
+        {
             enemies.Add(newData.id, newData);
+            keys.Add(newData.id);
+            customDataKeys.Add(newData.id);
+            egEnemyIds[element, grade].Add(newData.id);
+        }
+    }
+    public static void RemoveData(int id, int element, int grade)
+    {
+        if (enemies.ContainsKey(id))
+        {
+            enemies.Remove(id);
+            keys.Remove(id);
+            customDataKeys.Remove(id);
+            egEnemyIds[element, grade].Remove(id);
+        }
     }
 }

@@ -102,8 +102,19 @@ public static class Translator
         {
             for (int i = 0; i < langs.Length; i++)
             {
+                keys.Add(id);
                 languages[i].Add(id, langs[i]);
             }
+        }
+    }
+
+    public static void RemoveData(int id)
+    {
+        if (languages[0].ContainsKey(id))
+        {
+            keys.Remove(id);
+            for (int i = 0; i < langs.Count; i++)
+                languages[i].Remove(id);
         }
     }
 }

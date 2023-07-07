@@ -248,7 +248,7 @@ namespace Data
                         {
                             string fileName = type.ToUpper() + i.ToString() + ".png";
                             Sprite sprite = sprites[type][i];
-
+                            if (sprite == null) continue;
                             File.WriteAllBytes(imagePath + fileName, ImageConversion.EncodeToPNG(sprite.texture));
 
                             // IDLE의 첫번쨰라면 따로 하나 더 저장
@@ -336,6 +336,101 @@ namespace Data
                         }
 
                         File.WriteAllText(langPath[i], json);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+#if UNITY_EDITOR
+                Debug.Log($"{e}");
+#endif
+            }
+        }
+
+        public static void RemoveCustomData(int id, string dataPath, string imgPath)
+        {
+            try
+            {
+                // Data
+                {
+                    // 폴더가 있으면 안의 파일 전부 삭제 후 재생성
+                    if (Directory.Exists(imgPath))
+                    {
+                        DirectoryInfo dir = new DirectoryInfo(imgPath);
+                        foreach (var file in dir.GetFiles())
+                        {
+                            file.Delete();
+                        }
+                    }
+
+                    // 데이터 파일 수정
+                    string json = File.ReadAllText(dataPath);
+
+                    string findString = id.ToString(); // 해당 블록을 탐색하는 데에 활용
+                    string idString = "\"id\""; // 블록의 끝을 탐색하기 위해 다음 블록을 탐색하는 데에 활용.
+
+                    int idIndex = json.IndexOf(findString);
+                    if (idIndex > 0)
+                    {
+                        /* 하나의 블록은 { }으로 이루어져 있음.
+                         * 다만, 블록 내에서도 { }가 존재하기 떄문에 이를 이용해서는 탐색할 수 없음.
+                         * 대신, id는 하나만 존재하며 블록 내에 단 하나만 존재함.
+                         * 따라서 id를 기입해 해당되는 블록을 탐색하고 앞 쪽의 {를 찾으면 블록의 시작이 탐색됨.
+                         * 다음 id가 존재하는 index를 탐색하면 다음 블록을 찾을 수 있음.
+                         * 다음 블록의 앞 쪽 방향으로 }를 탐색하면 해당 블록의 끝을 찾을 수 있음.
+                         */
+
+
+                        int nextIndex = json.IndexOf(idString, idIndex + 1);
+                        if (nextIndex < 0)
+                            nextIndex = json.LastIndexOf("]");
+
+                        int startIndex = json.LastIndexOf(",", idIndex);
+                        int lastIndex = json.LastIndexOf("}", nextIndex);
+
+                        json = json.Remove(startIndex, lastIndex - startIndex + 1);
+                        File.WriteAllText(dataPath, json);
+                    }
+                }
+
+                // Language
+                {
+                    List<string> langPath = new List<string>();
+
+                    langPath = GetFileNames(Translator.path);
+
+                    for (int i = 0; i < langPath.Count; i++)
+                    {
+                        langPath[i] = UnityEngine.Application.streamingAssetsPath + Translator.path + langPath[i];
+
+                        // 데이터 파일 수정
+                        string json = File.ReadAllText(langPath[i]);
+
+                        string findString = id.ToString(); // 해당 블록을 탐색하는 데에 활용
+                        string idString = "\"id\""; // 블록의 끝을 탐색하기 위해 다음 블록을 탐색하는 데에 활용.
+
+                        int idIndex = json.IndexOf(findString);
+                        if (idIndex > 0)
+                        {
+                            /* 하나의 블록은 { }으로 이루어져 있음.
+                             * 다만, 블록 내에서도 { }가 존재하기 떄문에 이를 이용해서는 탐색할 수 없음.
+                             * 대신, id는 하나만 존재하며 블록 내에 단 하나만 존재함.
+                             * 따라서 id를 기입해 해당되는 블록을 탐색하고 앞 쪽의 {를 찾으면 블록의 시작이 탐색됨.
+                             * 다음 id가 존재하는 index를 탐색하면 다음 블록을 찾을 수 있음.
+                             * 다음 블록의 앞 쪽 방향으로 }를 탐색하면 해당 블록의 끝을 찾을 수 있음.
+                             */
+
+
+                            int nextIndex = json.IndexOf(idString, idIndex + 1);
+                            if (nextIndex < 0)
+                                nextIndex = json.LastIndexOf("]");
+
+                            int startIndex = json.LastIndexOf(",", idIndex);
+                            int lastIndex = json.LastIndexOf("}", nextIndex);
+
+                            json = json.Remove(startIndex, lastIndex - startIndex + 1);
+                            File.WriteAllText(langPath[i], json);
+                        }
                     }
                 }
             }

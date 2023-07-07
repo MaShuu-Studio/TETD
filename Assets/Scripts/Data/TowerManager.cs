@@ -153,22 +153,65 @@ public static class TowerManager
         }
     }
 
-    public static void AddData(TowerData data, Dictionary<AnimationType, List<Sprite>> anims)
+    public static void AddData(TowerData data, int element, int grade,
+        Dictionary<AnimationType, List<Sprite>> anims, Dictionary<string, List<Sprite>> efprojs)
     {
         Dictionary<AnimationType, Sprite[]> anim = new Dictionary<AnimationType, Sprite[]>();
-        foreach (AnimationType key in anim.Keys)
+        foreach (var key in anims.Keys)
         {
-            Sprite[] sprites = new Sprite[anim[key].Length];
+            Sprite[] sprites = new Sprite[anims[key].Count];
             for (int i = 0; i < anims[key].Count; i++)
-                sprites[i] = anim[key][i];
+                sprites[i] = anims[key][i];
 
             anim.Add(key, sprites);
         }
 
         Tower newData = new Tower(data, anim);
-        if (towers.ContainsKey(data.id))
-            towers[data.id] = newData;        
+
+        if (efprojs.Count > 0)
+        {
+            Dictionary<string, Sprite[]> epanim = new Dictionary<string, Sprite[]>();
+            foreach (var key in efprojs.Keys)
+            {
+                Sprite[] sprites = new Sprite[efprojs[key].Count];
+                for (int i = 0; i < efprojs[key].Count; i++)
+                    sprites[i] = efprojs[key][i];
+
+                epanim.Add(key, sprites);
+            }
+            if (towers.ContainsKey(newData.id))
+            {
+                effects[newData.id] = epanim["EFFECT"];
+                projectiles[newData.id] = epanim["WEAPON"];
+            }
+            else
+            {
+                effects.Add(newData.id, epanim["EFFECT"]);
+                projectiles.Add(newData.id, epanim["WEAPON"]);
+            }
+        }
+
+        if (towers.ContainsKey(newData.id))
+            towers[newData.id] = newData;
         else
+        {
             towers.Add(newData.id, newData);
+            keys.Add(newData.id);
+            customDataKeys.Add(newData.id);
+            egTowerIds[element, grade].Add(newData.id);
+        }
+    }
+
+    public static void RemoveData(int id, int element, int grade)
+    {
+        if (towers.ContainsKey(id))
+        {
+            towers.Remove(id);
+            effects.Remove(id);
+            projectiles.Remove(id);
+            keys.Remove(id);
+            customDataKeys.Remove(id);
+            egTowerIds[element, grade].Remove(id);
+        }
     }
 }
