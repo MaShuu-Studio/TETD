@@ -18,6 +18,7 @@ public class BuildTowerButton : ScriptableButton
     {
         base.Awake();
         gradeImage = GetComponent<Image>();
+        gradeImage.alphaHitTestMinimumThreshold = 0.1f;
     }
 
     public void SetItem(Tower tower)
