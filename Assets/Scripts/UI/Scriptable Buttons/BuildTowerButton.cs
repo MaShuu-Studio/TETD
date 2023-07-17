@@ -8,6 +8,7 @@ using TMPro;
 public class BuildTowerButton : ScriptableButton
 {
     [SerializeField] private Image image;
+    [SerializeField] private Image elementSlot;
     [SerializeField] private Image elementImage;
     [SerializeField] private TextMeshProUGUI costText;
     private Image gradeImage;
@@ -34,12 +35,15 @@ public class BuildTowerButton : ScriptableButton
 
         id = tower.id;
         image.sprite = SpriteManager.GetSprite(id);
+        ((RectTransform)image.transform).sizeDelta 
+            = new Vector2(image.sprite.texture.width, image.sprite.texture.height) / 24 * 100;
         image.gameObject.SetActive(true);
         // UI Icon들도 id를 붙이고 SpriteManager에서 관리 예정
         elementImage.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT,(int)tower.element);
         elementImage.gameObject.SetActive(true);
         costText.text = "$ " + PlayerController.Cost(tower.cost);
 
+        elementSlot.color = tower.GradeColor;
         gradeImage.color = tower.GradeColor;
     }
 

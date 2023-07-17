@@ -35,6 +35,13 @@ public class CameraController : MonoBehaviour
 
     public void FindCamera()
     {
+        if (shakeCoroutine != null)
+        {
+            StopCoroutine(shakeCoroutine);
+            //cam.transform.localScale = Vector3.one;
+            shakeCoroutine = null;
+        }
+
         cam = Camera.main;
         if (cam == null) return;
 

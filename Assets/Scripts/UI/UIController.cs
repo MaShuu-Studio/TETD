@@ -102,6 +102,9 @@ public class UIController : MonoBehaviour
         await library.Init();
         library.Open(false);
         await optionUI.Init();
+
+        shop.Init();
+
         mapEditorPanel.Init();
         unitEditor.Init();
 
@@ -155,6 +158,7 @@ public class UIController : MonoBehaviour
     {
         clearView.SetActive(true);
     }
+
     public void GameOver()
     {
         gameOverView.SetActive(true);
@@ -231,7 +235,7 @@ public class UIController : MonoBehaviour
         }
 
         damageUIPool.Init(damageUI);
-        shop.Init();
+        shop.StartGame();
 
         OpenShop(true);
         UpdateTowerList();

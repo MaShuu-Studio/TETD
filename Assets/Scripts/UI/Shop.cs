@@ -26,9 +26,7 @@ public class Shop : MonoBehaviour
         prob = new Dictionary<Grade, float>(originProb);
 
         for (int i = 0; i < items.Count; i++)
-        {
             items[i].Init();
-        }
 
         remains = new List<ShopRemainInfo>();
         for (int e = 0; e < EnumArray.Elements.Length; e++)
@@ -39,7 +37,13 @@ public class Shop : MonoBehaviour
 
             remain.Init(e);
         }
-        
+    }
+
+    public void StartGame()
+    {
+        for (int i = 0; i < items.Count; i++)
+            items[i].StartGame();
+
         UpdateProb();
         UpdateAmount();
     }
@@ -54,7 +58,7 @@ public class Shop : MonoBehaviour
 
         prob[Grade.NORMAL] = 100 - (prob[Grade.RARE] + prob[Grade.HEROIC] + prob[Grade.LEGENDARY]);
 
-        probText.text = 
+        probText.text =
             "NORMAL: " + string.Format("{0:0.##}", prob[Grade.NORMAL]) + "%\n" +
             "RARE: " + string.Format("{0:0.##}", prob[Grade.RARE]) + "%\n" +
             "HEROIC: " + string.Format("{0:0.##}", prob[Grade.HEROIC]) + "%\n" +

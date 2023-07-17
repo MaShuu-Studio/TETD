@@ -43,8 +43,8 @@ public class TowerInfoItem : TowerInfo
     {
         selectedElement = -1;
         if (elementDropdown != null)
-        { 
-            elementDropdown.value = -1;
+        {
+            elementDropdown.value = 0;
 
             List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>();
             for (int i = 0; i < EnumArray.Elements.Length; i++)
@@ -56,7 +56,16 @@ public class TowerInfoItem : TowerInfo
                 options.Add(option);
             }
             elementDropdown.AddOptions(options);
-            elementDropdown.template.sizeDelta = new Vector2(elementDropdown.template.sizeDelta.x, 75 * (1 + options.Count));            
+            elementDropdown.template.sizeDelta = new Vector2(elementDropdown.template.sizeDelta.x, 75 * (1 + options.Count));
+        }
+    }
+
+    public void StartGame()
+    {
+        if (elementDropdown != null)
+        {
+            elementDropdown.value = 0;
+            SelectElement();
         }
     }
 
