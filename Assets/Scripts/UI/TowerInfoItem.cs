@@ -60,8 +60,8 @@ public class TowerInfoItem : TowerInfo
         }
     }
 
-    public void SelectElement(int index)
+    public void SelectElement()
     {
-        selectedElement = index - 1;
+        selectedElement = elementDropdown.value - 1;
     }
 }
