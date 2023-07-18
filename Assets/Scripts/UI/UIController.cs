@@ -29,6 +29,8 @@ public class UIController : MonoBehaviour
     [Header("Scenes")]
     [SerializeField] private GameObject loadingScene;
     [SerializeField] private List<GameObject> scenes;
+    public int OpenScene { get { return openScene; } }
+    private int openScene;
 
     [Space]
     [Header("Loading Scene")]
@@ -68,7 +70,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bonusText;
 
     [Header("Tower Panel")]
-    [SerializeField] private List<BuildTowerButton> buildTowerButtons;
+    [SerializeField] private TowerPanel towerPanel;
 
     [Header("Shop")]
     [SerializeField] private Shop shop;
@@ -94,6 +96,7 @@ public class UIController : MonoBehaviour
     {
         TotalProgress = 1;
     }
+
     public async Task Init()
     {
         for (int i = 0; i < scenes.Count; i++)
@@ -110,6 +113,28 @@ public class UIController : MonoBehaviour
 
         CurProgress++;
         await Title();
+    }
+
+    private void Update()
+    {
+        // scenes| 0: Title, 1: Game Scene, 2: Map Editor, 3: Unit Editor, 4: Round Editor
+        if (openScene == 1)
+        {
+            // Game Scene이 열려 있을 때.
+            bool open = Input.GetButtonDown("Shop");
+            if (open)
+                OpenShop(!shop.gameObject.activeSelf);
+
+            // 상점이 열려있다면 리롤버튼 작동
+            if (shop.gameObject.activeSelf)
+            {
+                bool reroll = Input.GetButtonDown("Shop Reroll");
+                bool prob = Input.GetButtonDown("Shop Prob");
+
+                if (reroll) RerollAll();
+                if (prob) shop.OnOffRemainInfo();
+            }
+        }
     }
 
     public void StartLoading()
@@ -131,6 +156,7 @@ public class UIController : MonoBehaviour
             scenes[i].SetActive(b);
         }
         loadingScene.SetActive(false);
+        openScene = index;
     }
 
     public async Task Title()
@@ -229,12 +255,8 @@ public class UIController : MonoBehaviour
         clearView.SetActive(false);
         gameOverView.SetActive(false);
 
-        for (int i = 0; i < buildTowerButtons.Count; i++)
-        {
-            buildTowerButtons[i].SetItem(null);
-        }
-
         damageUIPool.Init(damageUI);
+        towerPanel.StartGame();
         shop.StartGame();
 
         OpenShop(true);
@@ -314,15 +336,15 @@ public class UIController : MonoBehaviour
     #region Towers Panel
     public void UpdateTowerList()
     {
-        for (int i = 0; i < PlayerController.Instance.Towers.Count; i++)
-        {
-            Tower tower = PlayerController.Instance.Towers[i];
-
-            buildTowerButtons[i].SetItem(tower);
-        }
+        towerPanel.UpdateTowersInfo();
     }
 
-    public void BuildTower(int id)
+    public void SelectTower(int index)
+    {
+        towerPanel.SelectTower(index);
+    }
+
+    public void ReadyToBuildTower(int id)
     {
         MapController.Instance.ReadyToBuild(id);
     }

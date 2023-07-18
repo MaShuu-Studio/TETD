@@ -91,6 +91,7 @@ public class MapController : MonoBehaviour
         if (CameraController.Instance.Cam == null) return;
 
         bool click = Input.GetMouseButtonDown(0);
+        bool rclick = Input.GetMouseButtonDown(1);
 
         Vector3 mousePos = Input.mousePosition;
         Vector3 worldPos = CameraController.Instance.Cam.ScreenToWorldPoint(mousePos);
@@ -99,8 +100,10 @@ public class MapController : MonoBehaviour
         if (readyToBuild)
         {
             bool buildable = SelectTile(worldPos);
-            if (click && buildable && TowerController.Instance.BuildTower(id, pos))
+            if ((click && buildable && TowerController.Instance.BuildTower(id, pos))
+                || rclick)
             {
+                OffSeletedTile();
                 readyToBuild = false;
                 id = 0;
             }
@@ -126,6 +129,7 @@ public class MapController : MonoBehaviour
     public void OffSeletedTile()
     {
         selectedTile.gameObject.SetActive(false);
+        UIController.Instance.SelectTower(-1);
     }
 
     public bool SelectTile(Vector3 worldPos)

@@ -11,6 +11,7 @@ public class Shop : MonoBehaviour
     [SerializeField] private ShopRemainInfo remainPrefab;
     private List<ShopRemainInfo> remains;
     [SerializeField] private List<TowerInfoItem> items;
+    [SerializeField] private GameObject remainInfo;
 
     private Dictionary<Grade, float> originProb;
     private Dictionary<Grade, float> prob;
@@ -152,6 +153,11 @@ public class Shop : MonoBehaviour
         else if (rand <= prob[Grade.LEGENDARY] + prob[Grade.HEROIC] + prob[Grade.RARE]) grade = Grade.RARE;
 
         return grade;
+    }
+
+    public void OnOffRemainInfo()
+    {
+        remainInfo.SetActive(!remainInfo.activeSelf);
     }
 
     public void UpdateLanguage()

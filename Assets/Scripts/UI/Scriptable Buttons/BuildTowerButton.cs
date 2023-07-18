@@ -13,12 +13,20 @@ public class BuildTowerButton : ScriptableButton
     [SerializeField] private TextMeshProUGUI costText;
     private Image gradeImage;
     private int id;
+    private int index;
+
+    public bool CanUse { get { return id != -1; } }
 
     protected override void Awake()
     {
         base.Awake();
         gradeImage = GetComponent<Image>();
         gradeImage.alphaHitTestMinimumThreshold = 0.1f;
+    }
+
+    public void SetIndex(int index)
+    {
+        this.index = index;
     }
 
     public void SetItem(Tower tower)
@@ -50,6 +58,12 @@ public class BuildTowerButton : ScriptableButton
 
     protected override void ClickEvent()
     {
-        if (id != -1) UIController.Instance.BuildTower(id);
+        UIController.Instance.SelectTower(index);
+    }
+
+    public void ReadyToBuildTower()
+    {
+        if (id != -1)
+            UIController.Instance.ReadyToBuildTower(id);
     }
 }

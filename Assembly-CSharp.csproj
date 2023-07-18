@@ -135,6 +135,7 @@
     <Compile Include="Assets\Scripts\Object\PoolController.cs" />
     <Compile Include="Assets\Scripts\Object\Projectile.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
+    <Compile Include="Assets\Scripts\UI\TowerPanel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
