@@ -171,7 +171,7 @@ public class SceneController : MonoBehaviour
             yield return null;
         }
 
-        CameraController.Instance.FindCamera();
+        //CameraController.Instance.FindCamera();
         sceneLoaded = true;
     }
 

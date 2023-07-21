@@ -44,11 +44,11 @@ public class BuildTowerButton : ScriptableButton
 
         id = tower.id;
         image.sprite = SpriteManager.GetSprite(id);
-        ((RectTransform)image.transform).sizeDelta 
-            = new Vector2(image.sprite.texture.width, image.sprite.texture.height) / 24 * 100;
+        ((RectTransform)image.transform).sizeDelta
+            = new Vector2(image.sprite.texture.width, image.sprite.texture.height) / 24 * CameraController.ReferencePPU;
         image.gameObject.SetActive(true);
         // UI Icon들도 id를 붙이고 SpriteManager에서 관리 예정
-        elementImage.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT,(int)tower.element);
+        elementImage.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT, (int)tower.element);
         elementImage.gameObject.SetActive(true);
         costText.text = "$ " + PlayerController.Cost(tower.cost);
 

@@ -24,7 +24,7 @@ public class LibraryCard : TowerInfo
     public override void SetData(Tower data)
     {
         enemy = null;
-        for(int i = 0; i < units.Length; i++)
+        for (int i = 0; i < units.Length; i++)
         {
             units[i].SetActive(true);
         }
@@ -50,7 +50,8 @@ public class LibraryCard : TowerInfo
         nameText.text = data.name;
         iconImage.sprite = SpriteManager.GetSprite(data.id);
         if (iconSlot != null)
-            iconSlot.sizeDelta = new Vector2(iconImage.sprite.texture.width, iconImage.sprite.texture.height) / 24 * 100;
+            iconSlot.sizeDelta
+                = new Vector2(iconImage.sprite.texture.width, iconImage.sprite.texture.height) / 24 * CameraController.ReferencePPU;
 
         elementImage.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT, (int)data.element);
 

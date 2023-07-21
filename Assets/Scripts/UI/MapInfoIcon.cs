@@ -15,6 +15,7 @@ public class MapInfoIcon : GameSettingIcon
         toggle.group = group;
 
         rect = GetComponent<RectTransform>();
+        transform.localScale = Vector3.one;
 
         UpdateMap(map);
     }
@@ -52,6 +53,7 @@ public class MapInfoIcon : GameSettingIcon
                     data = ruleTile.GetTile(info);
                 }
                 tile.transform.SetParent(grid.transform);
+                tile.transform.localScale = Vector3.one;
                 tile.sprite = (data != null) ? data.sprite : null;
                 tile.gameObject.SetActive(true);
 

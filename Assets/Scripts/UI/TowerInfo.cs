@@ -25,11 +25,12 @@ public class TowerInfo : MonoBehaviour
         iconImage.sprite = SpriteManager.GetSprite(data.id);
         if (iconSlot != null)
         {
-            iconSlot.sizeDelta = new Vector2(iconImage.sprite.texture.width, iconImage.sprite.texture.height) / 24 * 100;
+            iconSlot.sizeDelta
+                = new Vector2(iconImage.sprite.texture.width, iconImage.sprite.texture.height) / 24 * CameraController.ReferencePPU;
         }
 
         // UI Icon들도 id를 붙이고 SpriteManager에서 관리 예정
-        elementImage.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT,(int)data.element);
+        elementImage.sprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT, (int)data.element);
 
         for (int i = 0; i < mainStats.Length; i++)
         {

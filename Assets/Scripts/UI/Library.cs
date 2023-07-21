@@ -19,7 +19,7 @@ public class Library : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI pageText;
 
-    private const int cardUnitinPage = 8;
+    private int cardUnitinPage;
     public int CurrentPage { get { return currentPage; } }
     private int currentPage;
 
@@ -29,6 +29,8 @@ public class Library : MonoBehaviour
 
     public async Task Init()
     {
+        cardUnitinPage = items.Length;
+
         ids = new List<int>();
 
         // 페이지 이동 버튼
@@ -121,6 +123,7 @@ public class Library : MonoBehaviour
         // 필터링 후에는 1페이지 이동
         currentPage = 1;
         lastPage = ids.Count / cardUnitinPage + ((ids.Count % cardUnitinPage != 0) ? 1 : 0);
+
         if (lastPage == 0) lastPage = 1;
         pageText.text = $"{currentPage} / {lastPage}";
 
@@ -145,15 +148,13 @@ public class Library : MonoBehaviour
             if (index >= ids.Count) break;
             int id = ids[index];
 
-            if (id / 1000000 == 1)
-            {
-                Tower tower = TowerManager.GetTower(id);
-                items[i].SetData(tower);
-            }
-            else if (id / 1000000 == 2)
+            Tower tower = TowerManager.GetTower(id);
+            if (tower != null)                items[i].SetData(tower);
+            else
             {
                 Enemy enemy = EnemyManager.GetEnemy(id);
-                items[i].SetData(enemy);
+                if (enemy != null) items[i].SetData(enemy);
+                else items[i].gameObject.SetActive(false);
             }
         }
 
