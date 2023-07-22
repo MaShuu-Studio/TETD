@@ -20,4 +20,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Map Editor.unity
     guid: 0d2d6e8794522b648913d3be9144d181
+  - enabled: 1
+    path: Assets/Scenes/Unit Editor.unity
+    guid: 0dc33ea79237a074ea8602f0d7a005f9
+  - enabled: 1
+    path: Assets/Scenes/Round Editor.unity
+    guid: 6d91e082d49e5b94db043c01f41a0e9d
   m_configObjects: {}

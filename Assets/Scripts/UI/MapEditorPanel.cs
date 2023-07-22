@@ -50,6 +50,7 @@ public class MapEditorPanel : MonoBehaviour
 
                     metile.SetTile(tile);
                     metile.transform.SetParent(tileLists[i]);
+                    metile.transform.localScale = Vector3.one;
                     tiles[i].Add(metile);
                 }
             }
@@ -64,6 +65,7 @@ public class MapEditorPanel : MonoBehaviour
 
             metile.SetTile(tile, true);
             metile.transform.SetParent(tileLists[3]);
+            metile.transform.localScale = Vector3.one;
             tiles[3].Add(metile);
         }
 
@@ -76,6 +78,7 @@ public class MapEditorPanel : MonoBehaviour
 
             bgTile.SetTile(name, bg);
             bgTile.transform.SetParent(tileLists[4]);
+            bgTile.transform.localScale = Vector3.one;
             backgrounds.Add(bgTile);
         }
 

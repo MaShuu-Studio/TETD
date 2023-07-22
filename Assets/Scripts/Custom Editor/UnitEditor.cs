@@ -35,6 +35,7 @@ public class UnitEditor : MonoBehaviour
 
     [Space]
     [Header("Adjust Data")]
+    [SerializeField] private TextMeshProUGUI idInfoText;
     [SerializeField] private TMP_InputField idInput;
     [SerializeField] private TMP_InputField nameInput;
     [SerializeField] private TMP_Dropdown nameDropdown;
@@ -265,9 +266,10 @@ public class UnitEditor : MonoBehaviour
             UnitEditorUnitIcon icon = Instantiate(unitIconPrefab);
             icon.Init(id);
             icon.transform.SetParent(towerViewPort);
+            icon.transform.localScale = Vector3.one;
             towerIcons.Add(icon);
         }
-        towerViewPort.sizeDelta = new Vector2(475, (int)((towerIcons.Count + 1) / 2) * 275 + 25);
+        towerViewPort.sizeDelta = new Vector2(342, (int)((towerIcons.Count + 1) / 2) * 198 + 18);
 
         // EnemyPanel √ ±‚»≠
         foreach (var icon in enemyIcons)
@@ -283,9 +285,10 @@ public class UnitEditor : MonoBehaviour
             UnitEditorUnitIcon icon = Instantiate(unitIconPrefab);
             icon.Init(id);
             icon.transform.SetParent(enemyViewPort);
+            icon.transform.localScale = Vector3.one;
             enemyIcons.Add(icon);
         }
-        enemyViewPort.sizeDelta = new Vector2(475, (int)((enemyIcons.Count + 1) / 2) * 275 + 25);
+        enemyViewPort.sizeDelta = new Vector2(342, (int)((enemyIcons.Count + 1) / 2) * 198 + 18);
     }
     #endregion
 
@@ -890,6 +893,8 @@ public class UnitEditor : MonoBehaviour
         int id = typeInfo;
         id = id * 100 + element;
         id = id * 10 + grade;
+
+        idInfoText.text = id.ToString();
 
         string idStr = id.ToString() + unitId;
         saveButtonText.text = "SAVE " + idStr;
