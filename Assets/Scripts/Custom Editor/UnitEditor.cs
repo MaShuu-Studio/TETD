@@ -107,22 +107,26 @@ public class UnitEditor : MonoBehaviour
         enemyIcons = new List<UnitEditorUnitIcon>();
 
         #region Adjust Data
-        idInput.onValueChanged.AddListener(s => UpdateDataToPosterBasicData());
-        nameInput.onValueChanged.AddListener(s => UpdateDataToPosterBasicData());
+        idInput.onEndEdit.AddListener(s => UpdateDataToPosterBasicData());
+        nameInput.onEndEdit.AddListener(s => UpdateDataToPosterBasicData());
 
-        nameInput.onValueChanged.AddListener(s => nameDropdown.options[nameDropdown.value].text = s);
+        nameInput.onEndEdit.AddListener(s => nameDropdown.options[nameDropdown.value].text = s);
         nameDropdown.onValueChanged.AddListener(i => nameInput.text = nameDropdown.options[nameDropdown.value].text);
 
         for (int i = 0; i < pivotInputs.Length; i++)
-            pivotInputs[i].onValueChanged.AddListener(s => PivotDataChanged());
+            pivotInputs[i].onEndEdit.AddListener(s => PivotDataChanged());
 
         elementDropdown.onValueChanged.AddListener(i => UpdateDataToPosterBasicData());
         gradeDropdown.onValueChanged.AddListener(i => UpdateDataToPosterBasicData());
         enemyGradeDropdown.onValueChanged.AddListener(i => UpdateDataToPosterBasicData());
-        costInput.onValueChanged.AddListener(i => UpdateDataToPosterBasicData());
+        costInput.onEndEdit.AddListener(i => UpdateDataToPosterBasicData());
+
+        statInputs[0].onEndEdit.AddListener(s => StatChanged(0));
+        statInputs[1].onEndEdit.AddListener(s => StatChanged(1));
+        statInputs[2].onEndEdit.AddListener(s => StatChanged(2));
 
         for (int i = 0; i < statInputs.Length; i++)
-            statInputs[i].onValueChanged.AddListener(s => UpdateDataToPosterStat());
+            statInputs[i].onEndEdit.AddListener(s => UpdateDataToPosterStat());
 
         attackAmountInput.onValueChanged.AddListener(s => UpdateDataToPosterStat());
         attackAmountInput.onValueChanged.AddListener(s => ChangeAttackAmount(s));
@@ -134,11 +138,14 @@ public class UnitEditor : MonoBehaviour
             towerAbilityInputs[i].onValueChanged.AddListener(s => UpdateDataToPosterAbility());
         }
 
-        spfInput.onValueChanged.AddListener(s => ChangeSpf(s, spfInput, imageIcons[0]));
-        spfInput.onValueChanged.AddListener(s => ChangeSpf(s, spfInput, imageIcons[1]));
+        spfInput.onEndEdit.AddListener(s => ChangeSpf(s, spfInput, imageIcons[0]));
+        spfInput.onEndEdit.AddListener(s => ChangeSpf(s, spfInput, imageIcons[1]));
+
+        for (int i = 0; i < attackTimeInputs.Length; i++)
+            attackTimeInputs[i].onEndEdit.AddListener(s => ArrangeAttackTime());
 
         effectColorInput.onValueChanged.AddListener(s => Hexadecimal());
-        effectSpfInput.onValueChanged.AddListener(s => ChangeSpf(s, effectSpfInput, effectImageIcon));
+        effectSpfInput.onEndEdit.AddListener(s => ChangeSpf(s, effectSpfInput, effectImageIcon));
 
         for (int i = 0; i < typeToggles.Length; i++)
             typeToggles[i].onValueChanged.AddListener(b => ChangeTowerType());
@@ -291,29 +298,6 @@ public class UnitEditor : MonoBehaviour
         enemyViewPort.sizeDelta = new Vector2(342, (int)((enemyIcons.Count + 1) / 2) * 198 + 18);
     }
     #endregion
-
-    private void Update()
-    {
-        float value;
-        float.TryParse(statInputs[1].text, out value);
-
-        if (value < 0 || value >= 10)
-        {
-            value = Mathf.Clamp(value, 0, 9.9f);
-            statInputs[1].text = string.Format("{0:0.#}", value);
-        }
-
-        if (isTower)
-        {
-            float.TryParse(statInputs[2].text, out value);
-
-            if (value < 0 || value >= 10)
-            {
-                value = Mathf.Clamp(value, 0, 9.9f);
-                statInputs[2].text = string.Format("{0:0.#}", value);
-            }
-        }
-    }
 
     public void NewUnit()
     {
@@ -718,6 +702,11 @@ public class UnitEditor : MonoBehaviour
             Grade grade = data.grade;
             int cost = data.cost;
 
+            int idInfo = typeInfo;
+            idInfo = idInfo * 100 + (int)element;
+            idInfo = idInfo * 10 + (int)grade;
+            idInfoText.text = idInfo.ToString();
+
             costInput.text = cost.ToString();
 
             string[] stat = new string[3];
@@ -845,6 +834,11 @@ public class UnitEditor : MonoBehaviour
             EnemyGrade grade = data.grade;
             int money = data.money;
 
+            int idInfo = typeInfo;
+            idInfo = idInfo * 100 + (int)element;
+            idInfo = idInfo * 10 + (int)grade;
+            idInfoText.text = idInfo.ToString();
+
             costInput.text = money.ToString();
             string[] stat = new string[3];
             stat[0] = string.Format("{0:0.#}", data.hp);
@@ -954,6 +948,27 @@ public class UnitEditor : MonoBehaviour
 
     #region valueChanged
 
+    private void StatChanged(int index)
+    {
+        float value;
+        float.TryParse(statInputs[index].text, out value);
+
+        // 1번 스탯(공속, 이속) 타워의 2번스탯(사거리)에 적용되는 방식
+        if (index == 1 || (index == 2 && isTower))
+        {
+            if (value < 0 || value >= 10)
+            {
+                value = Mathf.Clamp(value, 0, 9.9f);
+                statInputs[index].text = string.Format("{0:0.#}", value);
+            }
+        }
+        // 나머지는 음수만 아니면 해결
+        else if (value < 0)
+        {
+            value = value * -1;
+            statInputs[index].text = value.ToString();
+        }
+    }
 
     // 0: Stats, 1: Buff, 2: Debuff
     private int ChangeStatToValue(int type, int index)
