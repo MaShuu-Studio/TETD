@@ -15,6 +15,11 @@ public class OptionUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI sfxText;
     [SerializeField] private TMP_Dropdown languages;
 
+    [SerializeField] private TMP_Dropdown resolutions;
+    [SerializeField] private TMP_Dropdown screenMode;
+    [SerializeField] private Slider frameSlider;
+    [SerializeField] private TextMeshProUGUI frameText;
+
     public async Task Init()
     {
         Setting setting = DataManager.LoadSetting();
@@ -49,6 +54,28 @@ public class OptionUI : MonoBehaviour
         bgmSlider.onValueChanged.AddListener(v => SetOption());
         sfxSlider.onValueChanged.AddListener(v => SetOption());
         languages.onValueChanged.AddListener(v => SetOption());
+
+        resolutions.onValueChanged.AddListener(v => ChangeResolution(v));
+
+        screenMode.onValueChanged.AddListener(v => ChangeScreenMode(v));
+        screenMode.value = (int)Screen.fullScreenMode;
+
+        if (resols.Count > 0)
+        {
+            for (int i = 0; i < resols.Count; i++)
+            {
+                if (resols[i].width == Screen.currentResolution.width
+                    && resols[i].height == Screen.currentResolution.height)
+                    resolutions.value = i;
+            }
+        }
+
+        frameSlider.wholeNumbers = true;
+        frameSlider.minValue = 30;
+        frameSlider.maxValue = Screen.currentResolution.refreshRate;
+
+        frameSlider.onValueChanged.AddListener(v => ChangeFrame((int)v));
+        frameSlider.value = 60;
     }
 
     public void SetSound()
@@ -68,6 +95,46 @@ public class OptionUI : MonoBehaviour
         setting.AddOption("language", languages.value);
 
         DataManager.SaveSetting(setting);
+    }
+
+    List<Resolution> resols = new List<Resolution>();
+    FullScreenMode curScreenMode;
+    private void SetResolutions(bool b)
+    {
+        resolutions.ClearOptions();
+        resols.Clear();
+
+        if (b)
+        {
+            List<string> r = new List<string>();
+            foreach (var res in Screen.resolutions)
+            {
+                if (res.width * 9 != res.height * 16) continue;
+                if (resols.Contains(res)) continue;
+                resols.Add(res);
+                string str = $"{res.width}x{res.height}";
+                r.Add(str);
+            }
+            resolutions.AddOptions(r);
+        }
+    }
+
+    private void ChangeResolution(int index)
+    {
+        Screen.SetResolution(resols[index].width, resols[index].height, curScreenMode);
+    }
+
+    private void ChangeScreenMode(int mode)
+    {
+        if (mode >= 2) mode = 3;
+        Screen.fullScreenMode = curScreenMode = (FullScreenMode)mode;
+        SetResolutions(mode != 1);
+    }
+
+    private void ChangeFrame(int frame)
+    {
+        Application.targetFrameRate = frame;
+        frameText.text = frame.ToString();
     }
 }
 
