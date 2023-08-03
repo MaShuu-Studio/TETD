@@ -43,6 +43,9 @@ public class SceneController : MonoBehaviour
 
     public async void Init()
     {
+        // 로딩동안에는 백그라운드 작동 허용.
+        Application.runInBackground = true;
+
         // 각 Init Class들의 전체진행도를 구함.
         await Translator.GetTotal();
         await SpriteManager.GetTotal();
@@ -89,6 +92,9 @@ public class SceneController : MonoBehaviour
         StopCoroutine(co);
         ChangeScene("Title", null);
         isLoading = false;
+
+        // 로딩이 끝나고 나면 자동으로 멈출 수 있게 백그라운드 작동 옵션 해제
+        Application.runInBackground = false;
     }
 
     private IEnumerator InitProgress(int total)

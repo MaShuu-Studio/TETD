@@ -30,11 +30,7 @@ public class GameController : MonoBehaviour
         if (SceneController.Instance.IsLoading == false)
         {
             bool esc = Input.GetButtonDown("Cancel");
-            if (esc)
-            {
-                paused = !paused;
-                UIController.Instance.OpenSetting(paused);
-            }
+            if (esc) Pause(!paused);
 
             if (SceneController.Instance.CurrentScene == "Game Scene")
             {
@@ -115,5 +111,16 @@ public class GameController : MonoBehaviour
     public void GameOver()
     {
         UIController.Instance.GameOver();
+    }
+
+    private void Pause(bool b)
+    {
+        paused = b;
+        UIController.Instance.OpenSetting(paused);
+    }
+
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause) Pause(true);
     }
 }
