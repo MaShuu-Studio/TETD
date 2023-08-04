@@ -97,25 +97,35 @@ public class OptionUI : MonoBehaviour
         DataManager.SaveSetting(setting);
     }
 
+
     List<Resolution> resols = new List<Resolution>();
     FullScreenMode curScreenMode;
-    private void SetResolutions(bool b)
+    private void SetResolutionOptions(bool b)
     {
         resolutions.ClearOptions();
         resols.Clear();
 
         if (b)
         {
-            List<string> r = new List<string>();
+            List<string> list = new List<string>();
             foreach (var res in Screen.resolutions)
             {
                 if (res.width * 9 != res.height * 16) continue;
-                if (resols.Contains(res)) continue;
+                bool skip = false;
+                foreach(var r in resols)
+                {
+                    if (res.width == r.width && res.height == r.height)
+                    {
+                        skip = true;
+                        break;
+                    }
+                }
+                if (skip) continue;
                 resols.Add(res);
                 string str = $"{res.width}x{res.height}";
-                r.Add(str);
+                list.Add(str);
             }
-            resolutions.AddOptions(r);
+            resolutions.AddOptions(list);
         }
     }
 
@@ -123,12 +133,46 @@ public class OptionUI : MonoBehaviour
     {
         Screen.SetResolution(resols[index].width, resols[index].height, curScreenMode);
     }
+    
+    private void ChangeResolution(int width, int height)
+    {
+        Screen.SetResolution(width, height, curScreenMode);
+    }
 
     private void ChangeScreenMode(int mode)
     {
         if (mode >= 2) mode = 3;
         Screen.fullScreenMode = curScreenMode = (FullScreenMode)mode;
-        SetResolutions(mode != 1);
+        SetResolutionOptions(mode != 1);
+
+        // 전체창모드는 현재 디스플레이 설정에 맞게 해상도 자동세팅.
+        if (mode == 1)
+        {
+            int width = Screen.mainWindowDisplayInfo.width;
+            int height = Screen.mainWindowDisplayInfo.height;
+            Resolution resol = new Resolution()
+            {
+                width = width,
+                height = height
+            };
+            resols.Add(resol);
+            resolutions.AddOptions(new List<string>() { $"{width}x{height}" });
+            resolutions.value = 0;
+
+            ChangeResolution(width, height);
+        }
+        else
+        {
+            for (int i = 0; i < resols.Count; i++)
+            {
+                if (resols[i].width == Screen.currentResolution.width
+                    && resols[i].height == Screen.currentResolution.height)
+                {
+                    resolutions.value = i;
+                    break;
+                }
+            }
+        }
     }
 
     private void ChangeFrame(int frame)
