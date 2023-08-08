@@ -34,6 +34,7 @@ public class Shop : MonoBehaviour
         {
             ShopRemainInfo remain = Instantiate(remainPrefab);
             remain.transform.SetParent(pubRemainParent);
+            remain.transform.localScale = Vector3.one;
             remains.Add(remain);
 
             remain.Init(e);

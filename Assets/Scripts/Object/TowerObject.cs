@@ -164,8 +164,8 @@ public class TowerObject : Poolable
 
         if (type == TowerStatType.DAMAGE)
         {
-            if (PlayerController.Instance.Type == CharacterType.POWER)
-                stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
+            stat += PlayerController.Instance.BonusElement(data.element, Character.ElementStatType.DMG);
+
             // 버프로 스탯 추가 증가
             // 비율이 아닌 수치로 증가하기 때문에 value의 값을 변경
             // 만약 비율 증가로 변경하게 되면 stat 값을 조정함. 상황에 따라 합계산, 곱계산 적용
@@ -175,14 +175,11 @@ public class TowerObject : Poolable
 
         else if (type == TowerStatType.ATTACKSPEED)
         {
-            if (PlayerController.Instance.Type == CharacterType.ATTACKSPEED)
-                stat = PlayerController.Instance.GetStat(CharacterStatType.ABILITY);
+            stat += PlayerController.Instance.BonusElement(data.element, Character.ElementStatType.ATTACKSPEED);
 
             if (buffs.ContainsKey(BuffType.ATKSPD))
                 value += buffs[BuffType.ATKSPD].value;
         }
-
-        stat += PlayerController.Instance.BonusElement(data.element);
 
         // 스탯으로 증가한 보너스 스탯은 퍼센티지로 증가
         float percent = stat / 100f;

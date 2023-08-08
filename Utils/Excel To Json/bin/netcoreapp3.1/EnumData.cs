@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EnumData
 {
-  public enum CharacterType { POWER = 0, ATTACKSPEED = 1, COST = 2, PROB = 3, }
+  public enum CharacterType { REWARD = 0, COST = 1, PROB = 2, }
   public enum DifficultyType { HP = 0, SPEED = 1, AMOUNT = 2, TIME = 3, COST = 4, PROB = 5, }
   public enum Element { FIRE = 0, WATER = 1, NATURE = 2, }
   public enum EnemyGrade { NORMAL = 0, ELITE = 1, BOSS = 2, }
@@ -13,7 +13,6 @@ namespace EnumData
   public enum TowerStatType { DAMAGE = 0, ATTACKSPEED = 1, DISTANCE = 2, MULTISHOT = 3, SPLASH = 4, }
   public enum BuffType { GOLDMINE = 0, DMG = 1, ATKSPD = 2, }
   public enum DebuffType { SLOW = 0, BURN = 1, POISON = 2, BLEED = 3, }
-  public enum CharacterStatType { ABILITY = 0, REWARD = 1, FIRE = 2, WATER = 3, NATURE = 4, }
   public enum AnimationType { IDLE = 0, ATTACK = 1, MOVE = 2, DEAD = 3, }
   public enum LanguageType { KOREAN = 0, ENGLISH = 1, }
   public enum AttackType { PROMPT = 0, PROJECTILE = 1, POINT = 2, }
@@ -30,7 +29,6 @@ public static EnemyStatType[] EnemyStatTypes { get; private set; } = (EnemyStatT
 public static TowerStatType[] TowerStatTypes { get; private set; } = (TowerStatType[])Enum.GetValues(typeof(TowerStatType));
 public static BuffType[] BuffTypes { get; private set; } = (BuffType[])Enum.GetValues(typeof(BuffType));
 public static DebuffType[] DebuffTypes { get; private set; } = (DebuffType[])Enum.GetValues(typeof(DebuffType));
-public static CharacterStatType[] CharacterStatTypes { get; private set; } = (CharacterStatType[])Enum.GetValues(typeof(CharacterStatType));
 public static AnimationType[] AnimationTypes { get; private set; } = (AnimationType[])Enum.GetValues(typeof(AnimationType));
 public static LanguageType[] LanguageTypes { get; private set; } = (LanguageType[])Enum.GetValues(typeof(LanguageType));
 public static AttackType[] AttackTypes { get; private set; } = (AttackType[])Enum.GetValues(typeof(AttackType));
@@ -44,7 +42,6 @@ public static Dictionary<EnemyStatType,string> EnemyStatTypeStrings { get; priva
 public static Dictionary<TowerStatType,string> TowerStatTypeStrings { get; private set; }
 public static Dictionary<BuffType,string> BuffTypeStrings { get; private set; }
 public static Dictionary<DebuffType,string> DebuffTypeStrings { get; private set; }
-public static Dictionary<CharacterStatType,string> CharacterStatTypeStrings { get; private set; }
 public static Dictionary<AnimationType,string> AnimationTypeStrings { get; private set; }
 public static Dictionary<LanguageType,string> LanguageTypeStrings { get; private set; }
 public static Dictionary<AttackType,string> AttackTypeStrings { get; private set; }
@@ -121,13 +118,6 @@ public static Dictionary<AttackType,string> AttackTypeStrings { get; private set
             {
                 DebuffType type = DebuffTypes[i];
                 DebuffTypeStrings.Add(type, type.ToString()); 
-            }
-
-            CharacterStatTypeStrings = new Dictionary<CharacterStatType, string>();
-            for (int i = 0; i < CharacterStatTypes.Length; i++)
-            {
-                CharacterStatType type = CharacterStatTypes[i];
-                CharacterStatTypeStrings.Add(type, type.ToString()); 
             }
 
             AnimationTypeStrings = new Dictionary<AnimationType, string>();

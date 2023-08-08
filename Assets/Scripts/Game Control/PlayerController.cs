@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
         {
             float prob = probDiff;
             if (Type == CharacterType.PROB)
-                return prob * ((100 + GetStat(CharacterStatType.ABILITY)) / 100f);
+                return prob * ((100 + character.Ability) / 100f);
             else return prob;
         }
     }
@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        character = new Character(type);
+        character = new Character(type, new Element[3] { Element.FIRE, Element.WATER, Element.NATURE });
 
         life = maxLife = 10;
         money = 10000;
@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
         float c = cost;
         if (Instance.Type == CharacterType.COST)
         {
-            c /= ((100 + Instance.GetStat(CharacterStatType.ABILITY)) / 100f);
+            c /= ((100 + Instance.character.Ability) / 100f);
         }
 
         c *= Instance.costDiff;
@@ -121,34 +121,29 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
-    public void Reinforce(CharacterStatType type)
+    public void Reinforce(int index, Character.ElementStatType type)
     {
-        character.Reinforce(type, 5);
+        character.Reinforce(index, type, 5);
         UpdateStat();
     }
 
-    public int GetStat(CharacterStatType type)
+    public int GetAbility()
     {
-        return character.Stat[type];
+        return character.Ability;
     }
-
-    public int BonusElement(Element element)
+    public int BonusElement(Element element, Character.ElementStatType type)
     {
-        switch (element)
-        {
-            case Element.FIRE:
-                return character.Stat[CharacterStatType.FIRE];
-            case Element.WATER:
-                return character.Stat[CharacterStatType.WATER];
-            case Element.NATURE:
-                return character.Stat[CharacterStatType.NATURE];
-        }
-
-        return 0;
+        return character.GetStat(element, type);
     }
 
     public void Reward(int exp, int money)
     {
+        if (character.Type == CharacterType.REWARD)
+        {
+            exp = (int)(exp * (100 + character.Ability) / 100f);
+            money = (int)(money * (100 + character.Ability) / 100f * (100 + character.Ability) / 100f);
+        }
+
         this.money += money;
         character.GetExp(exp);
         UpdateInfo();
@@ -178,24 +173,44 @@ public class Character
     public CharacterType Type { get { return type; } }
     private CharacterType type;
 
-    public Dictionary<CharacterStatType, int> Stat { get { return stat; } }
-    private Dictionary<CharacterStatType, int> stat;
+    public int Ability { get { return ability; } }
+    private int ability;
 
-    public Character(CharacterType type)
+    public enum ElementStatType { DMG = 0, ATTACKSPEED };
+    private ElementStat[] stat;
+    private Element[] statElements;
+
+    public int GetStat(Element element, ElementStatType type)
+    {
+        for (int i = 0; i < stat.Length; i++)
+        {
+            if (statElements[i] == element)
+            {
+                if (type == ElementStatType.DMG) return stat[i].dmg;
+                else return stat[i].attackspeed;
+            }
+        }
+        return 0;
+    }
+
+    public Character(CharacterType type, Element[] elements)
     {
         this.type = type;
         TypeString = type.ToString();
 
         level = 1;
         exp = 0;
-        bonusStat = 0;
+        bonusStat = 20;
+        ability = 50;
 
-        stat = new Dictionary<CharacterStatType, int>();
-        for (int i = 0; i < 5; i++)
-        {
-            stat.Add((CharacterStatType)i, 0);
-        }
-        stat[CharacterStatType.ABILITY] = 10;
+        statElements = elements;
+        stat = new ElementStat[elements.Length];
+        for (int i = 0; i < stat.Length; i++)
+            stat[i] = new ElementStat()
+            {
+                dmg = 0,
+                attackspeed = 0
+            };
     }
 
     public void GetExp(int amount)
@@ -207,14 +222,33 @@ public class Character
             exp -= 100;
             level++;
             bonusStat += 2;
+            ability += 2;
         }
     }
 
-    public void Reinforce(CharacterStatType type, int amount)
+    public void Reinforce(int index, ElementStatType type, int amount)
     {
         if (bonusStat <= 0) return;
 
-        stat[type] += amount;
+        stat[index].AddStat(type, amount);
         bonusStat--;
+    }
+
+    public struct ElementStat
+    {
+        public int dmg;
+        public int attackspeed;
+
+        public int GetStat(ElementStatType type)
+        {
+            if (type == ElementStatType.DMG) return dmg;
+            else return attackspeed;
+        }
+
+        public void AddStat(ElementStatType type, int amount)
+        {
+            if (type == ElementStatType.DMG) dmg += amount;
+            else attackspeed += amount;
+        }
     }
 }

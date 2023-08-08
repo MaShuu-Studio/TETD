@@ -287,7 +287,7 @@ public class UIController : MonoBehaviour
 
         infoText.text =
             $"LEVEL: { string.Format("{0:##}", c.Level)}\n" +
-            $"TYPE: {c.TypeString}";
+            $"TYPE: {c.TypeString} ({string.Format("{0:##}", PlayerController.Instance.GetAbility())})";
 
         bonusText.text = string.Format("{0:#0}", c.BonusStat);
 
@@ -296,7 +296,7 @@ public class UIController : MonoBehaviour
     {
         for (int i = 0; i < statText.Count; i++)
         {
-            statText[i].text = string.Format("{0:#0}", c.Stat[(CharacterStatType)i]);
+            statText[i].text = string.Format("{0:#0}", c.GetStat((Element)(i / 2), (Character.ElementStatType)(i % 2)));
         }
         bonusText.text = string.Format("{0:#0}", c.BonusStat);
 
@@ -362,6 +362,7 @@ public class UIController : MonoBehaviour
     {
         towerInfoPanel.gameObject.SetActive(b);
         if (tower != null) towerInfoPanel.SetData(tower);
+        else towerInfoPanel.gameObject.SetActive(false);
     }
 
     public bool PointInTowerInfo(Vector2 point)

@@ -82,6 +82,7 @@ public class TowerController : MonoBehaviour
         towerObj.Build(pos);
 
         towers.Add(pos, towerObj);
+        SelectTower(pos);
 
         return true;
     }

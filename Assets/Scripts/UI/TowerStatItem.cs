@@ -28,6 +28,6 @@ public class TowerStatItem : MonoBehaviour
     }
     public void SetData(float value)
     {
-        valueText.text = string.Format("{0:0.#}", value);
+        valueText.text = string.Format("{0:0.##}", value);
     }
 }

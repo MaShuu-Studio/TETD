@@ -52,7 +52,7 @@ public class TowerInfoPanel : TowerInfo
         {
             upgradeItems[i].gameObject.SetActive(false);
         }
-
+        UpdateInfo();
         //UpdateBonusStat();
     }
     /*
