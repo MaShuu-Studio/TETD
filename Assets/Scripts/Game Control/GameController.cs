@@ -121,6 +121,7 @@ public class GameController : MonoBehaviour
 
     private void OnApplicationPause(bool pause)
     {
-        if (pause) Pause(true);
+        if (SceneController.Instance.CurrentScene == "Game Scene" && pause)
+            Pause(true);
     }
 }
