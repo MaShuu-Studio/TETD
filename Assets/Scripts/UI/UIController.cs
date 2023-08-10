@@ -1,10 +1,10 @@
+using EnumData;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using EnumData;
-using System.Threading.Tasks;
 
 public class UIController : MonoBehaviour
 {
@@ -369,7 +369,13 @@ public class UIController : MonoBehaviour
     {
         if (towerInfoPanel.gameObject.activeSelf == false) return false;
 
-        Rect rect = new Rect(towerInfoPanel.RectTransform.anchoredPosition, towerInfoPanel.RectTransform.rect.size);
+        // 기본 위치는 오른쪽 끝에서 width만큼 떨어진 위치.
+        // 해당 위치를 기준으로 해상도에 맞게 조정
+        Vector2 size = towerInfoPanel.RectTransform.rect.size;
+        Vector2 pos = new Vector2(1920 - size.x, 0);
+        pos = pos / 1920 * CameraController.Instance.RefResolution.x;
+        size = size / 1920 * CameraController.Instance.RefResolution.x;
+        Rect rect = new Rect(pos, size);
         return rect.Contains(point);
     }
 
