@@ -23,23 +23,42 @@ public class OptionUI : MonoBehaviour
     public async Task Init()
     {
         Setting setting = DataManager.LoadSetting();
-        int bgm = 10;
-        int sfx = 10;
-        int lang = 0;
+        int bgm = -1;
+        int sfx = -1;
+        int lang = -1;
+        int width = -1;
+        int height = -1;
+        int screenmode = -1;
+        int frame = -1;
+
         if (setting != null)
         {
             bgm = setting.Option("bgm");
             sfx = setting.Option("sfx");
             lang = setting.Option("language");
+            width = setting.Option("width");
+            height = setting.Option("height");
+            screenmode = setting.Option("screenmode");
+            frame = setting.Option("frame");
         }
 
         if (bgm == -1) bgm = 10;
         if (sfx == -1) sfx = 10;
         if (lang == -1) lang = 0;
+        if (width == -1) width = Screen.currentResolution.width;
+        if (height == -1) height = Screen.currentResolution.height;
+        if (screenmode == -1) screenmode = (int)FullScreenMode.ExclusiveFullScreen;
+        if (frame == -1) frame = Screen.currentResolution.refreshRate;
 
         bgmSlider.value = bgm;
         sfxSlider.value = sfx;
         SetSound();
+        if (screenmode >= 2) screenmode = 2;
+        screenMode.value = screenmode;
+        ChangeScreenMode(screenmode);
+
+        ChangeResolution(width, height);
+        CameraController.Instance.ChangeResolution(width, height);
 
         while (Translator.Langs == null) await Task.Yield();
         languages.options.Clear();
@@ -55,30 +74,30 @@ public class OptionUI : MonoBehaviour
         sfxSlider.onValueChanged.AddListener(v => SetOption());
         languages.onValueChanged.AddListener(v => SetOption());
 
-        resolutions.onValueChanged.AddListener(v => ChangeResolution(v));
-
-        screenMode.onValueChanged.AddListener(v => ChangeScreenMode(v));
-        screenMode.value = (int)Screen.fullScreenMode;
-
         if (resols.Count > 0)
         {
             for (int i = 0; i < resols.Count; i++)
             {
-                if (resols[i].width == Screen.currentResolution.width
-                    && resols[i].height == Screen.currentResolution.height)
+                if (resols[i].width == width && resols[i].height == height)
                 {
                     resolutions.value = i;
-                    CameraController.Instance.ChangeResolution(resols[i].width, resols[i].height);
                 }
             }
         }
+
+        resolutions.onValueChanged.AddListener(v => ChangeResolution(v));
+        screenMode.onValueChanged.AddListener(v => ChangeScreenMode(v));
 
         frameSlider.wholeNumbers = true;
         frameSlider.minValue = 30;
         frameSlider.maxValue = Screen.currentResolution.refreshRate;
 
         frameSlider.onValueChanged.AddListener(v => ChangeFrame((int)v));
-        frameSlider.value = 60;
+        frameSlider.value = frame;
+
+        resolutions.onValueChanged.AddListener(v => SetOption());
+        screenMode.onValueChanged.AddListener(v => SetOption());
+        frameSlider.onValueChanged.AddListener(v => SetOption());
     }
 
     public void SetSound()
@@ -97,12 +116,19 @@ public class OptionUI : MonoBehaviour
         setting.AddOption("sfx", (int)sfxSlider.value);
         setting.AddOption("language", languages.value);
 
+        setting.AddOption("width", curResolution.x);
+        setting.AddOption("height", curResolution.y);
+        setting.AddOption("screenmode", (int)curScreenMode);
+
+        setting.AddOption("frame", Application.targetFrameRate);
+
         DataManager.SaveSetting(setting);
     }
 
 
     List<Resolution> resols = new List<Resolution>();
     FullScreenMode curScreenMode;
+    Vector2Int curResolution;
     private void SetResolutionOptions(bool b)
     {
         resolutions.ClearOptions();
@@ -136,12 +162,14 @@ public class OptionUI : MonoBehaviour
     {
         Screen.SetResolution(resols[index].width, resols[index].height, curScreenMode);
         CameraController.Instance.ChangeResolution(resols[index].width, resols[index].height);
+        curResolution = new Vector2Int(resols[index].width, resols[index].height);
     }
 
     private void ChangeResolution(int width, int height)
     {
         Screen.SetResolution(width, height, curScreenMode);
         CameraController.Instance.ChangeResolution(width, height);
+        curResolution = new Vector2Int(width, height);
     }
 
     private void ChangeScreenMode(int mode)
