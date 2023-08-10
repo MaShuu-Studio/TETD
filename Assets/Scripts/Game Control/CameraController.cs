@@ -8,6 +8,9 @@ public class CameraController : MonoBehaviour
     public static CameraController Instance { get { return instance; } }
     private static CameraController instance;
     public static int ReferencePPU { get; private set; } = 72;
+    private Vector2Int baseResolution = new Vector2Int(1920, 1080);
+    public Vector2Int RefResolution { get { return refResolution; } }
+    private Vector2Int refResolution;
 
     private void Awake()
     {
@@ -29,16 +32,24 @@ public class CameraController : MonoBehaviour
 
         pcam = cam.GetComponent<PixelPerfectCamera>();
 
-        float ratio = (float)1920 / Screen.width;
-
-        pcam.assetsPPU = ReferencePPU;// Mathf.CeilToInt(80 / ratio);
-        pcam.refResolutionX = Screen.width;
-        pcam.refResolutionY = Screen.height;
+        pcam.assetsPPU = ReferencePPU;
+        pcam.refResolutionX = baseResolution.x;
+        pcam.refResolutionY = baseResolution.y;
     }
 
     public Camera Cam { get { return cam; } }
     [SerializeField] private Camera cam;
     private PixelPerfectCamera pcam;
+
+
+    public void ChangeResolution(int width, int height)
+    {
+        refResolution = new Vector2Int(width, height);
+
+        pcam.assetsPPU = (int)(ReferencePPU * ((float)width / baseResolution.x));
+        pcam.refResolutionX = refResolution.x;
+        pcam.refResolutionY = refResolution.y;
+    }
 
     private Rect boundary;
     /*

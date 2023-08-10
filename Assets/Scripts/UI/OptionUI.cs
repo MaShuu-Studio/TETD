@@ -66,7 +66,10 @@ public class OptionUI : MonoBehaviour
             {
                 if (resols[i].width == Screen.currentResolution.width
                     && resols[i].height == Screen.currentResolution.height)
+                {
                     resolutions.value = i;
+                    CameraController.Instance.ChangeResolution(resols[i].width, resols[i].height);
+                }
             }
         }
 
@@ -112,7 +115,7 @@ public class OptionUI : MonoBehaviour
             {
                 if (res.width * 9 != res.height * 16) continue;
                 bool skip = false;
-                foreach(var r in resols)
+                foreach (var r in resols)
                 {
                     if (res.width == r.width && res.height == r.height)
                     {
@@ -132,11 +135,13 @@ public class OptionUI : MonoBehaviour
     private void ChangeResolution(int index)
     {
         Screen.SetResolution(resols[index].width, resols[index].height, curScreenMode);
+        CameraController.Instance.ChangeResolution(resols[index].width, resols[index].height);
     }
-    
+
     private void ChangeResolution(int width, int height)
     {
         Screen.SetResolution(width, height, curScreenMode);
+        CameraController.Instance.ChangeResolution(width, height);
     }
 
     private void ChangeScreenMode(int mode)
