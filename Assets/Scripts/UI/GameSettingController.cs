@@ -4,27 +4,36 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
 using EnumData;
+using TMPro;
 
 public class GameSettingController : MonoBehaviour
 {
     [SerializeField] private List<GameSettingIcon> charIcons;
     [SerializeField] private List<GameSettingIcon> difficultIcons;
-    [SerializeField] private ScrollRect mapScrollRect;
-    [SerializeField] private ToggleGroup mapInfos;
+    [SerializeField] private TextMeshProUGUI infoText;
+
+    [Header("Map Setting")]
+    [SerializeField] private GameObject mapListObject;
     [SerializeField] private MapInfoIcon mapIconPrefab;
+    [SerializeField] private SelectMapButton selectMapButtonPrefab;
+    [SerializeField] private MapInfoIcon currentMap;
+    [SerializeField] private ScrollRect mapList;
+    [SerializeField] private RectTransform mapButtonsRect;
+    [SerializeField] private Transform mapParent;
     private List<MapInfoIcon> mapIcons;
+    private int selectedMap;
 
     public async Task Init()
     {
         // 추후 해당 부분을 데이터화 및 자동 생성시켜 작동시킬 예정
         for (int i = 0; i < charIcons.Count; i++)
         {
-            charIcons[i].SetIcon(((CharacterType)i).ToString());
+            charIcons[i].SetIcon(this, ((CharacterType)i).ToString());
             charIcons[i].isOn = false;
         }
         for (int i = 0; i < difficultIcons.Count; i++)
         {
-            difficultIcons[i].SetIcon(((DifficultyType)i).ToString());
+            difficultIcons[i].SetIcon(this, ((DifficultyType)i).ToString());
             difficultIcons[i].isOn = false;
         }
 
@@ -40,29 +49,57 @@ public class GameSettingController : MonoBehaviour
 
         while (MapManager.Maps == null) await Task.Yield();
 
+        mapListObject.SetActive(false);
+        selectMapButtonPrefab.gameObject.SetActive(false);
+        mapIconPrefab.gameObject.SetActive(false);
         int size = 0;
         for (int i = 0; i < MapManager.Maps.Count; i++)
         {
-            if (i != 0) size += 50;
+            size += 110;
 
             string mapName = MapManager.Maps[i];
             Map map = await MapManager.LoadMap(mapName);
+
             MapInfoIcon mapIcon = Instantiate(mapIconPrefab);
-            mapIcon.transform.SetParent(mapInfos.transform);
-            mapIcon.SetIcon(map, mapInfos);
-            mapIcon.isOn = false;
+            mapIcon.SetIcon(map);
+            mapIcon.transform.SetParent(mapParent);
+            mapIcon.transform.localScale = Vector3.one;
+            ((RectTransform)(mapIcon.transform)).anchoredPosition = Vector3.zero;
+            mapIcon.gameObject.SetActive(false);
+
+            SelectMapButton mapButton = Instantiate(selectMapButtonPrefab);
+            mapButton.Init(mapName, this, i);
+            mapButton.transform.SetParent(mapButtonsRect.transform);
+            mapButton.transform.localScale = Vector3.one;
+            mapButton.gameObject.SetActive(true);
 
             mapIcons.Add(mapIcon);
-
-            size += 400;
         }
 
         charIcons[0].isOn = true;
-        mapIcons[0].isOn = true;
+        SelectMap(0);
 
-        RectTransform infoRect = mapInfos.GetComponent<RectTransform>();
-        infoRect.sizeDelta = new Vector2(size, 450);
-        mapScrollRect.horizontalNormalizedPosition = 0;
+        mapButtonsRect.sizeDelta = new Vector2(426, size);
+    }
+
+    public void SelectMap(int index)
+    {
+        currentMap.SetIcon(mapIcons[index].MapData);
+        mapListObject.SetActive(false);
+    }
+
+    public void ShowMap(int index)
+    {
+        mapIcons[selectedMap].gameObject.SetActive(false);
+        mapIcons[index].gameObject.SetActive(true);
+        selectedMap = index;
+    }
+
+    public void ShowInfo(bool b, string str)
+    {
+        if (b == false) return;
+
+        infoText.text = str;
     }
 
     public CharacterType SelectedCharacter()
@@ -88,10 +125,6 @@ public class GameSettingController : MonoBehaviour
 
     public string MapName()
     {
-        for (int i = 0; i < mapIcons.Count; i++)
-        {
-            if (mapIcons[i].isOn) return MapManager.Maps[i];
-        }
-        return MapManager.Maps[0];
+        return MapManager.Maps[selectedMap];
     }
 }

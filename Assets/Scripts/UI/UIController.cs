@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UIController : MonoBehaviour
 {
@@ -89,6 +90,8 @@ public class UIController : MonoBehaviour
     [Space]
     [Header("Unit Editor")]
     [SerializeField] private UnitEditor unitEditor;
+    private static int uiLayer = 5;
+    private static int pointOverUILayer = 6;
 
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
@@ -198,6 +201,22 @@ public class UIController : MonoBehaviour
     public void MoveDescription(Vector3 pos)
     {
         descPopup.MoveDescription(pos);
+    }
+
+    public static bool PointOverUI(GameObject go)
+    {
+        if (EventSystem.current == null) return false;
+
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        for (int i = 0; i < results.Count; i++)
+        {
+            if (results[i].gameObject == go) return true;
+        }
+        return false;
     }
 
     #region Library

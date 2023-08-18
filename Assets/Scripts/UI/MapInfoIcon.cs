@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MapInfoIcon : GameSettingIcon
+public class MapInfoIcon : MonoBehaviour
 {
     [SerializeField] private GridLayoutGroup grid;
     [SerializeField] private Image tileBase;
     private RectTransform rect;
     private Image[,] mapTiles;
-    public void SetIcon(Map map, ToggleGroup group)
+    public Map MapData { get { return map; } }
+    private Map map;
+    public void SetIcon(Map map)
     {
-        desc.text = map.name;
-        toggle.group = group;
-
         rect = GetComponent<RectTransform>();
         transform.localScale = Vector3.one;
+        this.map = map;
 
         UpdateMap(map);
     }
@@ -52,27 +52,16 @@ public class MapInfoIcon : GameSettingIcon
                     }
                     data = ruleTile.GetTile(info);
                 }
+                else
+                {
+                    tile.color = new Color(0, 0, 0, 0);
+                }
                 tile.transform.SetParent(grid.transform);
                 tile.transform.localScale = Vector3.one;
                 tile.sprite = (data != null) ? data.sprite : null;
                 tile.gameObject.SetActive(true);
 
                 mapTiles[y, x] = tile;
-            }
-        }
-    }
-
-    public override void ChangeColor(bool b)
-    {
-        Color c = Color.white;
-        if (b == false) c = Color.gray * 0.5f;
-
-        image.color = c;
-        for (int i = 0; i < mapTiles.GetLength(0); i++)
-        {
-            for (int j = 0; j < mapTiles.GetLength(1); j++)
-            {
-                mapTiles[i, j].color = c;
             }
         }
     }
