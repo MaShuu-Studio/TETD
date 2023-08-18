@@ -56,10 +56,9 @@ public class DescriptionPopup : MonoBehaviour
                 pos.x + rect.sizeDelta.x,
                 pos.y - rect.sizeDelta.y);
 
-        if (size.x > Screen.width) pos.x -= rect.sizeDelta.x;
-        if (size.y > Screen.height * -1) pos.y += rect.sizeDelta.y;
+        if (size.x > Screen.currentResolution.width) pos.x -= rect.sizeDelta.x;
+        if (size.y > Screen.currentResolution.height) pos.y -= rect.sizeDelta.y;
 
-        // anchor 조정 후 위치 변경.
-        transform.position = pos;
+        rect.anchoredPosition = pos;
     }
 }

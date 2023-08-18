@@ -85,16 +85,6 @@ public class MapEditorPanel : MonoBehaviour
         LoadPalette(0);
     }
 
-    public bool PointInTilePanel(Vector2 point)
-    {
-        if (gameObject.activeSelf == false) return false;
-
-        Vector2 pos = rectTransform.position;
-        Rect rect = new Rect(pos + rectTransform.offsetMin, rectTransform.rect.size);
-        if (rect.Contains(point)) return true;
-        return false;
-    }
-
     public void LoadPalette(int index)
     {
         for (int i = 0; i < palettes.Length; i++)

@@ -388,14 +388,7 @@ public class UIController : MonoBehaviour
     {
         if (towerInfoPanel.gameObject.activeSelf == false) return false;
 
-        // 기본 위치는 오른쪽 끝에서 width만큼 떨어진 위치.
-        // 해당 위치를 기준으로 해상도에 맞게 조정
-        Vector2 size = towerInfoPanel.RectTransform.rect.size;
-        Vector2 pos = new Vector2(1920 - size.x, 0);
-        pos = pos / 1920 * CameraController.Instance.RefResolution.x;
-        size = size / 1920 * CameraController.Instance.RefResolution.x;
-        Rect rect = new Rect(pos, size);
-        return rect.Contains(point);
+        return PointOverUI(towerInfoPanel.gameObject);
     }
 
     public void ReinforceTower(int index, TowerStatType type)
@@ -439,9 +432,9 @@ public class UIController : MonoBehaviour
         tileList.sizeDelta = new Vector2(300, 120 * count + 20 * (count - 1) + 30);*/
     }
 
-    public bool PointInTilePanel(Vector2 point)
+    public bool PointInMapEditPanel()
     {
-        return mapEditorPanel.PointInTilePanel(point);
+        return PointOverUI(mapEditorPanel.gameObject);
     }
 
     #endregion

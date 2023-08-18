@@ -92,9 +92,7 @@ public class MapEditor : MonoBehaviour
         Vector3 pos = GetMapPos(worldPos);
         Vector3Int tilePos = new Vector3Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y));
 
-        bool buildable = SelectTile(worldPos);
-
-        if (UIController.Instance.PointInTilePanel(mousePos) == false)
+        if (UIController.Instance.PointInMapEditPanel() == false)
         {
             if (click && selectedTile != null)
             {
