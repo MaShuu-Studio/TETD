@@ -17,12 +17,12 @@ public static class SoundManager
     {
         string[] fileNames = await DataManager.GetFiles(path);
         TotalProgress = fileNames.Length;
+
+        sounds = new Dictionary<string, AudioClip>();
     }
 
     public static async Task Init()
     {
-        sounds = new Dictionary<string, AudioClip>();
-
         string[] fileNames = await DataManager.GetFiles(path);
 
         for (int i = 0; i < fileNames.Length; i++)

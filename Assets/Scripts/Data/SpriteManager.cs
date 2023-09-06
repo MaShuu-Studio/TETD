@@ -13,6 +13,8 @@ public static class SpriteManager
     public static int TotalProgress { get; private set; }
     public static async Task GetTotal()
     {
+        sprites = new Dictionary<int, Sprite>();
+
         TotalProgress = 0;
         foreach (string dataName in datas)
         {
@@ -67,7 +69,6 @@ public static class SpriteManager
                 - A: UI에서는 Scene으로 구분. 0: basic, 1: Title, 2: InGame
                 - B: 번호
          */
-        sprites = new Dictionary<int, Sprite>();
 
         // etc로 분류된 데이터들의 스프라이트 유무를 체크하여 가져옴.
         foreach (string dataName in datas)

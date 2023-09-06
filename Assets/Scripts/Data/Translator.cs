@@ -33,10 +33,11 @@ public static class Translator
             List<LanguageData> l = await DataManager.DeserializeListJson<LanguageData>(path, langs[i]);
             TotalProgress += l.Count;
         }
+
+        languages = new Dictionary<int, Language>[langs.Count];
     }
     public static async Task Init()
     {
-        languages = new Dictionary<int, Language>[langs.Count];
         for (int i = 0; i < langs.Count; i++)
         {
             CurProgress++;

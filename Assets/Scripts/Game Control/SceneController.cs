@@ -76,16 +76,18 @@ public class SceneController : MonoBehaviour
         IEnumerator co = InitProgress(total);
         StartCoroutine(co);
         await Translator.Init();
-        await SpriteManager.Init();
-        await SoundManager.Init();
+        SpriteManager.Init();
+        SoundManager.Init();
 
-        await TowerManager.Init();
-        await EnemyManager.Init();
+        TowerManager.Init();
+        EnemyManager.Init();
 
-        await TileManager.Init();
-        await MapManager.Init();
-        await RoundManager.Init();
+        TileManager.Init();
+        MapManager.Init();
+        RoundManager.Init();
 
+        // PoolController는 Tower와 Enemy로부터 데이터를 받기 때문에
+        // await을 걸어주면 앞의 작업이 끝나는 걸 기다릴 수 있음.
         await PoolController.Instance.Init();
         await UIController.Instance.Init();
 
