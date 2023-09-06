@@ -1,3 +1,2 @@
 /Data/Map/RTD.json,
-/Data/Map/SNAKE.json,
-/Data/Map/test.json
+/Data/Map/SNAKE.json

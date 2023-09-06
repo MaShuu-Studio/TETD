@@ -10,7 +10,10 @@ public class GameSettingController : MonoBehaviour
 {
     [SerializeField] private List<GameSettingIcon> charIcons;
     [SerializeField] private List<GameSettingIcon> difficultIcons;
+    [SerializeField] private Transform elementParent;
+    [SerializeField] private GameSettingIcon elementIconPrefab;
     [SerializeField] private TextMeshProUGUI infoText;
+    private List<GameSettingIcon> elementIcons;
 
     [Header("Map Setting")]
     [SerializeField] private GameObject mapListObject;
@@ -25,17 +28,34 @@ public class GameSettingController : MonoBehaviour
 
     public async Task Init()
     {
+        while (SpriteManager.isLoad == false) await Task.Yield();
+
         // 추후 해당 부분을 데이터화 및 자동 생성시켜 작동시킬 예정
         for (int i = 0; i < charIcons.Count; i++)
         {
-            charIcons[i].SetIcon(this, ((CharacterType)i).ToString());
+            charIcons[i].SetIcon(this, SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.CHARTYPE, i), ((CharacterType)i).ToString());
             charIcons[i].isOn = false;
         }
+
         for (int i = 0; i < difficultIcons.Count; i++)
         {
-            difficultIcons[i].SetIcon(this, ((DifficultyType)i).ToString());
+            difficultIcons[i].SetIcon(this, SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.DIFF, i), ((DifficultyType)i).ToString());
             difficultIcons[i].isOn = false;
         }
+
+        elementIcons = new List<GameSettingIcon>();
+        for (int i = 0; i < EnumArray.Elements.Length; i++)
+        {
+            Element e = (Element)i;
+            GameSettingIcon icon = Instantiate(elementIconPrefab);
+            icon.SetIcon(this, SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT, i), EnumArray.ElementStrings[e]);
+            icon.transform.SetParent(elementParent);
+            icon.transform.localScale = Vector3.one;
+            icon.isOn = false;
+            elementIcons.Add(icon);
+        }
+
+        elementIconPrefab.gameObject.SetActive(false);
 
         if (mapIcons != null)
         {
@@ -79,7 +99,7 @@ public class GameSettingController : MonoBehaviour
         charIcons[0].isOn = true;
         SelectMap(0);
 
-        mapButtonsRect.sizeDelta = new Vector2(426, size);
+        mapButtonsRect.sizeDelta = new Vector2(300, size);
     }
 
     public void SelectMap(int index)

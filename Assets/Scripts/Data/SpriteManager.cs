@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 public static class SpriteManager
 {
+    public static bool isLoad { get { return sprites != null; } }
     private static Dictionary<int, Sprite> sprites;
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
@@ -26,9 +27,10 @@ public static class SpriteManager
     private static string[] datas = { "Stat" };
 
     // 기본 넘버만으로 데이터를 로드할 수 있도록 합해서 id를 뽑을 수 있는 고유 넘버를 보관
-    public enum ETCDataNumber {
+    public enum ETCDataNumber
+    {
         TYPE = 3000000, ELEMENT = 3001000, GRADE = 3002000, BUFF = 3003000, DEBUFF = 3004000,
-        CHARSTAT = 3100000, DIFF = 3101000,
+        CHARTYPE = 3100000, DIFF = 3101000,
         TOWERSTAT = 3200000, APRIORITY = 3201000,
         ENEMYSTAT = 3300000, ENEMYGRADE = 3301000,
     }
@@ -50,7 +52,7 @@ public static class SpriteManager
                         - 3: BUFF
                         - 4: DEBUFF
                     - A: 1 (Character)
-                        - 0: CHARACTER STAT
+                        - 0: Character Type
                         - 1: Difficulty
                         - 
                     - A: 2 (Tower)
@@ -72,7 +74,7 @@ public static class SpriteManager
         {
             List<int> list = await DataManager.DeserializeListJson<int>(dataPath, dataName);
 
-            foreach(int id in list)
+            foreach (int id in list)
             {
                 CurProgress++;
                 Sprite sprite = await DataManager.LoadSprite(path + dataName + "/" + id + ".png", Vector2.one / 2, 16);

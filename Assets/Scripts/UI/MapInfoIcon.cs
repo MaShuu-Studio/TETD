@@ -5,16 +5,22 @@ using UnityEngine.UI;
 
 public class MapInfoIcon : MonoBehaviour
 {
-    [SerializeField] private GridLayoutGroup grid;
+    [SerializeField] private Transform tilesParent;
+    [SerializeField] private Image[] backgrounds;
     [SerializeField] private Image tileBase;
     private RectTransform rect;
     private Image[,] mapTiles;
     public Map MapData { get { return map; } }
     private Map map;
+    private float tileSize;
     public void SetIcon(Map map)
     {
         rect = GetComponent<RectTransform>();
+        tileSize = rect.sizeDelta.y / 15;
+        RectTransform tileRect = tileBase.rectTransform;
+        tileRect.sizeDelta = Vector2.one * tileSize;
         transform.localScale = Vector3.one;
+
         this.map = map;
 
         UpdateMap(map);
@@ -22,13 +28,29 @@ public class MapInfoIcon : MonoBehaviour
 
     private void UpdateMap(Map map)
     {
+        Sprite[] backgrounds = map.tilemap.GetBackGround();
+        if (backgrounds == null)
+        {
+            for (int i = 0; i < this.backgrounds.Length; i++)
+                this.backgrounds[i].gameObject.SetActive(false);
+        }
+        else
+            for (int i = 0; i < backgrounds.Length; i++)
+            {
+                if (backgrounds[i] == null) this.backgrounds[i].gameObject.SetActive(false);
+                else
+                {
+                    this.backgrounds[i].gameObject.SetActive(true);
+                    this.backgrounds[i].sprite = backgrounds[i];
+                }
+            }
+
         if (mapTiles != null)
         {
             foreach (var tile in mapTiles)
                 Destroy(tile.gameObject);
         }
         mapTiles = new Image[map.tilemap.size.y, map.tilemap.size.x];
-        grid.cellSize = new Vector2(rect.sizeDelta.x / map.tilemap.size.x, rect.sizeDelta.y / map.tilemap.size.y);
         tileBase.gameObject.SetActive(false);
 
         for (int y = map.tilemap.size.y - 1; y >= 0; y--)
@@ -56,8 +78,9 @@ public class MapInfoIcon : MonoBehaviour
                 {
                     tile.color = new Color(0, 0, 0, 0);
                 }
-                tile.transform.SetParent(grid.transform);
+                tile.transform.SetParent(tilesParent);
                 tile.transform.localScale = Vector3.one;
+                ((RectTransform)(tile.transform)).anchoredPosition = new Vector3(pos.x, pos.y) * tileSize;
                 tile.sprite = (data != null) ? data.sprite : null;
                 tile.gameObject.SetActive(true);
 

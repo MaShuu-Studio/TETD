@@ -10,6 +10,7 @@ public class GameSettingIcon : MonoBehaviour
 {
     protected Toggle toggle;
     protected Image image;
+    private static Color g = new Color(0.25f, 0.25f, 0.25f, 1);
 
     public bool isOn
     {
@@ -22,10 +23,11 @@ public class GameSettingIcon : MonoBehaviour
         }
     }
 
-    public void SetIcon(GameSettingController gameSetting, string str)
+    public void SetIcon(GameSettingController gameSetting, Sprite sprite, string str)
     {
         if (toggle == null) toggle = GetComponent<Toggle>();
         if (image == null) image = GetComponent<Image>();
+        image.sprite = sprite;
         toggle.onValueChanged.AddListener(b => ChangeColor(b));
         toggle.onValueChanged.AddListener(b => gameSetting.ShowInfo(b, str));
         toggle.isOn = false;
@@ -35,6 +37,6 @@ public class GameSettingIcon : MonoBehaviour
     public void ChangeColor(bool b)
     {
         if (b) image.color = Color.white;
-        else image.color = Color.gray * 0.5f;
+        else image.color = g;
     }
 }
