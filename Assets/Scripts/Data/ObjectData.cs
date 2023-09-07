@@ -412,7 +412,8 @@ public class Enemy : ObjectData
     }
 }
 
-public abstract class JsonData
+[Serializable]
+public class JsonData
 {
     public int id;
     public string name;

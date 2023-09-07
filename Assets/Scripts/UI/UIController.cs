@@ -41,6 +41,7 @@ public class UIController : MonoBehaviour
     [Space]
     [Header("Title")]
     [SerializeField] private GameSettingController gameSetting;
+    [SerializeField] private CustomEditor customEditor;
     [SerializeField] private TMP_InputField mapNameInputfield;
 
     [Space]
@@ -113,9 +114,11 @@ public class UIController : MonoBehaviour
 
         mapEditorPanel.Init();
         unitEditor.Init();
+        customEditor.Init();
+        await gameSetting.Init();
 
         CurProgress++;
-        await Title();
+        Title();
     }
 
     private void Update()
@@ -162,10 +165,9 @@ public class UIController : MonoBehaviour
         openScene = index;
     }
 
-    public async Task Title()
+    public void Title()
     {
         mapNameInputfield.text = "";
-        await gameSetting.Init();
     }
 
     public void OpenSetting(bool b)

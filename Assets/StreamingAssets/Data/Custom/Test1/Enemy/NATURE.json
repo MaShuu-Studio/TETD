@@ -1,0 +1,173 @@
+{
+    "list": 
+    [
+        
+{
+    "id": 2020000,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2020000/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2020001,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2020001/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2020002,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2020002/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2021002,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2021002/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2021003,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2021003/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2021004,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2021004/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2022005,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2022005/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2020100,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2020100/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2020101,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2020101/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2020102,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2020102/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2021102,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2021102/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2021103,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2021103/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2021104,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2021104/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 2022105,
+"element": 2,
+"hp": 2,
+"dmg": 1,
+"exp": 2,
+"money": 50,
+"speed": 5,
+"imgsrc": "/Sprites/Enemy/2022105/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+}
+    ]
+}

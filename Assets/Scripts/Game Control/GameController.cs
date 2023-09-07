@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour
         if (SceneController.Instance.CurrentScene == "Title") return;
 
         List<SceneAction> actions = new List<SceneAction>();
-        actions.Add(new SceneAction(UIController.Instance.Title()));
+        actions.Add(new SceneAction(() => UIController.Instance.Title()));
         SceneController.Instance.ChangeScene("Title", actions);
 
         paused = false;

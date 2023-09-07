@@ -60,6 +60,7 @@ namespace Data
 
             return fileName;
         }
+
         public static async Task<string[]> GetFiles(string path)
         {
             string[] files = null;
@@ -156,7 +157,6 @@ namespace Data
         {
             if (fileName.Contains(".json") == false) fileName += ".json";
             path = UnityEngine.Application.streamingAssetsPath + Path.Combine(path, fileName);
-
             SerializableList<T> obj = null;
 
             using (UnityWebRequest req = UnityWebRequest.Get(path))
@@ -222,6 +222,47 @@ namespace Data
 
             return setting;
         }
+
+        public static async Task<List<CustomData>> LoadCustomDataList(string path)
+        {
+            string[] subDataDics = { "/Tower/", "/Enemy/", "/Map/" };
+            List<CustomData> datas = new List<CustomData>();
+            string[] dataNames = GetDics(UnityEngine.Application.streamingAssetsPath + path);
+            
+            foreach(string dataName in dataNames)
+            {
+                CustomData data = new CustomData();
+                data.name = dataName;
+                // Tower와 Enemy의 경우는 ObjectData로 통일되어 있음.
+                // 가볍게 로드하기 위해 데이터가 좀 더 적은 ObjectData로 로드할 수 있도록 진행.
+                for (int i = 0; i < subDataDics.Length; i++)
+                {
+                    string dpath = path + dataName + subDataDics[i];
+                    if (Directory.Exists(UnityEngine.Application.streamingAssetsPath + dpath) == false) continue;
+
+                    List<string> fileNames = GetFileNames(dpath);
+
+                    // Tower와 Enemy의 경우 폴더 내에서 세부 분리가 되어있을 수 있음.
+                    if (i < 2)
+                    {
+                        foreach (string fileName in fileNames)
+                        {
+                            List<JsonData> ods = await DeserializeListJson<JsonData>(dpath, fileName);
+                            data.dataAmount[i] += ods.Count;
+                        }
+                    }
+                    else data.dataAmount[i] = fileNames.Count;
+                }
+
+                if (data.dataAmount[0] != 0 || data.dataAmount[1] != 0 || data.dataAmount[2] != 0)
+                {
+                    datas.Add(data);
+                }
+            }
+
+            return datas;
+        }
+
         public static void SaveCustomData(JsonData data, string dataPath, Dictionary<string, List<Sprite>> sprites, Language[] langs)
         {
             try

@@ -55,6 +55,7 @@ public class SceneController : MonoBehaviour
         TileManager.GetTotal();
         await MapManager.GetTotal();
         RoundManager.GetTotal();
+        CustomDataManager.GetTotal();
         UIController.GetTotal();
 
         int total =
@@ -67,6 +68,7 @@ public class SceneController : MonoBehaviour
              MapManager.TotalProgress +
              RoundManager.TotalProgress +
              PoolController.TotalProgress +
+             CustomDataManager.TotalProgress +
              UIController.TotalProgress;
 
         // 로딩창으로 넘김
@@ -89,6 +91,7 @@ public class SceneController : MonoBehaviour
         // PoolController는 Tower와 Enemy로부터 데이터를 받기 때문에
         // await을 걸어주면 앞의 작업이 끝나는 걸 기다릴 수 있음.
         await PoolController.Instance.Init();
+        await CustomDataManager.Init();
         await UIController.Instance.Init();
 
         StopCoroutine(co);

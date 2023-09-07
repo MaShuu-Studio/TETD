@@ -1,0 +1,353 @@
+{
+    "list": 
+    [
+        
+{
+    "id": 1000000,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.1,
+    "attacktime": [ 0.2 ],
+"type": 0,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+    "debuffs": [ {"type": 1, "value": 0.5} ],
+"imgsrc": "/Sprites/Tower/1000000/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1000001,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.1,
+    "attacktime": [ 0.2 ],
+"type": 1,
+"projspf": 0.03,
+"projtime": 0.3,
+"projattacktime": 0.3,
+    "debuffs": [ {"type": 1, "value": 0.5} ],
+"imgsrc": "/Sprites/Tower/1000001/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1000002,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.1,
+    "attacktime": [ 0.2 ],
+"type": 1,
+"projspf": 0.03,
+"projtime": 0.3,
+"projattacktime": 0.3,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+    "ability": [ {"type": 4, "value": 1.5} ],
+"imgsrc": "/Sprites/Tower/1000002/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1000003,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.1,
+    "attacktime": [ 0.2 ],
+"type": 0,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+"imgsrc": "/Sprites/Tower/1000003/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1001003,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.1,
+    "attacktime": [ 0.2 ],
+"type": 0,
+"imgsrc": "/Sprites/Tower/1001003/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1002003,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.1,
+    "attacktime": [ 0.2 ],
+"type": 0,
+"imgsrc": "/Sprites/Tower/1002003/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1000004,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.08,
+    "attacktime": [ 0.32 ],
+"type": 1,
+"projspf": 0.03,
+"projtime": 0.3,
+"projattacktime": 0.3,
+    "ability": [ {"type": 3, "value": 2} ],
+"imgsrc": "/Sprites/Tower/1000004/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1001004,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.08,
+    "attacktime": [ 0.32 ],
+"type": 1,
+"projspf": 0.03,
+"projtime": 0.3,
+"projattacktime": 0.3,
+"imgsrc": "/Sprites/Tower/1001004/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1002004,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.08,
+    "attacktime": [ 0.32 ],
+"type": 1,
+"projspf": 0.03,
+"projtime": 0.3,
+"projattacktime": 0.3,
+"imgsrc": "/Sprites/Tower/1002004/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1000005,
+"cost": 150,
+"dmg": 0.5,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.15,
+    "attacktime": [ 0,0.15 ],
+"type": 0,
+"imgsrc": "/Sprites/Tower/1000005/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1001005,
+"cost": 150,
+"dmg": 0.5,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.15,
+    "attacktime": [ 0,0.15 ],
+"type": 0,
+"imgsrc": "/Sprites/Tower/1001005/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1002005,
+"cost": 150,
+"dmg": 0.5,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.15,
+    "attacktime": [ 0,0.15 ],
+"type": 0,
+"imgsrc": "/Sprites/Tower/1002005/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1000006,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.06,
+    "attacktime": [ 0.48 ],
+"type": 1,
+"projspf": 0.03,
+"projtime": 0.3,
+"projattacktime": 0.3,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+"imgsrc": "/Sprites/Tower/1000006/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1001006,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.06,
+    "attacktime": [ 0.48 ],
+"type": 2,
+"projspf": 0.03,
+"projtime": 0.3,
+"projattacktime": 0.3,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+"imgsrc": "/Sprites/Tower/1001006/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1002006,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.06,
+    "attacktime": [ 0.48 ],
+"type": 1,
+"projspf": 0.03,
+"projtime": 0.3,
+"projattacktime": 0.3,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+"imgsrc": "/Sprites/Tower/1002006/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1003006,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.06,
+    "attacktime": [ 0.48 ],
+"type": 2,
+"projspf": 0.03,
+"projtime": 0.3,
+"projattacktime": 0.3,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+"imgsrc": "/Sprites/Tower/1003006/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1000007,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.1,
+    "attacktime": [ 0.2 ],
+"type": 2,
+"projspf": 0.05,
+"projtime": 0.35,
+"projattacktime": 0.1,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+"imgsrc": "/Sprites/Tower/1000007/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1001007,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.1,
+    "attacktime": [ 0.2 ],
+"type": 2,
+"projspf": 0.03,
+"projtime": 0.35,
+"projattacktime": 0.1,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+"imgsrc": "/Sprites/Tower/1001007/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1002007,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.1,
+    "attacktime": [ 0.2 ],
+"type": 2,
+"projspf": 0.03,
+"projtime": 0.35,
+"projattacktime": 0.1,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+"imgsrc": "/Sprites/Tower/1002007/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1001008,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1.2,
+"spf": 0.075,
+    "attacktime": [ 0.525,1.125 ],
+"type": 1,
+"projspf": 0.03,
+"projtime": 0.3,
+"projattacktime": 0.3,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+"imgsrc": "/Sprites/Tower/1001008/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1002008,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1.2,
+"spf": 0.075,
+    "attacktime": [ 0.525,1.125 ],
+"type": 1,
+"projspf": 0.03,
+"projtime": 0.3,
+"projattacktime": 0.3,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+"imgsrc": "/Sprites/Tower/1002008/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1003008,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1.2,
+"spf": 0.075,
+    "attacktime": [ 0.525,1.125 ],
+"type": 1,
+"projspf": 0.03,
+"projtime": 0.3,
+"projattacktime": 0.3,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+"imgsrc": "/Sprites/Tower/1003008/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+}
+    ]
+}
