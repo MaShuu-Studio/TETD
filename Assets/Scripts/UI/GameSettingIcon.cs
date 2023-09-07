@@ -10,6 +10,11 @@ public class GameSettingIcon : MonoBehaviour
 {
     protected Toggle toggle;
     protected Image image;
+
+    private GameSettingController gameSetting;
+    private string name;
+    private string desc;
+
     private static Color g = new Color(0.25f, 0.25f, 0.25f, 1);
 
     public bool isOn
@@ -22,16 +27,32 @@ public class GameSettingIcon : MonoBehaviour
             toggle.isOn = value;
         }
     }
+    private void Update()
+    {
+        if (gameSetting != null && UIController.PointOverUI(gameObject))
+        {
+            gameSetting.ShowInfo(name, desc);
+        }
+    }
 
-    public void SetIcon(GameSettingController gameSetting, Sprite sprite, string str)
+    public void SetIcon(GameSettingController gameSetting, Sprite sprite, Language lang)
     {
         if (toggle == null) toggle = GetComponent<Toggle>();
         if (image == null) image = GetComponent<Image>();
         image.sprite = sprite;
+        name = lang.name;
+        desc = lang.desc;
+        this.gameSetting = gameSetting;
+
         toggle.onValueChanged.AddListener(b => ChangeColor(b));
-        toggle.onValueChanged.AddListener(b => gameSetting.ShowInfo(b, str));
         toggle.isOn = false;
         ChangeColor(false);
+    }
+
+    public void UpdateLanguage(Language lang)
+    {
+        name = lang.name;
+        desc = lang.desc;
     }
 
     public void ChangeColor(bool b)

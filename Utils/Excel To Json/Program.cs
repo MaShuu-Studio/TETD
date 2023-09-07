@@ -97,6 +97,8 @@ namespace Excel_To_Json
             for (int row = 2; row <= range.Rows.Count; row++)
             {
                 string idData = "";
+                string nameData = "";
+                string descData = "";
                 for (int column = 1; column <= range.Columns.Count; column++)
                 {
                     object o = (range.Cells[row, column] as Excel.Range).Value2;
@@ -110,8 +112,12 @@ namespace Excel_To_Json
                     }
 
                     if (type.ToUpper() == "NAME")
-                        ParseLanguage(idData, o.ToString());
+                        nameData = o.ToString();
+
+                    if (type.ToUpper() == "DESC")
+                        descData = o.ToString();
                 }
+                ParseLanguage(idData, nameData, descData);
                 count++;
             }
             // 마지막에 붙은 ,와 \n 제거
@@ -131,6 +137,7 @@ namespace Excel_To_Json
             {
                 string data = "";
                 string idData = "";
+                string nameData = "";
                 for (int column = 1; column <= range.Columns.Count; column++)
                 {
                     object o = (range.Cells[row, column] as Excel.Range).Value2;
@@ -143,11 +150,13 @@ namespace Excel_To_Json
                             idData = o.ToString();
 
                         if (type.ToUpper() == "NAME")
-                            ParseLanguage(idData, o.ToString());
+                            nameData = o.ToString();
 
                         if (type.ToUpper() != "NAME") data += value + ",\n";
                     }
                 }
+                // BasicData의 경우 아직은 descData가 필요 없음.
+                ParseLanguage(idData, nameData, "");
 
                 if (data != "")
                 {
@@ -162,15 +171,21 @@ namespace Excel_To_Json
             return contents;
         }
 
-        private static void ParseLanguage(string id, string n)
+        private static void ParseLanguage(string id, string n, string d)
         {
             // Array와 일반 string으로 구분
             string[] names = n.Split(",");
+            string[] descs = null;
+            if (string.IsNullOrEmpty(d) == false) descs = d.Split(",");
             if (n.Length > 1)
             {
                 for (int i = 0; i < names.Length; i++)
                 {
                     string str = ParseValue("id", id) + "," + ParseValue("name", names[i]);
+
+                    // desc는 empty string인 경우도 있으므로 해당 경우에는 배제해주어야 함.
+                    if (descs != null)
+                        str += "," + ParseValue("desc", descs[i]);
 
                     langContents[i] += string.Format(JsonFormat.contentsFormat, str) + ",\n";
                 }

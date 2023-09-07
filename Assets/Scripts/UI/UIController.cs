@@ -180,6 +180,7 @@ public class UIController : MonoBehaviour
         shop.UpdateLanguage();
         library.UpdatePage();
         unitEditor.UpdateLanguage();
+        gameSetting.UpdateLanage();
         UpdateRoundInfo();
     }
 

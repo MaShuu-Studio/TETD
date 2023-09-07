@@ -8,23 +8,27 @@ public class Language
 {
     public int id;
     public string name;
-    // description 등 다른 데이터의 필요에 따라 추가
+    public string desc;
 
-    public Language(int id, string name)
+    public Language(int id, string name, string desc = null)
     {
         this.id = id;
         this.name = name;
+        this.desc = desc;
     }
 
     public Language(LanguageData data)
     {
         id = data.id;
         name = data.name;
+        desc = data.desc;
     }
 }
+
 [Serializable]
 public class LanguageData
 {
     public int id;
     public string name;
+    public string desc;
 }

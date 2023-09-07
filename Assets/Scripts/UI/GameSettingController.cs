@@ -12,7 +12,8 @@ public class GameSettingController : MonoBehaviour
     [SerializeField] private List<GameSettingIcon> difficultIcons;
     [SerializeField] private Transform elementParent;
     [SerializeField] private GameSettingIcon elementIconPrefab;
-    [SerializeField] private TextMeshProUGUI infoText;
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI descText;
     private List<GameSettingIcon> elementIcons;
 
     [Header("Map Setting")]
@@ -28,18 +29,20 @@ public class GameSettingController : MonoBehaviour
 
     public async Task Init()
     {
+        ShowInfo("", "");
         while (SpriteManager.isLoad == false) await Task.Yield();
 
-        // 추후 해당 부분을 데이터화 및 자동 생성시켜 작동시킬 예정
         for (int i = 0; i < charIcons.Count; i++)
         {
-            charIcons[i].SetIcon(this, SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.CHARTYPE, i), ((CharacterType)i).ToString());
+            Language lang = Translator.GetLanguage((int)SpriteManager.ETCDataNumber.CHARTYPE + i);
+            charIcons[i].SetIcon(this, SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.CHARTYPE, i), lang);
             charIcons[i].isOn = false;
         }
 
         for (int i = 0; i < difficultIcons.Count; i++)
         {
-            difficultIcons[i].SetIcon(this, SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.DIFF, i), ((DifficultyType)i).ToString());
+            Language lang = Translator.GetLanguage((int)SpriteManager.ETCDataNumber.DIFF + i);
+            difficultIcons[i].SetIcon(this, SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.DIFF, i), lang);
             difficultIcons[i].isOn = false;
         }
 
@@ -48,7 +51,9 @@ public class GameSettingController : MonoBehaviour
         {
             Element e = (Element)i;
             GameSettingIcon icon = Instantiate(elementIconPrefab);
-            icon.SetIcon(this, SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT, i), EnumArray.ElementStrings[e]);
+            Language lang = Translator.GetLanguage((int)SpriteManager.ETCDataNumber.ELEMENT + i);
+
+            icon.SetIcon(this, SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.ELEMENT, i), lang);
             icon.transform.SetParent(elementParent);
             icon.transform.localScale = Vector3.one;
             icon.isOn = false;
@@ -115,11 +120,10 @@ public class GameSettingController : MonoBehaviour
         selectedMap = index;
     }
 
-    public void ShowInfo(bool b, string str)
+    public void ShowInfo(string name, string desc)
     {
-        if (b == false) return;
-
-        infoText.text = str;
+        nameText.text = name;
+        descText.text = desc;
     }
 
     public CharacterType SelectedCharacter()
@@ -146,5 +150,28 @@ public class GameSettingController : MonoBehaviour
     public string MapName()
     {
         return MapManager.Maps[selectedMap];
+    }
+
+    public void UpdateLanage()
+    {
+        for (int i = 0; i < charIcons.Count; i++)
+        {
+            Language lang = Translator.GetLanguage((int)SpriteManager.ETCDataNumber.CHARTYPE + i);
+            charIcons[i].UpdateLanguage(lang);
+        }
+
+        for (int i = 0; i < difficultIcons.Count; i++)
+        {
+            Language lang = Translator.GetLanguage((int)SpriteManager.ETCDataNumber.DIFF + i);
+            difficultIcons[i].UpdateLanguage(lang);
+        }
+
+        elementIcons = new List<GameSettingIcon>();
+        for (int i = 0; i < elementIcons.Count; i++)
+        {
+            Language lang = Translator.GetLanguage((int)SpriteManager.ETCDataNumber.ELEMENT + i);
+            elementIcons[i].UpdateLanguage(lang);
+        }
+        ShowInfo("", "");
     }
 }

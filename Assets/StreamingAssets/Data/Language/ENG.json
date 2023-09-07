@@ -291,7 +291,19 @@
 },
 
 {
+    "id": 4010000,"name": "Viking"
+},
+
+{
     "id": 4010001,"name": "Pirate"
+},
+
+{
+    "id": 4011001,"name": "Pirate"
+},
+
+{
+    "id": 4012001,"name": "Captain"
 },
 
 {
@@ -304,6 +316,14 @@
 
 {
     "id": 4020001,"name": "Trapper"
+},
+
+{
+    "id": 4020002,"name": "Satyr"
+},
+
+{
+    "id": 4020005,"name": "Elf Archer"
 },
 
 {
@@ -599,39 +619,39 @@
 },
 
 {
-    "id": 3100001,"name": "AttackSpeed"
+    "id": 3100000,"name": "Razera","desc": "Razera Description"
 },
 
 {
-    "id": 3100002,"name": "Cost"
+    "id": 3100001,"name": "Idelia","desc": "Idelia Description"
 },
 
 {
-    "id": 3100003,"name": "Probablity"
+    "id": 3100002,"name": "Zakona","desc": "Zakona Description"
 },
 
 {
-    "id": 3101000,"name": "HP"
+    "id": 3101000,"name": "HP","desc": "Increase enemy's HP by 50%."
 },
 
 {
-    "id": 3101001,"name": "Speed"
+    "id": 3101001,"name": "Speed","desc": "Increase enemy's speed by 50%."
 },
 
 {
-    "id": 3101002,"name": "Amount"
+    "id": 3101002,"name": "Amount","desc": "Increase enemy's amount by 50%."
 },
 
 {
-    "id": 3101003,"name": "Time"
+    "id": 3101003,"name": "Time","desc": "Decrease round preparation time by 50%."
 },
 
 {
-    "id": 3101004,"name": "Cost"
+    "id": 3101004,"name": "Cost","desc": "Increase cost by 50%."
 },
 
 {
-    "id": 3101005,"name": "Probablity"
+    "id": 3101005,"name": "Probablity","desc": "Decrease probablity of strong tower by 50%."
 },
 
 {
@@ -701,5 +721,5 @@
 {
     "id": 3301002,"name": "BOSS"
 }
-    ,{"id":402076867,"name":"gocheoyo"}]
+    ]
 }
