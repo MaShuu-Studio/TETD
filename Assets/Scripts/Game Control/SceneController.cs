@@ -23,7 +23,7 @@ public class SceneController : MonoBehaviour
     }
 
     private string[] SceneNames { get; }
-    = { "Title", "Game Scene", "Map Editor", "Unit Editor", "Round Editor"};
+    = { "Title", "Game Scene", "Map Editor", "Unit Editor", "Round Editor" };
 
     private const string LoadingScene = "Loading";
     public bool IsLoading { get { return isLoading; } }
@@ -72,7 +72,7 @@ public class SceneController : MonoBehaviour
              UIController.TotalProgress;
 
         // 로딩창으로 넘김
-        UIController.Instance.StartLoading();
+        UIController.Instance.Loading();
 
         // 초기화 작업 진행.
         IEnumerator co = InitProgress(total);
@@ -124,6 +124,53 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    // 조금 비효율적이더라도 우선 작동하도록 함수를 추가하여 개발.
+    public async void LoadCustomData(List<string>[] pathes)
+    {
+        // 로딩창으로 넘김
+        isLoading = true;
+        UIController.Instance.Loading();
+
+        IEnumerator co = CustomDataProgress();
+        StartCoroutine(co);
+
+        TowerManager.LoadCustomData(pathes[0]);
+        EnemyManager.LoadCustomData(pathes[1]);
+        MapManager.LoadCustomData(pathes[2]);
+
+        // 동시에 작동시키되 기다리도록 함. 
+        while (TowerManager.CurProgress < TowerManager.TotalProgress
+            || EnemyManager.CurProgress < EnemyManager.TotalProgress
+            || MapManager.CurProgress < MapManager.TotalProgress)
+            await Task.Yield();
+
+        // 데이터 재로드
+        await UIController.Instance.UpdateCustomData();
+
+        UIController.Instance.Loading(false);
+        isLoading = false;
+    }
+
+    private IEnumerator CustomDataProgress()
+    {
+        int cur = 0;
+        int total = 1;
+        while (total > cur)
+        { 
+            total = TowerManager.TotalProgress 
+                + EnemyManager.TotalProgress 
+                + MapManager.TotalProgress;
+
+            cur =
+                TowerManager.CurProgress +
+                EnemyManager.CurProgress +
+                MapManager.CurProgress;
+
+            Progress((float)cur / total, $"데이터를 불러오는 중 {cur} / {total}");
+            yield return null;
+        }
+    }
+
     public async void ChangeScene(string scene, List<SceneAction> actions)
     {
         int sceneNumber = FindScene(scene);
@@ -131,7 +178,7 @@ public class SceneController : MonoBehaviour
         {
             isLoading = true;
             Progress(0);
-            UIController.Instance.StartLoading();
+            UIController.Instance.Loading();
 
             int count = 1;
             if (actions != null) count += actions.Count;

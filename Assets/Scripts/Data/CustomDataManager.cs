@@ -34,5 +34,6 @@ public class CustomData
 {
     public string name;
     // 0: Tower, 1: Enemy, 2: Map
+    public List<string>[] pathes = new List<string>[3];
     public int[] dataAmount = new int[3] { 0, 0, 0 };
 }

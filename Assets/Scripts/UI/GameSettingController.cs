@@ -25,6 +25,7 @@ public class GameSettingController : MonoBehaviour
     [SerializeField] private RectTransform mapButtonsRect;
     [SerializeField] private Transform mapParent;
     private List<MapInfoIcon> mapIcons;
+    private List<SelectMapButton> mapButtons;
     private int selectedMap;
 
     public async Task Init()
@@ -71,6 +72,7 @@ public class GameSettingController : MonoBehaviour
             mapIcons.Clear();
         }
         mapIcons = new List<MapInfoIcon>();
+        mapButtons = new List<SelectMapButton>();
 
         while (MapManager.Maps == null) await Task.Yield();
 
@@ -82,8 +84,8 @@ public class GameSettingController : MonoBehaviour
         {
             size += 110;
 
-            string mapName = MapManager.Maps[i];
-            Map map = await MapManager.LoadMap(mapName);
+            string mapName = MapManager.Keys[i];
+            Map map = MapManager.LoadMap(mapName);
 
             MapInfoIcon mapIcon = Instantiate(mapIconPrefab);
             mapIcon.SetIcon(map);
@@ -99,6 +101,55 @@ public class GameSettingController : MonoBehaviour
             mapButton.gameObject.SetActive(true);
 
             mapIcons.Add(mapIcon);
+            mapButtons.Add(mapButton);
+        }
+
+        charIcons[0].isOn = true;
+        SelectMap(0);
+
+        mapButtonsRect.sizeDelta = new Vector2(300, size);
+    }
+
+    public async Task UpdateMaps()
+    {
+        foreach(var icon in mapIcons)
+        {
+            Destroy(icon.gameObject);
+        }
+        mapIcons.Clear();
+
+        foreach (var button in mapButtons)
+        {
+            Destroy(button.gameObject);
+        }
+        mapButtons.Clear();
+
+        mapListObject.SetActive(false);
+        selectMapButtonPrefab.gameObject.SetActive(false);
+        mapIconPrefab.gameObject.SetActive(false);
+        int size = 0;
+        for (int i = 0; i < MapManager.Maps.Count; i++)
+        {
+            size += 110;
+
+            string mapName = MapManager.Keys[i];
+            Map map = MapManager.LoadMap(mapName);
+
+            MapInfoIcon mapIcon = Instantiate(mapIconPrefab);
+            mapIcon.SetIcon(map);
+            mapIcon.transform.SetParent(mapParent);
+            mapIcon.transform.localScale = Vector3.one;
+            ((RectTransform)(mapIcon.transform)).anchoredPosition = Vector3.zero;
+            mapIcon.gameObject.SetActive(false);
+
+            SelectMapButton mapButton = Instantiate(selectMapButtonPrefab);
+            mapButton.Init(mapName, this, i);
+            mapButton.transform.SetParent(mapButtonsRect.transform);
+            mapButton.transform.localScale = Vector3.one;
+            mapButton.gameObject.SetActive(true);
+
+            mapIcons.Add(mapIcon);
+            mapButtons.Add(mapButton);
         }
 
         charIcons[0].isOn = true;
@@ -149,7 +200,7 @@ public class GameSettingController : MonoBehaviour
 
     public string MapName()
     {
-        return MapManager.Maps[selectedMap];
+        return MapManager.Keys[selectedMap];
     }
 
     public void UpdateLanage()

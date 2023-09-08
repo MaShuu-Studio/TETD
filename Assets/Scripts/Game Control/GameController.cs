@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour
         string mapName;
         UIController.Instance.GameSetting(out character, out difficulties, out mapName);
 
-        Map map = await MapManager.LoadMap(mapName);
+        Map map = MapManager.LoadMap(mapName);
         List<SceneAction> actions = new List<SceneAction>();
         actions.Add(new SceneAction(() => MapController.Instance.Init(map)));
         actions.Add(new SceneAction(() => EnemyController.Instance.Init(map, difficulties)));
@@ -83,7 +83,7 @@ public class GameController : MonoBehaviour
 
         if (string.IsNullOrEmpty(mapName)) return;
 
-        Map map = await MapManager.LoadMap(mapName);
+        Map map = MapManager.LoadMap(mapName);
 
         List<SceneAction> actions = new List<SceneAction>();
         actions.Add(new SceneAction(() => MapEditor.Instance.Init(map, mapName)));

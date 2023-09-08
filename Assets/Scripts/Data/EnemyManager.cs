@@ -12,6 +12,9 @@ public static class EnemyManager
 
     public static List<int> Keys { get { return keys; } }
     private static List<int> keys;
+
+    private static int originDataAmount;
+    private static int[,] customDataIndexes;
     public static List<int> CustomDataKeys { get { return customDataKeys; } }
     private static List<int> customDataKeys;
 
@@ -59,11 +62,13 @@ public static class EnemyManager
             Enemy enemy = new Enemy(data, anim);
             enemies.Add(enemy.id, enemy);
             egEnemyIds[(int)enemy.element, (int)enemy.grade].Add(enemy.id);
-
-            if (data.id.ToString()[0] == '5') customDataKeys.Add(data.id);
         }
 
         keys = enemies.Keys.ToList();
+
+        originDataAmount = enemies.Count;
+        customDataIndexes = new int[EnumArray.Elements.Length, EnumArray.Grades.Length];
+
 #if UNITY_EDITOR
         Debug.Log($"[SYSTEM] LOAD ENEMY {enemies.Count}");
 #endif
@@ -146,6 +151,81 @@ public static class EnemyManager
             keys.Remove(id);
             customDataKeys.Remove(id);
             egEnemyIds[element, grade].Remove(id);
+        }
+    }
+    public static void ResetCustomData()
+    {
+        CurProgress = 0;
+        TotalProgress = 9999;
+
+        for (int i = 0; i < customDataIndexes.GetLength(0); i++)
+        {
+            for (int j = 0; j < customDataIndexes.GetLength(1); j++)
+            {
+                customDataIndexes[i, j] = 0;
+            }
+        }
+
+        while (keys.Count > originDataAmount)
+        {
+            int index = keys.Count - 1;
+            int id = keys[index];
+
+            // id는 AEEGNNN으로 되어있음.
+            int element, grade;
+
+            element = id % 1000000; // A 제거
+            element = element / 10000; // GNNN 제거
+
+            grade = id % 10000; // AEE 제거
+            grade = grade / 1000; // NNN 제거
+
+
+            RemoveData(id, element, grade);
+        }
+    }
+
+    public static async Task LoadCustomData(List<string> pathes)
+    {
+        // CustomData의 index범위를 element, grade 별 1000으로 잡아서 활용. 0~999
+        // 이를 넘는다면 더이상 추가할 수 없도록 함. 관련 코드 기입 필요.
+
+        List<EnemyData> list = new List<EnemyData>();
+        foreach (string path in pathes)
+        {
+            list.AddRange(await DataManager.DeserializeListJson<EnemyData>(path));
+        }
+        TotalProgress = list.Count;
+
+        foreach (var data in list)
+        {
+            // 임시로 id를 통해 element와 grade를 직접 확인함.
+            // 추후 유닛에디터를 수정하며 id를 기입하지않고 element와 grade를 따로 저장하게 할 것이며
+            // 이를 통해 자동으로 아이디를 생성할 수 있도록 함.
+            // 또한, Sprite 역시 로드 방식을 바꿔야 함. 해당 부분에 대한 고민이 필요할 듯.
+            // 우선은 기존 id로 부터 받아서 활용할 수 있도록 함.
+            int originId = data.id;
+
+            // id는 AEEGNNN으로 되어있음.
+            int element, grade;
+
+            element = originId % 1000000; // A 제거
+            element = element / 10000; // GNNN 제거
+
+            grade = originId % 10000; // AEE 제거
+            grade = grade / 1000; // NNN 제거
+
+
+            int id = 5000000 + element * 10000 + grade * 1000 + (customDataIndexes[element, grade]++);
+
+            Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
+            await SpriteManager.AddSprite<Enemy>(data.imgsrc, id, data.pivot, data.pixelperunit);
+
+            Enemy enemy = new Enemy(data, anim);
+            enemies.Add(id, enemy);
+            egEnemyIds[(int)enemy.element, (int)enemy.grade].Add(id);
+
+            CurProgress++;
         }
     }
 }

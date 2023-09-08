@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Data;
@@ -10,10 +11,14 @@ public static class MapManager
 {
     private static string path = "/Data/Map/";
 
-    public static List<string> Maps { get { return maps; } }
-    private static List<string> maps;
+    public static Dictionary<string, Map> Maps { get { return maps; } }
+    private static Dictionary<string, Map> maps;
+    public static List<string> Keys { get { return keys; } }
+    private static List<string> keys;
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
+
+    private static int originDataAmount;
 
     public static void GetTotal()
     {
@@ -21,17 +26,24 @@ public static class MapManager
         TotalProgress = files.Count;
     }
 
-    public static void Init()
+    public static async Task Init()
     {
-        maps = new List<string>();
+        maps = new Dictionary<string, Map>();
         List<string> files = DataManager.GetFileNames(path);
 
         for (int i = 0; i < files.Count; i++)
         {
             CurProgress++;
+            string mapName = DataManager.FileNameTriming(files[i]);
 
-            maps.Add(DataManager.FileNameTriming(files[i]));
+            TilemapInfoJson data = await DataManager.DeserializeJson<TilemapInfoJson>(path, mapName);
+            if (data == null) continue;
+
+            TilemapInfo info = new TilemapInfo(data);
+            maps.Add(mapName, new Map(mapName, info));
         }
+        originDataAmount = maps.Count;
+        keys = maps.Keys.ToList();
 
 #if UNITY_EDITOR
         Debug.Log($"[SYSTEM] LOAD MAP {maps.Count}");
@@ -135,16 +147,43 @@ public static class MapManager
     {
         TilemapInfoJson data = new TilemapInfoJson(info);
         DataManager.SerializeJson(path, mapName, data);
-        if (maps.Contains(mapName) == false) maps.Add(mapName);
+        Map map = new Map(mapName, info);
+        if (maps.ContainsKey(mapName) == false) maps.Add(mapName, map);
     }
 
-    public static async Task<Map> LoadMap(string mapName)
+    public static Map LoadMap(string mapName)
     {
-        TilemapInfoJson data = await DataManager.DeserializeJson<TilemapInfoJson>(path, mapName);
-        if (data == null) return null;
+        if (maps.ContainsKey(mapName)) return maps[mapName];
+        return null;
+    }
 
-        TilemapInfo info = new TilemapInfo(data);
+    public static void ResetCustomData()
+    {
+        CurProgress = 0;
+        TotalProgress = 9999;
 
-        return new Map(mapName, info);
+        while (maps.Count > originDataAmount)
+        {
+            int index = maps.Count - 1;
+            maps.Remove(keys[index]);
+            keys.RemoveAt(index);
+        }
+    }
+
+    public static async Task LoadCustomData(List<string> pathes)
+    {
+        TotalProgress = pathes.Count;
+        foreach (var path in pathes)
+        {
+            CurProgress++;
+            string mapName = DataManager.FileNameTriming(path);
+
+            TilemapInfoJson data = await DataManager.DeserializeJson<TilemapInfoJson>(path);
+            if (data == null) continue;
+
+            TilemapInfo info = new TilemapInfo(data);
+            maps.Add(mapName, new Map(mapName, info));
+        }
+        keys = maps.Keys.ToList();
     }
 }

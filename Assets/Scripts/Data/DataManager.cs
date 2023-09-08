@@ -104,11 +104,60 @@ namespace Data
 
             return obj;
         }
+        public static async Task<T> DeserializeJson<T>(string path)
+        {
+            if (path.Contains(".json") == false) path += ".json";
+            path = UnityEngine.Application.streamingAssetsPath + path;
+
+            T obj = default(T);
+
+            using (UnityWebRequest req = UnityWebRequest.Get(path))
+            {
+                req.SendWebRequest();
+
+                try
+                {
+                    while (!req.isDone) await Task.Yield();
+                    string json = req.downloadHandler.text;
+                    obj = JsonUtility.FromJson<T>(json);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"{e}");
+                }
+            }
+
+            return obj;
+        }
 
         public static async Task<List<T>> DeserializeListJson<T>(string path, string fileName)
         {
             if (fileName.Contains(".json") == false) fileName += ".json";
             path = UnityEngine.Application.streamingAssetsPath + Path.Combine(path, fileName);
+            SerializableList<T> obj = null;
+
+            using (UnityWebRequest req = UnityWebRequest.Get(path))
+            {
+                req.SendWebRequest();
+
+                try
+                {
+                    while (!req.isDone) await Task.Yield();
+                    string json = req.downloadHandler.text;
+                    obj = JsonUtility.FromJson<SerializableList<T>>(json);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"{e}");
+                }
+            }
+
+            return obj.list;
+        }
+        public static async Task<List<T>> DeserializeListJson<T>(string path)
+        {
+            if (path.Contains(".json") == false) path += ".json";
+            path = UnityEngine.Application.streamingAssetsPath + path;
             SerializableList<T> obj = null;
 
             using (UnityWebRequest req = UnityWebRequest.Get(path))
@@ -180,8 +229,8 @@ namespace Data
             string[] subDataDics = { "/Tower/", "/Enemy/", "/Map/" };
             List<CustomData> datas = new List<CustomData>();
             string[] dataNames = GetDics(UnityEngine.Application.streamingAssetsPath + path);
-            
-            foreach(string dataName in dataNames)
+
+            foreach (string dataName in dataNames)
             {
                 CustomData data = new CustomData();
                 data.name = dataName;
@@ -204,9 +253,18 @@ namespace Data
                         }
                     }
                     else data.dataAmount[i] = fileNames.Count;
+
+                    if (data.dataAmount[i] > 0)
+                    {
+                        data.pathes[i] = new List<string>();
+                        for (int j = 0; j < fileNames.Count; j++)
+                        {
+                            data.pathes[i].Add(dpath + fileNames[j]);
+                        }
+                    }
                 }
 
-                if (data.dataAmount[0] != 0 || data.dataAmount[1] != 0 || data.dataAmount[2] != 0)
+                if (data.dataAmount[0] > 0 || data.dataAmount[1] > 0 || data.dataAmount[2] > 0)
                 {
                     datas.Add(data);
                 }

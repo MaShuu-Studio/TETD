@@ -20,7 +20,7 @@ public class UIController : MonoBehaviour
             return;
         }
 
-        StartLoading();
+        Loading();
 
         instance = this;
         DontDestroyOnLoad(gameObject);
@@ -143,9 +143,9 @@ public class UIController : MonoBehaviour
         }
     }
 
-    public void StartLoading()
+    public void Loading(bool b = true)
     {
-        loadingScene.SetActive(true);
+        loadingScene.SetActive(b);
     }
 
     public void Loading(float value, string progress)
@@ -221,6 +221,8 @@ public class UIController : MonoBehaviour
         }
         return false;
     }
+
+    
 
     #region Library
 
@@ -421,6 +423,15 @@ public class UIController : MonoBehaviour
     #endregion
     #endregion
 
+    #region Custom Editor
+
+    public async Task UpdateCustomData()
+    {
+        // 라이브러리와 게임준비화면을 재로드
+        library.UpdateLibrary();
+        await gameSetting.UpdateMaps();
+    }
+
     #region Map Edit Scene
     public string GetMapName()
     {
@@ -460,5 +471,6 @@ public class UIController : MonoBehaviour
     #endregion
 
     #region Round Editor
+    #endregion
     #endregion
 }
