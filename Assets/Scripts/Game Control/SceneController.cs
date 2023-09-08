@@ -127,6 +127,8 @@ public class SceneController : MonoBehaviour
     // 조금 비효율적이더라도 우선 작동하도록 함수를 추가하여 개발.
     public async void LoadCustomData(List<string>[] pathes)
     {
+        Application.runInBackground = true;
+
         // 로딩창으로 넘김
         isLoading = true;
         UIController.Instance.Loading();
@@ -149,6 +151,8 @@ public class SceneController : MonoBehaviour
 
         UIController.Instance.Loading(false);
         isLoading = false;
+
+        Application.runInBackground = false;
     }
 
     private IEnumerator CustomDataProgress()
