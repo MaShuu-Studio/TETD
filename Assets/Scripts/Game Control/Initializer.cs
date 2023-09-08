@@ -18,7 +18,6 @@ public class Initializer : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
-        Data.DataManager.MakeFileNameList();
         EnumData.EnumArray.Init();
 
         Application.targetFrameRate = 60;

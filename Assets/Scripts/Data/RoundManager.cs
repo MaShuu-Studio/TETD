@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 public static class RoundManager
 {
-    private static string path = Application.streamingAssetsPath + "/Data/";
+    private static string path = "/Data/";
 
     private static Round round;
     public static int CurProgress { get; private set; } = 0;

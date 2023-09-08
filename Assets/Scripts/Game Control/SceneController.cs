@@ -49,11 +49,11 @@ public class SceneController : MonoBehaviour
         // 각 Init Class들의 전체진행도를 구함.
         await Translator.GetTotal();
         await SpriteManager.GetTotal();
-        await SoundManager.GetTotal();
+        SoundManager.GetTotal();
         await TowerManager.GetTotal();
         await EnemyManager.GetTotal();
         TileManager.GetTotal();
-        await MapManager.GetTotal();
+        MapManager.GetTotal();
         RoundManager.GetTotal();
         CustomDataManager.GetTotal();
         UIController.GetTotal();

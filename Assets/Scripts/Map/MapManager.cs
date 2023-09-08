@@ -8,25 +8,25 @@ using System.Threading.Tasks;
 
 public static class MapManager
 {
-    private static string path = Application.streamingAssetsPath + "/Data/Map/";
+    private static string path = "/Data/Map/";
 
     public static List<string> Maps { get { return maps; } }
     private static List<string> maps;
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
 
-    public static async Task GetTotal()
+    public static void GetTotal()
     {
-        string[] files = await DataManager.GetFiles(path);
-        TotalProgress = files.Length;
+        List<string> files = DataManager.GetFileNames(path);
+        TotalProgress = files.Count;
     }
 
-    public static async Task Init()
+    public static void Init()
     {
         maps = new List<string>();
-        string[] files = await DataManager.GetFiles(path);
+        List<string> files = DataManager.GetFileNames(path);
 
-        for (int i = 0; i < files.Length; i++)
+        for (int i = 0; i < files.Count; i++)
         {
             CurProgress++;
 

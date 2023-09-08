@@ -25,32 +25,6 @@ namespace Data
         }
 
         #region Get Files
-        public static void MakeFileNameList()
-        {
-            string[] pathes =
-            {
-                "/Data/Map/",
-                "/Sounds/"
-            };
-            for (int i = 0; i < pathes.Length; i++)
-            {
-                string content = FileList(pathes[i]);
-                File.WriteAllText(UnityEngine.Application.streamingAssetsPath + pathes[i] + fileListName, content);
-            }
-        }
-        public static string FileList(string path)
-        {
-            string text = "";
-            string[] files = Directory.GetFiles(UnityEngine.Application.streamingAssetsPath + path);
-            for (int i = 0; i < files.Length; i++)
-            {
-                if (files[i].Contains(".meta") || files[i].Contains(".txt")) continue;
-                string file = Path.GetFileName(files[i]);
-                text += path + file + fileListSplit;
-            }
-            text = text.Substring(0, text.Length - fileListSplit.Length);
-            return text;
-        }
         public static string FileNameTriming(string fileName)
         {
             string[] split = fileName.Split("/");
@@ -59,28 +33,6 @@ namespace Data
             fileName = split[0];
 
             return fileName;
-        }
-
-        public static async Task<string[]> GetFiles(string path)
-        {
-            string[] files = null;
-            path += fileListName;
-            using (UnityWebRequest req = UnityWebRequest.Get(path))
-            {
-                req.SendWebRequest();
-
-                try
-                {
-                    while (!req.isDone) await Task.Yield();
-                    files = req.downloadHandler.text.Split(fileListSplit);
-                }
-                catch (Exception e)
-                {
-                    Debug.Log($"{e}");
-                }
-            }
-
-            return files;
         }
 
         // 윈도우 플랫폼에서만 작동함.
@@ -130,7 +82,7 @@ namespace Data
         public static async Task<T> DeserializeJson<T>(string path, string fileName)
         {
             if (fileName.Contains(".json") == false) fileName += ".json";
-            path = Path.Combine(path, fileName);
+            path = UnityEngine.Application.streamingAssetsPath + Path.Combine(path, fileName);
 
             T obj = default(T);
 

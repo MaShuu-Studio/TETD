@@ -10,25 +10,26 @@ public static class SoundManager
     private static Dictionary<string, AudioClip> sounds;
     public static List<string> Keys { get { return keys; } }
     private static List<string> keys;
-    private static string path = Application.streamingAssetsPath + "/Sounds/";
+    private static string path = "/Sounds/";
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
-    public static async Task GetTotal()
+    public static void GetTotal()
     {
-        string[] fileNames = await DataManager.GetFiles(path);
-        TotalProgress = fileNames.Length;
+        List<string> fileNames = DataManager.GetFileNames(path);
+        TotalProgress = fileNames.Count;
 
         sounds = new Dictionary<string, AudioClip>();
     }
 
     public static async Task Init()
     {
-        string[] fileNames = await DataManager.GetFiles(path);
+        List<string> fileNames = DataManager.GetFileNames(path);
 
-        for (int i = 0; i < fileNames.Length; i++)
+        for (int i = 0; i < fileNames.Count; i++)
         {
             CurProgress++;
-            AudioClip clip = await DataManager.LoadSound(fileNames[i], AudioType.WAV);
+            string filePath = path + fileNames[i];
+            AudioClip clip = await DataManager.LoadSound(filePath, AudioType.WAV);
             sounds.Add(DataManager.FileNameTriming(fileNames[i]).ToUpper(), clip);
         }
         keys = sounds.Keys.ToList();
