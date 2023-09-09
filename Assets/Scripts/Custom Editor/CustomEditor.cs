@@ -10,11 +10,14 @@ public class CustomEditor : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dataNameText;
     [SerializeField] private GameObject[] infoObjects;
     [SerializeField] private TextMeshProUGUI[] infoTexts;
+    [SerializeField] private GameObject editButton;
     private bool[] loadData;
+    private int selectedData;
 
     public void Init()
     {
         selectDataButtonPrefab.gameObject.SetActive(false);
+        editButton.SetActive(false);
         loadData = new bool[CustomDataManager.Datas.Count];
 
         for (int i = 0; i < CustomDataManager.Datas.Count; i++)
@@ -38,6 +41,9 @@ public class CustomEditor : MonoBehaviour
 
     public void SelectData(int index)
     {
+        editButton.SetActive(true);
+        selectedData = index;
+
         CustomData data = CustomDataManager.Datas[index];
         dataNameText.gameObject.SetActive(true);
         dataNameText.text = data.name;
@@ -55,6 +61,11 @@ public class CustomEditor : MonoBehaviour
     public void AddData(int index, bool b)
     {
         loadData[index] = b;
+    }
+
+    public void Edit()
+    {
+        GameController.Instance.EditCustomData(CustomDataManager.Datas[selectedData].pathes);
     }
 
     public void Apply()

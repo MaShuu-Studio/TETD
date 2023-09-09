@@ -17,17 +17,14 @@ public class MapEditorPanel : MonoBehaviour
 
     private RectTransform rectTransform;
 
-    private void Awake()
+    public void Init()
     {
         rectTransform = GetComponent<RectTransform>();
         tiles = new List<MapEditorTile>[4];
         for (int i = 0; i < tiles.Length; i++)
             tiles[i] = new List<MapEditorTile>();
         backgrounds = new List<MapEditorBackgroundTile>();
-    }
 
-    public void Init()
-    {
         foreach (var list in tiles)
         {
             foreach (var tile in list)

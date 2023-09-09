@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
@@ -29,7 +29,7 @@ public class UIController : MonoBehaviour
 
     [Header("Scenes")]
     [SerializeField] private GameObject loadingScene;
-    [SerializeField] private List<GameObject> scenes;
+    [SerializeField] private GameObject[] scenes;
     public int OpenScene { get { return openScene; } }
     private int openScene;
 
@@ -41,8 +41,6 @@ public class UIController : MonoBehaviour
     [Space]
     [Header("Title")]
     [SerializeField] private GameSettingController gameSetting;
-    [SerializeField] private CustomEditor customEditor;
-    [SerializeField] private TMP_InputField mapNameInputfield;
 
     [Space]
     [SerializeField] private Library library;
@@ -68,20 +66,27 @@ public class UIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private TextMeshProUGUI infoText;
     [SerializeField] private Slider expSlider;
-    [SerializeField] private List<TextMeshProUGUI> statText;
+    [SerializeField] private TextMeshProUGUI[] statText;
     [SerializeField] private TextMeshProUGUI bonusText;
 
-    [Header("Tower Panel")]
+    [Space]
     [SerializeField] private TowerPanel towerPanel;
 
-    [Header("Shop")]
+    [Space]
     [SerializeField] private Shop shop;
 
-    [Header("Tower Info")]
+    [Space]
     [SerializeField] private TowerInfoPanel towerInfoPanel;
 
     [Header("ETC")]
     [SerializeField] private DescriptionPopup descPopup;
+
+    [Space]
+    [Header("Custom Editor")]
+    [SerializeField] private CustomEditor customEditor;
+    [SerializeField] private GameObject[] editorUI; // main, map, unit, round
+    [SerializeField] private TextMeshProUGUI selectedMapNameText;
+    private int selectedMap;
 
     [Space]
     [Header("Map Editor")]
@@ -103,7 +108,7 @@ public class UIController : MonoBehaviour
 
     public async Task Init()
     {
-        for (int i = 0; i < scenes.Count; i++)
+        for (int i = 0; i < scenes.Length; i++)
             scenes[i].SetActive(true);
 
         await library.Init();
@@ -112,9 +117,14 @@ public class UIController : MonoBehaviour
 
         shop.Init();
 
+        for (int i = 0; i < editorUI.Length; i++)
+        {
+            editorUI[i].SetActive(true);
+        }
         mapEditorPanel.Init();
         unitEditor.Init();
         customEditor.Init();
+
         await gameSetting.Init();
 
         CurProgress++;
@@ -156,7 +166,7 @@ public class UIController : MonoBehaviour
 
     public void ChangeScene(int index)
     {
-        for (int i = 0; i < scenes.Count; i++)
+        for (int i = 0; i < scenes.Length; i++)
         {
             bool b = (i == index);
             scenes[i].SetActive(b);
@@ -167,7 +177,7 @@ public class UIController : MonoBehaviour
 
     public void Title()
     {
-        mapNameInputfield.text = "";
+
     }
 
     public void OpenSetting(bool b)
@@ -318,7 +328,7 @@ public class UIController : MonoBehaviour
     }
     public void UpdateStat(Character c)
     {
-        for (int i = 0; i < statText.Count; i++)
+        for (int i = 0; i < statText.Length; i++)
         {
             statText[i].text = string.Format("{0:#0}", c.GetStat((Element)(i / 2), (Character.ElementStatType)(i % 2)));
         }
@@ -425,6 +435,30 @@ public class UIController : MonoBehaviour
 
     #region Custom Editor
 
+    public void ChangeCustomEditorUI(int index)
+    {
+        for (int i = 0; i < editorUI.Length; i++)
+            editorUI[i].SetActive(i == index);
+    }
+
+    public void EditCustomData()
+    {
+        ChangeCustomEditorUI(0);
+        selectedMap = 0;
+        selectedMapNameText.text = MapManager.CustomDataKeys[selectedMap];
+    }
+
+    public void SelectMap(bool next)
+    {
+        if (next) selectedMap++;
+        else selectedMap--;
+
+        if (selectedMap > MapManager.CustomDataKeys.Count - 1) selectedMap = 0;
+        else if (selectedMap < 0) selectedMap = MapManager.CustomDataKeys.Count - 1;
+
+        selectedMapNameText.text = MapManager.CustomDataKeys[selectedMap];
+    }
+
     public async Task UpdateCustomData()
     {
         // 라이브러리와 게임준비화면을 재로드
@@ -435,11 +469,12 @@ public class UIController : MonoBehaviour
     #region Map Edit Scene
     public string GetMapName()
     {
-        return mapNameInputfield.text;
+        return selectedMapNameText.text;
     }
 
     public void EditMap(string mapName)
     {
+        ChangeCustomEditorUI(1);
         mapNameText.text = mapName;
         /*
         int count = Mathf.CeilToInt(tileList.childCount / 2);
@@ -456,6 +491,7 @@ public class UIController : MonoBehaviour
     #region Unit Editor
     public void EditUnit()
     {
+        ChangeCustomEditorUI(2);
         unitEditor.EditUnit();
     }
 

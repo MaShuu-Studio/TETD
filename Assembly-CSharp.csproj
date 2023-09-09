@@ -100,7 +100,6 @@
     <Compile Include="Assets\Scripts\Game Control\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\UnitEditorUnitIcon.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfo.cs" />
-    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\EditUnitButton.cs" />
     <Compile Include="Assets\Scripts\Map\MapEditorTile.cs" />
     <Compile Include="Assets\Scripts\UI\DamageUI.cs" />
     <Compile Include="Assets\Scripts\Game Control\SceneController.cs" />
@@ -140,6 +139,7 @@
     <Compile Include="Assets\Scripts\Data\CustomDataManager.cs" />
     <Compile Include="Assets\Scripts\Object\Projectile.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
+    <Compile Include="Assets\Scripts\UI\Scriptable Buttons\EditorToTitleButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

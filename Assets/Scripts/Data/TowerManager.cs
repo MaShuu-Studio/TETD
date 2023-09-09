@@ -113,7 +113,6 @@ public static class TowerManager
                 anim.Add(type, s);
             }
         }
-
         return anim;
     }
 
@@ -169,7 +168,7 @@ public static class TowerManager
                 customDataIndexes[i, j] = 0;
             }
         }
-
+        customDataKeys.Clear();
         while (keys.Count > originDataAmount)
         {
             int index = keys.Count - 1;
@@ -191,6 +190,12 @@ public static class TowerManager
 
     public static async Task LoadCustomData(List<string> pathes)
     {
+        if (pathes == null)
+        {
+            TotalProgress = 0;
+            return;
+        }
+
         // CustomData의 index범위를 element, grade 별 1000으로 잡아서 활용. 0~999
         // 이를 넘는다면 더이상 추가할 수 없도록 함. 관련 코드 기입 필요.
 
@@ -222,12 +227,12 @@ public static class TowerManager
 
             int id = 4000000 + element * 10000 + grade * 1000 + (customDataIndexes[element,grade]++);
 
-            CurProgress++;
-
             Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
             Tower tower = new Tower(data, anim);
+            keys.Add(id);
             towers.Add(id, tower);
             egTowerIds[element, grade].Add(id);
+            customDataKeys.Add(id);
             await SpriteManager.AddSprite<Tower>(data.imgsrc, id, data.pivot, data.pixelperunit);
 
             Sprite[] effect = await MakeObjects(data, "EFFECT");
@@ -235,6 +240,8 @@ public static class TowerManager
 
             Sprite[] proj = await MakeObjects(data, "WEAPON");
             if (proj != null) projectiles.Add(id, proj);
+
+            CurProgress++;
         }
     }
 
@@ -290,14 +297,16 @@ public static class TowerManager
 
     public static void RemoveData(int id, int element, int grade)
     {
+        Debug.Log($"Remove {id}");
         if (towers.ContainsKey(id))
         {
             towers.Remove(id);
             effects.Remove(id);
             projectiles.Remove(id);
             keys.Remove(id);
-            customDataKeys.Remove(id);
             egTowerIds[element, grade].Remove(id);
+
+            SpriteManager.RemoveData(id);
         }
     }
 }

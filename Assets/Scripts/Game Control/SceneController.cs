@@ -23,7 +23,7 @@ public class SceneController : MonoBehaviour
     }
 
     private string[] SceneNames { get; }
-    = { "Title", "Game Scene", "Map Editor", "Unit Editor", "Round Editor" };
+    = { "Title", "Game Scene", "Custom Editor"};
 
     private const string LoadingScene = "Loading";
     public bool IsLoading { get { return isLoading; } }
@@ -125,13 +125,17 @@ public class SceneController : MonoBehaviour
     }
 
     // 조금 비효율적이더라도 우선 작동하도록 함수를 추가하여 개발.
-    public async void LoadCustomData(List<string>[] pathes)
+    public async void LoadCustomData(List<string>[] pathes, bool edit = false)
     {
         Application.runInBackground = true;
 
         // 로딩창으로 넘김
         isLoading = true;
         UIController.Instance.Loading();
+
+        TowerManager.ResetCustomData();
+        EnemyManager.ResetCustomData();
+        MapManager.ResetCustomData();
 
         IEnumerator co = CustomDataProgress();
         StartCoroutine(co);
@@ -153,6 +157,12 @@ public class SceneController : MonoBehaviour
         isLoading = false;
 
         Application.runInBackground = false;
+        if (edit)
+        {
+            List<SceneAction> actions = new List<SceneAction>();
+            actions.Add(new SceneAction(() => UIController.Instance.EditCustomData()));
+            ChangeScene("Custom Editor", actions);
+        }
     }
 
     private IEnumerator CustomDataProgress()

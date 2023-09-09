@@ -149,8 +149,9 @@ public static class EnemyManager
         {
             enemies.Remove(id);
             keys.Remove(id);
-            customDataKeys.Remove(id);
             egEnemyIds[element, grade].Remove(id);
+
+            SpriteManager.RemoveData(id);
         }
     }
     public static void ResetCustomData()
@@ -165,6 +166,7 @@ public static class EnemyManager
                 customDataIndexes[i, j] = 0;
             }
         }
+        customDataKeys.Clear();
 
         while (keys.Count > originDataAmount)
         {
@@ -187,6 +189,12 @@ public static class EnemyManager
 
     public static async Task LoadCustomData(List<string> pathes)
     {
+        if (pathes == null)
+        {
+            TotalProgress = 0;
+            return;
+        }
+
         // CustomData의 index범위를 element, grade 별 1000으로 잡아서 활용. 0~999
         // 이를 넘는다면 더이상 추가할 수 없도록 함. 관련 코드 기입 필요.
 
@@ -222,9 +230,10 @@ public static class EnemyManager
             await SpriteManager.AddSprite<Enemy>(data.imgsrc, id, data.pivot, data.pixelperunit);
 
             Enemy enemy = new Enemy(data, anim);
+            keys.Add(id);
             enemies.Add(id, enemy);
             egEnemyIds[(int)enemy.element, (int)enemy.grade].Add(id);
-
+            customDataKeys.Add(id);
             CurProgress++;
         }
     }

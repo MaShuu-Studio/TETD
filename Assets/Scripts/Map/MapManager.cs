@@ -19,6 +19,8 @@ public static class MapManager
     public static int TotalProgress { get; private set; }
 
     private static int originDataAmount;
+    public static List<string> CustomDataKeys { get { return customDataKeys; } }
+    private static List<string> customDataKeys;
 
     public static void GetTotal()
     {
@@ -30,6 +32,7 @@ public static class MapManager
     {
         maps = new Dictionary<string, Map>();
         List<string> files = DataManager.GetFileNames(path);
+        customDataKeys = new List<string>();
 
         for (int i = 0; i < files.Count; i++)
         {
@@ -161,6 +164,7 @@ public static class MapManager
     {
         CurProgress = 0;
         TotalProgress = 9999;
+        customDataKeys.Clear();
 
         while (maps.Count > originDataAmount)
         {
@@ -172,10 +176,15 @@ public static class MapManager
 
     public static async Task LoadCustomData(List<string> pathes)
     {
+        if (pathes == null)
+        {
+            TotalProgress = 0;
+            return;
+        }
+
         TotalProgress = pathes.Count;
         foreach (var path in pathes)
         {
-            CurProgress++;
             string mapName = DataManager.FileNameTriming(path);
 
             TilemapInfoJson data = await DataManager.DeserializeJson<TilemapInfoJson>(path);
@@ -183,6 +192,8 @@ public static class MapManager
 
             TilemapInfo info = new TilemapInfo(data);
             maps.Add(mapName, new Map(mapName, info));
+            customDataKeys.Add(mapName);
+            CurProgress++;
         }
         keys = maps.Keys.ToList();
     }

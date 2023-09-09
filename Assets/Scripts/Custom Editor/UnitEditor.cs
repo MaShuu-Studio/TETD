@@ -625,7 +625,6 @@ public class UnitEditor : MonoBehaviour
         int.TryParse(id.Substring(2, 1), out grade);
 
         Translator.RemoveData(selectedId);
-        SpriteManager.RemoveData(selectedId);
         if (isTower)
             TowerManager.RemoveData(selectedId, element, grade);
         else

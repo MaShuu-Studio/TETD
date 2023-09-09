@@ -56,9 +56,14 @@ public class GameController : MonoBehaviour
 
         paused = false;
         UIController.Instance.OpenSetting(paused);
+
+        // 임시 처리 방식
+        TowerManager.ResetCustomData();
+        EnemyManager.ResetCustomData();
+        MapManager.ResetCustomData();
     }
 
-    public async void StartGame()
+    public void StartGame()
     {
         CharacterType character;
         List<DifficultyType> difficulties;
@@ -77,7 +82,21 @@ public class GameController : MonoBehaviour
         SceneController.Instance.ChangeScene("Game Scene", actions);
     }
 
-    public async void EditMap()
+    public void EndEditor()
+    {/*
+        TowerManager.ResetCustomData();
+        EnemyManager.ResetCustomData();
+        MapManager.ResetCustomData();*/
+
+        Title();
+    }
+
+    public void EditCustomData(List<string>[] pathes)
+    {
+        SceneController.Instance.LoadCustomData(pathes, true);
+    }
+
+    public void EditMap()
     {
         string mapName = UIController.Instance.GetMapName();
 
@@ -85,17 +104,8 @@ public class GameController : MonoBehaviour
 
         Map map = MapManager.LoadMap(mapName);
 
-        List<SceneAction> actions = new List<SceneAction>();
-        actions.Add(new SceneAction(() => MapEditor.Instance.Init(map, mapName)));
-        actions.Add(new SceneAction(() => UIController.Instance.EditMap(mapName)));
-        SceneController.Instance.ChangeScene("Map Editor", actions);
-    }
-
-    public void EditUnit()
-    {
-        List<SceneAction> actions = new List<SceneAction>();
-        actions.Add(new SceneAction(() => UIController.Instance.EditUnit()));
-        SceneController.Instance.ChangeScene("Unit Editor", actions);
+        MapEditor.Instance.Init(map, mapName);
+        UIController.Instance.EditMap(mapName);
     }
 
     public void EditRound()
