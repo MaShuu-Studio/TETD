@@ -63,7 +63,7 @@ public static class TowerManager
         foreach (var data in list)
         {
             CurProgress++;
-
+            
             Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
             Tower tower = new Tower(data, anim);
             towers.Add(tower.id, tower);
@@ -90,7 +90,7 @@ public static class TowerManager
     private static async Task<Dictionary<AnimationType, Sprite[]>> MakeAnimation(TowerData data)
     {
         Dictionary<AnimationType, Sprite[]> anim = new Dictionary<AnimationType, Sprite[]>();
-
+        
         for (int i = 0; i < EnumArray.AnimationTypes.Length; i++)
         {
             AnimationType type = EnumArray.AnimationTypes[i];
@@ -222,6 +222,8 @@ public static class TowerManager
 
             int id = 4000000 + element * 10000 + grade * 1000 + (customDataIndexes[element,grade]++);
 
+            CurProgress++;
+
             Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
             Tower tower = new Tower(data, anim);
             towers.Add(id, tower);
@@ -233,8 +235,6 @@ public static class TowerManager
 
             Sprite[] proj = await MakeObjects(data, "WEAPON");
             if (proj != null) projectiles.Add(id, proj);
-
-            CurProgress++;
         }
     }
 

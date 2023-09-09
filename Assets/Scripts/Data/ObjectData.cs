@@ -153,7 +153,6 @@ public class Tower : ObjectData
             }
             DebuffTypes = debuffs.Keys.ToArray();
         }
-
     }
 
     public Tower(Tower data)

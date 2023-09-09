@@ -528,6 +528,8 @@ namespace Data
         private static async Task<Sprite> LoadSprite(string path)
         {
             Sprite sprite = null;
+            if (File.Exists(path) == false) return null;
+
             using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(path))
             {
                 req.SendWebRequest();
@@ -555,6 +557,8 @@ namespace Data
         public static async Task<Sprite> LoadSprite(string path, Vector2 pivot, float pixelsPerUnit)
         {
             path = UnityEngine.Application.streamingAssetsPath + path;
+            if (File.Exists(path) == false) return null;
+
             Sprite sprite = null;
             using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(path))
             {
@@ -566,7 +570,6 @@ namespace Data
 
                     Texture2D texture = DownloadHandlerTexture.GetContent(req);
                     texture.filterMode = FilterMode.Point;
-
                     sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), pivot, pixelsPerUnit);
                 }
                 catch (Exception e)
@@ -582,6 +585,7 @@ namespace Data
         public static async Task<AudioClip> LoadSound(string path, AudioType type)
         {
             path = UnityEngine.Application.streamingAssetsPath + path;
+            if (File.Exists(path) == false) return null;
 
             AudioClip clip = null;
             using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(path, type))
