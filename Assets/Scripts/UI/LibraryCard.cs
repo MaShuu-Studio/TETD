@@ -77,9 +77,11 @@ public class LibraryCard : TowerInfo
 
     public override void UpdateInfo()
     {
-        base.UpdateInfo();
-
-        if (enemy == null) costText.text = data.cost.ToString();
+        if (enemy == null)
+        {
+            base.UpdateInfo();
+            costText.text = data.cost.ToString();
+        }
         else
         {
             mainStats[0].SetData(enemy.hp);

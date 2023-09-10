@@ -23,6 +23,9 @@ public static class TowerManager
     public static List<int>[,] EgTowerIds { get { return egTowerIds; } }
     private static List<int>[,] egTowerIds;
 
+    public static List<int>[] AbilityIds { get { return abilityIds; } }
+    private static List<int>[] abilityIds;
+
     public static List<int> Keys { get { return keys; } }
     private static List<int> keys;
 
@@ -59,6 +62,10 @@ public static class TowerManager
         for (int i = 0; i < EnumArray.Elements.Length; i++)
             for (int j = 0; j < EnumArray.Grades.Length; j++)
                 egTowerIds[i, j] = new List<int>();
+
+        abilityIds = new List<int>[20 + EnumArray.DebuffTypes.Length];
+        for (int i = 0; i < abilityIds.Length; i++)
+            abilityIds[i] = new List<int>();
 
         List<string> files = DataManager.GetFileNames(path);
         List<TowerData> list = new List<TowerData>();
@@ -99,6 +106,28 @@ public static class TowerManager
         keys.Add(id);
         towers.Add(id, tower);
         egTowerIds[(int)tower.element, (int)tower.grade].Add(id);
+
+        if (tower.StatTypes != null)
+            for (int i = 3; i < tower.StatTypes.Length; i++)
+            {
+                int type = (int)tower.StatTypes[i];
+                abilityIds[type].Add(id);
+            }
+
+        if (tower.BuffTypes != null)
+            for (int i = 0; i < tower.BuffTypes.Length; i++)
+            {
+                int type = 10 + (int)tower.BuffTypes[i];
+                abilityIds[type].Add(id);
+            }
+
+        if (tower.DebuffTypes != null)
+            for (int i = 0; i < tower.DebuffTypes.Length; i++)
+            {
+                int type = 20 + (int)tower.DebuffTypes[i];
+                abilityIds[type].Add(id);
+            }
+
         CurProgress++;
     }
 
@@ -305,6 +334,11 @@ public static class TowerManager
             projectiles.Remove(id);
             keys.Remove(id);
             egTowerIds[element, grade].Remove(id);
+            for (int i = 0; i < abilityIds.Length; i++)
+            {
+                if (abilityIds[i].Contains(id))
+                    abilityIds[i].Remove(id);
+            }    
 
             SpriteManager.RemoveData(id);
         }

@@ -16,6 +16,9 @@ public class Library : MonoBehaviour
     [SerializeField] private LibraryFilterToggle[] elementFilterToggles;
     [SerializeField] private LibraryFilterToggle[] gradeFilterToggles;
     [SerializeField] private LibraryFilterToggle[] enemyGradeFilterToggles;
+    [SerializeField] private LibraryFilterToggle[] statFilterToggles;
+    [SerializeField] private LibraryFilterToggle[] buffFilterToggles;
+    [SerializeField] private LibraryFilterToggle[] debuffFilterToggles;
 
     [SerializeField] private TextMeshProUGUI pageText;
 
@@ -60,6 +63,22 @@ public class Library : MonoBehaviour
             enemyGradeFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.ENEMYGRADE, i);
         }
 
+        // 임시 코드. 후에 Ability로 통합되게 되면 수정.
+        // 기본적으로 능력 필터는 끈 상태로 시작.
+        int a = 0;
+        for (int i = 3; i < EnumData.EnumArray.TowerStatTypes.Length; i++)
+        {
+            statFilterToggles[a++].Init((int)SpriteManager.ETCDataNumber.TOWERSTAT, i, false);
+        }
+        for (int i = 0; i < EnumData.EnumArray.BuffTypes.Length; i++)
+        {
+            buffFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.BUFF, i, false);
+        }
+        for (int i = 0; i < EnumData.EnumArray.DebuffTypes.Length; i++, a++)
+        {
+            debuffFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.DEBUFF, i, false);
+        }
+
         UpdateLibrary();
     }
 
@@ -91,10 +110,49 @@ public class Library : MonoBehaviour
                 for (int g = 0; g < gradeFilterToggles.Length; g++)
                 {
                     if (gradeFilterToggles[g].isOn == false) continue;
-
                     for (int i = 0; i < TowerManager.EgTowerIds[e, g].Count; i++)
                     {
-                        ids.Add(TowerManager.EgTowerIds[e, g][i]);
+                        int id = TowerManager.EgTowerIds[e, g][i];
+                        bool add = true;
+
+                        // 필터가 꺼져있는 것은 상관이 없음.
+                        // 그러나 필터가 켜져있다면 해당되지 않는 id는 넣지 않아야함.
+                        // 따라서 기본적으로 추가를 전제하에 진행하며
+                        // 만약에 필터가 켜져있었는데 해당 id가 해당 ability가 없다면 스킵.
+                        for (int s = 0; add && s < statFilterToggles.Length; s++)
+                        {
+                            if (statFilterToggles[s].isOn == false) continue;
+                            int type = s + 3;
+                            if (TowerManager.AbilityIds[type].Contains(id) == false)
+                            {
+                                add = false;
+                                break;
+                            }
+                        }
+
+                        for (int b = 0; add && b < buffFilterToggles.Length; b++)
+                        {
+                            if (buffFilterToggles[b].isOn == false) continue;
+                            int type = 10 + b;
+                            if (TowerManager.AbilityIds[type].Contains(id) == false)
+                            {
+                                add = false;
+                                break;
+                            }
+                        }
+
+                        for (int d = 0; add && d < debuffFilterToggles.Length; d++)
+                        {
+                            if (debuffFilterToggles[d].isOn == false) continue;
+                            int type = 20 + d;
+                            if (TowerManager.AbilityIds[type].Contains(id) == false)
+                            {
+                                add = false;
+                                break;
+                            }
+                        }
+
+                        if (add) ids.Add(id);
                     }
                 }
             }
@@ -149,7 +207,7 @@ public class Library : MonoBehaviour
             int id = ids[index];
 
             Tower tower = TowerManager.GetTower(id);
-            if (tower != null)                items[i].SetData(tower);
+            if (tower != null) items[i].SetData(tower);
             else
             {
                 Enemy enemy = EnemyManager.GetEnemy(id);

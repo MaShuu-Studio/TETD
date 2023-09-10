@@ -41,6 +41,7 @@ public class UIController : MonoBehaviour
     [Space]
     [Header("Title")]
     [SerializeField] private GameSettingController gameSetting;
+    [SerializeField] private GameObject[] titleWindows;
 
     [Space]
     [SerializeField] private Library library;
@@ -111,6 +112,9 @@ public class UIController : MonoBehaviour
         for (int i = 0; i < scenes.Length; i++)
             scenes[i].SetActive(true);
 
+        for (int i = 0; i < titleWindows.Length; i++)
+            titleWindows[i].SetActive(true);
+
         await library.Init();
         library.Open(false);
         await optionUI.Init();
@@ -177,7 +181,8 @@ public class UIController : MonoBehaviour
 
     public void Title()
     {
-
+        for (int i = 0; i < titleWindows.Length; i++)
+            titleWindows[i].SetActive(false);
     }
 
     public void OpenSetting(bool b)
@@ -231,8 +236,6 @@ public class UIController : MonoBehaviour
         }
         return false;
     }
-
-    
 
     #region Library
 
