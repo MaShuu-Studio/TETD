@@ -8,6 +8,8 @@ using UnityEngine;
 public static class EnemyManager
 {
     public static string path { get; private set; } = "/Data/Enemy/";
+
+    public static bool isLoaded { get; private set; }
     private static Dictionary<int, Enemy> enemies;
 
     public static List<int> Keys { get { return keys; } }
@@ -36,8 +38,11 @@ public static class EnemyManager
         }
     }
 
-    public static async Task Init()
+    public static async void Init()
     {
+        isLoaded = false;
+
+        keys = new List<int>();
         enemies = new Dictionary<int, Enemy>();
         customDataKeys = new List<int>();
 
@@ -55,16 +60,11 @@ public static class EnemyManager
 
         foreach (var data in list)
         {
-            CurProgress++;
-            Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
-            await SpriteManager.AddSprite<Enemy>(data.imgsrc, data.id, data.pivot, data.pixelperunit);
-
-            Enemy enemy = new Enemy(data, anim);
-            enemies.Add(enemy.id, enemy);
-            egEnemyIds[(int)enemy.element, (int)enemy.grade].Add(enemy.id);
+            AddData(data.id, data);
         }
 
-        keys = enemies.Keys.ToList();
+        while (keys.Count < list.Count) await Task.Yield();
+        isLoaded = true;
 
         originDataAmount = enemies.Count;
         customDataIndexes = new int[EnumArray.Elements.Length, EnumArray.Grades.Length];
@@ -72,6 +72,19 @@ public static class EnemyManager
 #if UNITY_EDITOR
         Debug.Log($"[SYSTEM] LOAD ENEMY {enemies.Count}");
 #endif
+    }
+
+    private static async void AddData(int id, EnemyData data)
+    {
+        Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
+        await SpriteManager.AddSprite<Enemy>(data.imgsrc, id, data.pivot, data.pixelperunit);
+
+        Enemy enemy = new Enemy(data, anim);
+        enemies.Add(id, enemy);
+        egEnemyIds[(int)enemy.element, (int)enemy.grade].Add(id);
+        keys.Add(id);
+
+        CurProgress++;
     }
 
     private static async Task<Dictionary<AnimationType, Sprite[]>> MakeAnimation(EnemyData data)
@@ -187,7 +200,7 @@ public static class EnemyManager
         }
     }
 
-    public static async Task LoadCustomData(List<string> pathes)
+    public static async void LoadCustomData(List<string> pathes)
     {
         if (pathes == null)
         {
@@ -223,18 +236,10 @@ public static class EnemyManager
             grade = originId % 10000; // AEE 제거
             grade = grade / 1000; // NNN 제거
 
-
             int id = 5000000 + element * 10000 + grade * 1000 + (customDataIndexes[element, grade]++);
 
-            Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
-            await SpriteManager.AddSprite<Enemy>(data.imgsrc, id, data.pivot, data.pixelperunit);
-
-            Enemy enemy = new Enemy(data, anim);
-            keys.Add(id);
-            enemies.Add(id, enemy);
-            egEnemyIds[(int)enemy.element, (int)enemy.grade].Add(id);
+            AddData(id, data);
             customDataKeys.Add(id);
-            CurProgress++;
         }
     }
 }

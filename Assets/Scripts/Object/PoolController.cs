@@ -56,7 +56,7 @@ public class PoolController : MonoBehaviour
         projPool = new Dictionary<int, ProjectilePool>();
         effectPool = new Dictionary<int, Pool>();
 
-        while (TowerManager.Keys == null || EnemyManager.Keys == null) await Task.Yield();
+        while (TowerManager.isLoaded == false || EnemyManager.isLoaded == false) await Task.Yield();
 
         for (int i = 0; i < TowerManager.Keys.Count; i++)
         {

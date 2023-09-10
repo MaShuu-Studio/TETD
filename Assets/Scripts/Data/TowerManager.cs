@@ -10,6 +10,8 @@ public static class TowerManager
 {
     public static string path { get; private set; } = "/Data/Tower/";
 
+    public static bool isLoaded { get; private set; }
+
     private static Dictionary<int, Tower> towers;
     public static Dictionary<int, Sprite[]> Projs { get { return projectiles; } }
     private static Dictionary<int, Sprite[]> projectiles;
@@ -20,6 +22,7 @@ public static class TowerManager
     // 0: elemental, 1: grade, List: Id
     public static List<int>[,] EgTowerIds { get { return egTowerIds; } }
     private static List<int>[,] egTowerIds;
+
     public static List<int> Keys { get { return keys; } }
     private static List<int> keys;
 
@@ -41,14 +44,18 @@ public static class TowerManager
         }
     }
 
-    public static async Task Init()
+    public static async void Init()
     {
+        isLoaded = false;
+
+        keys = new List<int>();
         towers = new Dictionary<int, Tower>();
         projectiles = new Dictionary<int, Sprite[]>();
         effects = new Dictionary<int, Sprite[]>();
         customDataKeys = new List<int>();
 
         egTowerIds = new List<int>[EnumArray.Elements.Length, EnumArray.Grades.Length];
+
         for (int i = 0; i < EnumArray.Elements.Length; i++)
             for (int j = 0; j < EnumArray.Grades.Length; j++)
                 egTowerIds[i, j] = new List<int>();
@@ -62,22 +69,11 @@ public static class TowerManager
 
         foreach (var data in list)
         {
-            CurProgress++;
-            
-            Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
-            Tower tower = new Tower(data, anim);
-            towers.Add(tower.id, tower);
-            egTowerIds[(int)tower.element, (int)tower.grade].Add(tower.id);
-            await SpriteManager.AddSprite<Tower>(data.imgsrc, tower.id, data.pivot, data.pixelperunit);
-
-            Sprite[] effect = await MakeObjects(data, "EFFECT");
-            if (effect != null) effects.Add(tower.id, effect);
-
-            Sprite[] proj = await MakeObjects(data, "WEAPON");
-            if (proj != null) projectiles.Add(tower.id, proj);
+            AddData(data.id, data);
         }
-
-        keys = towers.Keys.ToList();
+        
+        while (keys.Count < list.Count) await Task.Yield();
+        isLoaded = true;
 
         originDataAmount = towers.Count;
         customDataIndexes = new int[EnumArray.Elements.Length, EnumArray.Grades.Length];
@@ -87,10 +83,29 @@ public static class TowerManager
 #endif
     }
 
+    private static async void AddData(int id, TowerData data)
+    {
+        Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
+        Tower tower = new Tower(data, anim);
+
+        await SpriteManager.AddSprite<Tower>(data.imgsrc, id, data.pivot, data.pixelperunit);
+
+        Sprite[] effect = await MakeObjects(data, "EFFECT");
+        if (effect != null) effects.Add(id, effect);
+
+        Sprite[] proj = await MakeObjects(data, "WEAPON");
+        if (proj != null) projectiles.Add(id, proj);
+
+        keys.Add(id);
+        towers.Add(id, tower);
+        egTowerIds[(int)tower.element, (int)tower.grade].Add(id);
+        CurProgress++;
+    }
+
     private static async Task<Dictionary<AnimationType, Sprite[]>> MakeAnimation(TowerData data)
     {
         Dictionary<AnimationType, Sprite[]> anim = new Dictionary<AnimationType, Sprite[]>();
-        
+
         for (int i = 0; i < EnumArray.AnimationTypes.Length; i++)
         {
             AnimationType type = EnumArray.AnimationTypes[i];
@@ -188,7 +203,7 @@ public static class TowerManager
         }
     }
 
-    public static async Task LoadCustomData(List<string> pathes)
+    public static async void LoadCustomData(List<string> pathes)
     {
         if (pathes == null)
         {
@@ -224,24 +239,10 @@ public static class TowerManager
             grade = originId % 10000; // AEE 제거
             grade = grade / 1000; // NNN 제거
 
+            int id = 4000000 + element * 10000 + grade * 1000 + (customDataIndexes[element, grade]++);
 
-            int id = 4000000 + element * 10000 + grade * 1000 + (customDataIndexes[element,grade]++);
-
-            Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(data);
-            Tower tower = new Tower(data, anim);
-            keys.Add(id);
-            towers.Add(id, tower);
-            egTowerIds[element, grade].Add(id);
+            AddData(id, data);
             customDataKeys.Add(id);
-            await SpriteManager.AddSprite<Tower>(data.imgsrc, id, data.pivot, data.pixelperunit);
-
-            Sprite[] effect = await MakeObjects(data, "EFFECT");
-            if (effect != null) effects.Add(id, effect);
-
-            Sprite[] proj = await MakeObjects(data, "WEAPON");
-            if (proj != null) projectiles.Add(id, proj);
-
-            CurProgress++;
         }
     }
 
@@ -297,7 +298,6 @@ public static class TowerManager
 
     public static void RemoveData(int id, int element, int grade)
     {
-        Debug.Log($"Remove {id}");
         if (towers.ContainsKey(id))
         {
             towers.Remove(id);

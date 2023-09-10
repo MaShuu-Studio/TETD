@@ -459,11 +459,11 @@ public class UIController : MonoBehaviour
         selectedMapNameText.text = MapManager.CustomDataKeys[selectedMap];
     }
 
-    public async Task UpdateCustomData()
+    public void UpdateCustomData()
     {
         // 라이브러리와 게임준비화면을 재로드
         library.UpdateLibrary();
-        await gameSetting.UpdateMaps();
+        gameSetting.UpdateMaps();
     }
 
     #region Map Edit Scene

@@ -17,7 +17,7 @@ public static class RoundManager
         TotalProgress = 1;
     }
 
-    public static async Task Init()
+    public static async void Init()
     {
         CurProgress++;
         RoundData data = await DataManager.DeserializeJson<RoundData>(path, "Round");

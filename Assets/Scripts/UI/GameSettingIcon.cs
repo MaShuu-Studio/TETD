@@ -12,7 +12,7 @@ public class GameSettingIcon : MonoBehaviour
     protected Image image;
 
     private GameSettingController gameSetting;
-    private string name;
+    private string infoName;
     private string desc;
 
     private static Color g = new Color(0.25f, 0.25f, 0.25f, 1);
@@ -31,7 +31,7 @@ public class GameSettingIcon : MonoBehaviour
     {
         if (gameSetting != null && UIController.PointOverUI(gameObject))
         {
-            gameSetting.ShowInfo(name, desc);
+            gameSetting.ShowInfo(infoName, desc);
         }
     }
 
@@ -40,7 +40,7 @@ public class GameSettingIcon : MonoBehaviour
         if (toggle == null) toggle = GetComponent<Toggle>();
         if (image == null) image = GetComponent<Image>();
         image.sprite = sprite;
-        name = lang.name;
+        infoName = lang.name;
         desc = lang.desc;
         this.gameSetting = gameSetting;
 
@@ -51,7 +51,7 @@ public class GameSettingIcon : MonoBehaviour
 
     public void UpdateLanguage(Language lang)
     {
-        name = lang.name;
+        infoName = lang.name;
         desc = lang.desc;
     }
 

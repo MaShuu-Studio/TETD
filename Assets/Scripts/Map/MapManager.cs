@@ -28,7 +28,7 @@ public static class MapManager
         TotalProgress = files.Count;
     }
 
-    public static async Task Init()
+    public static async void Init()
     {
         maps = new Dictionary<string, Map>();
         List<string> files = DataManager.GetFileNames(path);
@@ -174,7 +174,7 @@ public static class MapManager
         }
     }
 
-    public static async Task LoadCustomData(List<string> pathes)
+    public static async void LoadCustomData(List<string> pathes)
     {
         if (pathes == null)
         {

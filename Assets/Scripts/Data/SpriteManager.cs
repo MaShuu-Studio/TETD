@@ -37,7 +37,7 @@ public static class SpriteManager
         ENEMYSTAT = 3300000, ENEMYGRADE = 3301000,
     }
 
-    public static async Task Init()
+    public static async void Init()
     {
         /* ETC Data id ³Ñ¹ö¸µ
             - STAT: 3ABBCCC

@@ -40,7 +40,7 @@ public static class TileManager
         TotalProgress = flagNames.Length + files.Count + backgroundNames.Length;
     }
 
-    public static async Task Init()
+    public static async void Init()
     {
         flags = new Dictionary<string, CustomRuleTile>();
 

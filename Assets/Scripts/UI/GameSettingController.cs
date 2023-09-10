@@ -110,7 +110,7 @@ public class GameSettingController : MonoBehaviour
         mapButtonsRect.sizeDelta = new Vector2(300, size);
     }
 
-    public async Task UpdateMaps()
+    public void UpdateMaps()
     {
         foreach(var icon in mapIcons)
         {

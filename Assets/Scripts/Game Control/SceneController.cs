@@ -151,7 +151,7 @@ public class SceneController : MonoBehaviour
             await Task.Yield();
 
         // 데이터 재로드
-        await UIController.Instance.UpdateCustomData();
+        UIController.Instance.UpdateCustomData();
 
         UIController.Instance.Loading(false);
         isLoading = false;

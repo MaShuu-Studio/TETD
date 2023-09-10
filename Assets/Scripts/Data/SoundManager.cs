@@ -21,7 +21,7 @@ public static class SoundManager
         sounds = new Dictionary<string, AudioClip>();
     }
 
-    public static async Task Init()
+    public static async void Init()
     {
         List<string> fileNames = DataManager.GetFileNames(path);
 
