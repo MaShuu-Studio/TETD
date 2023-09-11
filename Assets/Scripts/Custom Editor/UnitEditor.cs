@@ -266,12 +266,10 @@ public class UnitEditor : MonoBehaviour
         }
         towerIcons.Clear();
 
-        for (int i = 0; i < TowerManager.CustomDataKeys.Count; i++)
+        for (int i = 0; i < CustomDataManager.EditingTowerData.Count; i++)
         {
-            int id = TowerManager.CustomDataKeys[i];
-
             UnitEditorUnitIcon icon = Instantiate(unitIconPrefab);
-            icon.Init(id);
+            icon.Init(CustomDataManager.EditingTowerSprites[i]);
             icon.transform.SetParent(towerViewPort);
             icon.transform.localScale = Vector3.one;
             towerIcons.Add(icon);
@@ -285,12 +283,10 @@ public class UnitEditor : MonoBehaviour
         }
         enemyIcons.Clear();
 
-        for (int i = 0; i < EnemyManager.CustomDataKeys.Count; i++)
+        for (int i = 0; i < CustomDataManager.EditingEnemyData.Count; i++)
         {
-            int id = EnemyManager.CustomDataKeys[i];
-
             UnitEditorUnitIcon icon = Instantiate(unitIconPrefab);
-            icon.Init(id);
+            icon.Init(CustomDataManager.EditingEnemySprites[i]);
             icon.transform.SetParent(enemyViewPort);
             icon.transform.localScale = Vector3.one;
             enemyIcons.Add(icon);

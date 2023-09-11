@@ -7,14 +7,11 @@ using TMPro;
 public class UnitEditorUnitIcon : ScriptableButton
 {
     [SerializeField] private Image icon;
-    [SerializeField] private TextMeshProUGUI idText;
     private int id;
 
-    public void Init(int id)
+    public void Init(Sprite sprite)
     {
-        icon.sprite = SpriteManager.GetSprite(id);
-        idText.text = id.ToString();
-        this.id = id;
+        icon.sprite = sprite;
     }
 
     protected override void ClickEvent()

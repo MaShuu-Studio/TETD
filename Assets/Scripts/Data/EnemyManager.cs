@@ -17,8 +17,6 @@ public static class EnemyManager
 
     private static int originDataAmount;
     private static int[,] customDataIndexes;
-    public static List<int> CustomDataKeys { get { return customDataKeys; } }
-    private static List<int> customDataKeys;
 
     // 0: elemental, 1: grade, List: Id
     public static List<int>[,] EgEnemyIds { get { return egEnemyIds; } }
@@ -44,7 +42,6 @@ public static class EnemyManager
 
         keys = new List<int>();
         enemies = new Dictionary<int, Enemy>();
-        customDataKeys = new List<int>();
 
         egEnemyIds = new List<int>[EnumArray.Elements.Length, EnumArray.EnemyGrades.Length];
         for (int i = 0; i < EnumArray.Elements.Length; i++)
@@ -87,7 +84,7 @@ public static class EnemyManager
         CurProgress++;
     }
 
-    private static async Task<Dictionary<AnimationType, Sprite[]>> MakeAnimation(EnemyData data)
+    public static async Task<Dictionary<AnimationType, Sprite[]>> MakeAnimation(EnemyData data)
     {
         Dictionary<AnimationType, Sprite[]> anim = new Dictionary<AnimationType, Sprite[]>();
 
@@ -152,7 +149,6 @@ public static class EnemyManager
         {
             enemies.Add(newData.id, newData);
             keys.Add(newData.id);
-            customDataKeys.Add(newData.id);
             egEnemyIds[element, grade].Add(newData.id);
         }
     }
@@ -179,7 +175,6 @@ public static class EnemyManager
                 customDataIndexes[i, j] = 0;
             }
         }
-        customDataKeys.Clear();
 
         while (keys.Count > originDataAmount)
         {
@@ -239,7 +234,6 @@ public static class EnemyManager
             int id = 5000000 + element * 10000 + grade * 1000 + (customDataIndexes[element, grade]++);
 
             AddData(id, data);
-            customDataKeys.Add(id);
         }
     }
 }

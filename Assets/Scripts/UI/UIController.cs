@@ -448,7 +448,7 @@ public class UIController : MonoBehaviour
     {
         ChangeCustomEditorUI(0);
         selectedMap = 0;
-        selectedMapNameText.text = MapManager.CustomDataKeys[selectedMap];
+        selectedMapNameText.text = CustomDataManager.EditingMapNames[selectedMap];
     }
 
     public void SelectMap(bool next)
@@ -456,10 +456,10 @@ public class UIController : MonoBehaviour
         if (next) selectedMap++;
         else selectedMap--;
 
-        if (selectedMap > MapManager.CustomDataKeys.Count - 1) selectedMap = 0;
-        else if (selectedMap < 0) selectedMap = MapManager.CustomDataKeys.Count - 1;
+        if (selectedMap > CustomDataManager.EditingMapNames.Count - 1) selectedMap = 0;
+        else if (selectedMap < 0) selectedMap = CustomDataManager.EditingMapNames.Count - 1;
 
-        selectedMapNameText.text = MapManager.CustomDataKeys[selectedMap];
+        selectedMapNameText.text = CustomDataManager.EditingMapNames[selectedMap];
     }
 
     public void UpdateCustomData()
@@ -470,6 +470,11 @@ public class UIController : MonoBehaviour
     }
 
     #region Map Edit Scene
+
+    public Map GetMap()
+    {
+        return CustomDataManager.EditingMapData[selectedMap];
+    }
     public string GetMapName()
     {
         return selectedMapNameText.text;

@@ -31,8 +31,6 @@ public static class TowerManager
 
     private static int originDataAmount;
     private static int[,] customDataIndexes;
-    public static List<int> CustomDataKeys { get { return customDataKeys; } }
-    private static List<int> customDataKeys;
 
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
@@ -55,7 +53,6 @@ public static class TowerManager
         towers = new Dictionary<int, Tower>();
         projectiles = new Dictionary<int, Sprite[]>();
         effects = new Dictionary<int, Sprite[]>();
-        customDataKeys = new List<int>();
 
         egTowerIds = new List<int>[EnumArray.Elements.Length, EnumArray.Grades.Length];
 
@@ -131,7 +128,7 @@ public static class TowerManager
         CurProgress++;
     }
 
-    private static async Task<Dictionary<AnimationType, Sprite[]>> MakeAnimation(TowerData data)
+    public static async Task<Dictionary<AnimationType, Sprite[]>> MakeAnimation(TowerData data)
     {
         Dictionary<AnimationType, Sprite[]> anim = new Dictionary<AnimationType, Sprite[]>();
 
@@ -160,7 +157,7 @@ public static class TowerManager
         return anim;
     }
 
-    private static async Task<Sprite[]> MakeObjects(TowerData data, string type)
+    public static async Task<Sprite[]> MakeObjects(TowerData data, string type)
     {
         // 투사체의 이름은 WEAPON*
         // 이펙트의 이름은 EFFECT*
@@ -212,7 +209,7 @@ public static class TowerManager
                 customDataIndexes[i, j] = 0;
             }
         }
-        customDataKeys.Clear();
+
         while (keys.Count > originDataAmount)
         {
             int index = keys.Count - 1;
@@ -271,7 +268,6 @@ public static class TowerManager
             int id = 4000000 + element * 10000 + grade * 1000 + (customDataIndexes[element, grade]++);
 
             AddData(id, data);
-            customDataKeys.Add(id);
         }
     }
 
@@ -320,7 +316,6 @@ public static class TowerManager
         {
             towers.Add(newData.id, newData);
             keys.Add(newData.id);
-            customDataKeys.Add(newData.id);
             egTowerIds[element, grade].Add(newData.id);
         }
     }

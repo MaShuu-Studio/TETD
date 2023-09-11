@@ -125,7 +125,7 @@ public class SceneController : MonoBehaviour
     }
 
     // 조금 비효율적이더라도 우선 작동하도록 함수를 추가하여 개발.
-    public async void LoadCustomData(List<string>[] pathes, bool edit = false)
+    public async void LoadCustomData(List<string>[] pathes)
     {
         Application.runInBackground = true;
 
@@ -157,14 +157,8 @@ public class SceneController : MonoBehaviour
         isLoading = false;
 
         Application.runInBackground = false;
-        if (edit)
-        {
-            List<SceneAction> actions = new List<SceneAction>();
-            actions.Add(new SceneAction(() => UIController.Instance.EditCustomData()));
-            ChangeScene("Custom Editor", actions);
-        }
     }
-
+    
     private IEnumerator CustomDataProgress()
     {
         int cur = 0;
@@ -185,11 +179,53 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    public async void EditCustomData(List<string>[] pathes)
+    {
+        Application.runInBackground = true;
+
+        // 로딩창으로 넘김
+        isLoading = true;
+        UIController.Instance.Loading();
+
+        CustomDataManager.LoadCustomData(pathes);
+        IEnumerator co = EditCustomDataProgress();
+        StartCoroutine(co);
+
+        // 동시에 작동시키되 기다리도록 함. 
+        while (CustomDataManager.CurProgress < CustomDataManager.TotalProgress)
+            await Task.Yield();
+        isLoading = false;
+        UIController.Instance.Loading(false);
+
+        List<SceneAction> actions = new List<SceneAction>();
+        actions.Add(new SceneAction(() => UIController.Instance.EditCustomData()));
+        ChangeScene("Custom Editor", actions);
+
+
+        Application.runInBackground = false;
+    }
+
+    private IEnumerator EditCustomDataProgress()
+    {
+        int cur = 0;
+        int total = 1;
+        while (cur < total)
+        {
+            cur = CustomDataManager.CurProgress;
+            total = CustomDataManager.TotalProgress;
+
+            Progress((float)cur / total, $"데이터를 불러오는 중 {cur} / {total}");
+            
+            yield return null;
+        }
+    }
+
     public async void ChangeScene(string scene, List<SceneAction> actions)
     {
         int sceneNumber = FindScene(scene);
         if ((isLoading == true || sceneNumber == -1) == false)
         {
+            Application.runInBackground = true;
             isLoading = true;
             Progress(0);
             UIController.Instance.Loading();
@@ -222,6 +258,7 @@ public class SceneController : MonoBehaviour
             UIController.Instance.ChangeScene(sceneNumber);
             currentScene = scene;
             isLoading = false;
+            Application.runInBackground = false;
         }
     }
 
