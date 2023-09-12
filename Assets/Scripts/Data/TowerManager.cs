@@ -271,7 +271,7 @@ public static class TowerManager
         }
     }
 
-
+    /*
     public static void AddData(TowerData data, int element, int grade,
         Dictionary<AnimationType, List<Sprite>> anims, Dictionary<string, List<Sprite>> efprojs)
     {
@@ -318,7 +318,7 @@ public static class TowerManager
             keys.Add(newData.id);
             egTowerIds[element, grade].Add(newData.id);
         }
-    }
+    }*/
 
     public static void RemoveData(int id, int element, int grade)
     {

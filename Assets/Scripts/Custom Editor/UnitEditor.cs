@@ -253,7 +253,7 @@ public class UnitEditor : MonoBehaviour
 
         LoadUnitData();
 
-        UpdatePoster(TowerManager.GetTower(TowerManager.Keys[0]));
+        UpdatePoster(CustomDataManager.EditingTowerData[CustomDataManager.TowerKeys[0]]);
         SelectType(true);
     }
 
@@ -268,8 +268,10 @@ public class UnitEditor : MonoBehaviour
 
         for (int i = 0; i < CustomDataManager.EditingTowerData.Count; i++)
         {
+            int id = CustomDataManager.TowerKeys[i];
             UnitEditorUnitIcon icon = Instantiate(unitIconPrefab);
-            icon.Init(CustomDataManager.EditingTowerSprites[i]);
+
+            icon.Init(CustomDataManager.EditingTowerData[id], CustomDataManager.EditingTowerSprites[id]);
             icon.transform.SetParent(towerViewPort);
             icon.transform.localScale = Vector3.one;
             towerIcons.Add(icon);
@@ -285,8 +287,9 @@ public class UnitEditor : MonoBehaviour
 
         for (int i = 0; i < CustomDataManager.EditingEnemyData.Count; i++)
         {
+            int id = CustomDataManager.EnemyKeys[i];
             UnitEditorUnitIcon icon = Instantiate(unitIconPrefab);
-            icon.Init(CustomDataManager.EditingEnemySprites[i]);
+            icon.Init(CustomDataManager.EditingEnemyData[id], CustomDataManager.EditingEnemySprites[id]);
             icon.transform.SetParent(enemyViewPort);
             icon.transform.localScale = Vector3.one;
             enemyIcons.Add(icon);
@@ -420,9 +423,8 @@ public class UnitEditor : MonoBehaviour
 
         if (int.TryParse(idStr, out id))
         {
-            string dataPath = Application.streamingAssetsPath + ((isTower) ? TowerManager.path : EnemyManager.path) + "CUSTOM.json";
-            string imgsrc = SpriteManager.path + ((isTower) ? "Tower/" : "Enemy/") + id.ToString() + "/";
-
+            string dataPath = Application.streamingAssetsPath + ((isTower) ? CustomDataManager.editingPath + "Tower/" : CustomDataManager.editingPath + "Enemy/") + $"{EnumArray.Elements[element]}.json";
+            string imgPath = Application.streamingAssetsPath + ((isTower) ? CustomDataManager.editingTowerSpritePath  : CustomDataManager.editingEnemySpritePath) + $"{selectedId}/";
             if (id != selectedId) RemoveUnit();
 
             Vector2 pivot;
@@ -537,7 +539,7 @@ public class UnitEditor : MonoBehaviour
                 {
                     id = id,
 
-                    imgsrc = imgsrc,
+                    imgsrc = imgPath,
                     pivot = pivot,
                     spf = spf,
 
@@ -567,7 +569,7 @@ public class UnitEditor : MonoBehaviour
                 dataAnims.Add(AnimationType.IDLE, imageIcons[0].Sprites);
                 dataAnims.Add(AnimationType.ATTACK, imageIcons[1].Sprites);
 
-                TowerManager.AddData((TowerData)data, element, grade, dataAnims, efprojs);
+                CustomDataManager.AddData((TowerData)data);
             }
             else
             {
@@ -575,7 +577,7 @@ public class UnitEditor : MonoBehaviour
                 {
                     id = id,
 
-                    imgsrc = imgsrc,
+                    imgsrc = imgPath,
                     pivot = pivot,
                     spf = spf,
 
@@ -589,7 +591,7 @@ public class UnitEditor : MonoBehaviour
                 dataAnims.Add(AnimationType.IDLE, imageIcons[0].Sprites);
                 dataAnims.Add(AnimationType.MOVE, imageIcons[1].Sprites);
 
-                EnemyManager.AddData((EnemyData)data, element, grade, dataAnims);
+                CustomDataManager.AddData((EnemyData)data);
             }
 
             Language[] langs = new Language[Translator.Langs.Count];
@@ -597,22 +599,15 @@ public class UnitEditor : MonoBehaviour
             {
                 langs[i] = new Language(id, nameDropdown.options[i].text);
             }
-            Translator.AddData(id, langs);
-            if (isTower) TowerManager.UpdateLanguage(Translator.CurrentLanguage);
-            else EnemyManager.UpdateLanguage(Translator.CurrentLanguage);
 
-            SpriteManager.AddData(id, sprites["IDLE"][0]);
             DataManager.SaveCustomData(data, dataPath, sprites, langs);
             LoadUnitData();
         }
     }
-
     private int selectedId;
+
     public void RemoveUnit(bool onlyRemove = false)
     {
-        string dataPath = Application.streamingAssetsPath + ((isTower) ? TowerManager.path : EnemyManager.path) + "CUSTOM.json";
-        string imgPath = Application.streamingAssetsPath + SpriteManager.path + ((isTower) ? "Tower/" : "Enemy/") + selectedId.ToString() + "/";
-        
         string id = selectedId.ToString().Substring(1, 3);
         int element;
         int.TryParse(id.Substring(0, 2), out element);
@@ -620,11 +615,13 @@ public class UnitEditor : MonoBehaviour
         int grade;
         int.TryParse(id.Substring(2, 1), out grade);
 
-        Translator.RemoveData(selectedId);
+        string dataPath = Application.streamingAssetsPath + ((isTower) ? CustomDataManager.editingPath + "Tower/" : CustomDataManager.editingPath + "Enemy/") + $"{EnumArray.Elements[element]}.json";
+        string imgPath = Application.streamingAssetsPath + ((isTower) ? CustomDataManager.editingTowerSpritePath : CustomDataManager.editingEnemySpritePath) + $"{selectedId}/";
+
         if (isTower)
-            TowerManager.RemoveData(selectedId, element, grade);
+            CustomDataManager.RemoveData(selectedId);
         else
-            EnemyManager.RemoveData(selectedId, element, grade);
+            CustomDataManager.RemoveData(selectedId);
 
         DataManager.RemoveCustomData(selectedId, dataPath, imgPath);
 
@@ -724,7 +721,7 @@ public class UnitEditor : MonoBehaviour
                     if (i == 0)
                     {
                         sprites = new Sprite[1];
-                        sprites[0] = SpriteManager.GetSprite(data.id);
+                        sprites[0] = CustomDataManager.EditingTowerSprites[data.id];
                     }
                 }
                 imageIcons[i].SetSprites(sprites);
@@ -740,8 +737,8 @@ public class UnitEditor : MonoBehaviour
             towerAdvancedPopup.SetActive(true);
             {
                 Sprite[] sprites = null;
-                if (TowerManager.Effects.ContainsKey(data.id))
-                    sprites = TowerManager.Effects[data.id];
+                if (CustomDataManager.EditingTowerEffects.ContainsKey(data.id))
+                    sprites = CustomDataManager.EditingTowerEffects[data.id];
 
                 float effectSpf = data.effectspf;
                 effectImageIcon.SetSprites(sprites);
@@ -753,8 +750,8 @@ public class UnitEditor : MonoBehaviour
             if (data.attackType != AttackType.PROMPT)
             {
                 Sprite[] sprites = null;
-                if (TowerManager.Projs.ContainsKey(data.id))
-                    sprites = TowerManager.Projs[data.id];
+                if (CustomDataManager.EditingTowerProjs.ContainsKey(data.id))
+                    sprites = CustomDataManager.EditingTowerProjs[data.id];
 
                 float projSpf = data.projspf;
                 projImageIcon.SetSprites(sprites);
@@ -851,7 +848,7 @@ public class UnitEditor : MonoBehaviour
                     if (i == 0)
                     {
                         sprites = new Sprite[1];
-                        sprites[0] = SpriteManager.GetSprite(data.id);
+                        sprites[0] = CustomDataManager.EditingEnemySprites[data.id];
                     }
                 }
                 imageIcons[i].SetSprites(sprites);

@@ -91,9 +91,9 @@ public class GameController : MonoBehaviour
         Title();
     }
 
-    public void EditCustomData(List<string>[] pathes)
+    public void EditCustomData(string dataName, List<string>[] pathes)
     {
-        SceneController.Instance.EditCustomData(pathes);
+        SceneController.Instance.EditCustomData(dataName, pathes);
     }
 
     public void EditMap()

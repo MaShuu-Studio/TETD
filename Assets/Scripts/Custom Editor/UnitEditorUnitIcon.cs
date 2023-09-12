@@ -7,23 +7,30 @@ using TMPro;
 public class UnitEditorUnitIcon : ScriptableButton
 {
     [SerializeField] private Image icon;
-    private int id;
+    private Tower tower;
+    private Enemy enemy;
 
-    public void Init(Sprite sprite)
+    public void Init(Tower tower, Sprite sprite)
     {
+        this.tower = tower;
+        enemy = null;
+        icon.sprite = sprite;
+    }
+    public void Init(Enemy enemy, Sprite sprite)
+    {
+        this.tower = null;
+        this.enemy = enemy;
         icon.sprite = sprite;
     }
 
     protected override void ClickEvent()
     {
-        Tower tower = TowerManager.GetTower(id);
         if (tower != null)
         {
             UIController.Instance.UpdatePoster(tower);
         }
         else
         {
-            Enemy enemy = EnemyManager.GetEnemy(id);
             UIController.Instance.UpdatePoster(enemy);
         }
     }

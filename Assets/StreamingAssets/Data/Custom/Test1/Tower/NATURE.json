@@ -186,19 +186,6 @@
 },
 
 {
-    "id": 1020004,
-"cost": 150,
-"dmg": 1,
-"range": 2.5,
-"attackspeed": 1,
-"spf": 0.1,
-    "attacktime": [ 0.2 ],
-"type": 0,
-"imgsrc": "/Sprites/Tower/1020004/",
-"pivot": { "x": 0.5, "y": 0.0625 }
-},
-
-{
     "id": 1021004,
 "cost": 150,
 "dmg": 1,
@@ -342,38 +329,6 @@
 "projattacktime": 0.225,
     "debuffs": [ {"type": 0, "value": 0.4} ],
 "imgsrc": "/Sprites/Tower/1020008/",
-"pivot": { "x": 0.5, "y": 0.0625 }
-},
-
-{
-    "id": 1021008,
-"cost": 150,
-"dmg": 1,
-"range": 2.5,
-"attackspeed": 1,
-"spf": 0.1,
-    "attacktime": [ 0.4 ],
-"type": 2,
-"projspf": 0.075,
-"projtime": 0.6,
-"projattacktime": 0.225,
-"imgsrc": "/Sprites/Tower/1021008/",
-"pivot": { "x": 0.5, "y": 0.0625 }
-},
-
-{
-    "id": 1022008,
-"cost": 150,
-"dmg": 1,
-"range": 2.5,
-"attackspeed": 1,
-"spf": 0.1,
-    "attacktime": [ 0.4 ],
-"type": 2,
-"projspf": 0.075,
-"projtime": 0.6,
-"projattacktime": 0.225,
-"imgsrc": "/Sprites/Tower/1022008/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 }
     ]

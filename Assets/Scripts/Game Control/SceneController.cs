@@ -179,7 +179,7 @@ public class SceneController : MonoBehaviour
         }
     }
 
-    public async void EditCustomData(List<string>[] pathes)
+    public async void EditCustomData(string dataName, List<string>[] pathes)
     {
         Application.runInBackground = true;
 
@@ -187,21 +187,21 @@ public class SceneController : MonoBehaviour
         isLoading = true;
         UIController.Instance.Loading();
 
-        CustomDataManager.LoadCustomData(pathes);
+        CustomDataManager.LoadCustomData(dataName, pathes);
         IEnumerator co = EditCustomDataProgress();
         StartCoroutine(co);
 
         // 동시에 작동시키되 기다리도록 함. 
         while (CustomDataManager.CurProgress < CustomDataManager.TotalProgress)
             await Task.Yield();
+
         isLoading = false;
         UIController.Instance.Loading(false);
 
         List<SceneAction> actions = new List<SceneAction>();
         actions.Add(new SceneAction(() => UIController.Instance.EditCustomData()));
+        actions.Add(new SceneAction(() => MapEditor.Instance.SetActive(false)));
         ChangeScene("Custom Editor", actions);
-
-
         Application.runInBackground = false;
     }
 
@@ -215,7 +215,7 @@ public class SceneController : MonoBehaviour
             total = CustomDataManager.TotalProgress;
 
             Progress((float)cur / total, $"데이터를 불러오는 중 {cur} / {total}");
-            
+             
             yield return null;
         }
     }

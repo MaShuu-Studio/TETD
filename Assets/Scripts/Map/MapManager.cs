@@ -143,13 +143,6 @@ public static class MapManager
         return new Tuple<bool, List<Vector3Int>>(findRoute, road);
     }
     */
-    public static void SaveMap(string mapName, TilemapInfo info)
-    {
-        TilemapInfoJson data = new TilemapInfoJson(info);
-        DataManager.SerializeJson(path, mapName, data);
-        Map map = new Map(mapName, info);
-        if (maps.ContainsKey(mapName) == false) maps.Add(mapName, map);
-    }
 
     public static Map LoadMap(string mapName)
     {

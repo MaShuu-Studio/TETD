@@ -67,9 +67,16 @@ public class MapEditor : MonoBehaviour
     // 시작점과 도착점은 있어야 세이브 가능.
     public bool CanSave { get { return enemyRoad.Count >= 2; } }
 
+    public void SetActive(bool b)
+    {
+        gameObject.SetActive(b);
+    }
+
     #region Map Controller
+
     public void Init(Map map, string mapName)
     {
+        SetActive(true);
         this.mapName = mapName;
 
         if (map == null) tilemap = new TilemapInfo("");
@@ -84,6 +91,8 @@ public class MapEditor : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (gameObject.activeSelf == false) return;
+
         bool click = Input.GetMouseButton(0);
         bool rclick = Input.GetMouseButton(1);
 
@@ -91,6 +100,8 @@ public class MapEditor : MonoBehaviour
         Vector3 worldPos = cam.ScreenToWorldPoint(mousePos);
         Vector3 pos = GetMapPos(worldPos);
         Vector3Int tilePos = new Vector3Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y));
+
+        SelectTile(worldPos);
 
         if (UIController.Instance.PointInMapEditPanel() == false)
         {

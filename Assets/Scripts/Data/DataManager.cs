@@ -279,7 +279,7 @@ namespace Data
             {
                 // Data
                 {
-                    string imagePath = UnityEngine.Application.streamingAssetsPath + data.imgsrc;
+                    string imagePath = data.imgsrc;
 
                     // 폴더가 있으면 안의 파일 전부 삭제 후 재생성
                     if (Directory.Exists(imagePath))
@@ -347,11 +347,11 @@ namespace Data
                 {
                     List<string> langPath = new List<string>();
 
-                    langPath = GetFileNames(Translator.path);
+                    langPath = GetFileNames(CustomDataManager.editingLangPath);
 
                     for (int i = 0; i < langPath.Count; i++)
                     {
-                        langPath[i] = UnityEngine.Application.streamingAssetsPath + Translator.path + langPath[i];
+                        langPath[i] = CustomDataManager.editingLangPath + langPath[i];
 
                         // 데이터 파일 수정
                         string json = File.ReadAllText(langPath[i]);
@@ -448,11 +448,11 @@ namespace Data
                 {
                     List<string> langPath = new List<string>();
 
-                    langPath = GetFileNames(Translator.path);
+                    langPath = GetFileNames(CustomDataManager.editingLangPath);
 
                     for (int i = 0; i < langPath.Count; i++)
                     {
-                        langPath[i] = UnityEngine.Application.streamingAssetsPath + Translator.path + langPath[i];
+                        langPath[i] = CustomDataManager.editingLangPath + langPath[i];
 
                         // 데이터 파일 수정
                         string json = File.ReadAllText(langPath[i]);

@@ -65,7 +65,7 @@ public class CustomEditor : MonoBehaviour
 
     public void Edit()
     {
-        GameController.Instance.EditCustomData(CustomDataManager.Datas[selectedData].pathes);
+        GameController.Instance.EditCustomData(CustomDataManager.Datas[selectedData].name, CustomDataManager.Datas[selectedData].pathes);
     }
 
     public void Apply()

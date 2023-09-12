@@ -129,7 +129,7 @@ public static class EnemyManager
             enemy.UpdateName(Translator.GetLanguage(enemy.id));
         }
     }
-
+    /*
     public static void AddData(EnemyData data, int element, int grade, Dictionary<AnimationType, List<Sprite>> anims)
     {
         Dictionary<AnimationType, Sprite[]> anim = new Dictionary<AnimationType, Sprite[]>();
@@ -151,7 +151,7 @@ public static class EnemyManager
             keys.Add(newData.id);
             egEnemyIds[element, grade].Add(newData.id);
         }
-    }
+    }*/
     public static void RemoveData(int id, int element, int grade)
     {
         if (enemies.ContainsKey(id))

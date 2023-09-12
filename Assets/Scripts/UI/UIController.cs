@@ -473,7 +473,7 @@ public class UIController : MonoBehaviour
 
     public Map GetMap()
     {
-        return CustomDataManager.EditingMapData[selectedMap];
+        return CustomDataManager.EditingMapData[CustomDataManager.EditingMapNames[selectedMap]];
     }
     public string GetMapName()
     {

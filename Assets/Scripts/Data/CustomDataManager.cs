@@ -7,31 +7,46 @@ using System.Threading.Tasks;
 
 public static class CustomDataManager
 {
-    public static string path { get; private set; } = "/Data/Custom/";
+    private static string path = "/Data/Custom/";
+    public static string editingPath { get { return path + editingDataName + "/"; } }
+    public static string editingTowerSpritePath { get; private set; }
+    public static string editingEnemySpritePath { get; private set; }
+    public static string editingMapPath { get; private set; }
+    public static string editingLangPath { get; private set; }
     public static List<CustomData> Datas { get { return datas; } }
     private static List<CustomData> datas;
+
+    private static int editingDataIndex;
 
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
 
-    public static List<Tower> EditingTowerData { get { return editingTowerData; } }
-    private static List<Tower> editingTowerData;
-    public static List<Sprite> EditingTowerSprites { get { return editingTowerSprites; } }
-    private static List<Sprite> editingTowerSprites;
-    public static List<Sprite[]> EditingTowerEffects { get { return editingTowerEffects; } }
-    private static List<Sprite[]> editingTowerEffects;
-    public static List<Sprite[]> EditingTowerProjs { get { return editingTowerProjs; } }
-    private static List<Sprite[]> editingTowerProjs;
+    public static string EditingDataName { get { return editingDataName; } }
+    private static string editingDataName;
 
-    public static List<Sprite> EditingEnemySprites { get { return editingEnemySprites; } }
-    private static List<Sprite> editingEnemySprites;
-    public static List<Enemy> EditingEnemyData { get { return editingEnemyData; } }
-    private static List<Enemy> editingEnemyData;
+    public static List<int> TowerKeys { get { return towerKeys; } }
+    private static List<int> towerKeys;
+    public static List<int> EnemyKeys { get { return enemyKeys; } }
+    private static List<int> enemyKeys;
+
+    public static Dictionary<int, Tower> EditingTowerData { get { return editingTowerData; } }
+    private static Dictionary<int, Tower> editingTowerData;
+    public static Dictionary<int, Sprite> EditingTowerSprites { get { return editingTowerSprites; } }
+    private static Dictionary<int, Sprite> editingTowerSprites;
+    public static Dictionary<int, Sprite[]> EditingTowerEffects { get { return editingTowerEffects; } }
+    private static Dictionary<int, Sprite[]> editingTowerEffects;
+    public static Dictionary<int, Sprite[]> EditingTowerProjs { get { return editingTowerProjs; } }
+    private static Dictionary<int, Sprite[]> editingTowerProjs;
+
+    public static Dictionary<int, Sprite> EditingEnemySprites { get { return editingEnemySprites; } }
+    private static Dictionary<int, Sprite> editingEnemySprites;
+    public static Dictionary<int, Enemy> EditingEnemyData { get { return editingEnemyData; } }
+    private static Dictionary<int, Enemy> editingEnemyData;
 
     public static List<string> EditingMapNames { get { return editingMapNames; } }
     private static List<string> editingMapNames;
-    public static List<Map> EditingMapData { get { return editingMapData; } }
-    private static List<Map> editingMapData;
+    public static Dictionary<string, Map> EditingMapData { get { return editingMapData; } }
+    private static Dictionary<string, Map> editingMapData;
 
     public static void GetTotal()
     {
@@ -43,29 +58,40 @@ public static class CustomDataManager
         datas = await DataManager.LoadCustomDataList(path);
         CurProgress += 1;
 
-        editingTowerData = new List<Tower>();
-        editingTowerSprites = new List<Sprite>();
-        editingTowerEffects = new List<Sprite[]>();
-        editingTowerProjs = new List<Sprite[]>();
-        editingEnemyData = new List<Enemy>();
-        editingEnemySprites = new List<Sprite>();
+        towerKeys = new List<int>();
+        editingTowerData = new Dictionary<int, Tower>();
+        editingTowerSprites = new Dictionary<int, Sprite>();
+        editingTowerEffects = new Dictionary<int, Sprite[]>();
+        editingTowerProjs = new Dictionary<int, Sprite[]>();
+
+        enemyKeys = new List<int>();
+        editingEnemyData = new Dictionary<int, Enemy>();
+        editingEnemySprites = new Dictionary<int, Sprite>();
         editingMapNames = new List<string>();
-        editingMapData = new List<Map>();
+        editingMapData = new Dictionary<string, Map>();
 
 #if UNITY_EDITOR
         Debug.Log($"[SYSTEM] LOAD CUSTOM DATA LIST");
 #endif
     }
 
-    public static async void LoadCustomData(List<string>[] pathes)
+    public static async void LoadCustomData(string editingDataName, List<string>[] pathes)
     {
+        CustomDataManager.editingDataName = editingDataName;
+        editingLangPath = path + editingDataName + "/Language/";
+        editingMapPath = Application.streamingAssetsPath + path + editingDataName + "/Map/";
+        datas.FindIndex(data => data.name == editingDataName);
+
         CurProgress = 0;
         TotalProgress = 9999;
 
+        towerKeys.Clear();
         editingTowerData.Clear();
         editingTowerSprites.Clear();
         editingTowerEffects.Clear();
         editingTowerProjs.Clear();
+
+        enemyKeys.Clear();
         editingEnemyData.Clear();
         editingEnemySprites.Clear();
         editingMapNames.Clear();
@@ -100,11 +126,13 @@ public static class CustomDataManager
         if (pathes[2] != null)
             TotalProgress += pathes[2].Count;
 
+        editingTowerSpritePath = editingPath + "Sprites/Tower/";
         foreach (var data in towerList)
         {
             AddData(data);
         }
 
+        editingEnemySpritePath = editingPath + "Sprites/Enemy/";
         foreach (var data in enemyList)
         {
             AddData(data);
@@ -117,64 +145,169 @@ public static class CustomDataManager
             }
     }
 
-    private static async void AddData(TowerData data)
+    public static async void AddData(TowerData data)
     {
-        // 임시로 id를 통해 element와 grade를 직접 확인함.
-        // 추후 유닛에디터를 수정하며 id를 기입하지않고 element와 grade를 따로 저장하게 할 것이며
-        // 이를 통해 자동으로 아이디를 생성할 수 있도록 함.
-        // 또한, Sprite 역시 로드 방식을 바꿔야 함. 해당 부분에 대한 고민이 필요할 듯.
-        // 우선은 기존 id로 부터 받아서 활용할 수 있도록 함.
-        int originId = data.id;
+        int id = data.id;
 
-        // id는 AEEGNNN으로 되어있음.
-        int element, grade;
-
-        element = originId % 1000000; // A 제거
-        element = element / 10000; // GNNN 제거
-
-        grade = originId % 10000; // AEE 제거
-        grade = grade / 1000; // NNN 제거
-
-        Dictionary<AnimationType, Sprite[]> anim = await TowerManager.MakeAnimation(data);
+        Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(id, data);
         Tower tower = new Tower(data, anim);
-        editingTowerData.Add(tower);
 
-        Sprite[] effect = await TowerManager.MakeObjects(data, "EFFECT");
-        editingTowerEffects.Add(effect);
+        Sprite[] effect = await MakeObjects(id, data, "EFFECT");
+        Sprite[] proj = await MakeObjects(id, data, "WEAPON");
 
-        Sprite[] proj = await TowerManager.MakeObjects(data, "WEAPON");
-        editingTowerProjs.Add(proj);
+        Sprite sprite = await DataManager.LoadSprite(editingTowerSpritePath + $"{id}/" + "IDLE.png", data.pivot, data.pixelperunit);
+        if (sprite == null) sprite = await DataManager.LoadSprite(editingTowerSpritePath + $"{id}/" + "IDLE0.png", data.pivot, data.pixelperunit);
 
-        Sprite sprite = await DataManager.LoadSprite(data.imgsrc + "IDLE.png", data.pivot, data.pixelperunit);
-        if (sprite == null) sprite = await DataManager.LoadSprite(data.imgsrc + "IDLE0.png", data.pivot, data.pixelperunit);
-        editingTowerSprites.Add(sprite);
+        if (towerKeys.Contains(id) == false)
+        {
+            towerKeys.Add(id);
+            editingTowerData.Add(id, tower);
+            editingTowerEffects.Add(id, effect);
+            editingTowerProjs.Add(id, proj);
+            editingTowerSprites.Add(id, sprite);
+        }
+        else
+        {
+            editingTowerData[id] = tower;
+            editingTowerEffects[id] = effect;
+            editingTowerProjs[id] = proj;
+            editingTowerSprites[id] = sprite;
+        }
 
         CurProgress++;
     }
 
-    private static async void AddData(EnemyData data)
+    private static async Task<Dictionary<AnimationType, Sprite[]>> MakeAnimation(int id, TowerData data)
     {
-        int originId = data.id;
+        Dictionary<AnimationType, Sprite[]> anim = new Dictionary<AnimationType, Sprite[]>();
 
-        // id는 AEEGNNN으로 되어있음.
-        int element, grade;
+        for (int i = 0; i < EnumArray.AnimationTypes.Length; i++)
+        {
+            AnimationType type = EnumArray.AnimationTypes[i];
+            string animationName = EnumArray.AnimationTypeStrings[type];
+            List<Sprite> sprites = new List<Sprite>();
+            while (true)
+            {
+                // IDLE0.png 와 같은 방식
+                string filename = animationName + sprites.Count + ".png";
+                Sprite sprite = await DataManager.LoadSprite(editingTowerSpritePath + $"{id}/" + filename, data.pivot, data.pixelperunit);
+                if (sprite == null) break; // 이미지가 없다면 패스
+                sprites.Add(sprite);
+            }
 
-        element = originId % 1000000; // A 제거
-        element = element / 10000; // GNNN 제거
+            if (sprites.Count > 0)
+            {
+                Sprite[] s = new Sprite[sprites.Count];
+                sprites.CopyTo(s);
 
-        grade = originId % 10000; // AEE 제거
-        grade = grade / 1000; // NNN 제거
+                anim.Add(type, s);
+            }
+        }
+        return anim;
+    }
 
-        Dictionary<AnimationType, Sprite[]> anim = await EnemyManager.MakeAnimation(data);
+    private static async Task<Sprite[]> MakeObjects(int id, TowerData data, string type)
+    {
+        // 투사체의 이름은 WEAPON*
+        // 이펙트의 이름은 EFFECT*
+        Sprite[] s = null;
+
+        List<Sprite> sprites = new List<Sprite>();
+        while (true)
+        {
+            // IDLE0.png 와 같은 방식
+            string filename = type + sprites.Count + ".png";
+            Sprite sprite = await DataManager.LoadSprite(editingTowerSpritePath + $"{id}/" + filename, data.pivot, data.pixelperunit);
+            if (sprite == null) break; // 이미지가 없다면 패스
+            sprites.Add(sprite);
+        }
+
+        if (sprites.Count > 0)
+        {
+            s = new Sprite[sprites.Count];
+            sprites.CopyTo(s);
+        }
+
+        return s;
+    }
+
+    public static async void AddData(EnemyData data)
+    {
+        int id = data.id;
+
+        Dictionary<AnimationType, Sprite[]> anim = await MakeAnimation(id, data);
 
         Enemy enemy = new Enemy(data, anim);
-        editingEnemyData.Add(enemy);
-        Sprite sprite = await DataManager.LoadSprite(data.imgsrc + "IDLE.png", data.pivot, data.pixelperunit);
-        if (sprite == null) sprite = await DataManager.LoadSprite(data.imgsrc + "IDLE0.png", data.pivot, data.pixelperunit);
-        editingEnemySprites.Add(sprite);
+        Sprite sprite = await DataManager.LoadSprite(editingEnemySpritePath + $"{id}/" + "IDLE.png", data.pivot, data.pixelperunit);
+        if (sprite == null) sprite = await DataManager.LoadSprite(editingEnemySpritePath + $"{id}/" + "IDLE0.png", data.pivot, data.pixelperunit);
+
+
+        if (enemyKeys.Contains(id) == false)
+        {
+            enemyKeys.Add(id);
+            editingEnemyData.Add(id, enemy);
+            editingEnemySprites.Add(id, sprite);
+        }
+        else
+        {
+            editingEnemyData[id] = enemy;
+            editingEnemySprites[id] = sprite;
+        }
 
         CurProgress++;
     }
+
+    public static void RemoveData(int id)
+    {
+        if (editingTowerData.ContainsKey(id))
+        {
+            towerKeys.Remove(id);
+            editingTowerData.Remove(id);
+            editingTowerEffects.Remove(id);
+            editingTowerProjs.Remove(id);
+            editingTowerSprites.Remove(id);
+            datas[editingDataIndex].dataAmount[0]--;
+        }
+        else if (editingEnemyData.ContainsKey(id))
+        {
+            int index = enemyKeys.FindIndex(i => i == id);
+
+            enemyKeys.Remove(id);
+            editingEnemyData.Remove(id);
+            editingEnemySprites.Remove(id);
+            datas[editingDataIndex].dataAmount[1]--;
+        }
+    }
+
+    private static async Task<Dictionary<AnimationType, Sprite[]>> MakeAnimation(int id, EnemyData data)
+    {
+        Dictionary<AnimationType, Sprite[]> anim = new Dictionary<AnimationType, Sprite[]>();
+
+        for (int i = 0; i < EnumArray.AnimationTypes.Length; i++)
+        {
+            AnimationType type = EnumArray.AnimationTypes[i];
+            string animationName = EnumArray.AnimationTypeStrings[type];
+            List<Sprite> sprites = new List<Sprite>();
+            while (true)
+            {
+                // IDLE0.png 와 같은 방식
+                string filename = animationName + sprites.Count + ".png";
+                Sprite sprite = await DataManager.LoadSprite(editingEnemySpritePath + $"{id}/" + filename, data.pivot, data.pixelperunit);
+                if (sprite == null) break; // 이미지가 없다면 패스
+                sprites.Add(sprite);
+            }
+
+            if (sprites.Count > 0)
+            {
+                Sprite[] s = new Sprite[sprites.Count];
+                sprites.CopyTo(s);
+
+                anim.Add(type, s);
+            }
+        }
+        return anim;
+    }
+
 
     private static async void AddData(string path)
     {
@@ -185,9 +318,17 @@ public static class CustomDataManager
 
         TilemapInfo info = new TilemapInfo(data);
         editingMapNames.Add(mapName);
-        editingMapData.Add(new Map(mapName, info));
+        editingMapData.Add(mapName, new Map(mapName, info));
 
         CurProgress++;
+    }
+
+    public static void SaveMap(string mapName, TilemapInfo info)
+    {
+        TilemapInfoJson data = new TilemapInfoJson(info);
+        DataManager.SerializeJson(editingMapPath, mapName, data);
+        Map map = new Map(mapName, info);
+        if (editingMapData.ContainsKey(mapName) == false) editingMapData.Add(mapName, map);
     }
 }
 
