@@ -18,6 +18,7 @@ public class TowerObject : Poolable
     private AnimationType curAnim;
     private IEnumerator animCoroutine;
     private IEnumerator activateCoroutine;
+    private IEnumerator buffCoroutine;
 
     private PriorityQueue<EnemyObject> enemies;
     private PriorityQueue<TowerObject> towers;
@@ -26,6 +27,9 @@ public class TowerObject : Poolable
     private AttackPriority priority;
     public Dictionary<AbilityType, TowerBuff> Buffs { get { return buffs; } }
     private Dictionary<AbilityType, TowerBuff> buffs;
+
+    private enum ActiveType { ONLYATTACK = 0, ONLYBUFF, ATTACKWITHBUFF, }
+    private ActiveType activeType;
 
     public class TowerBuff
     {
@@ -69,6 +73,10 @@ public class TowerObject : Poolable
 
             if (buffCount == 1 && hasGoldMine) hasBuff = false;
         }
+
+        if (hasBuff == false) activeType = ActiveType.ONLYATTACK;
+        else if (data.Stat(TowerStatType.DAMAGE) == 0) activeType = ActiveType.ONLYBUFF;
+        else activeType = ActiveType.ATTACKWITHBUFF;
 
         range.Init(this, hasBuff);
         rangeUI.transform.localPosition = range.transform.localPosition = Vector3.zero;
@@ -219,6 +227,8 @@ public class TowerObject : Poolable
     #region Enemy
     public void AddEnemy(EnemyObject enemy)
     {
+        if (activeType == ActiveType.ONLYBUFF) return;
+
         enemies.Enqueue(enemy, GetPriority(enemy));
         if (activateCoroutine == null)
         {
@@ -281,7 +291,15 @@ public class TowerObject : Poolable
     {
         towers.Enqueue(tower, GetBuffPriority(tower));
 
-        if (activateCoroutine == null)
+        if (activeType == ActiveType.ATTACKWITHBUFF)
+        {
+            if (buffCoroutine == null)
+            {
+                buffCoroutine = ActiveWithBuff();
+                StartCoroutine(buffCoroutine);
+            }
+        }
+        else if (activateCoroutine == null)
         {
             activateCoroutine = Activate();
             StartCoroutine(activateCoroutine);
@@ -392,7 +410,8 @@ public class TowerObject : Poolable
     {
         while (true)
         {
-            if (enemies.Count <= 0 && towers.Count <= 0) break;
+            if (activeType != ActiveType.ONLYBUFF && enemies.Count <= 0) break;
+            if (activeType == ActiveType.ONLYBUFF && towers.Count <= 0) break;
 
             // Stat함수 자체가 연산이 진행되므로 값을 저장해둠
             // 배속 정도 = 현재 공격속도 / 기본공속
@@ -423,8 +442,11 @@ public class TowerObject : Poolable
                 }
 
                 // 선딜이 후에는 작동
-                if (enemies.Count > 0) StartCoroutine(Attack(speedRatio));
-                if (towers.Count > 0) GiveBuff();
+                if (activeType != ActiveType.ONLYBUFF && enemies.Count > 0) 
+                    StartCoroutine(Attack(speedRatio));
+
+                if (activeType == ActiveType.ONLYBUFF && towers.Count > 0) 
+                    GiveBuff();
 
                 yield return null;
             }
@@ -524,8 +546,46 @@ public class TowerObject : Poolable
         }
     }
 
+    // 버프 관련 코루틴.
+    private IEnumerator ActiveWithBuff()
+    {
+        while (true)
+        {
+            if (towers.Count <= 0) break;
+
+            // 버프와 공격을 같이 하는 경우
+            // 애니메이션은 공격에 맞추되 버프는 따로 작동하게 둠.
+            // 버프 공속관련 스탯을 따로 만들고 작동하게 함.
+            // 현재는 임시로 3초마다 자동으로 작동하게 함.
+
+            float curASPD = Stat(TowerStatType.ATTACKSPEED);
+            float speedRatio = curASPD / OriginAttackSpeed;
+            float delay = 1 / curASPD;
+            Animate(AnimationType.ATTACK, false, speedRatio);
+
+            float time = 0;
+
+            while (time < 3)
+            {
+                if (GameController.Instance.Paused)
+                {
+                    yield return null;
+                    continue;
+                }
+                time += Time.deltaTime;
+                yield return null;
+            }
+
+            if (towers.Count > 0)
+                GiveBuff();
+
+            yield return null;
+        }
+        buffCoroutine = null;
+    }
+
     // 버프 부여 함수
-    public void GiveBuff()
+    private void GiveBuff()
     {
         int targetAmount = (int)data.Ability(AbilityType.MULTISHOT);
         if (targetAmount == 0) targetAmount = 1;
@@ -576,12 +636,12 @@ public class TowerObject : Poolable
         }
     }
 
-    // 버프 임시 이펙트
+    // 버프 이펙트
     public void Effect(List<TowerObject> targets)
     {
         for (int i = 0; i < targets.Count; i++)
         {
-            GameObject effect = PoolController.PopEffect(data.id);
+            GameObject effect = PoolController.PopBuffEffect(data.id);
 
             if (effect != null)
             {

@@ -27,6 +27,7 @@ public class PoolController : MonoBehaviour
     [SerializeField] private Transform enemyParent;
     [SerializeField] private Transform projParent;
     [SerializeField] private Transform effectParent;
+    [SerializeField] private Transform buffParent;
 
     [Header("Object")]
     [SerializeField] private Pool poolPrefab;
@@ -42,7 +43,8 @@ public class PoolController : MonoBehaviour
 
     private Dictionary<int, Pool> pool;
     private Dictionary<int, ProjectilePool> projPool;
-    private Dictionary<int, Pool> effectPool;
+    private Dictionary<int, Pool> hitEffectPool;
+    private Dictionary<int, Pool> buffEffectPool;
 
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
@@ -54,7 +56,8 @@ public class PoolController : MonoBehaviour
     {
         pool = new Dictionary<int, Pool>();
         projPool = new Dictionary<int, ProjectilePool>();
-        effectPool = new Dictionary<int, Pool>();
+        hitEffectPool = new Dictionary<int, Pool>();
+        buffEffectPool = new Dictionary<int, Pool>();
 
         while (TowerManager.isLoaded == false || EnemyManager.isLoaded == false) await Task.Yield();
 
@@ -97,10 +100,10 @@ public class PoolController : MonoBehaviour
 
             // 이펙트 추가부분
             // 이펙트가 존재하는 유닛일 경우에만 추가
-            if (TowerManager.Effects.ContainsKey(id))
+            if (TowerManager.HitEffects.ContainsKey(id))
             {
                 Poolable effect = Instantiate(effectBase);
-                if (effect.MakePrefab(id) == false)
+                if (effect.MakePrefab(id + EffectObject.CheckBuffEffect * 1) == false)
                 {
                     Destroy(effect.gameObject);
                 }
@@ -110,7 +113,25 @@ public class PoolController : MonoBehaviour
                     effectPoolComponent.gameObject.name = id.ToString();
                     effectPoolComponent.Init(effect);
 
-                    effectPool.Add(id, effectPoolComponent);
+                    hitEffectPool.Add(id, effectPoolComponent);
+                }
+            }
+
+            // 버프 이펙트 추가부분
+            if (TowerManager.BuffEffects.ContainsKey(id))
+            {
+                Poolable effect = Instantiate(effectBase);
+                if (effect.MakePrefab(id + EffectObject.CheckBuffEffect * 2) == false)
+                {
+                    Destroy(effect.gameObject);
+                }
+                else
+                {
+                    Pool effectPoolComponent = Instantiate(poolPrefab, buffParent);
+                    effectPoolComponent.gameObject.name = id.ToString();
+                    effectPoolComponent.Init(effect);
+
+                    buffEffectPool.Add(id, effectPoolComponent);
                 }
             }
         }
@@ -187,17 +208,34 @@ public class PoolController : MonoBehaviour
     // 이펙트 전용 Push
     public static void PushEffect(int id, GameObject obj)
     {
-        if (Instance.effectPool.ContainsKey(id) == false) return;
+        if (Instance.hitEffectPool.ContainsKey(id) == false) return;
 
-        Instance.effectPool[id].Push(obj);
+        Instance.hitEffectPool[id].Push(obj);
     }
 
     // 이펙트 전용 Pop
     public static GameObject PopEffect(int id)
     {
-        if (Instance.effectPool.ContainsKey(id) == false) return null;
+        if (Instance.hitEffectPool.ContainsKey(id) == false) return null;
 
-        GameObject obj = Instance.effectPool[id].Pop();
+        GameObject obj = Instance.hitEffectPool[id].Pop();
+        return obj;
+    }
+
+    // 버프 이펙트 전용 Push
+    public static void PushBuffEffect(int id, GameObject obj)
+    {
+        if (Instance.buffEffectPool.ContainsKey(id) == false) return;
+
+        Instance.buffEffectPool[id].Push(obj);
+    }
+
+    // 버프 이펙트 전용 Pop
+    public static GameObject PopBuffEffect(int id)
+    {
+        if (Instance.buffEffectPool.ContainsKey(id) == false) return null;
+
+        GameObject obj = Instance.buffEffectPool[id].Pop();
         return obj;
     }
 }

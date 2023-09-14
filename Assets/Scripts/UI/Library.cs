@@ -112,7 +112,7 @@ public class Library : MonoBehaviour
                         for (int s = 0; add && s < abilFilterToggles.Length; s++)
                         {
                             if (abilFilterToggles[s].isOn == false) continue;
-                            int type = s + 3;
+                            int type = (int)EnumArray.AbilityTypes[s];
                             if (TowerManager.AbilityIds[type].Contains(id) == false)
                             {
                                 add = false;

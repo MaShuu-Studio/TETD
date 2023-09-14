@@ -16,8 +16,10 @@ public static class TowerManager
     public static Dictionary<int, Sprite[]> Projs { get { return projectiles; } }
     private static Dictionary<int, Sprite[]> projectiles;
 
-    public static Dictionary<int, Sprite[]> Effects { get { return effects; } }
-    private static Dictionary<int, Sprite[]> effects;
+    public static Dictionary<int, Sprite[]> HitEffects { get { return hitEffects; } }
+    private static Dictionary<int, Sprite[]> hitEffects;
+    public static Dictionary<int, Sprite[]> BuffEffects { get { return buffEffects; } }
+    private static Dictionary<int, Sprite[]> buffEffects;
 
     // 0: elemental, 1: grade, List: Id
     public static List<int>[,] EgTowerIds { get { return egTowerIds; } }
@@ -52,7 +54,8 @@ public static class TowerManager
         keys = new List<int>();
         towers = new Dictionary<int, Tower>();
         projectiles = new Dictionary<int, Sprite[]>();
-        effects = new Dictionary<int, Sprite[]>();
+        hitEffects = new Dictionary<int, Sprite[]>();
+        buffEffects = new Dictionary<int, Sprite[]>();
 
         egTowerIds = new List<int>[EnumArray.Elements.Length, EnumArray.Grades.Length];
 
@@ -95,10 +98,14 @@ public static class TowerManager
         await SpriteManager.AddSprite<Tower>(data.imgsrc, id, data.pivot, data.pixelperunit);
 
         Sprite[] effect = await MakeObjects(data, "EFFECT");
-        if (effect != null) effects.Add(id, effect);
+        if (effect != null) hitEffects.Add(id, effect);
+
+        Sprite[] buff = await MakeObjects(data, "BUFF");
+        if (buff != null) buffEffects.Add(id, buff);
 
         Sprite[] proj = await MakeObjects(data, "WEAPON");
         if (proj != null) projectiles.Add(id, proj);
+
 
         keys.Add(id);
         towers.Add(id, tower);
@@ -147,6 +154,7 @@ public static class TowerManager
     {
         // 투사체의 이름은 WEAPON*
         // 이펙트의 이름은 EFFECT*
+        // 버프의 이름은 BUFF*
         Sprite[] s = null;
 
         List<Sprite> sprites = new List<Sprite>();
@@ -158,6 +166,7 @@ public static class TowerManager
             if (sprite == null) break; // 이미지가 없다면 패스
             sprites.Add(sprite);
         }
+
 
         if (sprites.Count > 0)
         {
@@ -311,7 +320,8 @@ public static class TowerManager
         if (towers.ContainsKey(id))
         {
             towers.Remove(id);
-            effects.Remove(id);
+            hitEffects.Remove(id);
+            buffEffects.Remove(id);
             projectiles.Remove(id);
             keys.Remove(id);
             egTowerIds[element, grade].Remove(id);

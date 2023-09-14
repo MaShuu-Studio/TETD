@@ -8,18 +8,38 @@ public class EffectObject : Poolable
     private Sprite[] sprites;
     private float spf;
 
+    // 히트의 경우 앞자리가 1, 버프의 경우 2.
+    public const int CheckBuffEffect = 100000000;
+
     public override bool MakePrefab(int id)
     {
         this.id = id;
         amount = 5;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
-        if (TowerManager.Effects.ContainsKey(id))
+
+        int check = id / CheckBuffEffect;
+        id = id % CheckBuffEffect;
+
+        if (check == 1)
         {
-            sprites = TowerManager.Effects[id];
-            spf = TowerManager.GetTower(id).effectspf;
-            spriteRenderer.sprite = sprites[0];
-            return true;
+            if (TowerManager.HitEffects.ContainsKey(id))
+            {
+                sprites = TowerManager.HitEffects[id];
+                spf = TowerManager.GetTower(id).effectspf;
+                spriteRenderer.sprite = sprites[0];
+                return true;
+            }
+        }
+        else
+        {
+            if (TowerManager.BuffEffects.ContainsKey(id))
+            {
+                sprites = TowerManager.BuffEffects[id];
+                spf = TowerManager.GetTower(id).effectspf;
+                spriteRenderer.sprite = sprites[0];
+                return true;
+            }
         }
 
         return false;

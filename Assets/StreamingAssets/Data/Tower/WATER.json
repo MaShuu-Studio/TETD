@@ -11,6 +11,7 @@
 "spf": 0.1,
     "attacktime": [ 0.2,0.8 ],
 "type": 0,
+    "ability": [ {"type": 101, "value": 1} ],
 "imgsrc": "/Sprites/Tower/1010000/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 },

@@ -275,7 +275,7 @@
 {
     "id": 1020006,
 "cost": 150,
-"dmg": 1,
+"dmg": 0,
 "range": 2.5,
 "attackspeed": 1,
 "spf": 0.1,
@@ -289,7 +289,7 @@
 {
     "id": 1021006,
 "cost": 150,
-"dmg": 1,
+"dmg": 0,
 "range": 2.5,
 "attackspeed": 1,
 "spf": 0.1,
@@ -303,7 +303,7 @@
 {
     "id": 1020007,
 "cost": 150,
-"dmg": 1,
+"dmg": 0,
 "range": 2.5,
 "attackspeed": 1,
 "spf": 0.1,
@@ -317,7 +317,7 @@
 {
     "id": 1022007,
 "cost": 150,
-"dmg": 1,
+"dmg": 0,
 "range": 2.5,
 "attackspeed": 1,
 "spf": 0.1,
