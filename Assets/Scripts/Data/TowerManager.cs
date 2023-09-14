@@ -60,7 +60,7 @@ public static class TowerManager
             for (int j = 0; j < EnumArray.Grades.Length; j++)
                 egTowerIds[i, j] = new List<int>();
 
-        abilityIds = new List<int>[20 + EnumArray.DebuffTypes.Length];
+        abilityIds = new List<int>[(int)EnumArray.AbilityTypes[EnumArray.AbilityTypes.Length - 1] + 1];
         for (int i = 0; i < abilityIds.Length; i++)
             abilityIds[i] = new List<int>();
 
@@ -104,24 +104,10 @@ public static class TowerManager
         towers.Add(id, tower);
         egTowerIds[(int)tower.element, (int)tower.grade].Add(id);
 
-        if (tower.StatTypes != null)
-            for (int i = 3; i < tower.StatTypes.Length; i++)
+        if (tower.AbilityTypes != null)
+            for (int i = 0; i < tower.AbilityTypes.Length; i++)
             {
-                int type = (int)tower.StatTypes[i];
-                abilityIds[type].Add(id);
-            }
-
-        if (tower.BuffTypes != null)
-            for (int i = 0; i < tower.BuffTypes.Length; i++)
-            {
-                int type = 10 + (int)tower.BuffTypes[i];
-                abilityIds[type].Add(id);
-            }
-
-        if (tower.DebuffTypes != null)
-            for (int i = 0; i < tower.DebuffTypes.Length; i++)
-            {
-                int type = 20 + (int)tower.DebuffTypes[i];
+                int type = (int)tower.AbilityTypes[i];
                 abilityIds[type].Add(id);
             }
 

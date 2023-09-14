@@ -50,28 +50,14 @@ public class UnitEditorPoster : LibraryCard
         }
     }
 
-    public void UpdateAbility(Dictionary<TowerStatType, float> statAbils, Dictionary<BuffType, float> buffs, Dictionary<DebuffType, float> debuffs)
+    public void UpdateAbility(Dictionary<AbilityType, float> abils)
     {
         int abilIndex = 0;
-        foreach (var type in statAbils.Keys)
+        foreach (var type in abils.Keys)
         {
             abilities[abilIndex].gameObject.SetActive(true);
             abilities[abilIndex].Init(type);
-            abilities[abilIndex++].SetData(statAbils[type]);
-        }
-
-        foreach (var type in buffs.Keys)
-        {
-            abilities[abilIndex].gameObject.SetActive(true);
-            abilities[abilIndex].Init(type);
-            abilities[abilIndex++].SetData(buffs[type]);
-        }
-
-        foreach (var type in debuffs.Keys)
-        {
-            abilities[abilIndex].gameObject.SetActive(true);
-            abilities[abilIndex].Init(type);
-            abilities[abilIndex++].SetData(debuffs[type]);
+            abilities[abilIndex++].SetData(abils[type]);
         }
 
         for (; abilIndex < abilities.Length; abilIndex++)

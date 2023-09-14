@@ -14,13 +14,9 @@ public class TowerStatItem : MonoBehaviour
     {
         icon.SetIcon((int)SpriteManager.ETCDataNumber.TOWERSTAT + (int)type);
     }
-    public void Init(BuffType type)
+    public void Init(AbilityType type)
     {
-        icon.SetIcon((int)SpriteManager.ETCDataNumber.BUFF + (int)type);
-    }
-    public void Init(DebuffType type)
-    {
-        icon.SetIcon((int)SpriteManager.ETCDataNumber.DEBUFF + (int)type);
+        icon.SetIcon((int)SpriteManager.ETCDataNumber.TOWERABILITY + (int)type);
     }
     public void Init(EnemyStatType type)
     {

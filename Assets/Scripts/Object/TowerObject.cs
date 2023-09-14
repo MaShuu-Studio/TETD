@@ -24,8 +24,8 @@ public class TowerObject : Poolable
 
     public AttackPriority Priority { get { return priority; } }
     private AttackPriority priority;
-    public Dictionary<BuffType, TowerBuff> Buffs { get { return buffs; } }
-    private Dictionary<BuffType, TowerBuff> buffs;
+    public Dictionary<AbilityType, TowerBuff> Buffs { get { return buffs; } }
+    private Dictionary<AbilityType, TowerBuff> buffs;
 
     public class TowerBuff
     {
@@ -54,9 +54,22 @@ public class TowerObject : Poolable
         // 버프를 가졌을 경우 버프의 범위로도 Range가 작동하지만 
         // 금광이 유일한 버프일 경우 (갯수가 1개이고 그게 금광일 경우)
         // 버프의 범위로 사용되지 않음.
-        bool hasBuff =
-            data.HasBuff &&
-            !(data.BuffTypes.Length == 1 && data.BuffTypes[0] == BuffType.GOLDMINE);
+        bool hasBuff = data.HasBuff;
+        if (data.HasBuff)
+        {
+            bool hasGoldMine = false;
+            int buffCount = 0;
+            for (int i = 0; i < data.AbilityTypes.Length; i++)
+            {
+                if (data.AbilityTypes[i] == AbilityType.GOLDMINE) hasGoldMine = true;
+                if (Tower.IsBuff(data.AbilityTypes[i])) buffCount++;
+
+                if (buffCount > 1) break;
+            }
+
+            if (buffCount == 1 && hasGoldMine) hasBuff = false;
+        }
+
         range.Init(this, hasBuff);
         rangeUI.transform.localPosition = range.transform.localPosition = Vector3.zero;
 
@@ -92,12 +105,12 @@ public class TowerObject : Poolable
         Animate(AnimationType.IDLE, true);
         activateCoroutine = null;
 
-        buffs = new Dictionary<BuffType, TowerBuff>();
+        buffs = new Dictionary<AbilityType, TowerBuff>();
 
         // 금광의 경우 자버프 겸 자동 작동이므로 바로 추가
-        if (data.Buff(BuffType.GOLDMINE) != 0)
+        if (data.Ability(AbilityType.GOLDMINE) != 0)
         {
-            UpdateBuff(BuffType.GOLDMINE, data.Buff(BuffType.GOLDMINE), 99);
+            UpdateBuff(AbilityType.GOLDMINE, data.Ability(AbilityType.GOLDMINE), 99);
         }
     }
 
@@ -169,16 +182,16 @@ public class TowerObject : Poolable
             // 버프로 스탯 추가 증가
             // 비율이 아닌 수치로 증가하기 때문에 value의 값을 변경
             // 만약 비율 증가로 변경하게 되면 stat 값을 조정함. 상황에 따라 합계산, 곱계산 적용
-            if (buffs.ContainsKey(BuffType.DMG))
-                value += buffs[BuffType.DMG].value;
+            if (buffs.ContainsKey(AbilityType.DMG))
+                value += buffs[AbilityType.DMG].value;
         }
 
         else if (type == TowerStatType.ATTACKSPEED)
         {
             stat += PlayerController.Instance.BonusElement(data.element, Character.ElementStatType.ATTACKSPEED);
 
-            if (buffs.ContainsKey(BuffType.ATKSPD))
-                value += buffs[BuffType.ATKSPD].value;
+            if (buffs.ContainsKey(AbilityType.ATKSPD))
+                value += buffs[AbilityType.ATKSPD].value;
         }
 
         // 스탯으로 증가한 보너스 스탯은 퍼센티지로 증가
@@ -242,16 +255,17 @@ public class TowerObject : Poolable
         }
         else if (priority == AttackPriority.DEBUFF)
         {
-            if (data.DebuffTypes != null)
-                foreach (DebuffType type in data.DebuffTypes)
+            if (data.HasDebuff)
+                foreach (AbilityType type in data.AbilityTypes)
                 {
+                    if (Tower.IsDebuff(type) == false) continue;
                     int remainTime = enemy.DebuffRemainTime(type);
                     float value = enemy.DebuffValue(type);
 
                     // 남은 시간이 적을 수록
                     // 기존 값보다 더 강한 디버프 일 경우 더 높은 우선순위
                     prior += (5 - remainTime);
-                    prior += data.Debuff(type) - value;
+                    prior += data.Ability(type) - value;
                 }
 
             // 앞의 유닛이 더 높은 우선순위
@@ -265,7 +279,7 @@ public class TowerObject : Poolable
     #region Buff
     public void AddTower(TowerObject tower)
     {
-        towers.Enqueue(tower, GetPriority(tower));
+        towers.Enqueue(tower, GetBuffPriority(tower));
 
         if (activateCoroutine == null)
         {
@@ -282,12 +296,13 @@ public class TowerObject : Poolable
             towers.Remove(tower);
     }
 
-    public float GetPriority(TowerObject tower)
+    public float GetBuffPriority(TowerObject tower)
     {
         float prior = 0;
-        foreach (BuffType type in data.BuffTypes)
+        foreach (AbilityType type in data.AbilityTypes)
         {
-            if (type == BuffType.GOLDMINE) continue;
+            if (Tower.IsBuff(type) == false) continue;
+            if (type == AbilityType.GOLDMINE) continue;
 
             float remainTime = 0;
             float value = 0;
@@ -301,13 +316,13 @@ public class TowerObject : Poolable
             // 남은 시간이 적을 수록
             // 기존 값보다 더 강한 버프 일 경우 더 높은 우선순위
             prior += (5 - remainTime);
-            prior += data.Buff(type) - value;
+            prior += data.Ability(type) - value;
         }
 
         return prior;
     }
 
-    public void UpdateBuff(BuffType type, float value, float time)
+    public void UpdateBuff(AbilityType type, float value, float time)
     {
         // 이미 있는 버프일 경우 업데이트
         if (buffs.ContainsKey(type))
@@ -330,13 +345,13 @@ public class TowerObject : Poolable
         }
     }
 
-    private IEnumerator Buff(BuffType type)
+    private IEnumerator Buff(AbilityType type)
     {
         while (buffs[type].time > 0)
         {
             // 금광버프일 경우 일정 주기(공격 속도)마다 계속해서 골드 획득
             // 버프가 사라지지 않으므로 시간 갱신 X
-            if (type == BuffType.GOLDMINE)
+            if (type == AbilityType.GOLDMINE)
             {
                 float delayTime = 0;
                 float delay = 1 / Stat(TowerStatType.ATTACKSPEED);
@@ -435,7 +450,7 @@ public class TowerObject : Poolable
         float time = 0;
 
         // 이 후 공격관련 함수 전부 진행.
-        int targetAmount = (int)data.Stat(TowerStatType.MULTISHOT);
+        int targetAmount = (int)data.Ability(AbilityType.MULTISHOT);
         if (targetAmount == 0) targetAmount = 1;
         List<EnemyObject> target = enemies.Get(targetAmount);
         if (target != null && enemies.Count > 0)
@@ -483,7 +498,7 @@ public class TowerObject : Poolable
             }
 
             SoundController.PlayAudio(id);
-            if (data.Stat(TowerStatType.SPLASH) != 0)
+            if (data.Ability(AbilityType.SPLASH) != 0)
             {
                 for (int j = 0; j < target.Count; j++)
                 {
@@ -512,7 +527,7 @@ public class TowerObject : Poolable
     // 버프 부여 함수
     public void GiveBuff()
     {
-        int targetAmount = (int)data.Stat(TowerStatType.MULTISHOT);
+        int targetAmount = (int)data.Ability(AbilityType.MULTISHOT);
         if (targetAmount == 0) targetAmount = 1;
         List<TowerObject> target = towers.Get(targetAmount);
         if (target != null && towers.Count > 0)
@@ -520,10 +535,11 @@ public class TowerObject : Poolable
             Effect(target);
             for (int i = 0; i < target.Count; i++)
             {
-                foreach (BuffType type in data.BuffTypes)
+                foreach (AbilityType type in data.AbilityTypes)
                 {
-                    if (type == BuffType.GOLDMINE) continue;
-                    target[i].UpdateBuff(type, data.Buff(type), 5);
+                    if (Tower.IsBuff(type) == false) continue;
+                    if (type == AbilityType.GOLDMINE) continue;
+                    target[i].UpdateBuff(type, data.Ability(type), 5);
                 }
             }
 
@@ -535,7 +551,7 @@ public class TowerObject : Poolable
 
             for (int i = 0; i < tmp.Length; i++)
             {
-                towers.Enqueue(tmp[i], GetPriority(tmp[i]));
+                towers.Enqueue(tmp[i], GetBuffPriority(tmp[i]));
             }
         }
     }
@@ -547,7 +563,7 @@ public class TowerObject : Poolable
             // 타겟이 죽었을 경우에도 스플래시 공격이라면 이펙트가 남아야 함.
             // 반대로 타겟이 없고 스플래시 공격이 아니라면 이펙트가 남을 필요가 없음.
             if (targets[i].gameObject.activeSelf == false
-                && data.Stat(TowerStatType.SPLASH) == 0)
+                && data.Ability(AbilityType.SPLASH) == 0)
                 continue;
 
             GameObject effect = PoolController.PopEffect(data.id);

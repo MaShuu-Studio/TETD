@@ -10,9 +10,8 @@ namespace EnumData
   public enum Grade { NORMAL = 0, RARE = 1, HEROIC = 2, LEGENDARY = 3, }
   public enum AttackPriority { FIRST = 0, LAST = 1, STRONG = 2, WEAK = 3, ELEMENT = 4, DEBUFF = 5, }
   public enum EnemyStatType { HP = 0, SPEED = 1, EXP = 2, }
-  public enum TowerStatType { DAMAGE = 0, ATTACKSPEED = 1, DISTANCE = 2, MULTISHOT = 3, SPLASH = 4, }
-  public enum BuffType { GOLDMINE = 0, DMG = 1, ATKSPD = 2, }
-  public enum DebuffType { SLOW = 0, BURN = 1, POISON = 2, BLEED = 3, }
+  public enum TowerStatType { DAMAGE = 0, ATTACKSPEED = 1, DISTANCE = 2, }
+  public enum AbilityType { MULTISHOT=0,SPLASH=1,GOLDMINE=100,DMG=101,ATKSPD=102,SLOW=200,BURN=201,POISON=202,BLEED=203,}
   public enum AnimationType { IDLE = 0, ATTACK = 1, MOVE = 2, DEAD = 3, }
   public enum LanguageType { KOREAN = 0, ENGLISH = 1, }
   public enum AttackType { PROMPT = 0, PROJECTILE = 1, POINT = 2, }
@@ -27,8 +26,7 @@ public static Grade[] Grades { get; private set; } = (Grade[])Enum.GetValues(typ
 public static AttackPriority[] AttackPrioritys { get; private set; } = (AttackPriority[])Enum.GetValues(typeof(AttackPriority));
 public static EnemyStatType[] EnemyStatTypes { get; private set; } = (EnemyStatType[])Enum.GetValues(typeof(EnemyStatType));
 public static TowerStatType[] TowerStatTypes { get; private set; } = (TowerStatType[])Enum.GetValues(typeof(TowerStatType));
-public static BuffType[] BuffTypes { get; private set; } = (BuffType[])Enum.GetValues(typeof(BuffType));
-public static DebuffType[] DebuffTypes { get; private set; } = (DebuffType[])Enum.GetValues(typeof(DebuffType));
+public static AbilityType[] AbilityTypes { get; private set; } = (AbilityType[])Enum.GetValues(typeof(AbilityType));
 public static AnimationType[] AnimationTypes { get; private set; } = (AnimationType[])Enum.GetValues(typeof(AnimationType));
 public static LanguageType[] LanguageTypes { get; private set; } = (LanguageType[])Enum.GetValues(typeof(LanguageType));
 public static AttackType[] AttackTypes { get; private set; } = (AttackType[])Enum.GetValues(typeof(AttackType));
@@ -40,8 +38,7 @@ public static Dictionary<Grade,string> GradeStrings { get; private set; }
 public static Dictionary<AttackPriority,string> AttackPriorityStrings { get; private set; }
 public static Dictionary<EnemyStatType,string> EnemyStatTypeStrings { get; private set; }
 public static Dictionary<TowerStatType,string> TowerStatTypeStrings { get; private set; }
-public static Dictionary<BuffType,string> BuffTypeStrings { get; private set; }
-public static Dictionary<DebuffType,string> DebuffTypeStrings { get; private set; }
+public static Dictionary<AbilityType,string> AbilityTypeStrings { get; private set; }
 public static Dictionary<AnimationType,string> AnimationTypeStrings { get; private set; }
 public static Dictionary<LanguageType,string> LanguageTypeStrings { get; private set; }
 public static Dictionary<AttackType,string> AttackTypeStrings { get; private set; }
@@ -106,18 +103,11 @@ public static Dictionary<AttackType,string> AttackTypeStrings { get; private set
                 TowerStatTypeStrings.Add(type, type.ToString()); 
             }
 
-            BuffTypeStrings = new Dictionary<BuffType, string>();
-            for (int i = 0; i < BuffTypes.Length; i++)
+            AbilityTypeStrings = new Dictionary<AbilityType, string>();
+            for (int i = 0; i < AbilityTypes.Length; i++)
             {
-                BuffType type = BuffTypes[i];
-                BuffTypeStrings.Add(type, type.ToString()); 
-            }
-
-            DebuffTypeStrings = new Dictionary<DebuffType, string>();
-            for (int i = 0; i < DebuffTypes.Length; i++)
-            {
-                DebuffType type = DebuffTypes[i];
-                DebuffTypeStrings.Add(type, type.ToString()); 
+                AbilityType type = AbilityTypes[i];
+                AbilityTypeStrings.Add(type, type.ToString()); 
             }
 
             AnimationTypeStrings = new Dictionary<AnimationType, string>();

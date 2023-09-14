@@ -15,7 +15,7 @@
 "projtime": 0.3,
 "projattacktime": 0.3,
 "effectcolor": {"r":1,"g":0,"b":1,"a":1},
-    "debuffs": [ {"type": 2, "value": 1} ],
+    "ability": [ {"type": 202, "value": 1} ],
 "imgsrc": "/Sprites/Tower/1020000/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 },
@@ -49,7 +49,7 @@
 "projspf": 0.05,
 "projtime": 0.6,
 "projattacktime": 0.1,
-    "debuffs": [ {"type": 3, "value": 1} ],
+    "ability": [ {"type": 203, "value": 1} ],
 "imgsrc": "/Sprites/Tower/1020001/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 },
@@ -281,7 +281,7 @@
 "spf": 0.1,
     "attacktime": [ 0.2 ],
 "type": 0,
-    "buffs": [ {"type": 1, "value": 1} ],
+    "ability": [ {"type": 101, "value": 1} ],
 "imgsrc": "/Sprites/Tower/1020006/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 },
@@ -295,7 +295,7 @@
 "spf": 0.1,
     "attacktime": [ 0.2 ],
 "type": 0,
-    "buffs": [ {"type": 1, "value": 1} ],
+    "ability": [ {"type": 101, "value": 1} ],
 "imgsrc": "/Sprites/Tower/1021006/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 },
@@ -309,7 +309,7 @@
 "spf": 0.1,
     "attacktime": [ 0.2 ],
 "type": 0,
-    "buffs": [ {"type": 2, "value": 1} ],
+    "ability": [ {"type": 102, "value": 1} ],
 "imgsrc": "/Sprites/Tower/1020007/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 },
@@ -323,7 +323,7 @@
 "spf": 0.1,
     "attacktime": [ 0.2 ],
 "type": 0,
-    "buffs": [ {"type": 2, "value": 1} ],
+    "ability": [ {"type": 102, "value": 1} ],
 "imgsrc": "/Sprites/Tower/1022007/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 },
@@ -340,7 +340,7 @@
 "projspf": 0.075,
 "projtime": 0.6,
 "projattacktime": 0.225,
-    "debuffs": [ {"type": 0, "value": 0.4} ],
+    "ability": [ {"type": 200, "value": 0.4} ],
 "imgsrc": "/Sprites/Tower/1020008/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 },

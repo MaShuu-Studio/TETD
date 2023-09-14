@@ -26,7 +26,7 @@ public class EnemyObject : Poolable
     private IEnumerator moveCoroutine;
     private IEnumerator effectCoroutine;
 
-    private Dictionary<DebuffType, EnemyDebuff> debuffs;
+    private Dictionary<AbilityType, EnemyDebuff> debuffs;
 
     private class EnemyDebuff
     {
@@ -57,7 +57,7 @@ public class EnemyObject : Poolable
 
         hpBar.transform.localPosition = new Vector3(0, this.data.Height);
 
-        debuffs = new Dictionary<DebuffType, EnemyDebuff>();
+        debuffs = new Dictionary<AbilityType, EnemyDebuff>();
         return true;
     }
 
@@ -121,7 +121,7 @@ public class EnemyObject : Poolable
                     continue;
                 }
                 float slowAmount = 0;
-                if (debuffs.ContainsKey(DebuffType.SLOW)) slowAmount = debuffs[DebuffType.SLOW].value;
+                if (debuffs.ContainsKey(AbilityType.SLOW)) slowAmount = debuffs[AbilityType.SLOW].value;
                 Vector3 moveAmount = v * speed * Time.deltaTime * (1 - slowAmount);
                 transform.position += moveAmount;
                 yield return null;
@@ -152,12 +152,13 @@ public class EnemyObject : Poolable
 
         if (hp <= 0) return;
         // 디버프 추가
-        if (tower.DebuffTypes != null)
+        if (tower.HasDebuff)
         {
-            for (int i = 0; i < tower.DebuffTypes.Length; i++)
+            for (int i = 0; i < tower.AbilityTypes.Length; i++)
             {
-                DebuffType type = tower.DebuffTypes[i];
-                float value = tower.Debuff(type);
+                AbilityType type = tower.AbilityTypes[i];
+                if (Tower.IsDebuff(type) == false) continue;
+                float value = tower.Ability(type);
 
                 if (debuffs.ContainsKey(type) == false)
                 {
@@ -209,7 +210,7 @@ public class EnemyObject : Poolable
     #endregion
 
     #region Debuff
-    public IEnumerator Debuff(DebuffType type, Element element)
+    public IEnumerator Debuff(AbilityType type, Element element)
     {
         float time = 0;
         while (hp > 0 && debuffs[type].time > 0)
@@ -230,35 +231,35 @@ public class EnemyObject : Poolable
             Color c = Color.white;
             switch (type)
             {
-                case DebuffType.SLOW:
+                case AbilityType.SLOW:
                     c = Color.black;
                     break;
-                case DebuffType.BURN:
+                case AbilityType.BURN:
                     c = new Color(1, 0.5f, 0);
                     break;
-                case DebuffType.POISON:
+                case AbilityType.POISON:
                     c = Color.magenta;
                     break;
-                case DebuffType.BLEED:
+                case AbilityType.BLEED:
                     c = Color.red;
                     break;
             }
 
-            float value = (type >= DebuffType.BURN) ? debuffs[type].value : 0;
+            float value = (type >= AbilityType.BURN) ? debuffs[type].value : 0;
             Damaged(element, value, c);
         }
 
         debuffs.Remove(type);
     }
 
-    public int DebuffRemainTime(DebuffType type)
+    public int DebuffRemainTime(AbilityType type)
     {
         if (debuffs.ContainsKey(type)) return debuffs[type].time;
 
         return 0;
     }
 
-    public float DebuffValue(DebuffType type)
+    public float DebuffValue(AbilityType type)
     {
         if (debuffs.ContainsKey(type)) return debuffs[type].value;
 

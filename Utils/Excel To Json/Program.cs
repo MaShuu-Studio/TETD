@@ -234,7 +234,8 @@ namespace Excel_To_Json
                 {
                     string o = (range.Cells[row, column] as Excel.Range).Value2;
                     if (string.IsNullOrEmpty(o)) continue;
-                    data += string.Format(JsonFormat.enumDataFormat, o, count++);
+                    if (o.Contains("=")) data += o + ",";
+                    else data += string.Format(JsonFormat.enumDataFormat, o, count++);
                 }
                 contents += string.Format(JsonFormat.enumFormat, type, data) + "\n";
             }

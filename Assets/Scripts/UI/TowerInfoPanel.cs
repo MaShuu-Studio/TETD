@@ -41,9 +41,9 @@ public class TowerInfoPanel : TowerInfo
         priorityToggles[(int)AttackPriority.DEBUFF].gameObject.SetActive(data.HasDebuff);
 
         int i = 0;
-        for (; i < data.StatTypes.Length; i++)
+        for (; i < EnumArray.TowerStatTypes.Length; i++)
         {
-            TowerStatType type = data.StatTypes[i];
+            TowerStatType type = EnumArray.TowerStatTypes[i];
             upgradeItems[i].gameObject.SetActive(true);
             UpdateUpgradeStat(i, type);
         }
@@ -83,29 +83,14 @@ public class TowerInfoPanel : TowerInfo
             mainStats[i].SetData(selectedTower.Stat(type));
         }
 
-        int abilIndex = 0;
-        if (data.StatTypes.Length > 3)
+        if (data.AbilityTypes.Length > 0)
         {
-            for (int i = 3; i < data.StatTypes.Length; i++, abilIndex++)
+            for (int i = 0; i < data.AbilityTypes.Length; i++)
             {
-                TowerStatType type = data.StatTypes[i];
-                abilities[abilIndex].SetData(selectedTower.Stat(type));
+                AbilityType type = data.AbilityTypes[i];
+                abilities[i].SetData(data.Ability(type));
             }
         }
-
-        if (data.BuffTypes != null)
-            for (int i = 0; i < data.BuffTypes.Length; i++, abilIndex++)
-            {
-                BuffType type = data.BuffTypes[i];
-                abilities[abilIndex].SetData(data.Buff(type));
-            }
-
-        if (data.DebuffTypes != null)
-            for (int i = 0; i < data.DebuffTypes.Length; i++, abilIndex++)
-            {
-                DebuffType type = data.DebuffTypes[i];
-                abilities[abilIndex].SetData(data.Debuff(type));
-            }
     }
 
     public void Reinforce(int index, TowerStatType type)

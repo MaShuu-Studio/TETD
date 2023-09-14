@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using EnumData;
 
 public class Library : MonoBehaviour
 {
@@ -16,9 +17,7 @@ public class Library : MonoBehaviour
     [SerializeField] private LibraryFilterToggle[] elementFilterToggles;
     [SerializeField] private LibraryFilterToggle[] gradeFilterToggles;
     [SerializeField] private LibraryFilterToggle[] enemyGradeFilterToggles;
-    [SerializeField] private LibraryFilterToggle[] statFilterToggles;
-    [SerializeField] private LibraryFilterToggle[] buffFilterToggles;
-    [SerializeField] private LibraryFilterToggle[] debuffFilterToggles;
+    [SerializeField] private LibraryFilterToggle[] abilFilterToggles;
 
     [SerializeField] private TextMeshProUGUI pageText;
 
@@ -63,20 +62,11 @@ public class Library : MonoBehaviour
             enemyGradeFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.ENEMYGRADE, i);
         }
 
-        // 임시 코드. 후에 Ability로 통합되게 되면 수정.
         // 기본적으로 능력 필터는 끈 상태로 시작.
-        int a = 0;
-        for (int i = 3; i < EnumData.EnumArray.TowerStatTypes.Length; i++)
+        for (int i = 0; i < EnumArray.AbilityTypes.Length; i++)
         {
-            statFilterToggles[a++].Init((int)SpriteManager.ETCDataNumber.TOWERSTAT, i, false);
-        }
-        for (int i = 0; i < EnumData.EnumArray.BuffTypes.Length; i++)
-        {
-            buffFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.BUFF, i, false);
-        }
-        for (int i = 0; i < EnumData.EnumArray.DebuffTypes.Length; i++, a++)
-        {
-            debuffFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.DEBUFF, i, false);
+            int type = (int)EnumArray.AbilityTypes[i];
+            abilFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.TOWERABILITY, type, false);
         }
 
         UpdateLibrary();
@@ -119,32 +109,10 @@ public class Library : MonoBehaviour
                         // 그러나 필터가 켜져있다면 해당되지 않는 id는 넣지 않아야함.
                         // 따라서 기본적으로 추가를 전제하에 진행하며
                         // 만약에 필터가 켜져있었는데 해당 id가 해당 ability가 없다면 스킵.
-                        for (int s = 0; add && s < statFilterToggles.Length; s++)
+                        for (int s = 0; add && s < abilFilterToggles.Length; s++)
                         {
-                            if (statFilterToggles[s].isOn == false) continue;
+                            if (abilFilterToggles[s].isOn == false) continue;
                             int type = s + 3;
-                            if (TowerManager.AbilityIds[type].Contains(id) == false)
-                            {
-                                add = false;
-                                break;
-                            }
-                        }
-
-                        for (int b = 0; add && b < buffFilterToggles.Length; b++)
-                        {
-                            if (buffFilterToggles[b].isOn == false) continue;
-                            int type = 10 + b;
-                            if (TowerManager.AbilityIds[type].Contains(id) == false)
-                            {
-                                add = false;
-                                break;
-                            }
-                        }
-
-                        for (int d = 0; add && d < debuffFilterToggles.Length; d++)
-                        {
-                            if (debuffFilterToggles[d].isOn == false) continue;
-                            int type = 20 + d;
                             if (TowerManager.AbilityIds[type].Contains(id) == false)
                             {
                                 add = false;

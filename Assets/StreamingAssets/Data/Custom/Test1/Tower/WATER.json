@@ -75,7 +75,19 @@
 "pivot": { "x": 0.5, "y": 0.05 }
 },
 
-{"id":1010002,"name":"","imgsrc":"E:/Unity/TETD/Assets/StreamingAssets/Data/Custom/Test1/Sprites/Tower/1010002","pivot":{"x":0.5,"y":0.0625},"pixelperunit":24.0,"grade":0,"element":0,"type":0,"ability":[],"buffs":[],"debuffs":[],"cost":120,"dmg":1.0,"attackspeed":1.0,"range":2.5,"spf":0.10000000149011612,"attacktime":[0.4000000059604645],"projspf":0.0,"projattacktime":0.0,"projtime":0.0,"effectspf":0.029999999329447748,"effectcolor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0}},
+{
+    "id": 1010002,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.1,
+    "attacktime": [ 0.4 ],
+"type": 0,
+"effectcolor": {"r":0.6,"g":0.8,"b":1,"a":1},
+"imgsrc": "/Sprites/Tower/1010002/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
 
 {
     "id": 1011002,
@@ -140,6 +152,23 @@
 },
 
 {
+    "id": 1012003,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.1,
+    "attacktime": [ 0.6 ],
+"type": 1,
+"projspf": 0.1,
+"projtime": 0.3,
+"projattacktime": 0.3,
+"effectcolor": {"r":0.6,"g":0.8,"b":1,"a":1},
+"imgsrc": "/Sprites/Tower/1012003/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
     "id": 1011004,
 "cost": 150,
 "dmg": 1,
@@ -198,6 +227,23 @@
 "projattacktime": 0.3,
 "effectcolor": {"r":0.6,"g":0.8,"b":1,"a":1},
 "imgsrc": "/Sprites/Tower/1011005/",
+"pivot": { "x": 0.5, "y": 0.0625 }
+},
+
+{
+    "id": 1012005,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 1,
+"spf": 0.1,
+    "attacktime": [ 0.5 ],
+"type": 1,
+"projspf": 0.1,
+"projtime": 0.3,
+"projattacktime": 0.3,
+"effectcolor": {"r":0.6,"g":0.8,"b":1,"a":1},
+"imgsrc": "/Sprites/Tower/1012005/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 },
 
@@ -284,6 +330,24 @@
 "effectspf": 0.045,
 "effectcolor": {"r":1,"g":0,"b":0,"a":1},
 "imgsrc": "/Sprites/Tower/1012007/",
+"pivot": { "x": 0.5, "y": 0.05 }
+},
+
+{
+    "id": 1013007,
+"cost": 150,
+"dmg": 1,
+"range": 2.5,
+"attackspeed": 2,
+"spf": 0.1,
+    "attacktime": [ 0.2,0.8,1.4 ],
+"type": 1,
+"projspf": 0.1,
+"projtime": 0.3,
+"projattacktime": 0.3,
+"effectspf": 0.045,
+"effectcolor": {"r":1,"g":0,"b":0,"a":1},
+"imgsrc": "/Sprites/Tower/1013007/",
 "pivot": { "x": 0.5, "y": 0.05 }
 }
     ]

@@ -203,30 +203,11 @@ public class UnitEditor : MonoBehaviour
         // abilities
         {
             List<CustomDropdownOption> options = new List<CustomDropdownOption>();
-            // 0 ~ 2까지는 메인스탯
-            for (int i = 3; i < EnumArray.TowerStatTypes.Length; i++)
+            for (int i = 0; i < EnumArray.AbilityTypes.Length; i++)
             {
-                TowerStatType type = EnumArray.TowerStatTypes[i];
-                string oName = EnumArray.TowerStatTypeStrings[type];
-                Sprite oSprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.TOWERSTAT, i);
-                CustomDropdownOption option = new CustomDropdownOption(oName, oSprite);
-                options.Add(option);
-            }
-
-            for (int i = 0; i < EnumArray.BuffTypes.Length; i++)
-            {
-                BuffType type = EnumArray.BuffTypes[i];
-                string oName = EnumArray.BuffTypeStrings[type];
-                Sprite oSprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.BUFF, i);
-                CustomDropdownOption option = new CustomDropdownOption(oName, oSprite);
-                options.Add(option);
-            }
-
-            for (int i = 0; i < EnumArray.DebuffTypes.Length; i++)
-            {
-                DebuffType type = EnumArray.DebuffTypes[i];
-                string oName = EnumArray.DebuffTypeStrings[type];
-                Sprite oSprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.DEBUFF, i);
+                AbilityType type = EnumArray.AbilityTypes[i];
+                string oName = EnumArray.AbilityTypeStrings[type];
+                Sprite oSprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.TOWERABILITY, (int)type);
                 CustomDropdownOption option = new CustomDropdownOption(oName, oSprite);
                 options.Add(option);
             }
@@ -463,35 +444,17 @@ public class UnitEditor : MonoBehaviour
 
                 // 어빌리티
                 List<TowerAbility> abils = new List<TowerAbility>();
-                List<TowerAbility> buffs = new List<TowerAbility>();
-                List<TowerAbility> debuffs = new List<TowerAbility>();
-
-                int statAmount = EnumArray.TowerStatTypes.Length - 3;
-                int buffAmount = EnumArray.BuffTypes.Length;
-                int debuffAmount = EnumArray.DebuffTypes.Length;
 
                 for (int i = 0; i < towerAbilities.Length; i++)
                 {
                     TowerAbility ability = new TowerAbility();
                     int index = towerAbilityDropdowns[i].value;
-                    float.TryParse(towerAbilityInputs[i].text, out ability.value);
 
                     if (index == 0) continue;
-                    else if (index < 1 + statAmount)
-                    {
-                        ability.type = (index + statAmount);
-                        abils.Add(ability);
-                    }
-                    else if (index < 1 + statAmount + buffAmount)
-                    {
-                        ability.type = (index - statAmount - 1);
-                        buffs.Add(ability);
-                    }
-                    else
-                    {
-                        ability.type = (index - buffAmount - statAmount - 1);
-                        debuffs.Add(ability);
-                    }
+
+                    ability.type = (int)EnumArray.AbilityTypes[index - 1];
+                    float.TryParse(towerAbilityInputs[i].text, out ability.value);
+                    abils.Add(ability);
                 }
 
                 AttackType attackType = AttackType.PROMPT;
@@ -552,8 +515,6 @@ public class UnitEditor : MonoBehaviour
                     attacktime = attacktimes,
 
                     ability = abils,
-                    buffs = buffs,
-                    debuffs = debuffs,
 
                     type = attackType,
 
@@ -777,34 +738,13 @@ public class UnitEditor : MonoBehaviour
             #region ability
             int index = 0;
             towerAbilities[0].SetActive(true);
-            for (int i = 3; i < data.StatTypes.Length; i++)
-            {
-                if (index < towerAbilityDropdowns.Length)
-                {
-                    towerAbilityDropdowns[index].value = ChangeStatToValue(0, (int)data.StatTypes[i]);
-                    towerAbilityInputs[index].text = data.Stat(data.StatTypes[i]).ToString();
-                    towerAbilities[index++].SetActive(true);
-                }
-            }
-
-            if (data.BuffTypes != null)
-                for (int i = 0; i < data.BuffTypes.Length; i++)
+            if (data.AbilityTypes != null)
+                for (int i = 0; i < data.AbilityTypes.Length; i++)
                 {
                     if (index < towerAbilityDropdowns.Length)
                     {
-                        towerAbilityDropdowns[index].value = ChangeStatToValue(1, (int)data.BuffTypes[i]);
-                        towerAbilityInputs[index].text = data.Buff(data.BuffTypes[i]).ToString();
-                        towerAbilities[index++].SetActive(true);
-                    }
-                }
-
-            if (data.DebuffTypes != null)
-                for (int i = 0; i < data.DebuffTypes.Length; i++)
-                {
-                    if (index < towerAbilityDropdowns.Length)
-                    {
-                        towerAbilityDropdowns[index].value = ChangeStatToValue(2, (int)data.DebuffTypes[i]);
-                        towerAbilityInputs[index].text = data.Debuff(data.DebuffTypes[i]).ToString();
+                        towerAbilityDropdowns[index].value = ChangeAbilityToValue(data.AbilityTypes[i]);
+                        towerAbilityInputs[index].text = data.Ability(data.AbilityTypes[i]).ToString();
                         towerAbilities[index++].SetActive(true);
                     }
                 }
@@ -899,42 +839,21 @@ public class UnitEditor : MonoBehaviour
 
     private void UpdateDataToPosterAbility()
     {
-        Dictionary<TowerStatType, float> statAbils = new Dictionary<TowerStatType, float>();
-        Dictionary<BuffType, float> buffs = new Dictionary<BuffType, float>();
-        Dictionary<DebuffType, float> debuffs = new Dictionary<DebuffType, float>();
-
-        int statAmount = EnumArray.TowerStatTypes.Length - 3;
-        int buffAmount = EnumArray.BuffTypes.Length;
-        int debuffAmount = EnumArray.DebuffTypes.Length;
+        Dictionary<AbilityType, float> abils = new Dictionary<AbilityType, float>();
 
         for (int i = 0; i < towerAbilities.Length; i++)
         {
             int index = towerAbilityDropdowns[i].value;
+
+            if (index == 0) continue;
+            AbilityType type = EnumArray.AbilityTypes[index - 1];
             float value;
             float.TryParse(towerAbilityInputs[i].text, out value);
 
-            if (index == 0) continue;
-            else if (index < 1 + statAmount)
-            {
-                TowerStatType type = (TowerStatType)(index + statAmount);
-                if (statAbils.ContainsKey(type)) towerAbilityDropdowns[i].value = 0;
-                else statAbils.Add(type, value);
-            }
-            else if (index < 1 + statAmount + buffAmount)
-            {
-                BuffType type = (BuffType)(index - statAmount - 1);
-                if (buffs.ContainsKey(type)) towerAbilityDropdowns[i].value = 0;
-                else buffs.Add(type, value);
-            }
-            else
-            {
-                DebuffType type = (DebuffType)(index - buffAmount - statAmount - 1);
-                if (debuffs.ContainsKey(type)) towerAbilityDropdowns[i].value = 0;
-                else debuffs.Add(type, value);
-            }
+            abils.Add(type, value);
         }
 
-        poster.UpdateAbility(statAbils, buffs, debuffs);
+        poster.UpdateAbility(abils);
     }
     #endregion
 
@@ -962,28 +881,13 @@ public class UnitEditor : MonoBehaviour
         }
     }
 
-    // 0: Stats, 1: Buff, 2: Debuff
-    private int ChangeStatToValue(int type, int index)
+    private int ChangeAbilityToValue(AbilityType type)
     {
-        int value = 0;
-
-        int statAmount = EnumArray.TowerStatTypes.Length - 3;
-        int buffAmount = EnumArray.BuffTypes.Length;
-        int debuffAmount = EnumArray.DebuffTypes.Length;
-
-        switch (type)
+        for (int i = 0; i < EnumArray.AbilityTypes.Length; i++)
         {
-            case 0:
-                value = index - statAmount;
-                break;
-            case 1:
-                value = 1 + statAmount + index;
-                break;
-            case 2:
-                value = 1 + statAmount + buffAmount + index;
-                break;
+            if (type == EnumArray.AbilityTypes[i]) return i + 1;
         }
-        return value;
+        return 0;
     }
 
     private void ChangeAttackAmount(string s)

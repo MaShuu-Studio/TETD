@@ -351,7 +351,7 @@ namespace Data
 
                     for (int i = 0; i < langPath.Count; i++)
                     {
-                        langPath[i] = CustomDataManager.editingLangPath + langPath[i];
+                        langPath[i] = UnityEngine.Application.streamingAssetsPath + CustomDataManager.editingLangPath + langPath[i];
 
                         // 데이터 파일 수정
                         string json = File.ReadAllText(langPath[i]);

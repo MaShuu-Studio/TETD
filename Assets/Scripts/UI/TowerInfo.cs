@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using EnumData;
 
 public class TowerInfo : MonoBehaviour
 {
@@ -34,43 +35,27 @@ public class TowerInfo : MonoBehaviour
 
         for (int i = 0; i < mainStats.Length; i++)
         {
-            EnumData.TowerStatType type = (EnumData.TowerStatType)i;
+            TowerStatType type = (TowerStatType)i;
             mainStats[i].Init(type);
         }
 
         if (data.AttackAmount > 1) attackAmount.text = $"x{data.AttackAmount}";
         else attackAmount.text = "";
 
-        int abilIndex = 0;
-        if (data.StatTypes.Length > 3)
+        int index = 0;
+        if (data.AbilityTypes.Length > 0)
         {
-            for (int i = 3; i < data.StatTypes.Length; i++, abilIndex++)
+            for (index = 0; index < data.AbilityTypes.Length; index++)
             {
-                EnumData.TowerStatType type = data.StatTypes[i];
-                abilities[abilIndex].gameObject.SetActive(true);
-                abilities[abilIndex].Init(type);
+                AbilityType type = data.AbilityTypes[index];
+                abilities[index].gameObject.SetActive(true);
+                abilities[index].Init(type);
             }
         }
 
-        if (data.BuffTypes != null)
-            for (int i = 0; i < data.BuffTypes.Length; i++, abilIndex++)
-            {
-                EnumData.BuffType type = data.BuffTypes[i];
-                abilities[abilIndex].gameObject.SetActive(true);
-                abilities[abilIndex].Init(type);
-            }
-
-        if (data.DebuffTypes != null)
-            for (int i = 0; i < data.DebuffTypes.Length; i++, abilIndex++)
-            {
-                EnumData.DebuffType type = data.DebuffTypes[i];
-                abilities[abilIndex].gameObject.SetActive(true);
-                abilities[abilIndex].Init(type);
-            }
-
-        for (; abilIndex < abilities.Length; abilIndex++)
+        for (; index < abilities.Length; index++)
         {
-            abilities[abilIndex].gameObject.SetActive(false);
+            abilities[index].gameObject.SetActive(false);
         }
         UpdateInfo();
     }
@@ -79,33 +64,18 @@ public class TowerInfo : MonoBehaviour
     {
         for (int i = 0; i < mainStats.Length; i++)
         {
-            EnumData.TowerStatType type = (EnumData.TowerStatType)i;
+            TowerStatType type = (TowerStatType)i;
             mainStats[i].SetData(data.Stat(type));
         }
 
-        int abilIndex = 0;
-        if (data.StatTypes.Length > 3)
+        if (data.AbilityTypes.Length > 0)
         {
-            for (int i = 3; i < data.StatTypes.Length; i++, abilIndex++)
+            for (int i = 0; i < data.AbilityTypes.Length; i++)
             {
-                EnumData.TowerStatType type = data.StatTypes[i];
-                abilities[abilIndex].SetData(data.Stat(type));
+                AbilityType type = data.AbilityTypes[i];
+                abilities[i].SetData(data.Ability(type));
             }
         }
-
-        if (data.BuffTypes != null)
-            for (int i = 0; i < data.BuffTypes.Length; i++, abilIndex++)
-            {
-                EnumData.BuffType type = data.BuffTypes[i];
-                abilities[abilIndex].SetData(data.Buff(type));
-            }
-
-        if (data.DebuffTypes != null)
-            for (int i = 0; i < data.DebuffTypes.Length; i++, abilIndex++)
-            {
-                EnumData.DebuffType type = data.DebuffTypes[i];
-                abilities[abilIndex].SetData(data.Debuff(type));
-            }
     }
 
     public virtual void UpdateLanguage()

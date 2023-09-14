@@ -1,0 +1,617 @@
+{
+    "list": 
+    [
+        
+{
+    "id": 1000000,"name": "Torch"
+},
+
+{
+    "id": 1000001,"name": "Sling"
+},
+
+{
+    "id": 1000002,"name": "Molotov"
+},
+
+{
+    "id": 1000003,"name": "Sword"
+},
+
+{
+    "id": 1001003,"name": "Sword"
+},
+
+{
+    "id": 1002003,"name": "Sword"
+},
+
+{
+    "id": 1000004,"name": "Bow"
+},
+
+{
+    "id": 1001004,"name": "Bow"
+},
+
+{
+    "id": 1002004,"name": "Bow"
+},
+
+{
+    "id": 1000005,"name": "Fighter"
+},
+
+{
+    "id": 1001005,"name": "Fighter"
+},
+
+{
+    "id": 1002005,"name": "Fighter"
+},
+
+{
+    "id": 1000006,"name": "FireBall"
+},
+
+{
+    "id": 1001006,"name": "Inferno"
+},
+
+{
+    "id": 1002006,"name": "Fire Blast"
+},
+
+{
+    "id": 1003006,"name": "Metor"
+},
+
+{
+    "id": 1000007,"name": "Blaze"
+},
+
+{
+    "id": 1001007,"name": "Blaze"
+},
+
+{
+    "id": 1002007,"name": "Blaze"
+},
+
+{
+    "id": 1001008,"name": "Fire Orb"
+},
+
+{
+    "id": 1002008,"name": "Fire Orb"
+},
+
+{
+    "id": 1003008,"name": "Fire Orb"
+},
+
+{
+    "id": 1010000,"name": "Viking"
+},
+
+{
+    "id": 1011000,"name": "Viking"
+},
+
+{
+    "id": 1010001,"name": "Pirate"
+},
+
+{
+    "id": 1011001,"name": "Pirate"
+},
+
+{
+    "id": 1012001,"name": "Captain"
+},
+
+{
+    "id": 1010002,"name": "Spear"
+},
+
+{
+    "id": 1011002,"name": "Spear"
+},
+
+{
+    "id": 1012002,"name": "Spear"
+},
+
+{
+    "id": 1010003,"name": "Archer"
+},
+
+{
+    "id": 1011003,"name": "Archer"
+},
+
+{
+    "id": 1012003,"name": "Archer"
+},
+
+{
+    "id": 1011004,"name": "Slow"
+},
+
+{
+    "id": 1012004,"name": "Slow"
+},
+
+{
+    "id": 1010005,"name": "IceBolt"
+},
+
+{
+    "id": 1011005,"name": "IceBolt"
+},
+
+{
+    "id": 1012005,"name": "IceBolt"
+},
+
+{
+    "id": 1010006,"name": "IceArrow"
+},
+
+{
+    "id": 1011006,"name": "IceArrow"
+},
+
+{
+    "id": 1012006,"name": "IceArrow"
+},
+
+{
+    "id": 1013006,"name": "IceArrow"
+},
+
+{
+    "id": 1012007,"name": "Ship"
+},
+
+{
+    "id": 1013007,"name": "Ship"
+},
+
+{
+    "id": 1020000,"name": "Dart"
+},
+
+{
+    "id": 1021000,"name": "Dart"
+},
+
+{
+    "id": 1020001,"name": "Trapper"
+},
+
+{
+    "id": 1021001,"name": "Trapper"
+},
+
+{
+    "id": 1022001,"name": "Trapper"
+},
+
+{
+    "id": 1020002,"name": "Satyr"
+},
+
+{
+    "id": 1021002,"name": "Satyr"
+},
+
+{
+    "id": 1022002,"name": "Satyr"
+},
+
+{
+    "id": 1020003,"name": "Centaurs"
+},
+
+{
+    "id": 1021003,"name": "Centaurs"
+},
+
+{
+    "id": 1022003,"name": "Centaurs"
+},
+
+{
+    "id": 1020004,"name": "Elf Spear"
+},
+
+{
+    "id": 1021004,"name": "Elf Spear"
+},
+
+{
+    "id": 1022004,"name": "Elf Spear"
+},
+
+{
+    "id": 1020005,"name": "Elf Archer"
+},
+
+{
+    "id": 1021005,"name": "Elf Archer"
+},
+
+{
+    "id": 1022005,"name": "Elf Archer"
+},
+
+{
+    "id": 1020006,"name": "Bard"
+},
+
+{
+    "id": 1021006,"name": "Bard"
+},
+
+{
+    "id": 1020007,"name": "Fairy"
+},
+
+{
+    "id": 1022007,"name": "Fairy"
+},
+
+{
+    "id": 1020008,"name": "Druid"
+},
+
+{
+    "id": 1021008,"name": "Druid"
+},
+
+{
+    "id": 1022008,"name": "Druid"
+},
+
+{
+    "id": 2000000,"name": "Fire Orc"
+},
+
+{
+    "id": 2000001,"name": "Fire Orc Solider"
+},
+
+{
+    "id": 2000002,"name": "Fire Orc Axe Soldier"
+},
+
+{
+    "id": 2001002,"name": " Elite Fire Orc Axe Solider"
+},
+
+{
+    "id": 2001003,"name": " Giant Fire Orc"
+},
+
+{
+    "id": 2001004,"name": " Shaman Fire Orc"
+},
+
+{
+    "id": 2002005,"name": " Chief Fire Orc"
+},
+
+{
+    "id": 2000100,"name": "Fire Dark Elf Soldier"
+},
+
+{
+    "id": 2000101,"name": "Fire Dark Elf Spearman"
+},
+
+{
+    "id": 2000102,"name": "Fire Dark Elf Assassin"
+},
+
+{
+    "id": 2001102,"name": "Fire Dark Elf Assassin"
+},
+
+{
+    "id": 2001103,"name": "Fire Dark Elf Mage"
+},
+
+{
+    "id": 2001104,"name": "Fire Dark Elf Magic Knight"
+},
+
+{
+    "id": 2002105,"name": "Fire Dark Elf Lord"
+},
+
+{
+    "id": 2010000,"name": "Ice Orc"
+},
+
+{
+    "id": 2010001,"name": "Ice Orc Solider"
+},
+
+{
+    "id": 2010002,"name": "Ice Orc Axe Soldier"
+},
+
+{
+    "id": 2011002,"name": " Elite Ice Orc Axe Solider"
+},
+
+{
+    "id": 2011003,"name": " Giant Ice Orc"
+},
+
+{
+    "id": 2011004,"name": " Shaman Ice Orc"
+},
+
+{
+    "id": 2012005,"name": " Chief Ice Orc"
+},
+
+{
+    "id": 2010100,"name": "Ice Dark Elf Soldier"
+},
+
+{
+    "id": 2010101,"name": "Ice Dark Elf Spearman"
+},
+
+{
+    "id": 2010102,"name": "Ice Dark Elf Assassin"
+},
+
+{
+    "id": 2011102,"name": "Ice Dark Elf Assassin"
+},
+
+{
+    "id": 2011103,"name": "Ice Dark Elf Mage"
+},
+
+{
+    "id": 2011104,"name": "Ice Dark Elf Magic Knight"
+},
+
+{
+    "id": 2012105,"name": "Ice Dark Elf Lord"
+},
+
+{
+    "id": 2020000,"name": "Orc"
+},
+
+{
+    "id": 2020001,"name": " Orc Solider"
+},
+
+{
+    "id": 2020002,"name": " Orc Axe Soldier"
+},
+
+{
+    "id": 2021002,"name": " Elite Orc Axe Solider"
+},
+
+{
+    "id": 2021003,"name": " Giant Orc"
+},
+
+{
+    "id": 2021004,"name": " Shaman Orc"
+},
+
+{
+    "id": 2022005,"name": " Chief Orc"
+},
+
+{
+    "id": 2020100,"name": " Dark Elf Soldier"
+},
+
+{
+    "id": 2020101,"name": " Dark Elf Spearman"
+},
+
+{
+    "id": 2020102,"name": " Dark Elf Assassin"
+},
+
+{
+    "id": 2021102,"name": " Dark Elf Assassin"
+},
+
+{
+    "id": 2021103,"name": " Dark Elf Mage"
+},
+
+{
+    "id": 2021104,"name": " Dark Elf Magic Knight"
+},
+
+{
+    "id": 2022105,"name": " Dark Elf Lord"
+},
+
+{
+    "id": 3000000,"name": "Tower"
+},
+
+{
+    "id": 3000001,"name": "Enemy"
+},
+
+{
+    "id": 3001999,"name": "RANDOM"
+},
+
+{
+    "id": 3001000,"name": "Fire"
+},
+
+{
+    "id": 3001001,"name": "Water"
+},
+
+{
+    "id": 3001002,"name": "Nature"
+},
+
+{
+    "id": 3002000,"name": "Common"
+},
+
+{
+    "id": 3002001,"name": "Rare"
+},
+
+{
+    "id": 3002002,"name": "Heroic"
+},
+
+{
+    "id": 3002003,"name": "Legendary"
+},
+
+{
+    "id": 3100000,"name": "Razera","desc": "Razera Description"
+},
+
+{
+    "id": 3100001,"name": "Idelia","desc": "Idelia Description"
+},
+
+{
+    "id": 3100002,"name": "Zakona","desc": "Zakona Description"
+},
+
+{
+    "id": 3101000,"name": "HP","desc": "Increase enemy's HP by 50%."
+},
+
+{
+    "id": 3101001,"name": "Speed","desc": "Increase enemy's speed by 50%."
+},
+
+{
+    "id": 3101002,"name": "Amount","desc": "Increase enemy's amount by 50%."
+},
+
+{
+    "id": 3101003,"name": "Time","desc": "Decrease round preparation time by 50%."
+},
+
+{
+    "id": 3101004,"name": "Cost","desc": "Increase cost by 50%."
+},
+
+{
+    "id": 3101005,"name": "Probablity","desc": "Decrease probablity of strong tower by 50%."
+},
+
+{
+    "id": 3200000,"name": "Damage"
+},
+
+{
+    "id": 3200001,"name": "AttackSpeed"
+},
+
+{
+    "id": 3200002,"name": "Range"
+},
+
+{
+    "id": 3201000,"name": "Multi Shot"
+},
+
+{
+    "id": 3201001,"name": "Splash"
+},
+
+{
+    "id": 3201100,"name": "Goldmine"
+},
+
+{
+    "id": 3201101,"name": "Damage"
+},
+
+{
+    "id": 3201102,"name": "Attack Speed"
+},
+
+{
+    "id": 3201200,"name": "Slow"
+},
+
+{
+    "id": 3201201,"name": "Burn"
+},
+
+{
+    "id": 3201202,"name": "Poison"
+},
+
+{
+    "id": 3201203,"name": "Bleed"
+},
+
+{
+    "id": 3202000,"name": "First"
+},
+
+{
+    "id": 3202001,"name": "Last"
+},
+
+{
+    "id": 3202002,"name": "Strong"
+},
+
+{
+    "id": 3202003,"name": "Weak"
+},
+
+{
+    "id": 3202004,"name": "Element"
+},
+
+{
+    "id": 3202005,"name": "Debuff"
+},
+
+{
+    "id": 3300000,"name": "HP"
+},
+
+{
+    "id": 3300001,"name": "SPEED"
+},
+
+{
+    "id": 3300002,"name": "EXP"
+},
+
+{
+    "id": 3301000,"name": "NORMAL"
+},
+
+{
+    "id": 3301001,"name": "ELITE"
+},
+
+{
+    "id": 3301002,"name": "BOSS"
+}
+    ]
+}

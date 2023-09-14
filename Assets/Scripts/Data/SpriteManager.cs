@@ -31,9 +31,9 @@ public static class SpriteManager
     // 기본 넘버만으로 데이터를 로드할 수 있도록 합해서 id를 뽑을 수 있는 고유 넘버를 보관
     public enum ETCDataNumber
     {
-        TYPE = 3000000, ELEMENT = 3001000, GRADE = 3002000, BUFF = 3003000, DEBUFF = 3004000,
+        TYPE = 3000000, ELEMENT = 3001000, GRADE = 3002000,
         CHARTYPE = 3100000, DIFF = 3101000,
-        TOWERSTAT = 3200000, APRIORITY = 3201000,
+        TOWERSTAT = 3200000, TOWERABILITY = 3201000, APRIORITY = 3202000,
         ENEMYSTAT = 3300000, ENEMYGRADE = 3301000,
     }
 
@@ -51,15 +51,13 @@ public static class SpriteManager
                         - 0: Type (Tower or Enemy)
                         - 1: ELEMENT
                         - 2: Grade
-                        - 3: BUFF
-                        - 4: DEBUFF
                     - A: 1 (Character)
                         - 0: Character Type
                         - 1: Difficulty
-                        - 
                     - A: 2 (Tower)
                         - 0: TOWERSTAT
-                        - 1: ATTACKPRIORITY
+                        - 1: TOWERABILITY
+                        - 2: ATTACKPRIORITY
                     - A: 3 (Enemy)
                         - 0: ENEMYSTAT
                         - 1: ENEMYGRADE
