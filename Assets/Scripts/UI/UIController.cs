@@ -79,8 +79,6 @@ public class UIController : MonoBehaviour
     [Space]
     [SerializeField] private TowerInfoPanel towerInfoPanel;
 
-    [Header("ETC")]
-    [SerializeField] private DescriptionPopup descPopup;
 
     [Space]
     [Header("Custom Editor")]
@@ -99,6 +97,10 @@ public class UIController : MonoBehaviour
     [SerializeField] private UnitEditor unitEditor;
     private static int uiLayer = 5;
     private static int pointOverUILayer = 6;
+
+    [Header("ETC")]
+    [SerializeField] private DescriptionPopup descPopup;
+    [SerializeField] private ErrorLog errorLog;
 
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
@@ -209,6 +211,11 @@ public class UIController : MonoBehaviour
     public void GameOver()
     {
         gameOverView.SetActive(true);
+    }
+
+    public void ErrorLog(string log, string str)
+    {
+        errorLog.Log(log, str);
     }
 
     public void SetDescription(Vector3 pos, string str)
