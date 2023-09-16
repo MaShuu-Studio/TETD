@@ -154,11 +154,12 @@ public class EnemyObject : Poolable
         // 디버프 추가
         if (tower.HasDebuff)
         {
-            for (int i = 0; i < tower.AbilityTypes.Length; i++)
+            for (int i = 0; i < tower.AbilityTypes.Count; i++)
             {
                 AbilityType type = tower.AbilityTypes[i];
                 if (Tower.IsDebuff(type) == false) continue;
-                float value = tower.Ability(type);
+                float time = tower.Ability(type).time;
+                float value = tower.Ability(type).value;
 
                 if (debuffs.ContainsKey(type) == false)
                 {
@@ -166,7 +167,7 @@ public class EnemyObject : Poolable
                     {
                         coroutine = Debuff(type, element),
                         value = value,
-                        time = 5
+                        time = (int)time
                     };
                     debuffs.Add(type, debuff);
                     StartCoroutine(debuffs[type].coroutine);

@@ -40,7 +40,7 @@ namespace Excel_To_Json
         // {0} abliity Type (enum)
         // {1} ability Value (float)
         public static string abilityFormat =
-@"{{""type"": {0}, ""value"": {1}}}";
+@"{{""type"": {0}, ""time"": {1}, ""atkSpeed"": {2}, ""value"": {3}}}";
 
         // {0} color r (float 0 - 1.0)
         // {1} color g (float 0 - 1.0)

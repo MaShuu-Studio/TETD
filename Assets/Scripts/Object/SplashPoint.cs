@@ -22,7 +22,7 @@ public class SplashPoint : Poolable
         this.dmg = dmg;
         isActive = true;
 
-        transform.localScale = Vector3.one * data.Ability(AbilityType.SPLASH);
+        transform.localScale = Vector3.one * data.Ability(AbilityType.SPLASH).value;
 
         StartCoroutine(Timer());
     }

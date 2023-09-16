@@ -112,7 +112,7 @@ public static class TowerManager
         egTowerIds[(int)tower.element, (int)tower.grade].Add(id);
 
         if (tower.AbilityTypes != null)
-            for (int i = 0; i < tower.AbilityTypes.Length; i++)
+            for (int i = 0; i < tower.AbilityTypes.Count; i++)
             {
                 int type = (int)tower.AbilityTypes[i];
                 abilityIds[type].Add(id);

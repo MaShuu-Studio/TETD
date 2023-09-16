@@ -42,11 +42,11 @@ public class Tower : ObjectData
     public bool HasDebuff { get; private set; }
     public bool HasBuff { get; private set; }
 
-    public AbilityType[] AbilityTypes { get; private set; }
+    public List<AbilityType> AbilityTypes { get; private set; }
 
     private Dictionary<TowerStatType, float> stat;
     private Dictionary<TowerStatType, int> statLevel;
-    private Dictionary<AbilityType, float> abilities;
+    private Dictionary<AbilityType, TowerAbility> abilities;
 
     public Color GradeColor
     {
@@ -123,18 +123,19 @@ public class Tower : ObjectData
         stat.Add(TowerStatType.ATTACKSPEED, 1 / data.attackspeed);
         stat.Add(TowerStatType.DISTANCE, data.range);
 
-        abilities = new Dictionary<AbilityType, float>();
+        abilities = new Dictionary<AbilityType, TowerAbility>();
+        AbilityTypes = new List<AbilityType>();
         if (data.ability != null)
         {
             for (int i = 0; i < data.ability.Count; i++)
             {
-                abilities.Add((AbilityType)data.ability[i].type, data.ability[i].value);
+                abilities.Add((AbilityType)data.ability[i].type, data.ability[i]);
+                AbilityTypes.Add((AbilityType)data.ability[i].type);
 
                 if (IsBuff(data.ability[i].type)) HasBuff = true;
                 else if (IsDebuff(data.ability[i].type)) HasDebuff = true;
             }
         }
-        AbilityTypes = abilities.Keys.ToArray();
     }
 
     public Tower(Tower data)
@@ -170,17 +171,18 @@ public class Tower : ObjectData
             statLevel.Add(type, 1);
         }
 
-        abilities = new Dictionary<AbilityType, float>();
+        abilities = new Dictionary<AbilityType, TowerAbility>();
+        AbilityTypes = new List<AbilityType>();
         if (data.abilities.Count > 0)
         {
             foreach (AbilityType type in data.abilities.Keys)
             {
                 abilities.Add(type, data.abilities[type]);
+                AbilityTypes.Add(type);
 
                 if (IsBuff(type)) HasBuff = true;
                 else if (IsDebuff(type)) HasDebuff = true;
             }
-            AbilityTypes = abilities.Keys.ToArray();
         }
     }
 
@@ -210,10 +212,10 @@ public class Tower : ObjectData
         return 0;
     }
 
-    public float Ability(AbilityType type)
+    public TowerAbility Ability(AbilityType type)
     {
         if (abilities.ContainsKey(type)) return abilities[type];
-        return 0;
+        return null;
     }
 
     public int StatLevel(TowerStatType type)
@@ -455,5 +457,7 @@ public class EnemyData : JsonData
 public class TowerAbility
 {
     public int type; // enumType을 전부 받을 수 있도록
+    public float time; // 지속시간
+    public float atkSpeed; // 공속
     public float value;
 }

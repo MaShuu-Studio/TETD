@@ -267,6 +267,8 @@ namespace Excel_To_Json
             float f, x, y;
             bool b;
             int[] types;
+            float[] times;
+            float[] atkspeeds;
             float[] values;
 
             // 타입에 대한 체크
@@ -284,12 +286,12 @@ namespace Excel_To_Json
                 s = b.ToString().ToLower();
             }
             // ability class
-            else if (TryParseAbility(s, out types, out values))
+            else if (TryParseAbility(s, out types, out times, out atkspeeds, out values))
             {
                 string content = "";
                 for (int a = 0; a < types.Length; a++)
                 {
-                    content += string.Format(JsonFormat.abilityFormat, types[a], values[a]);
+                    content += string.Format(JsonFormat.abilityFormat, types[a], times[a], atkspeeds[a], values[a]);
                     if (a < types.Length - 1) content += ",\n";
                 }
 
@@ -367,23 +369,29 @@ namespace Excel_To_Json
             return true;
         }
 
-        private static bool TryParseAbility(string s, out int[] types, out float[] values)
+        private static bool TryParseAbility(string s, out int[] types, out float[] times, out float[] atkspeeds,  out float[] values)
         {
             string[] abilities = s.Split(";");
             types = null;
+            times = null;
+            atkspeeds = null;
             values = null;
             if (abilities.Length <= 1) return false;
 
             types = new int[abilities.Length - 1];
+            times = new float[abilities.Length - 1];
+            atkspeeds = new float[abilities.Length - 1];
             values = new float[abilities.Length - 1];
 
             for (int i = 0; i < abilities.Length - 1; i++)
             {
                 string[] tv = abilities[i].Split(",");
-                if (tv.Length != 2) return false;
+                if (tv.Length != 4) return false;
 
                 if (int.TryParse(tv[0], out types[i]) == false) return false;
-                if (float.TryParse(tv[1], out values[i]) == false) return false;
+                if (float.TryParse(tv[1], out times[i]) == false) return false;
+                if (float.TryParse(tv[2], out atkspeeds[i]) == false) return false;
+                if (float.TryParse(tv[3], out values[i]) == false) return false;
             }
 
             return true;

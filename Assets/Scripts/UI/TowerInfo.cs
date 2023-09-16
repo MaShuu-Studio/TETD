@@ -43,9 +43,9 @@ public class TowerInfo : MonoBehaviour
         else attackAmount.text = "";
 
         int index = 0;
-        if (data.AbilityTypes != null && data.AbilityTypes.Length > 0)
+        if (data.AbilityTypes != null && data.AbilityTypes.Count > 0)
         {
-            for (index = 0; index < data.AbilityTypes.Length; index++)
+            for (index = 0; index < data.AbilityTypes.Count; index++)
             {
                 AbilityType type = data.AbilityTypes[index];
                 abilities[index].gameObject.SetActive(true);
@@ -68,12 +68,12 @@ public class TowerInfo : MonoBehaviour
             mainStats[i].SetData(data.Stat(type));
         }
 
-        if (data.AbilityTypes != null && data.AbilityTypes.Length > 0)
+        if (data.AbilityTypes != null && data.AbilityTypes.Count > 0)
         {
-            for (int i = 0; i < data.AbilityTypes.Length; i++)
+            for (int i = 0; i < data.AbilityTypes.Count; i++)
             {
                 AbilityType type = data.AbilityTypes[i];
-                abilities[i].SetData(data.Ability(type));
+                abilities[i].SetData(data.Ability(type).value);
             }
         }
     }

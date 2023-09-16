@@ -18,7 +18,7 @@ public class TowerObject : Poolable
     private AnimationType curAnim;
     private IEnumerator animCoroutine;
     private IEnumerator activateCoroutine;
-    private IEnumerator buffCoroutine;
+    private Dictionary<AbilityType, IEnumerator> buffCoroutines;
 
     private PriorityQueue<EnemyObject> enemies;
     private PriorityQueue<TowerObject> towers;
@@ -63,7 +63,7 @@ public class TowerObject : Poolable
         {
             bool hasGoldMine = false;
             int buffCount = 0;
-            for (int i = 0; i < data.AbilityTypes.Length; i++)
+            for (int i = 0; i < data.AbilityTypes.Count; i++)
             {
                 if (data.AbilityTypes[i] == AbilityType.GOLDMINE) hasGoldMine = true;
                 if (Tower.IsBuff(data.AbilityTypes[i])) buffCount++;
@@ -112,13 +112,15 @@ public class TowerObject : Poolable
 
         Animate(AnimationType.IDLE, true);
         activateCoroutine = null;
+        buffCoroutines = new Dictionary<AbilityType, IEnumerator>();
 
         buffs = new Dictionary<AbilityType, TowerBuff>();
 
         // 금광의 경우 자버프 겸 자동 작동이므로 바로 추가
-        if (data.Ability(AbilityType.GOLDMINE) != 0)
+        if (data.AbilityTypes.Contains(AbilityType.GOLDMINE))
         {
-            UpdateBuff(AbilityType.GOLDMINE, data.Ability(AbilityType.GOLDMINE), 99);
+            TowerAbility ability = data.Ability(AbilityType.GOLDMINE);
+            UpdateBuff(AbilityType.GOLDMINE, ability.value, ability.time);
         }
     }
 
@@ -275,7 +277,7 @@ public class TowerObject : Poolable
                     // 남은 시간이 적을 수록
                     // 기존 값보다 더 강한 디버프 일 경우 더 높은 우선순위
                     prior += (5 - remainTime);
-                    prior += data.Ability(type) - value;
+                    prior += data.Ability(type).value - value;
                 }
 
             // 앞의 유닛이 더 높은 우선순위
@@ -293,10 +295,15 @@ public class TowerObject : Poolable
 
         if (activeType == ActiveType.ATTACKWITHBUFF)
         {
-            if (buffCoroutine == null)
+            if (buffCoroutines.Count == 0)
             {
-                buffCoroutine = ActiveWithBuff();
-                StartCoroutine(buffCoroutine);
+                for (int i = 0; i < data.AbilityTypes.Count; i++)
+                {
+                    AbilityType type = data.AbilityTypes[i];
+                    IEnumerator coroutine = ActiveWithBuff(type, data.Ability(type));
+                    buffCoroutines.Add(type, coroutine);
+                    StartCoroutine(coroutine);
+                }
             }
         }
         else if (activateCoroutine == null)
@@ -334,7 +341,7 @@ public class TowerObject : Poolable
             // 남은 시간이 적을 수록
             // 기존 값보다 더 강한 버프 일 경우 더 높은 우선순위
             prior += (5 - remainTime);
-            prior += data.Ability(type) - value;
+            prior += data.Ability(type).value - value;
         }
 
         return prior;
@@ -472,7 +479,7 @@ public class TowerObject : Poolable
         float time = 0;
 
         // 이 후 공격관련 함수 전부 진행.
-        int targetAmount = (int)data.Ability(AbilityType.MULTISHOT);
+        int targetAmount = (data.Ability(AbilityType.MULTISHOT) != null) ? (int)data.Ability(AbilityType.MULTISHOT).value : 0;
         if (targetAmount == 0) targetAmount = 1;
         List<EnemyObject> target = enemies.Get(targetAmount);
         if (target != null && enemies.Count > 0)
@@ -520,7 +527,7 @@ public class TowerObject : Poolable
             }
 
             SoundController.PlayAudio(id);
-            if (data.Ability(AbilityType.SPLASH) != 0)
+            if (data.Ability(AbilityType.SPLASH) != null)
             {
                 for (int j = 0; j < target.Count; j++)
                 {
@@ -547,7 +554,7 @@ public class TowerObject : Poolable
     }
 
     // 버프 관련 코루틴.
-    private IEnumerator ActiveWithBuff()
+    private IEnumerator ActiveWithBuff(AbilityType type, TowerAbility ability)
     {
         while (true)
         {
@@ -556,16 +563,11 @@ public class TowerObject : Poolable
             // 버프와 공격을 같이 하는 경우
             // 애니메이션은 공격에 맞추되 버프는 따로 작동하게 둠.
             // 버프 공속관련 스탯을 따로 만들고 작동하게 함.
-            // 현재는 임시로 3초마다 자동으로 작동하게 함.
 
-            float curASPD = Stat(TowerStatType.ATTACKSPEED);
-            float speedRatio = curASPD / OriginAttackSpeed;
-            float delay = 1 / curASPD;
-            Animate(AnimationType.ATTACK, false, speedRatio);
-
+            float delay = 1 / ability.atkSpeed;
             float time = 0;
 
-            while (time < 3)
+            while (time < delay)
             {
                 if (GameController.Instance.Paused)
                 {
@@ -581,13 +583,13 @@ public class TowerObject : Poolable
 
             yield return null;
         }
-        buffCoroutine = null;
+        buffCoroutines.Remove(type);
     }
 
     // 버프 부여 함수
     private void GiveBuff()
     {
-        int targetAmount = (int)data.Ability(AbilityType.MULTISHOT);
+        int targetAmount = (data.Ability(AbilityType.MULTISHOT) != null) ? (int)data.Ability(AbilityType.MULTISHOT).value : 0;
         if (targetAmount == 0) targetAmount = 1;
         List<TowerObject> target = towers.Get(targetAmount);
         if (target != null && towers.Count > 0)
@@ -599,7 +601,7 @@ public class TowerObject : Poolable
                 {
                     if (Tower.IsBuff(type) == false) continue;
                     if (type == AbilityType.GOLDMINE) continue;
-                    target[i].UpdateBuff(type, data.Ability(type), 5);
+                    target[i].UpdateBuff(type, data.Ability(type).value, data.Ability(type).time);
                 }
             }
 
@@ -623,7 +625,7 @@ public class TowerObject : Poolable
             // 타겟이 죽었을 경우에도 스플래시 공격이라면 이펙트가 남아야 함.
             // 반대로 타겟이 없고 스플래시 공격이 아니라면 이펙트가 남을 필요가 없음.
             if (targets[i].gameObject.activeSelf == false
-                && data.Ability(AbilityType.SPLASH) == 0)
+                && data.Ability(AbilityType.SPLASH) == null)
                 continue;
 
             GameObject effect = PoolController.PopEffect(data.id);

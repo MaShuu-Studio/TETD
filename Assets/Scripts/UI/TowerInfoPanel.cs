@@ -95,12 +95,12 @@ public class TowerInfoPanel : TowerInfo
             mainStats[i].SetData(selectedTower.Stat(type));
         }
 
-        if (data.AbilityTypes != null && data.AbilityTypes.Length > 0)
+        if (data.AbilityTypes != null && data.AbilityTypes.Count > 0)
         {
-            for (int i = 0; i < data.AbilityTypes.Length; i++)
+            for (int i = 0; i < data.AbilityTypes.Count; i++)
             {
                 AbilityType type = data.AbilityTypes[i];
-                abilities[i].SetData(data.Ability(type));
+                abilities[i].SetData(data.Ability(type).value);
             }
         }
     }

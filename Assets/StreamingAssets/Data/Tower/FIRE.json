@@ -12,7 +12,7 @@
     "attacktime": [ 0.2 ],
 "type": 0,
 "effectcolor": {"r":1,"g":0,"b":0,"a":1},
-    "ability": [ {"type": 201, "value": 0.5} ],
+    "ability": [ {"type": 201, "time": 3, "atkSpeed": 0, "value": 0.5} ],
 "imgsrc": "/Sprites/Tower/1000000/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 },
@@ -29,7 +29,7 @@
 "projspf": 0.03,
 "projtime": 0.3,
 "projattacktime": 0.3,
-    "ability": [ {"type": 201, "value": 0.5} ],
+    "ability": [ {"type": 201, "time": 3, "atkSpeed": 0, "value": 0.5} ],
 "imgsrc": "/Sprites/Tower/1000001/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 },
@@ -47,7 +47,7 @@
 "projtime": 0.3,
 "projattacktime": 0.3,
 "effectcolor": {"r":1,"g":0,"b":0,"a":1},
-    "ability": [ {"type": 1, "value": 1.5} ],
+    "ability": [ {"type": 1, "time": 3, "atkSpeed": 0, "value": 1.5} ],
 "imgsrc": "/Sprites/Tower/1000002/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 },
@@ -104,7 +104,7 @@
 "projspf": 0.03,
 "projtime": 0.3,
 "projattacktime": 0.3,
-    "ability": [ {"type": 0, "value": 2} ],
+    "ability": [ {"type": 0, "time": 0, "atkSpeed": 0, "value": 2} ],
 "imgsrc": "/Sprites/Tower/1000004/",
 "pivot": { "x": 0.5, "y": 0.0625 }
 },

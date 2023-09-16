@@ -739,7 +739,7 @@ public class UnitEditor : MonoBehaviour
             int index = 0;
             towerAbilities[0].SetActive(true);
             if (data.AbilityTypes != null)
-                for (int i = 0; i < data.AbilityTypes.Length; i++)
+                for (int i = 0; i < data.AbilityTypes.Count; i++)
                 {
                     if (index < towerAbilityDropdowns.Length)
                     {

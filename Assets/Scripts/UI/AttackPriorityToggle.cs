@@ -23,7 +23,6 @@ public class AttackPriorityToggle : MonoBehaviour
         }
     }
 
-    [SerializeField] private Image mask;
     private DescriptionIcon desc;
     private Toggle toggle;
     private Image image;
@@ -38,9 +37,8 @@ public class AttackPriorityToggle : MonoBehaviour
         desc = GetComponent<DescriptionIcon>();
 
         Sprite sprite = SpriteManager.GetSprite(id);
-        image.sprite = mask.sprite = sprite;
+        image.sprite = sprite;
         image.color = Color.white;
-        mask.color = new Color(0, 0, 0, 0.7f);
         desc.SetIcon(id);
         this.index = index;
         toggle.onValueChanged.AddListener(b => info.SetPriority(this.index));
