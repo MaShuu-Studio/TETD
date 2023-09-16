@@ -6,7 +6,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Image))]
 public class DescriptionIcon : MonoBehaviour
 {
-    [SerializeField] private int iconId;
+    private int iconId;
     
     private Image image;
     private bool isOn;
@@ -14,19 +14,13 @@ public class DescriptionIcon : MonoBehaviour
     private Vector3 mousePos;
     private bool contains;
 
-    private void Awake()
-    {
-        image = GetComponent<Image>();
-    }
-    private void Start()
-    {
-        isOn = false;
-    }
-
     public void SetIcon(int id)
     {
         if (image == null)
+        {
             image = GetComponent<Image>();
+            isOn = false;
+        }
 
         iconId = id;
         Sprite sprite = SpriteManager.GetSprite(id);

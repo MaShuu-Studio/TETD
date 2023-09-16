@@ -67,6 +67,8 @@
     <Compile Include="Assets\Scripts\Data\DataManager.cs" />
     <Compile Include="Assets\Scripts\Game Control\SoundController.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\CustomDropdown.cs" />
+    <Compile Include="Assets\Scripts\Game Control\LogCollector.cs" />
+    <Compile Include="Assets\Scripts\UI\ErrorLog.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfoPanel.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\UnitEditorSetImageIcon.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\StartButton.cs" />
@@ -140,8 +142,7 @@
     <Compile Include="Assets\Scripts\Data\CustomDataManager.cs" />
     <Compile Include="Assets\Scripts\Object\Projectile.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
-    <Compile Include="Assets\Scripts\Game Control\LogCollector.cs" />
-    <Compile Include="Assets\Scripts\UI\ErrorLog.cs" />
+    <Compile Include="Assets\Scripts\UI\AttackPriorityToggle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -43,7 +43,7 @@ public class TowerInfo : MonoBehaviour
         else attackAmount.text = "";
 
         int index = 0;
-        if (data.AbilityTypes.Length > 0)
+        if (data.AbilityTypes != null && data.AbilityTypes.Length > 0)
         {
             for (index = 0; index < data.AbilityTypes.Length; index++)
             {
@@ -68,7 +68,7 @@ public class TowerInfo : MonoBehaviour
             mainStats[i].SetData(data.Stat(type));
         }
 
-        if (data.AbilityTypes.Length > 0)
+        if (data.AbilityTypes != null && data.AbilityTypes.Length > 0)
         {
             for (int i = 0; i < data.AbilityTypes.Length; i++)
             {

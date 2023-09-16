@@ -11,7 +11,9 @@ public class TowerInfoPanel : TowerInfo
     [SerializeField] private Image gradeImage;
 
     [Space]
-    [SerializeField] private Toggle[] priorityToggles;
+    [SerializeField] private AttackPriorityToggle priorityTogglePrefab;
+    [SerializeField] private Transform priorityParent;
+    private List<AttackPriorityToggle> priorityToggles;
 
     [SerializeField] private TowerUpgradeItem[] upgradeItems;
     [SerializeField] private TextMeshProUGUI valueText;
@@ -22,9 +24,19 @@ public class TowerInfoPanel : TowerInfo
     private TowerObject selectedTower;
 
 
-    private void Awake()
+    public void Init()
     {
         rectTransform = GetComponent<RectTransform>();
+        priorityToggles = new List<AttackPriorityToggle>();
+        for (int i = 0; i < EnumArray.AttackPrioritys.Length; i++)
+        {
+            int id = (int)SpriteManager.ETCDataNumber.APRIORITY + i;
+            AttackPriorityToggle toggle = Instantiate(priorityTogglePrefab, priorityParent);
+            toggle.gameObject.SetActive(true);
+            toggle.SetIcon(id, this, i);
+            priorityToggles.Add(toggle);
+        }
+        priorityTogglePrefab.gameObject.SetActive(false);
     }
 
     public override void SetData(Tower data)
@@ -36,10 +48,10 @@ public class TowerInfoPanel : TowerInfo
         selectedTower = TowerController.Instance.SelectedTower;
         valueText.text = "$ " + data.Value();
         int index = (int)selectedTower.Priority;
-        priorityToggles[index].isOn = true;
+        for (int p = 0; p < priorityToggles.Count; p++)
+            priorityToggles[p].isOn = p == index;
 
         priorityToggles[(int)AttackPriority.DEBUFF].gameObject.SetActive(data.HasDebuff);
-
         int i = 0;
         for (; i < EnumArray.TowerStatTypes.Length; i++)
         {
@@ -83,7 +95,7 @@ public class TowerInfoPanel : TowerInfo
             mainStats[i].SetData(selectedTower.Stat(type));
         }
 
-        if (data.AbilityTypes.Length > 0)
+        if (data.AbilityTypes != null && data.AbilityTypes.Length > 0)
         {
             for (int i = 0; i < data.AbilityTypes.Length; i++)
             {
@@ -116,18 +128,10 @@ public class TowerInfoPanel : TowerInfo
     }
 
     // 토글 작동시 ValueChanged를 통해 조정
-    public void SetPriority(bool b)
+    public void SetPriority(int index)
     {
-        // 하나만 작동하도록 false면 return
-        if (b == false) return;
+        if (selectedTower == null) return;
 
-        for (int i = 0; i < priorityToggles.Length; i++)
-        {
-            if (priorityToggles[i].isOn)
-            {
-                selectedTower.ChangePriority((AttackPriority)i);
-                break;
-            }
-        }
+        selectedTower.ChangePriority((AttackPriority)index);
     }
 }

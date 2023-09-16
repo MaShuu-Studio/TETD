@@ -122,6 +122,7 @@ public class UIController : MonoBehaviour
         await optionUI.Init();
 
         shop.Init();
+        towerInfoPanel.Init();
 
         for (int i = 0; i < editorUI.Length; i++)
         {

@@ -13,11 +13,18 @@ public class Library : MonoBehaviour
     [SerializeField] private Button prevButton;
     [SerializeField] private Button nextButton;
 
-    [SerializeField] private LibraryFilterToggle[] typeFilterToggles;
-    [SerializeField] private LibraryFilterToggle[] elementFilterToggles;
-    [SerializeField] private LibraryFilterToggle[] gradeFilterToggles;
-    [SerializeField] private LibraryFilterToggle[] enemyGradeFilterToggles;
-    [SerializeField] private LibraryFilterToggle[] abilFilterToggles;
+    [SerializeField] private LibraryFilterToggle filterTogglePrefab;
+    [SerializeField] private Transform typeParent;
+    [SerializeField] private Transform elementParent;
+    [SerializeField] private Transform gradeParent;
+    [SerializeField] private Transform enemyGradeParent;
+    [SerializeField] private Transform abilityParent;
+
+    private List<LibraryFilterToggle> typeFilterToggles;
+    private List<LibraryFilterToggle> elementFilterToggles;
+    private List<LibraryFilterToggle> gradeFilterToggles;
+    private List<LibraryFilterToggle> enemyGradeFilterToggles;
+    private List<LibraryFilterToggle> abilFilterToggles;
 
     [SerializeField] private TextMeshProUGUI pageText;
 
@@ -34,6 +41,11 @@ public class Library : MonoBehaviour
         cardUnitinPage = items.Length;
 
         ids = new List<int>();
+        typeFilterToggles = new List<LibraryFilterToggle>();
+        elementFilterToggles = new List<LibraryFilterToggle>();
+        gradeFilterToggles = new List<LibraryFilterToggle>();
+        enemyGradeFilterToggles = new List<LibraryFilterToggle>();
+        abilFilterToggles = new List<LibraryFilterToggle>();
 
         // 페이지 이동 버튼
         prevButton.onClick.AddListener(() => MovePage(false));
@@ -45,28 +57,47 @@ public class Library : MonoBehaviour
         // 각 필터 토글 초기화
         // 후에 프리팹을 활용해 등급, 속성의 갯수에 따라 자동으로 생성되면 좋을 듯.
 
-        for (int i = 0; i < typeFilterToggles.Length; i++)
+        filterTogglePrefab.gameObject.SetActive(false);
+        for (int i = 0; i < 2; i++)
         {
-            typeFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.TYPE, i);
+            LibraryFilterToggle toggle = Instantiate(filterTogglePrefab, typeParent);
+            toggle.Init((int)SpriteManager.ETCDataNumber.TYPE, i);
+            toggle.gameObject.SetActive(true);
+            typeFilterToggles.Add(toggle);
         }
-        for (int i = 0; i < elementFilterToggles.Length; i++)
+
+        for (int i = 0; i < EnumArray.Elements.Length; i++)
         {
-            elementFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.ELEMENT, i);
+            LibraryFilterToggle toggle = Instantiate(filterTogglePrefab, elementParent);
+            toggle.Init((int)SpriteManager.ETCDataNumber.ELEMENT, i);
+            toggle.gameObject.SetActive(true);
+            elementFilterToggles.Add(toggle);
         }
-        for (int i = 0; i < gradeFilterToggles.Length; i++)
+
+        for (int i = 0; i < EnumArray.Grades.Length; i++)
         {
-            gradeFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.GRADE, i);
+            LibraryFilterToggle toggle = Instantiate(filterTogglePrefab, gradeParent);
+            toggle.Init((int)SpriteManager.ETCDataNumber.GRADE, i);
+            toggle.gameObject.SetActive(true);
+            gradeFilterToggles.Add(toggle);
         }
-        for (int i = 0; i < enemyGradeFilterToggles.Length; i++)
+
+        for (int i = 0; i < EnumArray.EnemyGrades.Length; i++)
         {
-            enemyGradeFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.ENEMYGRADE, i);
+            LibraryFilterToggle toggle = Instantiate(filterTogglePrefab, enemyGradeParent);
+            toggle.Init((int)SpriteManager.ETCDataNumber.ENEMYGRADE, i);
+            toggle.gameObject.SetActive(true);
+            enemyGradeFilterToggles.Add(toggle);
         }
 
         // 기본적으로 능력 필터는 끈 상태로 시작.
         for (int i = 0; i < EnumArray.AbilityTypes.Length; i++)
         {
             int type = (int)EnumArray.AbilityTypes[i];
-            abilFilterToggles[i].Init((int)SpriteManager.ETCDataNumber.TOWERABILITY, type, false);
+            LibraryFilterToggle toggle = Instantiate(filterTogglePrefab, abilityParent);
+            toggle.Init((int)SpriteManager.ETCDataNumber.TOWERABILITY, type, false);
+            toggle.gameObject.SetActive(true);
+            abilFilterToggles.Add(toggle);
         }
 
         UpdateLibrary();
@@ -93,11 +124,11 @@ public class Library : MonoBehaviour
         if (typeFilterToggles[0].isOn)
         {
             // 토글의 온오프를 체크하여 순서대로 추가
-            for (int e = 0; e < elementFilterToggles.Length; e++)
+            for (int e = 0; e < elementFilterToggles.Count; e++)
             {
                 if (elementFilterToggles[e].isOn == false) continue;
 
-                for (int g = 0; g < gradeFilterToggles.Length; g++)
+                for (int g = 0; g < gradeFilterToggles.Count; g++)
                 {
                     if (gradeFilterToggles[g].isOn == false) continue;
                     for (int i = 0; i < TowerManager.EgTowerIds[e, g].Count; i++)
@@ -109,7 +140,7 @@ public class Library : MonoBehaviour
                         // 그러나 필터가 켜져있다면 해당되지 않는 id는 넣지 않아야함.
                         // 따라서 기본적으로 추가를 전제하에 진행하며
                         // 만약에 필터가 켜져있었는데 해당 id가 해당 ability가 없다면 스킵.
-                        for (int s = 0; add && s < abilFilterToggles.Length; s++)
+                        for (int s = 0; add && s < abilFilterToggles.Count; s++)
                         {
                             if (abilFilterToggles[s].isOn == false) continue;
                             int type = (int)EnumArray.AbilityTypes[s];
@@ -126,15 +157,27 @@ public class Library : MonoBehaviour
             }
         }
 
-        if (typeFilterToggles[1].isOn)
+        bool enemyOff = false;
+
+        // 필터가 켜져있다면 적은 제외함.
+        for (int s = 0; s < abilFilterToggles.Count; s++)
+        {
+            if (abilFilterToggles[s].isOn)
+            {
+                enemyOff = true;
+                break;
+            }
+        }
+
+        if (enemyOff == false && typeFilterToggles[1].isOn)
         {
             // 토글의 온오프를 체크하여 순서대로 추가 
             // enemy가 뒤로가도록 배치
-            for (int e = 0; e < elementFilterToggles.Length; e++)
+            for (int e = 0; e < elementFilterToggles.Count; e++)
             {
                 if (elementFilterToggles[e].isOn == false) continue;
 
-                for (int g = 0; g < enemyGradeFilterToggles.Length; g++)
+                for (int g = 0; g < enemyGradeFilterToggles.Count; g++)
                 {
                     if (enemyGradeFilterToggles[g].isOn == false) continue;
 
