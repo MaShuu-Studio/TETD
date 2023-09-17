@@ -177,7 +177,7 @@ public class Tower : ObjectData
         {
             foreach (AbilityType type in data.abilities.Keys)
             {
-                abilities.Add(type, data.abilities[type]);
+                abilities.Add(type, new TowerAbility(data.abilities[type]));
                 AbilityTypes.Add(type);
 
                 if (IsBuff(type)) HasBuff = true;
@@ -218,11 +218,22 @@ public class Tower : ObjectData
         return null;
     }
 
-    public int StatLevel(TowerStatType type)
+    public int StatLevel(int id)
     {
-        if (statLevel.ContainsKey(type))
+        int check = id / 1000;
+        if (check == ((int)SpriteManager.ETCDataNumber.TOWERSTAT / 1000))
         {
-            return statLevel[type];
+            TowerStatType type = (TowerStatType)(id % 1000);
+            if (statLevel.ContainsKey(type))
+            {
+                return statLevel[type];
+            }
+        }
+        else if (check == ((int)SpriteManager.ETCDataNumber.TOWERABILITY / 1000))
+        {
+            AbilityType type = (AbilityType)(id % 1000);
+            if (abilities.ContainsKey(type))
+                return abilities[type].lv;
         }
 
         return 0;
@@ -241,10 +252,24 @@ public class Tower : ObjectData
 
             for (int i = 1; i < level; i++)
             {
-                isUpgrade = true;/*
-                if (type == TowerStatType.MULTISHOT)
-                    upgradeCost += cost;
-                else*/
+                isUpgrade = true;
+                upgradeCost += cost / 10;
+                value += upgradeCost;
+            }
+        }
+
+        foreach (var ability in abilities.Values)
+        {
+            int level = ability.lv;
+
+            int upgradeCost = 0;
+
+            for (int i = 1; i < level; i++)
+            {
+                isUpgrade = true;
+                if (ability.type == (int)AbilityType.MULTISHOT)
+                    upgradeCost += cost / 2;
+                else
                     upgradeCost += cost / 10;
                 value += upgradeCost;
             }
@@ -255,27 +280,58 @@ public class Tower : ObjectData
         return value;
     }
 
-    public void Upgrade(TowerStatType type)
+    public void Upgrade(int id)
     {
-        statLevel[type]++;
-        /*if (type == TowerStatType.MULTISHOT)
-            stat[type] += 1;
-        else*/
+        int check = id / 1000;
+        if (check == ((int)SpriteManager.ETCDataNumber.TOWERSTAT / 1000))
+        {
+            TowerStatType type = (TowerStatType)(id % 1000);
+
+            statLevel[type]++;
             stat[type] *= 1.1f;
+        }
+        else if (check == ((int)SpriteManager.ETCDataNumber.TOWERABILITY / 1000))
+        {
+            AbilityType type = (AbilityType)(id % 1000);
+
+            abilities[type].lv++;
+            if (type == AbilityType.MULTISHOT)
+                abilities[type].value += 1;
+            else
+            {
+                abilities[type].value *= 1.1f;
+            }
+        }
     }
 
-    public int UpgradeCost(TowerStatType type)
+    public int UpgradeCost(int id)
     {
         int upgradeCost = 0;
-        int level = statLevel[type];
-        for (int i = 1; i <= level; i++)
-        {
-            /*if (type == TowerStatType.MULTISHOT)
-                upgradeCost += cost / 2;
-            else*/
-                upgradeCost += cost / 10;
-        }
 
+        int check = id / 1000;
+        if (check == ((int)SpriteManager.ETCDataNumber.TOWERSTAT / 1000))
+        {
+            TowerStatType type = (TowerStatType)(id % 1000);
+
+            int level = statLevel[type];
+            for (int i = 1; i <= level; i++)
+            {
+                upgradeCost += cost / 10;
+            }
+        }
+        else if (check == ((int)SpriteManager.ETCDataNumber.TOWERABILITY / 1000))
+        {
+            AbilityType type = (AbilityType)(id % 1000);
+
+            int level = abilities[type].lv;
+            for (int i = 1; i <= level; i++)
+            {
+                if (type == AbilityType.MULTISHOT)
+                    upgradeCost += cost / 2;
+                else
+                    upgradeCost += cost / 10;
+            }
+        }
         return upgradeCost;
     }
 }
@@ -457,7 +513,21 @@ public class EnemyData : JsonData
 public class TowerAbility
 {
     public int type; // enumType을 전부 받을 수 있도록
+    public int lv = 1;
     public float time; // 지속시간
     public float atkSpeed; // 공속
     public float value;
+
+    public TowerAbility()
+    {
+
+    }
+    public TowerAbility(TowerAbility ability)
+    {
+        type = ability.type;
+        lv = ability.lv;
+        time = ability.time;
+        atkSpeed = ability.atkSpeed;
+        value = ability.value;
+    }
 }

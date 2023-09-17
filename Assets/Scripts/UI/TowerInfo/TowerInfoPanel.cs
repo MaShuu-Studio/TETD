@@ -52,38 +52,30 @@ public class TowerInfoPanel : TowerInfo
             priorityToggles[p].isOn = p == index;
 
         priorityToggles[(int)AttackPriority.DEBUFF].gameObject.SetActive(data.HasDebuff);
-        int i = 0;
-        for (; i < EnumArray.TowerStatTypes.Length; i++)
+        int upgradeItemIndex = 0;
+        for (int i = 0; i < EnumArray.TowerStatTypes.Length; i++)
         {
-            TowerStatType type = EnumArray.TowerStatTypes[i];
-            upgradeItems[i].gameObject.SetActive(true);
-            UpdateUpgradeStat(i, type);
+            int id = (int)SpriteManager.ETCDataNumber.TOWERSTAT + (int)EnumArray.TowerStatTypes[i];
+            upgradeItems[upgradeItemIndex].gameObject.SetActive(true);
+            UpdateUpgradeStat(upgradeItemIndex++, id);
         }
 
-        for (; i < upgradeItems.Length; i++)
+        if (data.AbilityTypes != null && data.AbilityTypes.Count > 0)
+        {
+            for (int i = 0; i < data.AbilityTypes.Count; i++)
+            {
+                int id = (int)SpriteManager.ETCDataNumber.TOWERABILITY + (int)data.AbilityTypes[i];
+                upgradeItems[upgradeItemIndex].gameObject.SetActive(true);
+                UpdateUpgradeStat(upgradeItemIndex++, id);
+            }
+        }
+
+        for (int i = upgradeItemIndex; i < upgradeItems.Length; i++)
         {
             upgradeItems[i].gameObject.SetActive(false);
         }
         UpdateInfo();
-        //UpdateBonusStat();
     }
-    /*
-    public void UpdateBonusStat()
-    {
-        for (int i = 0; i < bonusStatObjects.Length; i++)
-        {
-            float bonus = 0;
-            if (selectedTower != null) bonus = selectedTower.BonusStat((TowerStatType)i);
-            if (bonus == 0) bonusStatObjects[i].SetActive(false);
-            else
-            {
-                bonusStatObjects[i].SetActive(true);
-                bonusStatTexts[i].text = string.Format("{0:0.#}", bonus);
-            }
-        }
-    }
-    */
-
 
     public override void UpdateInfo()
     {
@@ -105,26 +97,25 @@ public class TowerInfoPanel : TowerInfo
         }
     }
 
-    public void Reinforce(int index, TowerStatType type)
+    public void Reinforce(int index, int id)
     {
-        if (PlayerController.Instance.Buy(selectedTower.Data.UpgradeCost(type)))
+        if (PlayerController.Instance.Buy(selectedTower.Data.UpgradeCost(id)))
         {
-            selectedTower.Data.Upgrade(type);
+            selectedTower.Data.Upgrade(id);
             selectedTower.UpdateDistnace();
             valueText.text = "$ " + data.Value();
 
-            UpdateUpgradeStat(index, type);
+            UpdateUpgradeStat(index, id);
             UpdateInfo();
-            //UpdateBonusStat();
         }
     }
 
-    public void UpdateUpgradeStat(int index, TowerStatType type)
+    public void UpdateUpgradeStat(int index, int id)
     {
-        int level = selectedTower.Data.StatLevel(type);
-        int cost = PlayerController.Cost(selectedTower.Data.UpgradeCost(type));
+        int level = selectedTower.Data.StatLevel(id);
+        int cost = PlayerController.Cost(selectedTower.Data.UpgradeCost(id));
 
-        upgradeItems[index].SetData(index, type, level, cost);
+        upgradeItems[index].SetData(index, id, level, cost);
     }
 
     // 토글 작동시 ValueChanged를 통해 조정

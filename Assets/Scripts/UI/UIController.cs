@@ -417,9 +417,9 @@ public class UIController : MonoBehaviour
         return PointOverUI(towerInfoPanel.gameObject);
     }
 
-    public void ReinforceTower(int index, TowerStatType type)
+    public void ReinforceTower(int index, int id)
     {
-        towerInfoPanel.Reinforce(index, type);
+        towerInfoPanel.Reinforce(index, id);
     }
 
     #endregion

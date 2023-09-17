@@ -8,6 +8,6 @@ public class TowerReinforceButton : ScriptableButton
 
     protected override void ClickEvent()
     {
-        UIController.Instance.ReinforceTower(upgradeItem.Index, upgradeItem.Type);
+        UIController.Instance.ReinforceTower(upgradeItem.Index, upgradeItem.Id);
     }
 }
