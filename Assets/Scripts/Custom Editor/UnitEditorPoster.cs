@@ -50,7 +50,7 @@ public class UnitEditorPoster : LibraryCard
         }
     }
 
-    public void UpdateAbility(Dictionary<AbilityType, float> abils)
+    public void UpdateAbility(Dictionary<AbilityType, TowerAbility> abils)
     {
         int abilIndex = 0;
         foreach (var type in abils.Keys)

@@ -839,7 +839,7 @@ public class UnitEditor : MonoBehaviour
 
     private void UpdateDataToPosterAbility()
     {
-        Dictionary<AbilityType, float> abils = new Dictionary<AbilityType, float>();
+        Dictionary<AbilityType, TowerAbility> abils = new Dictionary<AbilityType, TowerAbility>();
 
         for (int i = 0; i < towerAbilities.Length; i++)
         {
@@ -847,10 +847,12 @@ public class UnitEditor : MonoBehaviour
 
             if (index == 0) continue;
             AbilityType type = EnumArray.AbilityTypes[index - 1];
+            TowerAbility abil = new TowerAbility();
+            abil.type = (int)type - (int)SpriteManager.ETCDataNumber.TOWERABILITY;
             float value;
             float.TryParse(towerAbilityInputs[i].text, out value);
 
-            abils.Add(type, value);
+            abils.Add(type, abil);
         }
 
         poster.UpdateAbility(abils);
