@@ -74,8 +74,8 @@ public class TowerObject : Poolable
             if (buffCount == 1 && hasGoldMine) hasBuff = false;
         }
 
-        if (hasBuff == false) activeType = ActiveType.ONLYATTACK;
-        else if (data.Stat(TowerStatType.DAMAGE) == 0) activeType = ActiveType.ONLYBUFF;
+        if (data.Stat(TowerStatType.DAMAGE) == 0) activeType = ActiveType.ONLYBUFF;
+        else if (hasBuff == false) activeType = ActiveType.ONLYATTACK;
         else activeType = ActiveType.ATTACKWITHBUFF;
 
         range.Init(this, hasBuff);
@@ -234,7 +234,7 @@ public class TowerObject : Poolable
         enemies.Enqueue(enemy, GetPriority(enemy));
         if (activateCoroutine == null)
         {
-            activateCoroutine = Activate();
+            activateCoroutine = ActivateAttack();
             StartCoroutine(activateCoroutine);
         }
     }
@@ -291,25 +291,20 @@ public class TowerObject : Poolable
     #region Buff
     public void AddTower(TowerObject tower)
     {
+        if (activeType == ActiveType.ONLYATTACK) return;
+
         towers.Enqueue(tower, GetBuffPriority(tower));
 
-        if (activeType == ActiveType.ATTACKWITHBUFF)
+        if (buffCoroutines.Count == 0)
         {
-            if (buffCoroutines.Count == 0)
+            Animate(AnimationType.ATTACK, true);
+            for (int i = 0; i < data.AbilityTypes.Count; i++)
             {
-                for (int i = 0; i < data.AbilityTypes.Count; i++)
-                {
-                    AbilityType type = data.AbilityTypes[i];
-                    IEnumerator coroutine = ActiveWithBuff(type, data.Ability(type));
-                    buffCoroutines.Add(type, coroutine);
-                    StartCoroutine(coroutine);
-                }
+                AbilityType type = data.AbilityTypes[i];
+                IEnumerator coroutine = ActivateBuff(type, data.Ability(type));
+                buffCoroutines.Add(type, coroutine);
+                StartCoroutine(coroutine);
             }
-        }
-        else if (activateCoroutine == null)
-        {
-            activateCoroutine = Activate();
-            StartCoroutine(activateCoroutine);
         }
     }
 
@@ -413,7 +408,7 @@ public class TowerObject : Poolable
     #endregion
 
     #region Activate
-    private IEnumerator Activate()
+    private IEnumerator ActivateAttack()
     {
         while (true)
         {
@@ -449,11 +444,8 @@ public class TowerObject : Poolable
                 }
 
                 // 선딜이 후에는 작동
-                if (activeType != ActiveType.ONLYBUFF && enemies.Count > 0) 
+                if (enemies.Count > 0)
                     StartCoroutine(Attack(speedRatio));
-
-                if (activeType == ActiveType.ONLYBUFF && towers.Count > 0) 
-                    GiveBuff();
 
                 yield return null;
             }
@@ -554,7 +546,7 @@ public class TowerObject : Poolable
     }
 
     // 버프 관련 코루틴.
-    private IEnumerator ActiveWithBuff(AbilityType type, TowerAbility ability)
+    private IEnumerator ActivateBuff(AbilityType type, TowerAbility ability)
     {
         while (true)
         {
@@ -584,6 +576,10 @@ public class TowerObject : Poolable
             yield return null;
         }
         buffCoroutines.Remove(type);
+        if (buffCoroutines.Count == 0 && curAnim == AnimationType.ATTACK)
+        {
+            Animate(AnimationType.IDLE, true);
+        }
     }
 
     // 버프 부여 함수
