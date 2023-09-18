@@ -175,6 +175,7 @@ public static class MapManager
         foreach (var path in pathes)
         {
             string mapName = DataManager.FileNameTriming(path);
+            if (maps.ContainsKey(mapName)) continue;
 
             TilemapInfoJson data = await DataManager.DeserializeJson<TilemapInfoJson>(path);
             if (data == null) continue;

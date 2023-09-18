@@ -39,6 +39,16 @@ public class CustomEditor : MonoBehaviour
         }
     }
 
+    public void OpenEditorUI()
+    {
+        gameObject.SetActive(true);
+        dataNameText.gameObject.SetActive(false);
+        for (int i = 0; i < infoObjects.Length; i++)
+        {
+            infoObjects[i].SetActive(false);
+        }
+    }
+
     public void SelectData(int index)
     {
         editButton.SetActive(true);
@@ -65,7 +75,7 @@ public class CustomEditor : MonoBehaviour
 
     public void Edit()
     {
-        GameController.Instance.EditCustomData(CustomDataManager.Datas[selectedData].name, CustomDataManager.Datas[selectedData].pathes);
+        GameController.Instance.EditCustomData(selectedData, CustomDataManager.Datas[selectedData].pathes);
     }
 
     public void Apply()

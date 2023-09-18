@@ -179,7 +179,7 @@ public class SceneController : MonoBehaviour
         }
     }
 
-    public async void EditCustomData(string dataName, List<string>[] pathes)
+    public async void EditCustomData(int index, List<string>[] pathes)
     {
         Application.runInBackground = true;
 
@@ -187,7 +187,7 @@ public class SceneController : MonoBehaviour
         isLoading = true;
         UIController.Instance.Loading();
 
-        CustomDataManager.LoadCustomData(dataName, pathes);
+        CustomDataManager.LoadCustomData(index, pathes);
         IEnumerator co = EditCustomDataProgress();
         StartCoroutine(co);
 

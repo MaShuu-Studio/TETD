@@ -91,16 +91,15 @@ public class GameController : MonoBehaviour
         Title();
     }
 
-    public void EditCustomData(string dataName, List<string>[] pathes)
+    public void EditCustomData(int index, List<string>[] pathes)
     {
-        SceneController.Instance.EditCustomData(dataName, pathes);
+        SceneController.Instance.EditCustomData(index, pathes);
     }
 
     public void EditMap()
     {
         string mapName = UIController.Instance.GetMapName();
         Map map = UIController.Instance.GetMap();
-        if (map == null) return;
 
         MapEditor.Instance.Init(map, mapName);
         UIController.Instance.EditMap(mapName);

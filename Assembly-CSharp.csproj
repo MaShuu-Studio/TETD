@@ -99,6 +99,7 @@
     <Compile Include="Assets\Scripts\Data\Translator.cs" />
     <Compile Include="Assets\Scripts\UI\TowerPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\GetTowerButton.cs" />
+    <Compile Include="Assets\Scripts\UI\TowerInfo\TowerAbilityItem.cs" />
     <Compile Include="Assets\Scripts\Game Control\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\UnitEditorUnitIcon.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfo\TowerInfo.cs" />
@@ -143,7 +144,6 @@
     <Compile Include="Assets\Scripts\Data\CustomDataManager.cs" />
     <Compile Include="Assets\Scripts\Object\Projectile.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
-    <Compile Include="Assets\Scripts\UI\TowerInfo\TowerAbilityItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

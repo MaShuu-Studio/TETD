@@ -75,9 +75,10 @@ public static class CustomDataManager
 #endif
     }
 
-    public static async void LoadCustomData(string editingDataName, List<string>[] pathes)
+    public static async void LoadCustomData(int index, List<string>[] pathes)
     {
-        CustomDataManager.editingDataName = editingDataName;
+        editingDataIndex = index;
+        editingDataName = datas[index].name;
         editingLangPath = path + editingDataName + "/Language/";
         editingMapPath = Application.streamingAssetsPath + path + editingDataName + "/Map/";
         datas.FindIndex(data => data.name == editingDataName);
@@ -241,7 +242,6 @@ public static class CustomDataManager
         Sprite sprite = await DataManager.LoadSprite(editingEnemySpritePath + $"{id}/" + "IDLE.png", data.pivot, data.pixelperunit);
         if (sprite == null) sprite = await DataManager.LoadSprite(editingEnemySpritePath + $"{id}/" + "IDLE0.png", data.pivot, data.pixelperunit);
 
-
         if (enemyKeys.Contains(id) == false)
         {
             enemyKeys.Add(id);
@@ -328,7 +328,19 @@ public static class CustomDataManager
         TilemapInfoJson data = new TilemapInfoJson(info);
         DataManager.SerializeJson(editingMapPath, mapName, data);
         Map map = new Map(mapName, info);
-        if (editingMapData.ContainsKey(mapName) == false) editingMapData.Add(mapName, map);
+
+        if (editingMapData.ContainsKey(mapName) == false)
+        {
+            string path = CustomDataManager.path + editingDataName + "/Map/" + mapName + ".json";
+            editingMapData.Add(mapName, map);
+            datas[editingDataIndex].dataAmount[2]++;
+            datas[editingDataIndex].pathes[2].Add(path);
+            datas[editingDataIndex].pathes[2].Sort();
+        }
+        else
+        {
+            editingMapData[mapName] = map;
+        }
     }
 }
 

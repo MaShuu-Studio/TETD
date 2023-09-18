@@ -84,7 +84,13 @@ public class UIController : MonoBehaviour
     [Header("Custom Editor")]
     [SerializeField] private CustomEditor customEditor;
     [SerializeField] private GameObject[] editorUI; // main, map, unit, round
+    [SerializeField] private Image[] towerImages;
+    [SerializeField] private GameObject towerEtcSymbol;
+    [SerializeField] private Image[] enemyImages;
+    [SerializeField] private GameObject enemyEtcSymbol;
     [SerializeField] private TextMeshProUGUI selectedMapNameText;
+    [SerializeField] private MapInfoIcon selectedMapInfo;
+    [SerializeField] private TMP_InputField newMapInput;
     private int selectedMap;
 
     [Space]
@@ -455,8 +461,49 @@ public class UIController : MonoBehaviour
     public void EditCustomData()
     {
         ChangeCustomEditorUI(0);
-        selectedMap = 0;
-        selectedMapNameText.text = CustomDataManager.EditingMapNames[selectedMap];
+
+        int i = 0;
+        towerEtcSymbol.SetActive(false);
+        foreach (var sprite in CustomDataManager.EditingTowerSprites.Values)
+        {
+            if (sprite == null) continue;
+
+            if (i >= towerImages.Length)
+            {
+                towerEtcSymbol.SetActive(true);
+                break;
+            }
+            towerImages[i].sprite = sprite;
+            ((RectTransform)towerImages[i].transform).sizeDelta = new Vector2(sprite.texture.width, sprite.texture.height) * 3;
+            
+            i++;
+        }
+        for (; i < towerImages.Length; i++)
+            towerImages[i].gameObject.SetActive(false);
+
+        i = 0;
+        enemyEtcSymbol.SetActive(false);
+        foreach (var sprite in CustomDataManager.EditingEnemySprites.Values)
+        {
+            if (sprite == null) continue;
+
+            if (i >= enemyImages.Length)
+            {
+                enemyEtcSymbol.SetActive(true);
+                break;
+            }
+            enemyImages[i].sprite = sprite;
+            ((RectTransform)enemyImages[i].transform).sizeDelta = new Vector2(sprite.texture.width, sprite.texture.height) * 3;
+        
+            i++;
+        }
+        for (; i < enemyImages.Length; i++)
+            enemyImages[i].gameObject.SetActive(false);
+
+
+
+        selectedMap = -1;
+        SelectMap(true);
     }
 
     public void SelectMap(bool next)
@@ -464,10 +511,26 @@ public class UIController : MonoBehaviour
         if (next) selectedMap++;
         else selectedMap--;
 
-        if (selectedMap > CustomDataManager.EditingMapNames.Count - 1) selectedMap = 0;
+        if (selectedMap > CustomDataManager.EditingMapNames.Count) selectedMap = 0;
         else if (selectedMap < 0) selectedMap = CustomDataManager.EditingMapNames.Count - 1;
 
-        selectedMapNameText.text = CustomDataManager.EditingMapNames[selectedMap];
+        // 가장 끝 번호는 신규 맵 생성
+        if (selectedMap >= CustomDataManager.EditingMapNames.Count)
+        {
+            newMapInput.gameObject.SetActive(true);
+            selectedMapInfo.gameObject.SetActive(false);
+            selectedMapNameText.text = "CREATE NEW MAP";
+            newMapInput.text = "";
+
+        }
+        else
+        {
+            newMapInput.gameObject.SetActive(false);
+            selectedMapInfo.gameObject.SetActive(true);
+            string mapName = CustomDataManager.EditingMapNames[selectedMap];
+            selectedMapNameText.text = mapName;
+            selectedMapInfo.SetIcon(CustomDataManager.EditingMapData[mapName]);
+        }
     }
 
     public void UpdateCustomData()
@@ -481,20 +544,20 @@ public class UIController : MonoBehaviour
 
     public Map GetMap()
     {
-        return CustomDataManager.EditingMapData[CustomDataManager.EditingMapNames[selectedMap]];
+        if (selectedMap < CustomDataManager.EditingMapNames.Count)
+            return CustomDataManager.EditingMapData[CustomDataManager.EditingMapNames[selectedMap]];
+        return null;
     }
     public string GetMapName()
     {
-        return selectedMapNameText.text;
+        string mapName = (selectedMap < CustomDataManager.EditingMapNames.Count) ? selectedMapNameText.text : newMapInput.text;
+        return mapName;
     }
 
     public void EditMap(string mapName)
     {
         ChangeCustomEditorUI(1);
         mapNameText.text = mapName;
-        /*
-        int count = Mathf.CeilToInt(tileList.childCount / 2);
-        tileList.sizeDelta = new Vector2(300, 120 * count + 20 * (count - 1) + 30);*/
     }
 
     public bool PointInMapEditPanel()
