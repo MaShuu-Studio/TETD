@@ -195,9 +195,16 @@ public static class EnemyManager
         }
     }
 
-    public static async void LoadCustomData(List<string> pathes)
+    public static async void LoadCustomData(List<CustomData> datas)
     {
-        if (pathes == null)
+        List<string> pathes = new List<string>();
+        foreach (var data in datas)
+        {
+            if (data.pathes[1] == null) continue;
+            pathes.AddRange(data.pathes[1]);
+        }
+
+        if (pathes.Count == 0)
         {
             TotalProgress = 0;
             return;

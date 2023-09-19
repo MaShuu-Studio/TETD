@@ -163,26 +163,39 @@ public static class MapManager
         }
     }
 
-    public static async void LoadCustomData(List<string> pathes)
+    public static async void LoadCustomData(List<CustomData> datas)
     {
-        if (pathes == null)
+        List<Tuple<string, List<string>>> list = new List<Tuple<string, List<string>>>();
+
+        TotalProgress = 0;
+        foreach (var data in datas)
         {
-            TotalProgress = 0;
-            return;
+            if (data.pathes[2] == null) continue;
+            list.Add(new Tuple<string, List<string>>(data.name, data.pathes[2]));
+            TotalProgress += data.pathes[2].Count;
         }
 
-        TotalProgress = pathes.Count;
-        foreach (var path in pathes)
+        if (TotalProgress == 0) return;
+
+        foreach (var tuple in list)
         {
-            string mapName = DataManager.FileNameTriming(path);
-            if (maps.ContainsKey(mapName)) continue;
+            string dataName = tuple.Item1;
+            List<string> pathes = tuple.Item2;
+            foreach (var path in pathes)
+            {
+                string mapName = $"{dataName}-{DataManager.FileNameTriming(path)}";
+                string originName = mapName;
+                int i = 2;
+                while(maps.ContainsKey(mapName))
+                    mapName = $"{originName}{i++}";
 
-            TilemapInfoJson data = await DataManager.DeserializeJson<TilemapInfoJson>(path);
-            if (data == null) continue;
+                TilemapInfoJson data = await DataManager.DeserializeJson<TilemapInfoJson>(path);
+                if (data == null) continue;
 
-            TilemapInfo info = new TilemapInfo(data);
-            maps.Add(mapName, new Map(mapName, info));
-            CurProgress++;
+                TilemapInfo info = new TilemapInfo(data);
+                maps.Add(mapName, new Map(mapName, info));
+                CurProgress++;
+            }
         }
         keys = maps.Keys.ToList();
     }

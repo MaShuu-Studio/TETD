@@ -23,7 +23,7 @@ public class SceneController : MonoBehaviour
     }
 
     private string[] SceneNames { get; }
-    = { "Title", "Game Scene", "Custom Editor"};
+    = { "Title", "Game Scene", "Custom Editor" };
 
     private const string LoadingScene = "Loading";
     public bool IsLoading { get { return isLoading; } }
@@ -125,7 +125,7 @@ public class SceneController : MonoBehaviour
     }
 
     // 조금 비효율적이더라도 우선 작동하도록 함수를 추가하여 개발.
-    public async void LoadCustomData(List<string>[] pathes)
+    public async void LoadCustomData(List<CustomData> datas)
     {
         Application.runInBackground = true;
 
@@ -140,9 +140,9 @@ public class SceneController : MonoBehaviour
         IEnumerator co = CustomDataProgress();
         StartCoroutine(co);
 
-        TowerManager.LoadCustomData(pathes[0]);
-        EnemyManager.LoadCustomData(pathes[1]);
-        MapManager.LoadCustomData(pathes[2]);
+        TowerManager.LoadCustomData(datas);
+        EnemyManager.LoadCustomData(datas);
+        MapManager.LoadCustomData(datas);
 
         // 동시에 작동시키되 기다리도록 함. 
         while (TowerManager.CurProgress < TowerManager.TotalProgress
@@ -158,15 +158,15 @@ public class SceneController : MonoBehaviour
 
         Application.runInBackground = false;
     }
-    
+
     private IEnumerator CustomDataProgress()
     {
         int cur = 0;
         int total = 1;
         while (total > cur)
-        { 
-            total = TowerManager.TotalProgress 
-                + EnemyManager.TotalProgress 
+        {
+            total = TowerManager.TotalProgress
+                + EnemyManager.TotalProgress
                 + MapManager.TotalProgress;
 
             cur =
@@ -215,7 +215,7 @@ public class SceneController : MonoBehaviour
             total = CustomDataManager.TotalProgress;
 
             Progress((float)cur / total, $"데이터를 불러오는 중 {cur} / {total}");
-             
+
             yield return null;
         }
     }

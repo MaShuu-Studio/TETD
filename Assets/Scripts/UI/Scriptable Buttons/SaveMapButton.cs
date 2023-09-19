@@ -10,7 +10,6 @@ public class SaveMapButton : ScriptableButton
         {
             TilemapInfo info = MapEditor.Instance.Tilemap;
             CustomDataManager.SaveMap(MapEditor.Instance.MapName, info);
-            GameController.Instance.Title();
         }
     }
 }

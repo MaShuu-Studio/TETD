@@ -80,11 +80,7 @@ public class CustomEditor : MonoBehaviour
 
     public void Apply()
     {
-        List<string>[] pathes = new List<string>[3];
-        for (int i = 0; i < 3; i++)
-        {
-            pathes[i] = new List<string>();
-        }
+        List<CustomData> datas = new List<CustomData>();
 
         bool b = false;
         for (int i = 0; i < loadData.Length; i++)
@@ -93,12 +89,7 @@ public class CustomEditor : MonoBehaviour
             b = true;
 
             CustomData data = CustomDataManager.Datas[i];
-
-            // path 안에 데이터를 전부 때려박고 진행.
-            for (int j = 0; j < 3; j++)
-            {
-                pathes[j].AddRange(data.pathes[j]);
-            }
+            datas.Add(data);
         }
 
         // 이 후 해당 path를 넘겨서 로드 진행.
@@ -108,7 +99,7 @@ public class CustomEditor : MonoBehaviour
             TowerManager.ResetCustomData();
             EnemyManager.ResetCustomData();
             MapManager.ResetCustomData();
-            SceneController.Instance.LoadCustomData(pathes);
+            SceneController.Instance.LoadCustomData(datas);
         }
     }
 }

@@ -332,12 +332,26 @@ public class MapEditor : MonoBehaviour
         bool update = true;
         if (tilemap.tiles.ContainsKey(pos))
         {
-            if (tile == null) 
+            if (tile == null)
+            {
+                if (tilemap.GetTile(pos).type == "ROAD" && enemyRoad.Contains(pos))
+                {
+                    enemyRoad.Clear();
+                    UpdateRoad();
+                }
                 tilemap.tiles.Remove(pos);
+            }
 
             else if (tilemap.tiles[pos].name != tile.name)
+            {
+                if ((tilemap.GetTile(pos).type == "ROAD" && tile.type != "ROAD")
+                    && enemyRoad.Contains(pos))
+                {
+                    enemyRoad.Clear();
+                    UpdateRoad();
+                }
                 tilemap.tiles[pos] = new TileInfo(tile.name, tile.Base.buildable);
-
+            }
             else update = false;
         }
         else
@@ -420,6 +434,8 @@ public class MapEditor : MonoBehaviour
     private void UpdateRoad()
     {
         routeTilemap.ClearAllTiles();
+        if (enemyRoad.Count == 0) return;
+
         // 가장 첫 부분은 STARTFLAG, 마지막 부분은 DESTFLAG임.
         int index = 0;
         routeTilemap.SetTile(enemyRoad[index], TileManager.GetFlag("STARTFLAG").Base);
