@@ -61,9 +61,7 @@ public class UnitEditor : MonoBehaviour
 
     [Space]
     [SerializeField] private GameObject towerAbilityParent;
-    [SerializeField] private GameObject[] towerAbilities;
-    [SerializeField] private CustomDropdown[] towerAbilityDropdowns;
-    [SerializeField] private TMP_InputField[] towerAbilityInputs;
+    [SerializeField] private UnitEditorAbility[] towerAbilities;
     /*
     [Space]
     [SerializeField] private GameObject enemyAbilityParent;
@@ -130,13 +128,9 @@ public class UnitEditor : MonoBehaviour
 
         attackAmountInput.onValueChanged.AddListener(s => UpdateDataToPosterStat());
         attackAmountInput.onValueChanged.AddListener(s => ChangeAttackAmount(s));
-
-        for (int i = 0; i < towerAbilityDropdowns.Length; i++)
-        {
-            towerAbilityDropdowns[i].onValueChanged.AddListener(s => AblityChanged());
-            towerAbilityDropdowns[i].onValueChanged.AddListener(s => UpdateDataToPosterAbility());
-            towerAbilityInputs[i].onValueChanged.AddListener(s => UpdateDataToPosterAbility());
-        }
+        
+        for (int i = 0; i< towerAbilities.Length;i++)
+            towerAbilities[i].Init(this);
 
         spfInput.onEndEdit.AddListener(s => ChangeSpf(s, spfInput, imageIcons[0]));
         spfInput.onEndEdit.AddListener(s => ChangeSpf(s, spfInput, imageIcons[1]));
@@ -198,28 +192,6 @@ public class UnitEditor : MonoBehaviour
             }
             enemyGradeDropdown.AddOptions(options);
             enemyGradeDropdown.template.sizeDelta = new Vector2(enemyGradeDropdown.template.sizeDelta.x, 75 * (1 + options.Count));
-        }
-
-        // abilities
-        {
-            List<CustomDropdownOption> options = new List<CustomDropdownOption>();
-            for (int i = 0; i < EnumArray.AbilityTypes.Length; i++)
-            {
-                AbilityType type = EnumArray.AbilityTypes[i];
-                string oName = EnumArray.AbilityTypeStrings[type];
-                Sprite oSprite = SpriteManager.GetSpriteWithNumber(SpriteManager.ETCDataNumber.TOWERABILITY, (int)type);
-                CustomDropdownOption option = new CustomDropdownOption(oName, oSprite);
-                options.Add(option);
-            }
-
-            float width = ((options.Count >= 5) ? 5 : options.Count) * 87.5f;
-            float height = (100f / 3f * 2f) * (1 + (int)(options.Count / 5)) + 25;
-
-            for (int i = 0; i < towerAbilityDropdowns.Length; i++)
-            {
-                towerAbilityDropdowns[i].template.sizeDelta = new Vector2(width, height);
-                towerAbilityDropdowns[i].AddOptions(options);
-            }
         }
 
         towerAdvancedPopup.SetActive(false);
@@ -310,10 +282,7 @@ public class UnitEditor : MonoBehaviour
         attackAmountInput.text = "";
 
         for (int i = 0; i < towerAbilities.Length; i++)
-        {
-            towerAbilityDropdowns[i].value = 0;
-            towerAbilityInputs[i].text = "";
-        }
+            towerAbilities[i].UpdateData(null);
 
         for (int i = 0; i < attackTimeInputs.Length; i++)
         {
@@ -447,13 +416,8 @@ public class UnitEditor : MonoBehaviour
 
                 for (int i = 0; i < towerAbilities.Length; i++)
                 {
-                    TowerAbility ability = new TowerAbility();
-                    int index = towerAbilityDropdowns[i].value;
-
-                    if (index == 0) continue;
-
-                    ability.type = (int)EnumArray.AbilityTypes[index - 1];
-                    float.TryParse(towerAbilityInputs[i].text, out ability.value);
+                    TowerAbility ability = towerAbilities[i].GetData();
+                    if (ability == null) continue;
                     abils.Add(ability);
                 }
 
@@ -737,22 +701,19 @@ public class UnitEditor : MonoBehaviour
 
             #region ability
             int index = 0;
-            towerAbilities[0].SetActive(true);
+            towerAbilities[index].gameObject.SetActive(true);
+            towerAbilities[index].UpdateData(null);
             if (data.AbilityTypes != null)
-                for (int i = 0; i < data.AbilityTypes.Count; i++)
+                foreach (var type in data.AbilityTypes)
                 {
-                    if (index < towerAbilityDropdowns.Length)
-                    {
-                        towerAbilityDropdowns[index].value = ChangeAbilityToValue(data.AbilityTypes[i]);
-                        towerAbilityInputs[index].text = data.Ability(data.AbilityTypes[i]).ToString();
-                        towerAbilities[index++].SetActive(true);
-                    }
+                    towerAbilities[index].UpdateData(data.Ability(type));
+                    towerAbilities[index++].gameObject.SetActive(true);
                 }
 
-            for (int i = index; i < towerAbilityDropdowns.Length; i++)
+            for (int i = index + 1; i < towerAbilities.Length; i++)
             {
-                towerAbilityDropdowns[i].value = 0;
-                towerAbilities[i].SetActive(i == index + 1);
+                towerAbilities[i].UpdateData(null);
+                towerAbilities[i].gameObject.SetActive(false);
             }
             #endregion
             #endregion
@@ -837,22 +798,17 @@ public class UnitEditor : MonoBehaviour
         poster.UpdateStat(stats);
     }
 
-    private void UpdateDataToPosterAbility()
+    public void UpdateDataToPosterAbility()
     {
         Dictionary<AbilityType, TowerAbility> abils = new Dictionary<AbilityType, TowerAbility>();
 
         for (int i = 0; i < towerAbilities.Length; i++)
         {
-            int index = towerAbilityDropdowns[i].value;
+            TowerAbility ability = towerAbilities[i].GetData();
+            if (ability == null) continue;
 
-            if (index == 0) continue;
-            AbilityType type = EnumArray.AbilityTypes[index - 1];
-            TowerAbility abil = new TowerAbility();
-            abil.type = (int)type - (int)SpriteManager.ETCDataNumber.TOWERABILITY;
-            float value;
-            float.TryParse(towerAbilityInputs[i].text, out value);
-
-            abils.Add(type, abil);
+            if (abils.ContainsKey((AbilityType)ability.type)) towerAbilities[i].UpdateData(null);
+            else abils.Add((AbilityType)ability.type, ability);
         }
 
         poster.UpdateAbility(abils);
@@ -881,15 +837,6 @@ public class UnitEditor : MonoBehaviour
             value = value * -1;
             statInputs[index].text = value.ToString();
         }
-    }
-
-    private int ChangeAbilityToValue(AbilityType type)
-    {
-        for (int i = 0; i < EnumArray.AbilityTypes.Length; i++)
-        {
-            if (type == EnumArray.AbilityTypes[i]) return i + 1;
-        }
-        return 0;
     }
 
     private void ChangeAttackAmount(string s)
@@ -931,28 +878,28 @@ public class UnitEditor : MonoBehaviour
         }
     }
 
-    private void AblityChanged()
+    public void AblityChanged()
     {
         for (int i = 0; i < towerAbilities.Length; i++)
         {
-            if (towerAbilityDropdowns[i].value == 0)
+            TowerAbility ability = towerAbilities[i].GetData();
+            if (ability == null)
             {
                 // 뒷 부분이 있을 경우 스왑함. (다음 부분으로 넘어갔을 때 연이어 스왑하도록
                 // 대신 뒷 부분도 0이라면 나머지도 전부 0임.더이상 체크할 이유가 없음.
                 if (i + 1 < towerAbilities.Length)
                 {
-                    if (towerAbilityDropdowns[i + 1].value != 0)
+                    TowerAbility nextAbility = towerAbilities[i+1].GetData();
+                    if (nextAbility != null)
                     {
-                        towerAbilityDropdowns[i].value = towerAbilityDropdowns[i + 1].value;
-                        towerAbilityInputs[i].text = towerAbilityInputs[i + 1].text;
-                        towerAbilityDropdowns[i + 1].value = 0;
-                        towerAbilityInputs[i + 1].text = "0";
+                        towerAbilities[i].UpdateData(nextAbility);
+                        towerAbilities[i + 1].UpdateData(null);
                     }
                     else
                     {
                         for (i = i + 1; i < towerAbilities.Length; i++)
                         {
-                            towerAbilities[i].SetActive(false);
+                            towerAbilities[i].gameObject.SetActive(false);
                         }
                     }
                 }
@@ -960,7 +907,7 @@ public class UnitEditor : MonoBehaviour
             // 0이 아니라면 다음 부분 미리 열어둠.
             else if (i + 1 < towerAbilities.Length)
             {
-                towerAbilities[i + 1].SetActive(true);
+                towerAbilities[i + 1].gameObject.SetActive(true);
             }
         }
     }

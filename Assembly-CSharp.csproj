@@ -104,6 +104,7 @@
     <Compile Include="Assets\Scripts\Custom Editor\UnitEditorUnitIcon.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfo\TowerInfo.cs" />
     <Compile Include="Assets\Scripts\Map\MapEditorTile.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\UnitEditorAbility.cs" />
     <Compile Include="Assets\Scripts\Object\DamageUI.cs" />
     <Compile Include="Assets\Scripts\Game Control\SceneController.cs" />
     <Compile Include="Assets\Scripts\Map\MapEditor.cs" />

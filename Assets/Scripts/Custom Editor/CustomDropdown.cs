@@ -88,6 +88,7 @@ public class CustomDropdown : MonoBehaviour
             dropDownList = Instantiate(template.gameObject);
 
             dropDownList.transform.SetParent(transform);
+            dropDownList.transform.localScale = Vector3.one;
             RectTransform dropDownRect = dropDownList.transform as RectTransform;
             dropDownRect.anchorMin = template.anchorMin;
             dropDownRect.anchorMax = template.anchorMax;
@@ -98,6 +99,7 @@ public class CustomDropdown : MonoBehaviour
                 CustomDropdownItem item = Instantiate(this.item);
                 item.SetOption(this, i, options[i]);
                 item.transform.SetParent(dropDownList.transform);
+                item.transform.localScale = Vector3.one;
                 item.gameObject.SetActive(true);
             }
             dropDownList.SetActive(true);

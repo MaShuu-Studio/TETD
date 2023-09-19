@@ -514,6 +514,11 @@ public class UIController : MonoBehaviour
         if (selectedMap > CustomDataManager.EditingMapNames.Count) selectedMap = 0;
         else if (selectedMap < 0) selectedMap = CustomDataManager.EditingMapNames.Count - 1;
 
+        UpdateMap();
+    }
+
+    public void UpdateMap()
+    {
         // 가장 끝 번호는 신규 맵 생성
         if (selectedMap >= CustomDataManager.EditingMapNames.Count)
         {
@@ -521,7 +526,6 @@ public class UIController : MonoBehaviour
             selectedMapInfo.gameObject.SetActive(false);
             selectedMapNameText.text = "CREATE NEW MAP";
             newMapInput.text = "";
-
         }
         else
         {
