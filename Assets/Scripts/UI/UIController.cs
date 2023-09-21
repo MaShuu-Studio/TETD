@@ -107,6 +107,7 @@ public class UIController : MonoBehaviour
     [Header("ETC")]
     [SerializeField] private DescriptionPopup descPopup;
     [SerializeField] private ErrorLog errorLog;
+    [SerializeField] private TutorialControler tutorialControler;
 
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
@@ -139,6 +140,7 @@ public class UIController : MonoBehaviour
         customEditor.Init();
 
         await gameSetting.Init();
+        tutorialControler.Init();
 
         CurProgress++;
         Title();
@@ -207,6 +209,7 @@ public class UIController : MonoBehaviour
         library.UpdatePage();
         unitEditor.UpdateLanguage();
         gameSetting.UpdateLanage();
+        tutorialControler.UpdateLauguage();
         UpdateRoundInfo();
     }
 
@@ -316,6 +319,8 @@ public class UIController : MonoBehaviour
 
         OpenShop(false);
         SelectTower(false);
+        
+        ShowTutorial(0);
     }
 
     public void EnemyDamaged(Vector3 pos, float damage)
@@ -326,6 +331,12 @@ public class UIController : MonoBehaviour
     public void PushDamageUI(GameObject go)
     {
         damageUIPool.Push(go);
+    }
+
+    public void ShowTutorial(int index)
+    {
+        if (TutorialControler.isTutorial)
+            tutorialControler.ShowTutorial(index);
     }
 
     #region Info Panel
@@ -435,6 +446,8 @@ public class UIController : MonoBehaviour
     {
         shop.gameObject.SetActive(b);
         shop.UpdateProb();
+
+        ShowTutorial(2);
     }
 
     public void RerollAll()

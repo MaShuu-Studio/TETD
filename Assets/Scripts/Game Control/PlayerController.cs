@@ -217,8 +217,9 @@ public class Character
     {
         exp += amount;
 
-        if (exp >= 100)
+        if (exp >= 10)
         {
+            UIController.Instance.ShowTutorial(5);
             exp -= 100;
             level++;
             bonusStat += 2;

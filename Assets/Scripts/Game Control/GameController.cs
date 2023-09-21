@@ -120,10 +120,10 @@ public class GameController : MonoBehaviour
         UIController.Instance.GameOver();
     }
 
-    private void Pause(bool b)
+    public void Pause(bool b, bool isTutorial = false)
     {
         paused = b;
-        UIController.Instance.OpenSetting(paused);
+        if (isTutorial == false) UIController.Instance.OpenSetting(paused);
     }
 
     private void OnApplicationPause(bool pause)

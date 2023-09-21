@@ -69,6 +69,7 @@ public class TowerController : MonoBehaviour
     public bool BuildTower(int id, Vector3 pos)
     {
         if (ContainsTower(pos)) return false;
+        UIController.Instance.ShowTutorial(4);
 
         Tower tower = TowerManager.GetTower(id);
         if (tower == null) return false;
