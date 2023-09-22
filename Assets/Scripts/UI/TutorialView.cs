@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
 using TMPro;
 
 [RequireComponent(typeof(Image))]
@@ -14,11 +15,11 @@ public class TutorialView : MonoBehaviour
     [SerializeField] private Image background;
     [SerializeField] private TextMeshProUGUI text;
 
-    public bool isShowing { get; private set; }
+    public bool isProgress { get; private set; }
 
-    public void SetView(TutorialControler tutorialController, string str)
+    public void SetView(TutorialController tutorialController)
     {
-        isShowing = false;
+        isProgress = true;
 
         GetComponent<Image>().color = new Color(0, 0, 0, 0);
         Button button = GetComponent<Button>();
@@ -30,15 +31,22 @@ public class TutorialView : MonoBehaviour
         background.rectTransform.anchorMax = mask.rectTransform.anchorMax;
         background.rectTransform.anchoredPosition = mask.rectTransform.anchoredPosition * -1;
 
-        background.color = new Color(0, 0, 0, 0.5f);
-
         gameObject.SetActive(false);
-        //text.text = str;
+    }
+
+    public void SetProgress(bool b)
+    {
+        isProgress = b;
+    }
+
+    public void SetText(string str)
+    {
+        text.text = str;
     }
 
     public void ShowTutorial()
     {
-        isShowing = true;
+        isProgress = false;
         gameObject.SetActive(true);
     }
 }

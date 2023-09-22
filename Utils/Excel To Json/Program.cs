@@ -174,21 +174,32 @@ namespace Excel_To_Json
         private static void ParseLanguage(string id, string n, string d)
         {
             // Array와 일반 string으로 구분
-            string[] names = n.Split(",");
+            string[] names = null;
             string[] descs = null;
-            if (string.IsNullOrEmpty(d) == false) descs = d.Split(",");
-            if (n.Length > 1)
+
+            int count = 0;
+            if (string.IsNullOrEmpty(n) == false)
             {
-                for (int i = 0; i < names.Length; i++)
-                {
-                    string str = ParseValue("id", id) + "," + ParseValue("name", names[i]);
+                names = n.Split(";");
+                count = names.Length;
+            }
+            if (string.IsNullOrEmpty(d) == false)
+            {
+                descs = d.Split(";");
+                count = descs.Length;
+            }
+            for (int i = 0; i < count; i++)
+            {
+                string str = string.Format(JsonFormat.valueFormat, "id", id);
 
-                    // desc는 empty string인 경우도 있으므로 해당 경우에는 배제해주어야 함.
-                    if (descs != null)
-                        str += "," + ParseValue("desc", descs[i]);
+                // 각 데이터는 empty string인 경우도 있으므로 해당 경우에는 배제해주어야 함.
+                if (names != null)
+                    str += "," + string.Format(JsonFormat.valueFormat, "name", $"\"{names[i]}\"");
 
-                    langContents[i] += string.Format(JsonFormat.contentsFormat, str) + ",\n";
-                }
+                if (descs != null)
+                    str += "," + string.Format(JsonFormat.valueFormat, "desc", $"\"{descs[i]}\"");
+
+                langContents[i] += string.Format(JsonFormat.contentsFormat, str) + ",\n";
             }
         }
 
@@ -369,7 +380,7 @@ namespace Excel_To_Json
             return true;
         }
 
-        private static bool TryParseAbility(string s, out int[] types, out float[] times, out float[] atkspeeds,  out float[] values)
+        private static bool TryParseAbility(string s, out int[] types, out float[] times, out float[] atkspeeds, out float[] values)
         {
             string[] abilities = s.Split(";");
             types = null;

@@ -612,6 +612,30 @@
 
 {
     "id": 3301002,"name": "BOSS"
+},
+
+{
+    "id": 9030000,"desc": "Information for the next round will come from here."
+},
+
+{
+    "id": 9030001,"desc": "Click here to open the store."
+},
+
+{
+    "id": 9030002,"desc": "You can get towers from the store. If you don't want to, you can change the list by rerolling."
+},
+
+{
+    "id": 9030003,"desc": "towers can be built by purchasing them."
+},
+
+{
+    "id": 9030004,"desc": "Information about the built tower will appear when you click on it. You can set priorities, upgrade, sell, and more."
+},
+
+{
+    "id": 9030005,"desc": "You can improve your stats when you level up. You can enhance Damage and Attack speed for each element."
 }
     ]
 }

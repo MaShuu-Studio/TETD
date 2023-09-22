@@ -22,8 +22,9 @@ public class GameController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         paused = false;
     }
-    public bool Paused { get { return paused; } }
+    public bool Paused { get { return paused || tutorialPaused; } }
     private bool paused;
+    private bool tutorialPaused;
 
     private void Update()
     {
@@ -120,10 +121,14 @@ public class GameController : MonoBehaviour
         UIController.Instance.GameOver();
     }
 
-    public void Pause(bool b, bool isTutorial = false)
+    public void Pause(bool b)
     {
         paused = b;
-        if (isTutorial == false) UIController.Instance.OpenSetting(paused);
+        UIController.Instance.OpenSetting(paused);
+    }
+    public void TutorialPause(bool b)
+    {
+        tutorialPaused = b;
     }
 
     private void OnApplicationPause(bool pause)

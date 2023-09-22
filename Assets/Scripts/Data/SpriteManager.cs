@@ -35,6 +35,7 @@ public static class SpriteManager
         CHARTYPE = 3100000, DIFF = 3101000,
         TOWERSTAT = 3200000, TOWERABILITY = 3201000, APRIORITY = 3202000,
         ENEMYSTAT = 3300000, ENEMYGRADE = 3301000,
+        TUTORIALGAME = 9030000,
     }
 
     public static async void Init()

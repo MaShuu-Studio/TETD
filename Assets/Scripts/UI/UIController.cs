@@ -107,7 +107,7 @@ public class UIController : MonoBehaviour
     [Header("ETC")]
     [SerializeField] private DescriptionPopup descPopup;
     [SerializeField] private ErrorLog errorLog;
-    [SerializeField] private TutorialControler tutorialControler;
+    [SerializeField] private TutorialController tutorialController;
 
     public static int CurProgress { get; private set; } = 0;
     public static int TotalProgress { get; private set; }
@@ -126,7 +126,6 @@ public class UIController : MonoBehaviour
 
         await library.Init();
         library.Open(false);
-        await optionUI.Init();
 
         shop.Init();
         towerInfoPanel.Init();
@@ -140,8 +139,9 @@ public class UIController : MonoBehaviour
         customEditor.Init();
 
         await gameSetting.Init();
-        tutorialControler.Init();
+        tutorialController.Init();
 
+        await optionUI.Init();
         CurProgress++;
         Title();
     }
@@ -209,7 +209,7 @@ public class UIController : MonoBehaviour
         library.UpdatePage();
         unitEditor.UpdateLanguage();
         gameSetting.UpdateLanage();
-        tutorialControler.UpdateLauguage();
+        tutorialController.UpdateLauguage();
         UpdateRoundInfo();
     }
 
@@ -335,8 +335,17 @@ public class UIController : MonoBehaviour
 
     public void ShowTutorial(int index)
     {
-        if (TutorialControler.isTutorial)
-            tutorialControler.ShowTutorial(index);
+        tutorialController.ShowTutorial(index);
+    }
+
+    public void SetTutorialProgress(bool b)
+    {
+        tutorialController.SetProgress(b);
+    }
+
+    public void EndTutorial()
+    {
+        optionUI.EndTutorial();
     }
 
     #region Info Panel
@@ -446,8 +455,6 @@ public class UIController : MonoBehaviour
     {
         shop.gameObject.SetActive(b);
         shop.UpdateProb();
-
-        ShowTutorial(2);
     }
 
     public void RerollAll()

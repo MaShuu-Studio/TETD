@@ -14,6 +14,7 @@ public class OptionUI : MonoBehaviour
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private TextMeshProUGUI sfxText;
     [SerializeField] private TMP_Dropdown languages;
+    [SerializeField] private Toggle tutorialToggle;
 
     [SerializeField] private TMP_Dropdown resolutions;
     [SerializeField] private TMP_Dropdown screenMode;
@@ -30,6 +31,7 @@ public class OptionUI : MonoBehaviour
         int height = -1;
         int screenmode = -1;
         int frame = -1;
+        bool tutorial = true;
 
         if (setting != null)
         {
@@ -40,6 +42,7 @@ public class OptionUI : MonoBehaviour
             height = setting.Option("height");
             screenmode = setting.Option("screenmode");
             frame = setting.Option("frame");
+            tutorial = setting.Option("tutorial") == 1;
         }
 
         if (bgm == -1) bgm = 10;
@@ -70,10 +73,6 @@ public class OptionUI : MonoBehaviour
         Translator.SetLanguage(lang);
         languages.value = lang;
 
-        bgmSlider.onValueChanged.AddListener(v => SetOption());
-        sfxSlider.onValueChanged.AddListener(v => SetOption());
-        languages.onValueChanged.AddListener(v => SetOption());
-
         if (resols.Count > 0)
         {
             for (int i = 0; i < resols.Count; i++)
@@ -95,9 +94,17 @@ public class OptionUI : MonoBehaviour
         frameSlider.onValueChanged.AddListener(v => ChangeFrame((int)v));
         frameSlider.value = frame;
 
+        tutorialToggle.isOn = !tutorial;
+        tutorialToggle.onValueChanged.AddListener(b => UIController.Instance.SetTutorialProgress(b));
+        tutorialToggle.isOn = tutorial;
+
+        bgmSlider.onValueChanged.AddListener(v => SetOption());
+        sfxSlider.onValueChanged.AddListener(v => SetOption());
+        languages.onValueChanged.AddListener(v => SetOption());
         resolutions.onValueChanged.AddListener(v => SetOption());
         screenMode.onValueChanged.AddListener(v => SetOption());
         frameSlider.onValueChanged.AddListener(v => SetOption());
+        tutorialToggle.onValueChanged.AddListener(v => SetOption());
     }
 
     public void SetSound()
@@ -121,10 +128,10 @@ public class OptionUI : MonoBehaviour
         setting.AddOption("screenmode", (int)curScreenMode);
 
         setting.AddOption("frame", Application.targetFrameRate);
+        setting.AddOption("tutorial", (tutorialToggle.isOn) ? 1 : 0);
 
         DataManager.SaveSetting(setting);
     }
-
 
     List<Resolution> resols = new List<Resolution>();
     FullScreenMode curScreenMode;
@@ -212,6 +219,11 @@ public class OptionUI : MonoBehaviour
     {
         Application.targetFrameRate = frame;
         frameText.text = frame.ToString();
+    }
+
+    public void EndTutorial()
+    {
+        tutorialToggle.isOn = false;
     }
 }
 

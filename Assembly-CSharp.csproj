@@ -92,7 +92,7 @@
     <Compile Include="Assets\Scripts\Map\MapEditorBackgroundTile.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\SelectCustomDataButton.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\UnitEditor.cs" />
-    <Compile Include="Assets\Scripts\Game Control\TutorialControler.cs" />
+    <Compile Include="Assets\Scripts\Game Control\TutorialController.cs" />
     <Compile Include="Assets\Scripts\Data\Language.cs" />
     <Compile Include="Assets\Scripts\Map\Map.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ExitButton.cs" />
@@ -123,6 +123,7 @@
     <Compile Include="Assets\Scripts\Data\TowerManager.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\EditorToTitleButton.cs" />
     <Compile Include="Assets\Scripts\UI\GameSettingIcon.cs" />
+    <Compile Include="Assets\Scripts\UI\TutorialView.cs" />
     <Compile Include="Assets\Scripts\UI\AttackPriorityToggle.cs" />
     <Compile Include="Assets\Scripts\Object\Poolable.cs" />
     <Compile Include="Assets\Scripts\Data\EnemyManager.cs" />
@@ -146,8 +147,6 @@
     <Compile Include="Assets\Scripts\Data\CustomDataManager.cs" />
     <Compile Include="Assets\Scripts\Object\Projectile.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
-    <Compile Include="Assets\Scripts\UI\TutorialView.cs" />
-    <Compile Include="Assets\Scripts\UI\CutMaskUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
