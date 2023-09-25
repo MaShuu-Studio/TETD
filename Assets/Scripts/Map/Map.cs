@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
-using System.Linq;
+using EnumData;
 
 public class Map
 {
@@ -17,6 +17,16 @@ public class Map
     }
 }
 
+[Serializable]
+public class MapProperty
+{
+    public Element element;
+    public int atk;
+    public int atkSpeed;
+    public int hp;
+    public int speed;
+}
+
 public class TilemapInfo
 {
     public string backgroundName;
@@ -25,13 +35,18 @@ public class TilemapInfo
     public Dictionary<Vector3Int, TileInfo> tiles;
     public List<Vector3Int> enemyRoad;
 
-    public TilemapInfo(string backgroundName)
+    public List<MapProperty> mapProperties;
+    public Dictionary<Vector3Int, TileProperty> tileProperties;
+
+    public TilemapInfo()
     {
-        this.backgroundName = backgroundName;
+        this.backgroundName = "";
         this.origin = Vector3Int.zero;
         this.size = Vector3Int.zero;
         this.tiles = new Dictionary<Vector3Int, TileInfo>();
         enemyRoad = new List<Vector3Int>();
+        mapProperties = new List<MapProperty>();
+        tileProperties = new Dictionary<Vector3Int, TileProperty>();
     }
 
     public TilemapInfo(TilemapInfoJson data)
@@ -43,6 +58,37 @@ public class TilemapInfo
 
         if (data.enemyRoad != null) enemyRoad = data.enemyRoad;
         else enemyRoad = new List<Vector3Int>();
+
+        //mapProperties = data.mapProperties;
+        //tileProperties = data.tileProperties;
+
+        mapProperties = new List<MapProperty>();
+        mapProperties.Add(new MapProperty()
+        {
+            element = Element.FIRE,
+            atk = UnityEngine.Random.Range(-1, 2) * 50,
+            atkSpeed = UnityEngine.Random.Range(-1, 2) * 50
+        });
+        mapProperties.Add(new MapProperty()
+        {
+            element = Element.WATER,
+            atk = UnityEngine.Random.Range(-1, 2) * 50,
+            atkSpeed = UnityEngine.Random.Range(-1, 2) * 50
+        });
+        mapProperties.Add(new MapProperty()
+        {
+            element = Element.NATURE,
+            atk = UnityEngine.Random.Range(-1, 2) * 50,
+            atkSpeed = UnityEngine.Random.Range(-1, 2) * 50
+        });
+
+        tileProperties = new Dictionary<Vector3Int, TileProperty>();
+        tileProperties.Add(Vector3Int.zero, new TileProperty()
+        {
+            atk = 30,
+            atkSpeed = 100,
+            range = 50
+        });
     }
 
     public TilemapInfo(TilemapInfo data)
@@ -54,6 +100,9 @@ public class TilemapInfo
 
         if (data.enemyRoad != null) enemyRoad = data.enemyRoad;
         else enemyRoad = new List<Vector3Int>();
+
+        mapProperties = data.mapProperties;
+        tileProperties = data.tileProperties;
     }
 
     public CustomRuleTile GetTile(Vector3Int pos)
@@ -87,6 +136,14 @@ public struct TileInfo
     }
 }
 
+public class TileProperty
+{
+    public int atk;
+    public int atkSpeed;
+    public int range;
+}
+
+// 스프라이트 형태 표기용 룰타일.
 public class CustomRuleTile
 {
     // 1111 : 상 하 좌 우
@@ -171,6 +228,11 @@ public class TilemapInfoJson : ISerializationCallbackReceiver
     public Dictionary<Vector3Int, TileInfo> tiles;
     public List<Vector3Int> enemyRoad;
 
+    public List<Vector3Int> tpKeys = new List<Vector3Int>();
+    public List<TileProperty> tpValues = new List<TileProperty>();
+    public Dictionary<Vector3Int, TileProperty> tileProperties;
+    public List<MapProperty> mapProperties;
+
     public TilemapInfoJson(TilemapInfo info)
     {
         this.backgroundName = info.backgroundName;
@@ -178,6 +240,7 @@ public class TilemapInfoJson : ISerializationCallbackReceiver
         this.size = info.size;
         this.tiles = info.tiles;
         this.enemyRoad = info.enemyRoad;
+        this.mapProperties = info.mapProperties;
     }
 
     public void OnBeforeSerialize()
@@ -185,10 +248,19 @@ public class TilemapInfoJson : ISerializationCallbackReceiver
         tileKeys.Clear();
         tileValues.Clear();
 
+        tpKeys.Clear();
+        tpValues.Clear();
+
         foreach (var kvp in tiles)
         {
             tileKeys.Add(kvp.Key);
             tileValues.Add(kvp.Value);
+        }
+
+        foreach (var kvp in tileProperties)
+        {
+            tpKeys.Add(kvp.Key);
+            tpValues.Add(kvp.Value);
         }
     }
 
@@ -199,6 +271,13 @@ public class TilemapInfoJson : ISerializationCallbackReceiver
         for (int i = 0; i < tileKeys.Count && i < tileValues.Count; i++)
         {
             tiles.Add(tileKeys[i], tileValues[i]);
+        }
+
+        tileProperties = new Dictionary<Vector3Int, TileProperty>();
+
+        for (int i = 0; i < tpKeys.Count && i < tpValues.Count; i++)
+        {
+            tileProperties.Add(tpKeys[i], tpValues[i]);
         }
     }
 }

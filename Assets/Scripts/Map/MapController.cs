@@ -27,6 +27,8 @@ public class MapController : MonoBehaviour
     [SerializeField] private SpriteRenderer selectedTile;
     [SerializeField] private Tilemap tilemap;
     private Grid grid;
+
+    public Map MapData { get { return map; } }
     private Map map;
 
     private bool readyToBuild;
@@ -139,7 +141,7 @@ public class MapController : MonoBehaviour
         // 굳이 WorldPos를 GetTilePos를 한번 더 거쳐주는 이유는 작업의 실수를 최소화 하기 위함임.
         // 실제 위치와 타일의 위치가 약간 다름.
         Vector3 pos = GetMapPos(worldPos);
-        Vector3Int tilePos = new Vector3Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y));
+        Vector3Int tilePos = GetTilePos(pos);
 
         bool buildable = (map != null && map.tilemap.Buildable(tilePos));
 
@@ -154,14 +156,19 @@ public class MapController : MonoBehaviour
         return buildable;
     }
 
-    public Vector3 GetMapPos(Vector3 pos)
+    public Vector3Int GetTilePos(Vector3 pos)
+    {
+        return new Vector3Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y));
+    }
+
+    public Vector3 GetMapPos(Vector3 worldPos)
     {
         /* 타일은 grid.cellSize만큼 나누어져 있음
          * 따라서 worldPos에서 내림을 통해 사각형의 왼쪽 아래 꼭지점을 얻음.
          * 이후 cellSize의 절반만큼 위치를 조정해주면 타일의 위치가 됨.
          */
-        float x = Mathf.FloorToInt(pos.x) + grid.cellSize.x / 2;
-        float y = Mathf.FloorToInt(pos.y) + grid.cellSize.y / 2;
+        float x = Mathf.FloorToInt(worldPos.x) + grid.cellSize.x / 2;
+        float y = Mathf.FloorToInt(worldPos.y) + grid.cellSize.y / 2;
 
         return new Vector3(x, y);
     }

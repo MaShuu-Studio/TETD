@@ -13,6 +13,9 @@ public class TowerObject : Poolable
     public Tower Data { get { return data; } }
     private Tower data;
 
+    private TileProperty tileProperty;
+    private MapProperty mapProperty;
+
     private float OriginAttackSpeed;
 
     private AnimationType curAnim;
@@ -91,12 +94,14 @@ public class TowerObject : Poolable
     }
 
     #region Build
-    public void Build(Vector3 pos)
+    public void Build(Vector3 pos, TileProperty tp, MapProperty mp)
     {
         Pos = pos;
 
         Tower data = TowerManager.GetTower(id);
         this.data = new Tower(data);
+        tileProperty = tp;
+        mapProperty = mp;
 
         int sorting = Mathf.FloorToInt(pos.y) * -1;
         spriteRenderer.sortingOrder = sorting;
@@ -155,7 +160,7 @@ public class TowerObject : Poolable
 
     public void UpdateDistnace()
     {
-        rangeUI.transform.localScale = range.transform.localScale = Vector3.one * (1 + data.Stat(TowerStatType.DISTANCE) * 2);
+        rangeUI.transform.localScale = range.transform.localScale = Vector3.one * (1 + Stat(TowerStatType.DISTANCE) * 2);
     }
 
     private void LookAtEnemy()
@@ -176,6 +181,39 @@ public class TowerObject : Poolable
         float value = data.Stat(type);
 
         value += BonusStat(type);
+        // 후에 코드 정리를 하면 더 좋을 듯?
+        if (tileProperty != null)
+        {
+            float percent = 1;
+            switch (type)
+            {
+                case TowerStatType.DAMAGE:
+                    percent = (100 + tileProperty.atk) / 100f;
+                    break;
+                case TowerStatType.ATTACKSPEED:
+                    percent = (100 + tileProperty.atkSpeed) / 100f;
+                    break;
+                case TowerStatType.DISTANCE:
+                    percent = (100 + tileProperty.range) / 100f;
+                    break;
+            }
+            value *= percent;
+        }
+
+        if (mapProperty != null)
+        {
+            float percent = 1;
+            switch (type)
+            {
+                case TowerStatType.DAMAGE:
+                    percent = (100 + mapProperty.atk) / 100f;
+                    break;
+                case TowerStatType.ATTACKSPEED:
+                    percent = (100 + mapProperty.atkSpeed) / 100f;
+                    break;
+            }
+            value *= percent;
+        }
 
         return value;
     }

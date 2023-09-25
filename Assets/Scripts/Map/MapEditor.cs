@@ -79,7 +79,7 @@ public class MapEditor : MonoBehaviour
         SetActive(true);
         this.mapName = mapName;
 
-        if (map == null) tilemap = new TilemapInfo("");
+        if (map == null) tilemap = new TilemapInfo();
         else tilemap = new TilemapInfo(map.tilemap);
         enemyRoad = new List<Vector3Int>();
 

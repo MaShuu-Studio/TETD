@@ -5,14 +5,34 @@ using UnityEngine.UI;
 
 public class MapInfoIcon : MonoBehaviour
 {
+    [Header("Map")]
     [SerializeField] private Transform tilesParent;
     [SerializeField] private Image[] backgrounds;
     [SerializeField] private Image tileBase;
     private RectTransform rect;
     private Image[,] mapTiles;
+
+    [Space]
+    [Header("Info")]
+    [SerializeField] private RectTransform summarizedInfosParent;
+    [SerializeField] private MapSummarizedInfo summarizedInfoPrefab;
+    [Header("More Info")]
+    [SerializeField] private GameObject moreInfoIcon;
+    [SerializeField] private RectTransform background;
+    [SerializeField] private RectTransform moreInfoParent;
+    [SerializeField] private MapMoreInfo moreInfoPrefab;
+    private List<GameObject> infoObjectList = new List<GameObject>();
+
     public Map MapData { get { return map; } }
     private Map map;
     private float tileSize;
+
+    private void Update()
+    {
+        if (moreInfoIcon.activeSelf)
+            background.gameObject.SetActive(UIController.PointOverUI(moreInfoIcon));
+    }
+
     public void SetIcon(Map map)
     {
         rect = GetComponent<RectTransform>();
@@ -21,7 +41,49 @@ public class MapInfoIcon : MonoBehaviour
         tileRect.sizeDelta = Vector2.one * tileSize;
         transform.localScale = Vector3.one;
 
+        summarizedInfoPrefab.gameObject.SetActive(false);
+        moreInfoPrefab.gameObject.SetActive(false);
+        background.gameObject.SetActive(false);
+
+        foreach (var go in infoObjectList)
+        {
+            Destroy(go);
+        }
+        infoObjectList.Clear();
+
         this.map = map;
+        if (this.map.tilemap.mapProperties != null)
+        {
+            foreach (var prop in this.map.tilemap.mapProperties)
+            {
+                // Summarized Info
+                MapSummarizedInfo.UpDown updown = MapSummarizedInfo.UpDown.MID;
+                if (prop.atk > 0) updown--;
+                else if (prop.atk < 0) updown++;
+                if (prop.atkSpeed > 0) updown--;
+                else if (prop.atkSpeed < 0) updown++;
+
+                if (updown < 0) updown = MapSummarizedInfo.UpDown.UP;
+                else if ((int)updown > 2) updown = MapSummarizedInfo.UpDown.DOWN;
+
+                MapSummarizedInfo info = Instantiate(summarizedInfoPrefab);
+                info.gameObject.SetActive(true);
+                info.SetInfo(prop.element, updown);
+                info.transform.SetParent(summarizedInfosParent);
+                info.transform.localScale = Vector3.one;
+                infoObjectList.Add(info.gameObject);
+
+                // More Info
+                MapMoreInfo moreInfo = Instantiate(moreInfoPrefab);
+                moreInfo.gameObject.SetActive(true);
+                moreInfo.SetInfo(prop);
+                moreInfo.transform.SetParent(moreInfoParent);
+                moreInfo.transform.localScale = Vector3.one;
+                infoObjectList.Add(moreInfo.gameObject);
+            }
+            summarizedInfosParent.sizeDelta = new Vector2(96 * this.map.tilemap.mapProperties.Count, 48);
+            background.sizeDelta = new Vector2(264, 72 + this.map.tilemap.mapProperties.Count * 48);
+        }
 
         UpdateMap(map);
     }

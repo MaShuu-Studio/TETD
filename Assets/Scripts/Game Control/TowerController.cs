@@ -80,7 +80,24 @@ public class TowerController : MonoBehaviour
         obj.transform.SetParent(transform);
 
         TowerObject towerObj = obj.GetComponent<TowerObject>();
-        towerObj.Build(pos);
+
+        TileProperty tp = null;
+        MapProperty mp = null;
+        Vector3Int tilePos = MapController.Instance.GetTilePos(pos);
+        if (MapController.Instance.MapData.tilemap.tileProperties.ContainsKey(tilePos))
+        {
+            tp = MapController.Instance.MapData.tilemap.tileProperties[tilePos];
+        }
+        if (MapController.Instance.MapData.tilemap.mapProperties != null)
+            foreach (var prop in MapController.Instance.MapData.tilemap.mapProperties)
+            {
+                if (prop.element == tower.element)
+                {
+                    mp = prop;
+                    break;
+                }
+            }
+        towerObj.Build(pos, tp, mp);
 
         towers.Add(pos, towerObj);
         SelectTower(pos);
