@@ -313,19 +313,18 @@ public static class CustomDataManager
     {
         string mapName = DataManager.FileNameTriming(path);
 
-        TilemapInfoJson data = await DataManager.DeserializeJson<TilemapInfoJson>(path);
+        MapDataJson data = await DataManager.DeserializeJson<MapDataJson>(path);
         if (data == null) return;
 
-        TilemapInfo info = new TilemapInfo(data);
         editingMapNames.Add(mapName);
-        editingMapData.Add(mapName, new Map(mapName, info));
+        editingMapData.Add(mapName, new Map(mapName, data));
 
         CurProgress++;
     }
 
-    public static void SaveMap(string mapName, TilemapInfo info)
+    public static void SaveMap(string mapName, Map info)
     {
-        TilemapInfoJson data = new TilemapInfoJson(info);
+        MapDataJson data = new MapDataJson(info);
         DataManager.SerializeJson(editingMapPath, mapName, data);
         Map map = new Map(mapName, info);
 

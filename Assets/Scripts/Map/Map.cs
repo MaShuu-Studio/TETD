@@ -8,27 +8,7 @@ using EnumData;
 public class Map
 {
     public string name;
-    public TilemapInfo tilemap;
 
-    public Map(string name, TilemapInfo info)
-    {
-        this.name = name;
-        tilemap = new TilemapInfo(info);
-    }
-}
-
-[Serializable]
-public class MapProperty
-{
-    public Element element;
-    public int atk;
-    public int atkSpeed;
-    public int hp;
-    public int speed;
-}
-
-public class TilemapInfo
-{
     public string backgroundName;
     public Vector3Int origin;
     public Vector3Int size;
@@ -38,19 +18,23 @@ public class TilemapInfo
     public List<MapProperty> mapProperties;
     public Dictionary<Vector3Int, TileProperty> tileProperties;
 
-    public TilemapInfo()
+    public Map()
     {
-        this.backgroundName = "";
-        this.origin = Vector3Int.zero;
-        this.size = Vector3Int.zero;
-        this.tiles = new Dictionary<Vector3Int, TileInfo>();
+        name = "";
+
+        backgroundName = "";
+        origin = Vector3Int.zero;
+        size = Vector3Int.zero;
+        tiles = new Dictionary<Vector3Int, TileInfo>();
         enemyRoad = new List<Vector3Int>();
         mapProperties = new List<MapProperty>();
         tileProperties = new Dictionary<Vector3Int, TileProperty>();
     }
 
-    public TilemapInfo(TilemapInfoJson data)
+    public Map(string name, MapDataJson data)
     {
+        this.name = name;
+        
         this.backgroundName = data.backgroundName;
         this.origin = data.origin;
         this.size = data.size;
@@ -91,8 +75,10 @@ public class TilemapInfo
         });
     }
 
-    public TilemapInfo(TilemapInfo data)
+    public Map(string name, Map data)
     {
+        this.name = name;
+
         this.backgroundName = data.backgroundName;
         this.origin = data.origin;
         this.size = data.size;
@@ -134,6 +120,16 @@ public struct TileInfo
         this.name = name;
         this.buildable = b;
     }
+}
+
+[Serializable]
+public class MapProperty
+{
+    public Element element;
+    public int atk;
+    public int atkSpeed;
+    public int hp;
+    public int speed;
 }
 
 public class TileProperty
@@ -218,7 +214,7 @@ public class CustomTile : Tile
 
 // 실 사용할 데이터와 직렬화할 데이터를 구분
 [Serializable]
-public class TilemapInfoJson : ISerializationCallbackReceiver
+public class MapDataJson : ISerializationCallbackReceiver
 {
     public string backgroundName;
     public Vector3Int origin;
@@ -233,14 +229,15 @@ public class TilemapInfoJson : ISerializationCallbackReceiver
     public Dictionary<Vector3Int, TileProperty> tileProperties;
     public List<MapProperty> mapProperties;
 
-    public TilemapInfoJson(TilemapInfo info)
+    public MapDataJson(Map data)
     {
-        this.backgroundName = info.backgroundName;
-        this.origin = info.origin;
-        this.size = info.size;
-        this.tiles = info.tiles;
-        this.enemyRoad = info.enemyRoad;
-        this.mapProperties = info.mapProperties;
+        this.backgroundName = data.backgroundName;
+        this.origin = data.origin;
+        this.size = data.size;
+        this.tiles = data.tiles;
+        this.enemyRoad = data.enemyRoad;
+        this.mapProperties = data.mapProperties;
+        this.tileProperties = data.tileProperties;
     }
 
     public void OnBeforeSerialize()

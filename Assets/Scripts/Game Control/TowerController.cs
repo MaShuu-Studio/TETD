@@ -84,12 +84,12 @@ public class TowerController : MonoBehaviour
         TileProperty tp = null;
         MapProperty mp = null;
         Vector3Int tilePos = MapController.Instance.GetTilePos(pos);
-        if (MapController.Instance.MapData.tilemap.tileProperties.ContainsKey(tilePos))
+        if (MapController.Instance.MapData.tileProperties.ContainsKey(tilePos))
         {
-            tp = MapController.Instance.MapData.tilemap.tileProperties[tilePos];
+            tp = MapController.Instance.MapData.tileProperties[tilePos];
         }
-        if (MapController.Instance.MapData.tilemap.mapProperties != null)
-            foreach (var prop in MapController.Instance.MapData.tilemap.mapProperties)
+        if (MapController.Instance.MapData.mapProperties != null)
+            foreach (var prop in MapController.Instance.MapData.mapProperties)
             {
                 if (prop.element == tower.element)
                 {

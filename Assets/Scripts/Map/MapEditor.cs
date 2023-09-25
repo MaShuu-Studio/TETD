@@ -44,21 +44,20 @@ public class MapEditor : MonoBehaviour
     [SerializeField] private Tilemap routeTilemap;
     [SerializeField] private SpriteRenderer selectedPosSprite;
     private Grid grid;
-    private Map map;
 
     public string MapName { get { return mapName; } }
     private string mapName;
 
-    public TilemapInfo Tilemap 
+    public Map MapData
     { 
         get 
         {
             // 타일맵에 enemyRoad 부여.
-            tilemap.enemyRoad = enemyRoad;
-            return tilemap; 
+            map.enemyRoad = enemyRoad;
+            return map; 
         }
     }
-    private TilemapInfo tilemap;
+    private Map map;
 
     private List<Vector3Int> enemyRoad;
     private CustomRuleTile selectedTile;
@@ -79,11 +78,11 @@ public class MapEditor : MonoBehaviour
         SetActive(true);
         this.mapName = mapName;
 
-        if (map == null) tilemap = new TilemapInfo();
-        else tilemap = new TilemapInfo(map.tilemap);
+        if (map == null) map = new Map();
+        else this.map = new Map(mapName, map);
         enemyRoad = new List<Vector3Int>();
 
-        SetBackground(tilemap.backgroundName);
+        SetBackground(map.backgroundName);
 
         UpdateMap();
     }
@@ -144,7 +143,7 @@ public class MapEditor : MonoBehaviour
             }
         }
 
-        tilemap.backgroundName = name;
+        map.backgroundName = name;
     }
 
     public bool SelectTile(Vector3 worldPos)
@@ -156,7 +155,7 @@ public class MapEditor : MonoBehaviour
         Vector3 pos = GetMapPos(worldPos);
         Vector3Int tilePos = new Vector3Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y));
 
-        bool buildable = (map != null && map.tilemap.Buildable(tilePos));
+        bool buildable = (map != null && map.Buildable(tilePos));
 
         if (buildable) selectedPosSprite.color = new Color(0, 1, 0, 0.7f);
         else selectedPosSprite.color = new Color(1, 0, 0, 0.7f);
@@ -192,7 +191,7 @@ public class MapEditor : MonoBehaviour
     {
         // Flag는 Road에만 설치할 수 있음.
         // pos 칸이 비어있거나 Road가 아니면 취소
-        if (tilemap.tiles.ContainsKey(pos) == false || tilemap.GetTile(pos).type != "ROAD") return;
+        if (map.tiles.ContainsKey(pos) == false || map.GetTile(pos).type != "ROAD") return;
 
         // 추가
         if (add)
@@ -235,7 +234,7 @@ public class MapEditor : MonoBehaviour
                             startRoad.Add(nextPos);
                             nextPos += dir;
                             // 만약에 해당 방향에 Road가 없다면 이 역시 지을 수 없는 형태.
-                            if (tilemap.tiles.ContainsKey(nextPos) == false || tilemap.GetTile(nextPos).type != "ROAD")
+                            if (map.tiles.ContainsKey(nextPos) == false || map.GetTile(nextPos).type != "ROAD")
                                 return;
                         }
 
@@ -285,7 +284,7 @@ public class MapEditor : MonoBehaviour
                         while (nextPos != pos)
                         {
                             nextPos += dir;
-                            if (tilemap.tiles.ContainsKey(nextPos) == false || tilemap.GetTile(nextPos).type != "ROAD")
+                            if (map.tiles.ContainsKey(nextPos) == false || map.GetTile(nextPos).type != "ROAD")
                                 return;
                             destRoad.Add(nextPos);
                         }
@@ -330,63 +329,63 @@ public class MapEditor : MonoBehaviour
     private void SetTile(Vector3Int pos, CustomRuleTile tile)
     {
         bool update = true;
-        if (tilemap.tiles.ContainsKey(pos))
+        if (map.tiles.ContainsKey(pos))
         {
             if (tile == null)
             {
-                if (tilemap.GetTile(pos).type == "ROAD" && enemyRoad.Contains(pos))
+                if (map.GetTile(pos).type == "ROAD" && enemyRoad.Contains(pos))
                 {
                     enemyRoad.Clear();
                     UpdateRoad();
                 }
-                tilemap.tiles.Remove(pos);
+                map.tiles.Remove(pos);
             }
 
-            else if (tilemap.tiles[pos].name != tile.name)
+            else if (map.tiles[pos].name != tile.name)
             {
-                if ((tilemap.GetTile(pos).type == "ROAD" && tile.type != "ROAD")
+                if ((map.GetTile(pos).type == "ROAD" && tile.type != "ROAD")
                     && enemyRoad.Contains(pos))
                 {
                     enemyRoad.Clear();
                     UpdateRoad();
                 }
-                tilemap.tiles[pos] = new TileInfo(tile.name, tile.Base.buildable);
+                map.tiles[pos] = new TileInfo(tile.name, tile.Base.buildable);
             }
             else update = false;
         }
         else
         {
-            if (tilemap.tiles.Count == 0)
+            if (map.tiles.Count == 0)
             {
-                tilemap.origin = pos;
-                tilemap.size = new Vector3Int(1, 1);
+                map.origin = pos;
+                map.size = new Vector3Int(1, 1);
             }
 
             if (tile != null)
-                tilemap.tiles.Add(pos, new TileInfo(tile.name, tile.Base.buildable));
+                map.tiles.Add(pos, new TileInfo(tile.name, tile.Base.buildable));
         }
 
-        int x = tilemap.origin.x;
-        int y = tilemap.origin.y;
+        int x = map.origin.x;
+        int y = map.origin.y;
 
         if (x > pos.x)
         {
-            tilemap.size.x += x - pos.x;
-            tilemap.origin.x = pos.x;
+            map.size.x += x - pos.x;
+            map.origin.x = pos.x;
         }
-        else if (x + (tilemap.size.x - 1) < pos.x)
+        else if (x + (map.size.x - 1) < pos.x)
         {
-            tilemap.size.x = pos.x - x + 1;
+            map.size.x = pos.x - x + 1;
         }
 
         if (y > pos.y)
         {
-            tilemap.size.y += y - pos.y;
-            tilemap.origin.y = pos.y;
+            map.size.y += y - pos.y;
+            map.origin.y = pos.y;
         }
-        else if (y + (tilemap.size.y - 1) < pos.y)
+        else if (y + (map.size.y - 1) < pos.y)
         {
-            tilemap.size.y = pos.y - y + 1;
+            map.size.y = pos.y - y + 1;
         }
 
         if (update) UpdateMap(pos);
@@ -408,14 +407,14 @@ public class MapEditor : MonoBehaviour
             CustomTile tile = null;
             CustomTile buildableFlag = null;
 
-            CustomRuleTile ruleTile = tilemap.GetTile(pos);
+            CustomRuleTile ruleTile = map.GetTile(pos);
             if (ruleTile != null)
             {
                 string[] info = new string[4] { "", "", "", "" };
 
                 for (int j = 0; j < 4; j++)
                 {
-                    CustomRuleTile aroundTile = tilemap.GetTile(pos + dir[j]);
+                    CustomRuleTile aroundTile = map.GetTile(pos + dir[j]);
                     if (aroundTile != null) info[j] = aroundTile.type;
                 }
 
@@ -465,9 +464,9 @@ public class MapEditor : MonoBehaviour
     {
         Clear();
 
-        foreach (var pos in tilemap.tiles.Keys)
+        foreach (var pos in map.tiles.Keys)
         {
-            CustomRuleTile ruleTile = tilemap.GetTile(pos);
+            CustomRuleTile ruleTile = map.GetTile(pos);
             if (ruleTile != null)
             {
                 string[] info = new string[4] { "", "", "", "" };
@@ -475,7 +474,7 @@ public class MapEditor : MonoBehaviour
 
                 for (int i = 0; i < 4; i++)
                 {
-                    CustomRuleTile aroundTile = tilemap.GetTile(pos + dir[i]);
+                    CustomRuleTile aroundTile = map.GetTile(pos + dir[i]);
                     if (aroundTile != null) info[i] = aroundTile.type;
                 }
 
@@ -487,18 +486,18 @@ public class MapEditor : MonoBehaviour
             }
         }
 
-        if (tilemap.enemyRoad.Count > 0)
+        if (map.enemyRoad.Count > 0)
         {
             // 시작점 세팅.
             CustomRuleTile cornerTile = TileManager.GetTile("CORNER");
             CustomRuleTile ruleTile = TileManager.GetTile("STARTFLAG");
-            routeTilemap.SetTile(tilemap.enemyRoad[0], ruleTile.Base);
-            enemyRoad.Add(tilemap.enemyRoad[0]);
+            routeTilemap.SetTile(map.enemyRoad[0], ruleTile.Base);
+            enemyRoad.Add(map.enemyRoad[0]);
 
-            for (int i = 1; i < tilemap.enemyRoad.Count; i++)
+            for (int i = 1; i < map.enemyRoad.Count; i++)
             {
-                Vector3Int start = tilemap.enemyRoad[i - 1];
-                Vector3Int dest = tilemap.enemyRoad[i];
+                Vector3Int start = map.enemyRoad[i - 1];
+                Vector3Int dest = map.enemyRoad[i];
                 Vector3Int d = dest - start;
 
                 if (d.x > 0) d.x = 1;
@@ -511,7 +510,7 @@ public class MapEditor : MonoBehaviour
 
                 ruleTile = TileManager.GetTile("CORNER");
 
-                if (i == tilemap.enemyRoad.Count - 1)
+                if (i == map.enemyRoad.Count - 1)
                     ruleTile = TileManager.GetTile("DESTFLAG");
 
                 // 중간 부분을 corner로 채우는 과정.

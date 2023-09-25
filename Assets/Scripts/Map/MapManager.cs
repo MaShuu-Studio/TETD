@@ -36,11 +36,11 @@ public static class MapManager
             CurProgress++;
             string mapName = DataManager.FileNameTriming(files[i]);
 
-            TilemapInfoJson data = await DataManager.DeserializeJson<TilemapInfoJson>(path, mapName);
+            MapDataJson data = await DataManager.DeserializeJson<MapDataJson>(path, mapName);
             if (data == null) continue;
 
-            TilemapInfo info = new TilemapInfo(data);
-            maps.Add(mapName, new Map(mapName, info));
+            Map map = new Map(mapName, data);
+            maps.Add(mapName, map);
         }
         originDataAmount = maps.Count;
         keys = maps.Keys.ToList();
@@ -189,11 +189,11 @@ public static class MapManager
                 while(maps.ContainsKey(mapName))
                     mapName = $"{originName}{i++}";
 
-                TilemapInfoJson data = await DataManager.DeserializeJson<TilemapInfoJson>(path);
+                MapDataJson data = await DataManager.DeserializeJson<MapDataJson>(path);
                 if (data == null) continue;
 
-                TilemapInfo info = new TilemapInfo(data);
-                maps.Add(mapName, new Map(mapName, info));
+                Map map = new Map(mapName, data);
+                maps.Add(mapName, map);
                 CurProgress++;
             }
         }

@@ -8,8 +8,8 @@ public class SaveMapButton : ScriptableButton
     {
         if (MapEditor.Instance.CanSave)
         {
-            TilemapInfo info = MapEditor.Instance.Tilemap;
-            CustomDataManager.SaveMap(MapEditor.Instance.MapName, info);
+            Map map = MapEditor.Instance.MapData;
+            CustomDataManager.SaveMap(MapEditor.Instance.MapName, map);
         }
     }
 }

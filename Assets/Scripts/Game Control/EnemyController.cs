@@ -42,9 +42,9 @@ public class EnemyController : MonoBehaviour
         enemyAttackedQueue = new Queue<Tuple<EnemyObject, Tower, float>>();
         enemies = new List<EnemyObject>();
         road = new List<Vector3>();
-        for (int i = 0; i < map.tilemap.enemyRoad.Count; i++)
+        for (int i = 0; i < map.enemyRoad.Count; i++)
         {
-            Vector3 v = new Vector3(map.tilemap.enemyRoad[i].x, map.tilemap.enemyRoad[i].y);
+            Vector3 v = new Vector3(map.enemyRoad[i].x, map.enemyRoad[i].y);
             v = MapController.Instance.GetMapPos(v);
             road.Add(v);
         }

@@ -52,9 +52,9 @@ public class MapInfoIcon : MonoBehaviour
         infoObjectList.Clear();
 
         this.map = map;
-        if (this.map.tilemap.mapProperties != null)
+        if (this.map.mapProperties != null)
         {
-            foreach (var prop in this.map.tilemap.mapProperties)
+            foreach (var prop in this.map.mapProperties)
             {
                 // Summarized Info
                 MapSummarizedInfo.UpDown updown = MapSummarizedInfo.UpDown.MID;
@@ -81,8 +81,8 @@ public class MapInfoIcon : MonoBehaviour
                 moreInfo.transform.localScale = Vector3.one;
                 infoObjectList.Add(moreInfo.gameObject);
             }
-            summarizedInfosParent.sizeDelta = new Vector2(96 * this.map.tilemap.mapProperties.Count, 48);
-            background.sizeDelta = new Vector2(264, 72 + this.map.tilemap.mapProperties.Count * 48);
+            summarizedInfosParent.sizeDelta = new Vector2(96 * this.map.mapProperties.Count, 48);
+            background.sizeDelta = new Vector2(264, 72 + this.map.mapProperties.Count * 48);
         }
 
         UpdateMap(map);
@@ -90,7 +90,7 @@ public class MapInfoIcon : MonoBehaviour
 
     private void UpdateMap(Map map)
     {
-        Sprite[] backgrounds = map.tilemap.GetBackGround();
+        Sprite[] backgrounds = map.GetBackGround();
         if (backgrounds == null)
         {
             for (int i = 0; i < this.backgrounds.Length; i++)
@@ -112,18 +112,18 @@ public class MapInfoIcon : MonoBehaviour
             foreach (var tile in mapTiles)
                 Destroy(tile.gameObject);
         }
-        mapTiles = new Image[map.tilemap.size.y, map.tilemap.size.x];
+        mapTiles = new Image[map.size.y, map.size.x];
         tileBase.gameObject.SetActive(false);
 
-        for (int y = map.tilemap.size.y - 1; y >= 0; y--)
+        for (int y = map.size.y - 1; y >= 0; y--)
         {
-            for (int x = 0; x < map.tilemap.size.x; x++)
+            for (int x = 0; x < map.size.x; x++)
             {
-                Vector3Int pos = new Vector3Int(map.tilemap.origin.x + x, map.tilemap.origin.y + y);
+                Vector3Int pos = new Vector3Int(map.origin.x + x, map.origin.y + y);
                 Image tile = Instantiate(tileBase);
                 CustomTile data = null;
 
-                CustomRuleTile ruleTile = map.tilemap.GetTile(pos);
+                CustomRuleTile ruleTile = map.GetTile(pos);
                 if (ruleTile != null)
                 {
                     string[] info = new string[4] { "", "", "", "" };
@@ -131,7 +131,7 @@ public class MapInfoIcon : MonoBehaviour
 
                     for (int i = 0; i < 4; i++)
                     {
-                        CustomRuleTile aroundTile = map.tilemap.GetTile(pos + dir[i]);
+                        CustomRuleTile aroundTile = map.GetTile(pos + dir[i]);
                         if (aroundTile != null) info[i] = aroundTile.type;
                     }
                     data = ruleTile.GetTile(info);

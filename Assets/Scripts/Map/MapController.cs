@@ -41,10 +41,10 @@ public class MapController : MonoBehaviour
         this.map = map;
 
         tilemap.ClearAllTiles();
-        tilemap.origin = map.tilemap.origin;
-        tilemap.size = map.tilemap.size;
+        tilemap.origin = map.origin;
+        tilemap.size = map.size;
 
-        Sprite[] sprites = map.tilemap.GetBackGround();
+        Sprite[] sprites = map.GetBackGround();
         if (sprites != null)
         {
             for (int i = 0; i < backgrounds.Length; i++)
@@ -67,9 +67,9 @@ public class MapController : MonoBehaviour
             }
         }
 
-        foreach (var pos in map.tilemap.tiles.Keys)
+        foreach (var pos in map.tiles.Keys)
         {
-            CustomRuleTile ruleTile = map.tilemap.GetTile(pos);
+            CustomRuleTile ruleTile = map.GetTile(pos);
             if (ruleTile != null)
             {
                 string[] info = new string[4] { "", "", "", "" };
@@ -77,7 +77,7 @@ public class MapController : MonoBehaviour
 
                 for (int i = 0; i < 4; i++)
                 {
-                    CustomRuleTile aroundTile = map.tilemap.GetTile(pos + dir[i]);
+                    CustomRuleTile aroundTile = map.GetTile(pos + dir[i]);
                     if (aroundTile != null) info[i] = aroundTile.type;
                 }
                 CustomTile tile = ruleTile.GetTile(info);
@@ -143,7 +143,7 @@ public class MapController : MonoBehaviour
         Vector3 pos = GetMapPos(worldPos);
         Vector3Int tilePos = GetTilePos(pos);
 
-        bool buildable = (map != null && map.tilemap.Buildable(tilePos));
+        bool buildable = (map != null && map.Buildable(tilePos));
 
         if (TowerController.Instance.ContainsTower(pos)) buildable = false;
 
