@@ -72,7 +72,7 @@
     <Compile Include="Assets\Scripts\UI\TowerInfo\TowerInfoPanel.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\UnitEditorSetImageIcon.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\StartButton.cs" />
-    <Compile Include="Assets\Scripts\Custom Editor\MapEditorPanel.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditorTilePanel.cs" />
     <Compile Include="Assets\Scripts\UI\GameSettingController.cs" />
     <Compile Include="Assets\Scripts\Data\SpriteManager.cs" />
     <Compile Include="Assets\Scripts\Game Control\TowerController.cs" />
@@ -149,6 +149,10 @@
     <Compile Include="Assets\Scripts\Data\CustomDataManager.cs" />
     <Compile Include="Assets\Scripts\Object\Projectile.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditorDataPanel.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditorMapProperty.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditorTileProperty.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditorRoundInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

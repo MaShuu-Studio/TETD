@@ -14,10 +14,11 @@ public class CustomDropdown : MonoBehaviour
     [SerializeField] private CustomDropdownItem item;
 
     [SerializeField] private List<CustomDropdownOption> options;
-
+    public List<CustomDropdownOption> Options { get { return options; } }
     public CustomDropdownEvent onValueChanged { get { return m_OnValueChanged; } set { m_OnValueChanged = value; } }
     private CustomDropdownEvent m_OnValueChanged;
 
+    [SerializeField] private bool isFlexible;
     public RectTransform template;
     private GameObject dropDownList;
 
@@ -101,6 +102,14 @@ public class CustomDropdown : MonoBehaviour
                 item.transform.SetParent(dropDownList.transform);
                 item.transform.localScale = Vector3.one;
                 item.gameObject.SetActive(true);
+            }
+
+            if (isFlexible)
+            {
+                // 나중에 fixed row와 fixed column을 받아 사이즈를 조금 더 유동적이게
+                // 당장은 MapEditor에서 활용할 정도로만 코드 구현.
+                RectTransform rect = item.transform as RectTransform;
+                dropDownRect.sizeDelta = new Vector2(rect.sizeDelta.x * options.Count, rect.sizeDelta.y);
             }
             dropDownList.SetActive(true);
         }

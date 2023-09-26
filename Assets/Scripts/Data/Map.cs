@@ -34,7 +34,7 @@ public class Map
     public Map(string name, MapDataJson data)
     {
         this.name = name;
-        
+
         this.backgroundName = data.backgroundName;
         this.origin = data.origin;
         this.size = data.size;
@@ -130,6 +130,24 @@ public class MapProperty
     public int atkSpeed;
     public int hp;
     public int speed;
+
+    public MapProperty()
+    {
+        element = Element.FIRE;
+        atk = 0;
+        atkSpeed = 0;
+        hp = 0;
+        speed = 0;
+    }
+
+    public MapProperty(MapProperty prop)
+    {
+        element = prop.element;
+        atk = prop.atk;
+        atkSpeed = prop.atkSpeed;
+        hp = prop.hp;
+        speed = prop.speed;
+    }
 }
 
 public class TileProperty
@@ -137,6 +155,19 @@ public class TileProperty
     public int atk;
     public int atkSpeed;
     public int range;
+
+    public TileProperty()
+    {
+        atk = 0;
+        atkSpeed = 0;
+        range = 0;
+    }
+    public TileProperty(TileProperty prop)
+    {
+        atk = prop.atk;
+        atkSpeed = prop.atkSpeed;
+        range = prop.range;
+    }
 }
 
 // 스프라이트 형태 표기용 룰타일.
@@ -264,14 +295,12 @@ public class MapDataJson : ISerializationCallbackReceiver
     public void OnAfterDeserialize()
     {
         tiles = new Dictionary<Vector3Int, TileInfo>();
-
         for (int i = 0; i < tileKeys.Count && i < tileValues.Count; i++)
         {
             tiles.Add(tileKeys[i], tileValues[i]);
         }
 
         tileProperties = new Dictionary<Vector3Int, TileProperty>();
-
         for (int i = 0; i < tpKeys.Count && i < tpValues.Count; i++)
         {
             tileProperties.Add(tpKeys[i], tpValues[i]);

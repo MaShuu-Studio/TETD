@@ -96,7 +96,8 @@ public class UIController : MonoBehaviour
     [Space]
     [Header("Map Editor")]
     [SerializeField] private TextMeshProUGUI mapNameText;
-    [SerializeField] private MapEditorPanel mapEditorPanel;
+    [SerializeField] private MapEditorTilePanel mapEditorTilePanel;
+    [SerializeField] private MapEditorDataPanel mapEditorDataPanel;
 
     [Space]
     [Header("Unit Editor")]
@@ -134,7 +135,8 @@ public class UIController : MonoBehaviour
         {
             editorUI[i].SetActive(true);
         }
-        mapEditorPanel.Init();
+        mapEditorTilePanel.Init();
+        mapEditorDataPanel.Init();
         unitEditor.Init();
         customEditor.Init();
 
@@ -578,15 +580,16 @@ public class UIController : MonoBehaviour
         return mapName;
     }
 
-    public void EditMap(string mapName)
+    public void EditMap(Map map)
     {
         ChangeCustomEditorUI(1);
-        mapNameText.text = mapName;
+        mapEditorDataPanel.LoadMap(map);
+        mapNameText.text = map.name;
     }
 
     public bool PointInMapEditPanel()
     {
-        return PointOverUI(mapEditorPanel.gameObject);
+        return PointOverUI(mapEditorTilePanel.gameObject);
     }
 
     #endregion
