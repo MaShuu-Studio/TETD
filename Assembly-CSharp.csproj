@@ -72,7 +72,7 @@
     <Compile Include="Assets\Scripts\UI\TowerInfo\TowerInfoPanel.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\UnitEditorSetImageIcon.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\StartButton.cs" />
-    <Compile Include="Assets\Scripts\UI\MapEditorPanel.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditorPanel.cs" />
     <Compile Include="Assets\Scripts\UI\GameSettingController.cs" />
     <Compile Include="Assets\Scripts\Data\SpriteManager.cs" />
     <Compile Include="Assets\Scripts\Game Control\TowerController.cs" />
@@ -89,12 +89,12 @@
     <Compile Include="Assets\Scripts\UI\Library.cs" />
     <Compile Include="Assets\Scripts\Game Control\PlayerController.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\BuildTowerButton.cs" />
-    <Compile Include="Assets\Scripts\Map\MapEditorBackgroundTile.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditorBackgroundTile.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\SelectCustomDataButton.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\UnitEditor.cs" />
     <Compile Include="Assets\Scripts\Game Control\TutorialController.cs" />
     <Compile Include="Assets\Scripts\Data\Language.cs" />
-    <Compile Include="Assets\Scripts\Map\Map.cs" />
+    <Compile Include="Assets\Scripts\Data\Map.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ExitButton.cs" />
     <Compile Include="Assets\Scripts\Object\DamagePool.cs" />
     <Compile Include="Assets\Scripts\Data\Translator.cs" />
@@ -104,11 +104,11 @@
     <Compile Include="Assets\Scripts\Game Control\EnemyController.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\UnitEditorUnitIcon.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfo\TowerInfo.cs" />
-    <Compile Include="Assets\Scripts\Map\MapEditorTile.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditorTile.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\UnitEditorAbility.cs" />
     <Compile Include="Assets\Scripts\Object\DamageUI.cs" />
     <Compile Include="Assets\Scripts\Game Control\SceneController.cs" />
-    <Compile Include="Assets\Scripts\Map\MapEditor.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditor.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\UI\Shop.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\SellButton.cs" />
@@ -119,10 +119,11 @@
     <Compile Include="Assets\Scripts\Custom Editor\CustomDropdownItem.cs" />
     <Compile Include="Assets\Scripts\Data\Round.cs" />
     <Compile Include="Assets\Scripts\UI\LibraryFilterToggle.cs" />
-    <Compile Include="Assets\Scripts\Map\MapManager.cs" />
+    <Compile Include="Assets\Scripts\Data\MapManager.cs" />
     <Compile Include="Assets\Scripts\Data\TowerManager.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\EditorToTitleButton.cs" />
     <Compile Include="Assets\Scripts\UI\GameSettingIcon.cs" />
+    <Compile Include="Assets\Scripts\UI\MapMoreInfo.cs" />
     <Compile Include="Assets\Scripts\UI\TutorialView.cs" />
     <Compile Include="Assets\Scripts\UI\AttackPriorityToggle.cs" />
     <Compile Include="Assets\Scripts\Object\Poolable.cs" />
@@ -130,7 +131,7 @@
     <Compile Include="Assets\Scripts\Data\ObjectData.cs" />
     <Compile Include="Assets\Scripts\Game Control\CameraController.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\CustomEditor.cs" />
-    <Compile Include="Assets\Scripts\Map\MapController.cs" />
+    <Compile Include="Assets\Scripts\Game Control\MapController.cs" />
     <Compile Include="Assets\Scripts\Game Control\RoundController.cs" />
     <Compile Include="Assets\Scripts\Game Control\Initializer.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfo\TowerStatItem.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Assets\Scripts\UI\DescriptionPopup.cs" />
     <Compile Include="Assets\Scripts\Game Control\GameController.cs" />
     <Compile Include="Assets\Scripts\Sound\CustomAudioSource.cs" />
+    <Compile Include="Assets\Scripts\UI\MapSummarizedInfo.cs" />
     <Compile Include="Assets\Scripts\Data\RoundManager.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfo\TowerUpgradeItem.cs" />
     <Compile Include="Assets\Scripts\Data\EnumData.cs" />
@@ -147,8 +149,6 @@
     <Compile Include="Assets\Scripts\Data\CustomDataManager.cs" />
     <Compile Include="Assets\Scripts\Object\Projectile.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
-    <Compile Include="Assets\Scripts\UI\MapMoreInfo.cs" />
-    <Compile Include="Assets\Scripts\UI\MapSummarizedInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
