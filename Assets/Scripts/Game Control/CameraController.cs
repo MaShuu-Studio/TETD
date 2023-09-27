@@ -12,6 +12,8 @@ public class CameraController : MonoBehaviour
     public Vector2Int RefResolution { get { return refResolution; } }
     private Vector2Int refResolution;
 
+    private int curPPU;
+
     private void Awake()
     {
         if (Instance != null)
@@ -41,12 +43,20 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Camera cam;
     private PixelPerfectCamera pcam;
 
-
     public void ChangeResolution(int width, int height)
     {
         refResolution = new Vector2Int(width, height);
 
         pcam.assetsPPU = (int)(ReferencePPU * ((float)width / baseResolution.x));
+        pcam.refResolutionX = refResolution.x;
+        pcam.refResolutionY = refResolution.y;
+
+        curPPU = pcam.assetsPPU;
+    }
+
+    public void ResetCameraSetting()
+    {
+        pcam.assetsPPU = curPPU;
         pcam.refResolutionX = refResolution.x;
         pcam.refResolutionY = refResolution.y;
     }

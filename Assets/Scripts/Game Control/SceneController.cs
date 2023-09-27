@@ -202,7 +202,6 @@ public class SceneController : MonoBehaviour
         actions.Add(new SceneAction(() => UIController.Instance.EditCustomData()));
         actions.Add(new SceneAction(() => MapEditor.Instance.SetActive(false)));
         ChangeScene("Custom Editor", actions);
-        Application.runInBackground = false;
     }
 
     private IEnumerator EditCustomDataProgress()
@@ -280,7 +279,7 @@ public class SceneController : MonoBehaviour
             yield return null;
         }
 
-        //CameraController.Instance.FindCamera();
+        CameraController.Instance.ResetCameraSetting();
         sceneLoaded = true;
     }
 
