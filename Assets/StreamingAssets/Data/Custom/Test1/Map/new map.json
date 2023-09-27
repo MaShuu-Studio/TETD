@@ -1,1 +1,139 @@
-{"backgroundName":"AUTUMN","origin":{"x":-3,"y":-6,"z":0},"size":{"x":13,"y":10,"z":0},"tileKeys":[{"x":-3,"y":3,"z":0},{"x":-3,"y":2,"z":0},{"x":-3,"y":1,"z":0},{"x":-3,"y":0,"z":0},{"x":-3,"y":-1,"z":0},{"x":-3,"y":-2,"z":0},{"x":-2,"y":-2,"z":0},{"x":-1,"y":-2,"z":0},{"x":0,"y":-2,"z":0},{"x":1,"y":-2,"z":0},{"x":-2,"y":2,"z":0},{"x":-2,"y":1,"z":0},{"x":-2,"y":0,"z":0},{"x":-2,"y":-1,"z":0},{"x":-1,"y":-1,"z":0},{"x":0,"y":-1,"z":0},{"x":1,"y":-1,"z":0},{"x":0,"y":0,"z":0},{"x":-1,"y":0,"z":0},{"x":-1,"y":1,"z":0},{"x":0,"y":1,"z":0},{"x":1,"y":1,"z":0},{"x":3,"y":1,"z":0},{"x":4,"y":1,"z":0},{"x":5,"y":0,"z":0},{"x":4,"y":0,"z":0},{"x":3,"y":0,"z":0},{"x":2,"y":0,"z":0},{"x":1,"y":0,"z":0},{"x":3,"y":-2,"z":0},{"x":3,"y":-1,"z":0},{"x":4,"y":-1,"z":0},{"x":4,"y":-2,"z":0},{"x":3,"y":-3,"z":0},{"x":9,"y":-6,"z":0}],"tileValues":[{"name":"ROAD","buildable":false},{"name":"ROAD","buildable":false},{"name":"ROAD","buildable":false},{"name":"ROAD","buildable":false},{"name":"ROAD","buildable":false},{"name":"ROAD","buildable":false},{"name":"ROAD","buildable":false},{"name":"ROAD","buildable":false},{"name":"ROAD","buildable":false},{"name":"ROAD","buildable":false},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true},{"name":"GRASS","buildable":true}],"enemyRoad":[{"x":-3,"y":3,"z":0},{"x":-3,"y":2,"z":0},{"x":-3,"y":1,"z":0},{"x":-3,"y":0,"z":0},{"x":-3,"y":-1,"z":0},{"x":-3,"y":-2,"z":0},{"x":-2,"y":-2,"z":0},{"x":-1,"y":-2,"z":0},{"x":0,"y":-2,"z":0},{"x":1,"y":-2,"z":0}],"tpKeys":[{"x":0,"y":0,"z":0},{"x":1,"y":0,"z":0},{"x":3,"y":0,"z":0},{"x":4,"y":0,"z":0}],"tpValues":[{"atk":30,"atkSpeed":100,"range":50},{"atk":500,"atkSpeed":0,"range":0},{"atk":0,"atkSpeed":500,"range":0},{"atk":0,"atkSpeed":0,"range":500}],"mapProperties":[{"element":0,"atk":-50,"atkSpeed":50,"hp":0,"speed":0},{"element":1,"atk":0,"atkSpeed":0,"hp":0,"speed":0},{"element":2,"atk":0,"atkSpeed":0,"hp":0,"speed":0}]}
+{
+  "backgroundName": "AUTUMN",
+  "origin": { "x": -3, "y": -6, "z": 0 },
+  "size": { "x": 13, "y": 10, "z": 0 },
+  "tileKeys": [
+    { "x": -3, "y": 3, "z": 0 },
+    { "x": -3, "y": 2, "z": 0 },
+    { "x": -3, "y": 1, "z": 0 },
+    { "x": -3, "y": 0, "z": 0 },
+    { "x": -3, "y": -1, "z": 0 },
+    { "x": -3, "y": -2, "z": 0 },
+    { "x": -2, "y": -2, "z": 0 },
+    { "x": -1, "y": -2, "z": 0 },
+    { "x": 0, "y": -2, "z": 0 },
+    { "x": 1, "y": -2, "z": 0 },
+    { "x": -2, "y": 2, "z": 0 },
+    { "x": -2, "y": 1, "z": 0 },
+    { "x": -2, "y": 0, "z": 0 },
+    { "x": -2, "y": -1, "z": 0 },
+    { "x": -1, "y": -1, "z": 0 },
+    { "x": 0, "y": -1, "z": 0 },
+    { "x": 1, "y": -1, "z": 0 },
+    { "x": 0, "y": 0, "z": 0 },
+    { "x": -1, "y": 0, "z": 0 },
+    { "x": -1, "y": 1, "z": 0 },
+    { "x": 0, "y": 1, "z": 0 },
+    { "x": 1, "y": 1, "z": 0 },
+    { "x": 3, "y": 1, "z": 0 },
+    { "x": 4, "y": 1, "z": 0 },
+    { "x": 5, "y": 0, "z": 0 },
+    { "x": 4, "y": 0, "z": 0 },
+    { "x": 3, "y": 0, "z": 0 },
+    { "x": 2, "y": 0, "z": 0 },
+    { "x": 1, "y": 0, "z": 0 },
+    { "x": 3, "y": -2, "z": 0 },
+    { "x": 3, "y": -1, "z": 0 },
+    { "x": 4, "y": -1, "z": 0 },
+    { "x": 4, "y": -2, "z": 0 },
+    { "x": 3, "y": -3, "z": 0 },
+    { "x": 9, "y": -6, "z": 0 }
+  ],
+  "tileValues": [
+    { "name": "ROAD", "buildable": false },
+    { "name": "ROAD", "buildable": false },
+    { "name": "ROAD", "buildable": false },
+    { "name": "ROAD", "buildable": false },
+    { "name": "ROAD", "buildable": false },
+    { "name": "ROAD", "buildable": false },
+    { "name": "ROAD", "buildable": false },
+    { "name": "ROAD", "buildable": false },
+    { "name": "ROAD", "buildable": false },
+    { "name": "ROAD", "buildable": false },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true },
+    { "name": "GRASS", "buildable": true }
+  ],
+  "enemyRoad": [
+    { "x": -3, "y": 3, "z": 0 },
+    { "x": -3, "y": 2, "z": 0 },
+    { "x": -3, "y": 1, "z": 0 },
+    { "x": -3, "y": 0, "z": 0 },
+    { "x": -3, "y": -1, "z": 0 },
+    { "x": -3, "y": -2, "z": 0 },
+    { "x": -2, "y": -2, "z": 0 },
+    { "x": -1, "y": -2, "z": 0 },
+    { "x": 0, "y": -2, "z": 0 },
+    { "x": 1, "y": -2, "z": 0 }
+  ],
+  "tpKeys": [
+    { "x": 0, "y": 0, "z": 0 },
+    { "x": 1, "y": 0, "z": 0 },
+    { "x": 3, "y": 0, "z": 0 },
+    { "x": 4, "y": 0, "z": 0 }
+  ],
+  "tpValues": [
+    { "atk": 30, "atkSpeed": 100, "range": 50 },
+    { "atk": 500, "atkSpeed": 0, "range": 0 },
+    { "atk": 0, "atkSpeed": 500, "range": 0 },
+    { "atk": 0, "atkSpeed": 0, "range": 500 }
+  ],
+  "mapProperties": [
+    { "element": 0, "atk": -50, "atkSpeed": 50, "hp": 0, "speed": 0 },
+    { "element": 1, "atk": 0, "atkSpeed": 0, "hp": 0, "speed": 0 },
+    { "element": 2, "atk": 0, "atkSpeed": 0, "hp": 0, "speed": 0 }
+  ],
+  "rounds": [
+    {
+      "units": [2020000, 2020001, 2020002],
+      "amounts": [5, 5, 5]
+    },
+
+    {
+      "units": [2021003, 2021004, 2022005],
+      "amounts": [3, 3, 1]
+    },
+
+    {
+      "units": [2020100, 2020101, 2020102],
+      "amounts": [5, 5, 5]
+    },
+
+    {
+      "units": [2021103, 2021104, 2022105],
+      "amounts": [3, 3, 1]
+    },
+
+    {
+      "units": [2000000, 2010000, 2020000],
+      "amounts": [10, 10, 10]
+    },
+
+    {
+      "units": [2000100, 2010100, 2020100],
+      "amounts": [10, 10, 10]
+    }
+  ]
+}

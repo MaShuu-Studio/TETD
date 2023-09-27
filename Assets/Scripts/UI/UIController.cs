@@ -60,7 +60,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private DamageUI damageUI;
     [SerializeField] private DamagePool damageUIPool;
     [SerializeField] private Image flashImage;
-    private EachRound nextRound;
+    private Round nextRound;
 
     [Header("Info Panel")]
     [SerializeField] private TextMeshProUGUI lifeText;
@@ -380,7 +380,7 @@ public class UIController : MonoBehaviour
         towerInfoPanel.UpdateInfo();
     }
 
-    public void NextRoundInfo(EachRound nextRoundInfo)
+    public void NextRoundInfo(Round nextRoundInfo)
     {
         nextRound = nextRoundInfo;
         UpdateRoundInfo();

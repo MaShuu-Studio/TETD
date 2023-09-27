@@ -118,7 +118,6 @@
     <Compile Include="Assets\Scripts\Object\SplashPoint.cs" />
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ReinforceButton.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\CustomDropdownItem.cs" />
-    <Compile Include="Assets\Scripts\Data\Round.cs" />
     <Compile Include="Assets\Scripts\UI\LibraryFilterToggle.cs" />
     <Compile Include="Assets\Scripts\Data\MapManager.cs" />
     <Compile Include="Assets\Scripts\Data\TowerManager.cs" />
@@ -145,7 +144,6 @@
     <Compile Include="Assets\Scripts\Sound\CustomAudioSource.cs" />
     <Compile Include="Assets\Scripts\UI\MapSummarizedInfo.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\MapEditorMapProperty.cs" />
-    <Compile Include="Assets\Scripts\Data\RoundManager.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfo\TowerUpgradeItem.cs" />
     <Compile Include="Assets\Scripts\Data\EnumData.cs" />
     <Compile Include="Assets\Scripts\Object\ProjectilePool.cs" />

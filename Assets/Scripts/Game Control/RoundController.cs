@@ -21,7 +21,7 @@ public class RoundController : MonoBehaviour
 
     private IEnumerator timerCoroutine;
     private IEnumerator spawnCoroutine;
-    private Round data;
+    private List<Round> data;
     private int curRound;
 
     public float Difficulty { get { return amountDiff; } }
@@ -30,7 +30,7 @@ public class RoundController : MonoBehaviour
     public bool IsEnd { get { return isEnd; } }
     private bool isEnd;
 
-    public void Init(string mapName, List<DifficultyType> difficulties)
+    public void SetRound(List<Round> rounds, List<DifficultyType> difficulties)
     {
         isEnd = false;
 
@@ -40,7 +40,7 @@ public class RoundController : MonoBehaviour
         if (difficulties.Contains(DifficultyType.AMOUNT)) amountDiff = 1.5f;
         if (difficulties.Contains(DifficultyType.TIME)) timeDiff = 0.5f;
 
-        data = RoundManager.GetRound(mapName);
+        data = rounds;
         curRound = 0;
 
         timerCoroutine = NextRoundTimer(curRound);
@@ -50,7 +50,7 @@ public class RoundController : MonoBehaviour
     public void StartRound()
     {
         if (timerCoroutine != null) StopCoroutine(timerCoroutine);
-        EachRound round = data.data[curRound++];
+        Round round = data[curRound++];
 
         UIController.Instance.NextRoundInfo(null);
 
@@ -60,14 +60,14 @@ public class RoundController : MonoBehaviour
 
     IEnumerator NextRoundTimer(int cur)
     {
-        if (data.data.Count == curRound)
+        if (data.Count == curRound)
         {
             isEnd = true;
             timerCoroutine = null;
         }
         else
         {
-            EachRound nextRound = data.data[curRound];
+            Round nextRound = data[curRound];
             UIController.Instance.NextRoundInfo(nextRound);
             float time = 0;
 
@@ -87,7 +87,7 @@ public class RoundController : MonoBehaviour
         }
     }
 
-    IEnumerator MobSpawn(EachRound round)
+    IEnumerator MobSpawn(Round round)
     {
         foreach (int id in round.unitData.Keys)
         {

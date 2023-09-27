@@ -18,6 +18,8 @@ public class Map
     public List<MapProperty> mapProperties;
     public Dictionary<Vector3Int, TileProperty> tileProperties;
 
+    public List<Round> rounds;
+
     public Map()
     {
         name = "";
@@ -29,6 +31,7 @@ public class Map
         enemyRoad = new List<Vector3Int>();
         mapProperties = new List<MapProperty>();
         tileProperties = new Dictionary<Vector3Int, TileProperty>();
+        rounds = new List<Round>();
     }
 
     public Map(string name, MapDataJson data)
@@ -45,6 +48,8 @@ public class Map
 
         mapProperties = data.mapProperties;
         tileProperties = data.tileProperties;
+
+        rounds = data.rounds;
     }
 
     public Map(string name, Map data)
@@ -61,6 +66,8 @@ public class Map
 
         mapProperties = data.mapProperties;
         tileProperties = data.tileProperties;
+
+        rounds = data.rounds;
     }
 
     public CustomRuleTile GetTile(Vector3Int pos)
@@ -81,6 +88,8 @@ public class Map
     }
 }
 
+#region Tile
+
 [Serializable]
 public struct TileInfo
 {
@@ -91,55 +100,6 @@ public struct TileInfo
     {
         this.name = name;
         this.buildable = b;
-    }
-}
-
-[Serializable]
-public class MapProperty
-{
-    public Element element;
-    public int atk;
-    public int atkSpeed;
-    public int hp;
-    public int speed;
-
-    public MapProperty()
-    {
-        element = Element.FIRE;
-        atk = 0;
-        atkSpeed = 0;
-        hp = 0;
-        speed = 0;
-    }
-
-    public MapProperty(MapProperty prop)
-    {
-        element = prop.element;
-        atk = prop.atk;
-        atkSpeed = prop.atkSpeed;
-        hp = prop.hp;
-        speed = prop.speed;
-    }
-}
-
-[Serializable]
-public class TileProperty
-{
-    public int atk;
-    public int atkSpeed;
-    public int range;
-
-    public TileProperty()
-    {
-        atk = 0;
-        atkSpeed = 0;
-        range = 0;
-    }
-    public TileProperty(TileProperty prop)
-    {
-        atk = prop.atk;
-        atkSpeed = prop.atkSpeed;
-        range = prop.range;
     }
 }
 
@@ -215,6 +175,85 @@ public class CustomTile : Tile
         this.buildable = buildable;
     }
 }
+#endregion
+
+[Serializable]
+public class MapProperty
+{
+    public Element element;
+    public int atk;
+    public int atkSpeed;
+    public int hp;
+    public int speed;
+
+    public MapProperty()
+    {
+        element = Element.FIRE;
+        atk = 0;
+        atkSpeed = 0;
+        hp = 0;
+        speed = 0;
+    }
+
+    public MapProperty(MapProperty prop)
+    {
+        element = prop.element;
+        atk = prop.atk;
+        atkSpeed = prop.atkSpeed;
+        hp = prop.hp;
+        speed = prop.speed;
+    }
+}
+
+[Serializable]
+public class TileProperty
+{
+    public int atk;
+    public int atkSpeed;
+    public int range;
+
+    public TileProperty()
+    {
+        atk = 0;
+        atkSpeed = 0;
+        range = 0;
+    }
+    public TileProperty(TileProperty prop)
+    {
+        atk = prop.atk;
+        atkSpeed = prop.atkSpeed;
+        range = prop.range;
+    }
+}
+
+[Serializable]
+public class Round : ISerializationCallbackReceiver
+{
+    public Dictionary<int, int> unitData;
+    public List<int> units = new List<int>();
+    public List<int> amounts = new List<int>();
+
+    public void OnBeforeSerialize()
+    {
+        units.Clear();
+        amounts.Clear();
+
+        foreach (var kvp in unitData)
+        {
+            units.Add(kvp.Key);
+            amounts.Add(kvp.Value);
+        }
+    }
+
+    public void OnAfterDeserialize()
+    {
+        unitData = new Dictionary<int, int>();
+        for (int i = 0; i < units.Count && i < amounts.Count; i++)
+        {
+            unitData.Add(units[i], amounts[i]);
+        }
+    }
+}
 
 // 실 사용할 데이터와 직렬화할 데이터를 구분
 [Serializable]
@@ -233,15 +272,18 @@ public class MapDataJson : ISerializationCallbackReceiver
     public Dictionary<Vector3Int, TileProperty> tileProperties;
     public List<MapProperty> mapProperties;
 
+    public List<Round> rounds;
+
     public MapDataJson(Map data)
     {
-        this.backgroundName = data.backgroundName;
-        this.origin = data.origin;
-        this.size = data.size;
-        this.tiles = data.tiles;
-        this.enemyRoad = data.enemyRoad;
-        this.mapProperties = data.mapProperties;
-        this.tileProperties = data.tileProperties;
+        backgroundName = data.backgroundName;
+        origin = data.origin;
+        size = data.size;
+        tiles = data.tiles;
+        enemyRoad = data.enemyRoad;
+        mapProperties = data.mapProperties;
+        tileProperties = data.tileProperties;
+        rounds = data.rounds;
     }
 
     public void OnBeforeSerialize()

@@ -75,7 +75,7 @@ public class GameController : MonoBehaviour
         List<SceneAction> actions = new List<SceneAction>();
         actions.Add(new SceneAction(() => MapController.Instance.Init(map)));
         actions.Add(new SceneAction(() => EnemyController.Instance.Init(map, difficulties)));
-        actions.Add(new SceneAction(() => RoundController.Instance.Init(map.name, difficulties)));
+        actions.Add(new SceneAction(() => RoundController.Instance.SetRound(map.rounds, difficulties)));
         actions.Add(new SceneAction(() => PlayerController.Instance.Init(character, difficulties)));
         actions.Add(new SceneAction(() => TowerController.Instance.Init()));
         actions.Add(new SceneAction(() => UIController.Instance.StartGame()));
