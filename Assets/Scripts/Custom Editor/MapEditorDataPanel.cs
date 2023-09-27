@@ -38,8 +38,10 @@ public class MapEditorDataPanel : MonoBehaviour
         tilePropertyIcons = new List<MapEditorTileProperty>();
     }
 
-    public void LoadMap(Map map)
+    public void LoadMap()
     {
+        Map map = MapEditor.Instance.MapData;
+
         selectedPanel = 0;
         LoadPanel(selectedPanel);
 
@@ -54,18 +56,15 @@ public class MapEditorDataPanel : MonoBehaviour
         }
         tilePropertyIcons.Clear();
 
-        mapProperties.Clear();
-        foreach(var prop in map.mapProperties)
+        mapProperties = map.mapProperties;
+        foreach(var prop in mapProperties)
         {
-            MapProperty mp = new MapProperty(prop);
-
             MapEditorMapProperty propIcon = Instantiate(mapPropertyPrefab);
             propIcon.transform.SetParent(mapPanelParent);
             propIcon.transform.localScale = Vector3.one;
             propIcon.gameObject.SetActive(true);
-            propIcon.SetProp(mapPropertyIcons.Count,mp, this);
+            propIcon.SetProp(mapPropertyIcons.Count, prop, this);
 
-            mapProperties.Add(mp);
             mapPropertyIcons.Add(propIcon);
         }
         UpdateElements();

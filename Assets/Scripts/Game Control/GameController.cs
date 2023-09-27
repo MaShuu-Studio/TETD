@@ -103,7 +103,7 @@ public class GameController : MonoBehaviour
         Map map = UIController.Instance.GetMap();
 
         MapEditor.Instance.Init(map, mapName);
-        UIController.Instance.EditMap(map);
+        UIController.Instance.EditMap();
     }
 
     public void EditRound()

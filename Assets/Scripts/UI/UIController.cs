@@ -580,11 +580,11 @@ public class UIController : MonoBehaviour
         return mapName;
     }
 
-    public void EditMap(Map map)
+    public void EditMap()
     {
         ChangeCustomEditorUI(1);
-        mapEditorDataPanel.LoadMap(map);
-        mapNameText.text = map.name;
+        mapEditorDataPanel.LoadMap();
+        mapNameText.text = MapEditor.Instance.MapData.name;
     }
 
     public bool PointInMapEditPanel()
