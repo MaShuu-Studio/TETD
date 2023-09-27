@@ -151,6 +151,7 @@
     <Compile Include="Assets\Scripts\Data\CustomDataManager.cs" />
     <Compile Include="Assets\Scripts\Object\Projectile.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditorRoundUnitInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

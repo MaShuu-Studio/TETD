@@ -12,19 +12,21 @@ public class MapEditorDataPanel : MonoBehaviour
 
     [Header("MAP PANEL")]
     [SerializeField] private MapEditorMapProperty mapPropertyPrefab;
-    [SerializeField] private Transform mapPanelParent;
+    [SerializeField] private RectTransform mapPanelParent;
     private List<MapProperty> mapProperties;
     private List<MapEditorMapProperty> mapPropertyIcons;
 
     [Header("TILE PANEL")]
     [SerializeField] private MapEditorTileProperty tilePropertyPrefab;
-    [SerializeField] private Transform tilePanelParent;
+    [SerializeField] private RectTransform tilePanelParent;
     private Dictionary<Vector3Int, TileProperty> tileProperties;
     private Dictionary<Vector3Int, MapEditorTileProperty> tilePropertyIcons;
 
     [Header("ROUND PANEL")]
     [SerializeField] private MapEditorRoundInfo roundInfoPrefab;
-    [SerializeField] private Transform roundPanelParent;
+    [SerializeField] private RectTransform roundPanelParent;
+    private List<Round> rounds;
+    private List<MapEditorRoundInfo> roundInfoIcons;
 
     private int selectedPanel;
 
@@ -32,9 +34,11 @@ public class MapEditorDataPanel : MonoBehaviour
     {
         mapPropertyPrefab.gameObject.SetActive(false);
         tilePropertyPrefab.gameObject.SetActive(false);
-        mapPropertyIcons = new List<MapEditorMapProperty>();
+        roundInfoPrefab.gameObject.SetActive(false);
 
+        mapPropertyIcons = new List<MapEditorMapProperty>();
         tilePropertyIcons = new Dictionary<Vector3Int, MapEditorTileProperty>();
+        roundInfoIcons = new List<MapEditorRoundInfo>();
     }
 
     public void LoadMap()
@@ -49,11 +53,18 @@ public class MapEditorDataPanel : MonoBehaviour
             Destroy(icon.gameObject);
         }
         mapPropertyIcons.Clear();
+
         foreach (var icon in tilePropertyIcons.Values)
         {
             Destroy(icon.gameObject);
         }
         tilePropertyIcons.Clear();
+
+        foreach (var icon in roundInfoIcons)
+        {
+            Destroy(icon.gameObject);
+        }
+        roundInfoIcons.Clear();
 
         mapProperties = map.mapProperties;
         foreach (var prop in mapProperties)
@@ -67,8 +78,14 @@ public class MapEditorDataPanel : MonoBehaviour
             mapPropertyIcons.Add(propIcon);
         }
         UpdateElements();
+        int count = mapProperties.Count;
         if (GetRemainElements().Count == 0) addButtons[0].gameObject.SetActive(false);
-        else addButtons[0].transform.SetAsLastSibling();
+        else
+        {
+            count++;
+            addButtons[0].transform.SetAsLastSibling();
+        }
+        mapPanelParent.sizeDelta = new Vector2(426, 120 * count);
 
         tileProperties = map.tileProperties;
         foreach (var prop in tileProperties)
@@ -82,6 +99,21 @@ public class MapEditorDataPanel : MonoBehaviour
             propIcon.SetProp(tilePropertyIcons.Count, prop.Key, prop.Value, this);
             UIController.Instance.AddSpecialTile(prop.Key);
         }
+        tilePanelParent.sizeDelta = new Vector2(426, tileProperties.Count);
+
+        rounds = map.rounds;
+        foreach (var round in rounds)
+        {
+            MapEditorRoundInfo roundInfo = Instantiate(roundInfoPrefab);
+            roundInfo.transform.SetParent(roundPanelParent);
+            roundInfo.transform.localScale = Vector3.one;
+            roundInfo.gameObject.SetActive(true);
+            roundInfoIcons.Add(roundInfo);
+
+            roundInfo.SetRoundInfo(roundInfoIcons.Count, round, this);
+        }
+        addButtons[2].transform.SetAsLastSibling();
+        roundPanelParent.sizeDelta = new Vector2(426, 165 * (rounds.Count + 1));
     }
 
     public List<Element> GetRemainElements()
@@ -137,15 +169,31 @@ public class MapEditorDataPanel : MonoBehaviour
                 UpdateElements();
 
                 addButtons[selectedPanel].transform.SetAsLastSibling();
+
+                int count = mapProperties.Count + 1;
                 // 만약에 마지막 속성이라면 addButton을 비활성화함.
                 if (elements.Count == 1)
+                {
                     addButtons[selectedPanel].SetActive(false);
+                    count--;
+                }
+                mapPanelParent.sizeDelta = new Vector2(426, 120 * count);
             }
         }
         // Round
         else if (selectedPanel == 2)
         {
+            Round round = new Round();
+            MapEditorRoundInfo roundInfo = Instantiate(roundInfoPrefab);
+            roundInfo.transform.SetParent(roundPanelParent);
+            roundInfo.transform.localScale = Vector3.one;
+            roundInfo.gameObject.SetActive(true);
+            roundInfoIcons.Add(roundInfo);
 
+            roundInfo.SetRoundInfo(roundInfoIcons.Count, round, this);
+            addButtons[2].transform.SetAsLastSibling();
+
+            roundPanelParent.sizeDelta = new Vector2(426, 165 * (rounds.Count + 1));
         }
     }
 
@@ -161,6 +209,19 @@ public class MapEditorDataPanel : MonoBehaviour
 
             addButtons[0].SetActive(true);
             addButtons[0].transform.SetAsLastSibling();
+            mapPanelParent.sizeDelta = new Vector2(426, 120 * (mapProperties.Count + 1));
+        }
+        else if (selectedPanel == 2)
+        {
+            rounds.RemoveAt(index);
+            Destroy(roundInfoIcons[index].gameObject);
+            roundInfoIcons.RemoveAt(index);
+
+            for (int i = 0; i < roundInfoIcons.Count; i++)
+            {
+                roundInfoIcons[i].UpdateNumber(i + 1);
+            }
+            roundPanelParent.sizeDelta = new Vector2(426, 165 * (rounds.Count + 1));
         }
     }
 
@@ -178,6 +239,8 @@ public class MapEditorDataPanel : MonoBehaviour
 
         tileProperties.Add(pos, prop);
         tilePropertyIcons.Add(pos, propIcon);
+
+        tilePanelParent.sizeDelta = new Vector2(426, tileProperties.Count);
     }
 
     public void RemoveData(Vector3Int pos)
@@ -186,6 +249,8 @@ public class MapEditorDataPanel : MonoBehaviour
         tileProperties.Remove(pos);
         Destroy(tilePropertyIcons[pos].gameObject);
         tilePropertyIcons.Remove(pos);
+
+        tilePanelParent.sizeDelta = new Vector2(426, tileProperties.Count);
     }
 
     public void UpdateNumber(Vector3Int pos, int number)
