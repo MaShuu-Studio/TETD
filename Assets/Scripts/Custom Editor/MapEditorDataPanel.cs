@@ -20,7 +20,7 @@ public class MapEditorDataPanel : MonoBehaviour
     [SerializeField] private MapEditorTileProperty tilePropertyPrefab;
     [SerializeField] private Transform tilePanelParent;
     private Dictionary<Vector3Int, TileProperty> tileProperties;
-    private List<MapEditorTileProperty> tilePropertyIcons;
+    private Dictionary<Vector3Int, MapEditorTileProperty> tilePropertyIcons;
 
     [Header("ROUND PANEL")]
     [SerializeField] private MapEditorRoundInfo roundInfoPrefab;
@@ -31,11 +31,10 @@ public class MapEditorDataPanel : MonoBehaviour
     public void Init()
     {
         mapPropertyPrefab.gameObject.SetActive(false);
-        mapProperties = new List<MapProperty>();
+        tilePropertyPrefab.gameObject.SetActive(false);
         mapPropertyIcons = new List<MapEditorMapProperty>();
 
-        tileProperties = new Dictionary<Vector3Int, TileProperty>();
-        tilePropertyIcons = new List<MapEditorTileProperty>();
+        tilePropertyIcons = new Dictionary<Vector3Int, MapEditorTileProperty>();
     }
 
     public void LoadMap()
@@ -50,14 +49,14 @@ public class MapEditorDataPanel : MonoBehaviour
             Destroy(icon.gameObject);
         }
         mapPropertyIcons.Clear();
-        foreach (var icon in tilePropertyIcons)
+        foreach (var icon in tilePropertyIcons.Values)
         {
             Destroy(icon.gameObject);
         }
         tilePropertyIcons.Clear();
 
         mapProperties = map.mapProperties;
-        foreach(var prop in mapProperties)
+        foreach (var prop in mapProperties)
         {
             MapEditorMapProperty propIcon = Instantiate(mapPropertyPrefab);
             propIcon.transform.SetParent(mapPanelParent);
@@ -68,12 +67,20 @@ public class MapEditorDataPanel : MonoBehaviour
             mapPropertyIcons.Add(propIcon);
         }
         UpdateElements();
-        addButtons[0].transform.SetAsLastSibling();
+        if (GetRemainElements().Count == 0) addButtons[0].gameObject.SetActive(false);
+        else addButtons[0].transform.SetAsLastSibling();
 
-        tileProperties.Clear();
-        foreach (var kv in map.tileProperties)
+        tileProperties = map.tileProperties;
+        foreach (var prop in tileProperties)
         {
-            tileProperties.Add(kv.Key, kv.Value);
+            MapEditorTileProperty propIcon = Instantiate(tilePropertyPrefab);
+            propIcon.transform.SetParent(tilePanelParent);
+            propIcon.transform.localScale = Vector3.one;
+            propIcon.gameObject.SetActive(true);
+            tilePropertyIcons.Add(prop.Key, propIcon);
+
+            propIcon.SetProp(tilePropertyIcons.Count, prop.Key, prop.Value, this);
+            UIController.Instance.AddSpecialTile(prop.Key);
         }
     }
 
@@ -135,11 +142,6 @@ public class MapEditorDataPanel : MonoBehaviour
                     addButtons[selectedPanel].SetActive(false);
             }
         }
-        // Tile Property
-        else if (selectedPanel == 1)
-        {
-
-        }
         // Round
         else if (selectedPanel == 2)
         {
@@ -149,13 +151,46 @@ public class MapEditorDataPanel : MonoBehaviour
 
     public void RemoveData(int index)
     {
-        mapProperties.RemoveAt(index);
-        Destroy(mapPropertyIcons[index].gameObject);
-        mapPropertyIcons.RemoveAt(index);
+        if (selectedPanel == 0)
+        {
+            mapProperties.RemoveAt(index);
+            Destroy(mapPropertyIcons[index].gameObject);
+            mapPropertyIcons.RemoveAt(index);
 
-        UpdateElements();
+            UpdateElements();
 
-        addButtons[selectedPanel].SetActive(true);
+            addButtons[0].SetActive(true);
+            addButtons[0].transform.SetAsLastSibling();
+        }
+    }
+
+    public void AddData(Vector3Int pos, int number)
+    {
+        if (tileProperties.ContainsKey(pos)) return;
+
+        TileProperty prop = new TileProperty();
+
+        MapEditorTileProperty propIcon = Instantiate(tilePropertyPrefab);
+        propIcon.transform.SetParent(tilePanelParent);
+        propIcon.transform.localScale = Vector3.one;
+        propIcon.gameObject.SetActive(true);
+        propIcon.SetProp(number, pos, prop, this);
+
+        tileProperties.Add(pos, prop);
+        tilePropertyIcons.Add(pos, propIcon);
+    }
+
+    public void RemoveData(Vector3Int pos)
+    {
+        UIController.Instance.RemoveNumbering(pos);
+        tileProperties.Remove(pos);
+        Destroy(tilePropertyIcons[pos].gameObject);
+        tilePropertyIcons.Remove(pos);
+    }
+
+    public void UpdateNumber(Vector3Int pos, int number)
+    {
+        tilePropertyIcons[pos].UpdateNumber(number);
     }
 
     public void LoadPanel(int index)

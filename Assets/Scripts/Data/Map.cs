@@ -43,36 +43,8 @@ public class Map
         if (data.enemyRoad != null) enemyRoad = data.enemyRoad;
         else enemyRoad = new List<Vector3Int>();
 
-        //mapProperties = data.mapProperties;
-        //tileProperties = data.tileProperties;
-
-        mapProperties = new List<MapProperty>();
-        mapProperties.Add(new MapProperty()
-        {
-            element = Element.FIRE,
-            atk = UnityEngine.Random.Range(-1, 2) * 50,
-            atkSpeed = UnityEngine.Random.Range(-1, 2) * 50
-        });
-        mapProperties.Add(new MapProperty()
-        {
-            element = Element.WATER,
-            atk = UnityEngine.Random.Range(-1, 2) * 50,
-            atkSpeed = UnityEngine.Random.Range(-1, 2) * 50
-        });
-        mapProperties.Add(new MapProperty()
-        {
-            element = Element.NATURE,
-            atk = UnityEngine.Random.Range(-1, 2) * 50,
-            atkSpeed = UnityEngine.Random.Range(-1, 2) * 50
-        });
-
-        tileProperties = new Dictionary<Vector3Int, TileProperty>();
-        tileProperties.Add(Vector3Int.zero, new TileProperty()
-        {
-            atk = 30,
-            atkSpeed = 100,
-            range = 50
-        });
+        mapProperties = data.mapProperties;
+        tileProperties = data.tileProperties;
     }
 
     public Map(string name, Map data)
@@ -150,6 +122,7 @@ public class MapProperty
     }
 }
 
+[Serializable]
 public class TileProperty
 {
     public int atk;

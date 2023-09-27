@@ -106,13 +106,13 @@ public class MapEditor : MonoBehaviour
         {
             if (click && selectedTile != null)
             {
-                if (drawFlag) SetRoad(tilePos, selectedTile.name);
+                if (drawFlag) SetFlag(tilePos, selectedTile.name);
                 else SetTile(tilePos, selectedTile);
             }
 
             if (rclick)
             {
-                if (drawFlag) SetRoad(tilePos, selectedTile.name, false);
+                if (drawFlag) SetFlag(tilePos, selectedTile.name, false);
                 else SetTile(tilePos, null);
             }
         }
@@ -187,143 +187,162 @@ public class MapEditor : MonoBehaviour
 
     #region Map
     // Flag를 세팅하는데 작동하는 코드
-    private void SetRoad(Vector3Int pos, string flagName, bool add = true)
+    private void SetFlag(Vector3Int pos, string flagName, bool add = true)
     {
-        // Flag는 Road에만 설치할 수 있음.
-        // pos 칸이 비어있거나 Road가 아니면 취소
-        if (map.tiles.ContainsKey(pos) == false || map.GetTile(pos).type != "ROAD") return;
+        // Flag는 이미 타일이 설치된 곳에만 설치할 수 있음.
+        // pos 칸이 비어있다면 취소
+        if (map.tiles.ContainsKey(pos) == false) return;
 
         // 추가
         if (add)
         {
-            // StartFlag와 DestFlag로 이루어짐.
-            // 기존 시작 혹은 도착지점과 방향이 맞지 않다면 그려지지 않음.
-            // 방향이 맞다면 그 사이를 코너로 다 메우는 방식.
-            // 방향이 겹친다면 앞 부분을 다 날려버림.
-            if (flagName == "STARTFLAG")
+            // STARTFLAG와 DESTFLAG는 ROAD에만 지을 수 있음.
+            if (map.GetTile(pos).type == "ROAD")
             {
-                // 우선 road가 있는지 체크.
-                if (enemyRoad.Count > 0)
+                // StartFlag와 DestFlag로 이루어짐.
+                // 기존 시작 혹은 도착지점과 방향이 맞지 않다면 그려지지 않음.
+                // 방향이 맞다면 그 사이를 코너로 다 메우는 방식.
+                // 방향이 겹친다면 앞 부분을 다 날려버림.
+                if (flagName == "STARTFLAG")
                 {
-                    // 있다면 가장 앞 부분과 방향 체크.
-                    Vector3Int targetPos = enemyRoad[0];
-                    Vector3Int dir = targetPos - pos;
-
-                    // 방향이 맞지 않다면 설치하지 않음.
-                    // 혹은 같은 곳에 설치하더라도 의미 없으니 취소.
-                    if ((dir.x != 0 && dir.y != 0)
-                        || (dir.x == 0 && dir.y == 0)) return;
-
-                    // dir를 normarlize함.
-                    if (dir.x > 0) dir.x = 1;
-                    else if (dir.x < 0) dir.x = -1;
-
-                    if (dir.y > 0) dir.y = 1;
-                    else if (dir.y < 0) dir.y = -1;
-
-                    // 그 외의 경우는 기존에 만들어져 있는 Road인지 체크.
-                    // 기존에 만들어져 있다면 앞 부분을 전부 날림.
-                    int index = enemyRoad.FindIndex(p => p == pos);
-                    if (index < 0) // 없다면 방향에 맞춰서 사이를 메워주는 방식.
+                    // 우선 road가 있는지 체크.
+                    if (enemyRoad.Count > 0)
                     {
-                        List<Vector3Int> startRoad = new List<Vector3Int>();
-                        startRoad.Add(pos); // 가장 앞 부분으로써 추가.
-                        Vector3Int nextPos = pos + dir;
-                        while (nextPos != targetPos)
+                        // 있다면 가장 앞 부분과 방향 체크.
+                        Vector3Int targetPos = enemyRoad[0];
+                        Vector3Int dir = targetPos - pos;
+
+                        // 방향이 맞지 않다면 설치하지 않음.
+                        // 혹은 같은 곳에 설치하더라도 의미 없으니 취소.
+                        if ((dir.x != 0 && dir.y != 0)
+                            || (dir.x == 0 && dir.y == 0)) return;
+
+                        // dir를 normarlize함.
+                        if (dir.x > 0) dir.x = 1;
+                        else if (dir.x < 0) dir.x = -1;
+
+                        if (dir.y > 0) dir.y = 1;
+                        else if (dir.y < 0) dir.y = -1;
+
+                        // 그 외의 경우는 기존에 만들어져 있는 Road인지 체크.
+                        // 기존에 만들어져 있다면 앞 부분을 전부 날림.
+                        int index = enemyRoad.FindIndex(p => p == pos);
+                        if (index < 0) // 없다면 방향에 맞춰서 사이를 메워주는 방식.
                         {
-                            startRoad.Add(nextPos);
-                            nextPos += dir;
-                            // 만약에 해당 방향에 Road가 없다면 이 역시 지을 수 없는 형태.
-                            if (map.tiles.ContainsKey(nextPos) == false || map.GetTile(nextPos).type != "ROAD")
-                                return;
+                            List<Vector3Int> startRoad = new List<Vector3Int>();
+                            startRoad.Add(pos); // 가장 앞 부분으로써 추가.
+                            Vector3Int nextPos = pos + dir;
+                            while (nextPos != targetPos)
+                            {
+                                startRoad.Add(nextPos);
+                                nextPos += dir;
+                                // 만약에 해당 방향에 Road가 없다면 이 역시 지을 수 없는 형태.
+                                if (map.tiles.ContainsKey(nextPos) == false || map.GetTile(nextPos).type != "ROAD")
+                                    return;
+                            }
+
+                            startRoad.AddRange(enemyRoad);
+                            enemyRoad = startRoad;
+
                         }
-
-                        startRoad.AddRange(enemyRoad);
-                        enemyRoad = startRoad;
-
+                        else // 있다면 해당 부분 앞 부분을 전부 없앰.
+                        {
+                            enemyRoad.RemoveRange(0, index);
+                        }
                     }
-                    else // 있다면 해당 부분 앞 부분을 전부 없앰.
+                    else
                     {
-                        enemyRoad.RemoveRange(0, index);
+                        // road가 없다면 자연스럽게 추가.
+                        enemyRoad.Add(pos);
                     }
                 }
-                else
+                else if (flagName == "DESTFLAG")
                 {
-                    // road가 없다면 자연스럽게 추가.
-                    enemyRoad.Add(pos);
+                    // 우선 road가 있는지 체크.
+                    if (enemyRoad.Count > 0)
+                    {
+                        // 있다면 가장 뒷 부분과 방향 체크.
+                        Vector3Int targetPos = enemyRoad[enemyRoad.Count - 1];
+                        Vector3Int dir = pos - targetPos;
+
+                        // 방향이 맞지 않다면 설치하지 않음.
+                        // 혹은 같은 곳에 설치하더라도 의미 없으니 취소.
+                        if ((dir.x != 0 && dir.y != 0)
+                            || (dir.x == 0 && dir.y == 0)) return;
+
+                        // dir를 normarlize함.
+                        if (dir.x > 0) dir.x = 1;
+                        else if (dir.x < 0) dir.x = -1;
+
+                        if (dir.y > 0) dir.y = 1;
+                        else if (dir.y < 0) dir.y = -1;
+
+                        // 그 외의 경우는 기존에 만들어져 있는 Road인지 체크.
+                        // 기존에 만들어져 있다면 뒷 부분을 전부 날림.
+                        int index = enemyRoad.FindIndex(p => p == pos);
+                        if (index < 0) // 없다면 방향에 맞춰서 사이를 메워주는 방식.
+                        {
+                            List<Vector3Int> destRoad = new List<Vector3Int>();
+                            Vector3Int nextPos = targetPos;
+                            while (nextPos != pos)
+                            {
+                                nextPos += dir;
+                                if (map.tiles.ContainsKey(nextPos) == false || map.GetTile(nextPos).type != "ROAD")
+                                    return;
+                                destRoad.Add(nextPos);
+                            }
+
+                            enemyRoad.AddRange(destRoad);
+
+                        }
+                        else // 있다면 해당 부분 앞 부분을 전부 없앰.
+                        {
+                            enemyRoad.RemoveRange(index + 1, enemyRoad.Count - 1 - index);
+                        }
+                    }
+                    else
+                    {
+                        // road가 없다면 자연스럽게 추가.
+                        enemyRoad.Add(pos);
+                    }
                 }
+                UpdateRoad();
             }
-            else if (flagName == "DESTFLAG")
+
+            // 특수 능력을 부여하는 SPECIAL ZONE의 경우 BUILDABLE에만 지을 수 있음.
+            if (map.GetTile(pos).type == "BUILDABLE")
             {
-                // 우선 road가 있는지 체크.
-                if (enemyRoad.Count > 0)
-                {
-                    // 있다면 가장 뒷 부분과 방향 체크.
-                    Vector3Int targetPos = enemyRoad[enemyRoad.Count - 1];
-                    Vector3Int dir = pos - targetPos;
-
-                    // 방향이 맞지 않다면 설치하지 않음.
-                    // 혹은 같은 곳에 설치하더라도 의미 없으니 취소.
-                    if ((dir.x != 0 && dir.y != 0)
-                        || (dir.x == 0 && dir.y == 0)) return;
-
-                    // dir를 normarlize함.
-                    if (dir.x > 0) dir.x = 1;
-                    else if (dir.x < 0) dir.x = -1;
-
-                    if (dir.y > 0) dir.y = 1;
-                    else if (dir.y < 0) dir.y = -1;
-
-                    // 그 외의 경우는 기존에 만들어져 있는 Road인지 체크.
-                    // 기존에 만들어져 있다면 뒷 부분을 전부 날림.
-                    int index = enemyRoad.FindIndex(p => p == pos);
-                    if (index < 0) // 없다면 방향에 맞춰서 사이를 메워주는 방식.
-                    {
-                        List<Vector3Int> destRoad = new List<Vector3Int>();
-                        Vector3Int nextPos = targetPos;
-                        while (nextPos != pos)
-                        {
-                            nextPos += dir;
-                            if (map.tiles.ContainsKey(nextPos) == false || map.GetTile(nextPos).type != "ROAD")
-                                return;
-                            destRoad.Add(nextPos);
-                        }
-
-                        enemyRoad.AddRange(destRoad);
-
-                    }
-                    else // 있다면 해당 부분 앞 부분을 전부 없앰.
-                    {
-                        enemyRoad.RemoveRange(index + 1, enemyRoad.Count - 1 - index);
-                    }
-                }
-                else
-                {
-                    // road가 없다면 자연스럽게 추가.
-                    enemyRoad.Add(pos);
-                }
+                UIController.Instance.AddSpecialTile(pos);
             }
         }
         // 삭제
         else
         {
-            // STARTFLAG면 가장 뒤쪽까지 삭제(LastIndex)
-            // DESTFLAG면 가장 앞쪽까지 삭제(Index)
-            if (flagName == "STARTFLAG")
+            if (map.GetTile(pos).type == "ROAD")
             {
-                int index = enemyRoad.FindIndex(p => p == pos);
-                if (index < 0) return;
-                enemyRoad.RemoveRange(0, index + 1);
+                // STARTFLAG면 가장 뒤쪽까지 삭제(LastIndex)
+                // DESTFLAG면 가장 앞쪽까지 삭제(Index)
+                if (flagName == "STARTFLAG")
+                {
+                    int index = enemyRoad.FindIndex(p => p == pos);
+                    if (index < 0) return;
+                    enemyRoad.RemoveRange(0, index + 1);
+                }
+                else if (flagName == "DESTFLAG")
+                {
+                    int index = enemyRoad.FindLastIndex(p => p == pos);
+                    if (index < 0) return;
+                    enemyRoad.RemoveRange(index, enemyRoad.Count - index);
+                }
+                UpdateRoad();
             }
-            else if (flagName == "DESTFLAG")
+
+            if (map.GetTile(pos).type == "BUILDABLE")
             {
-                int index = enemyRoad.FindLastIndex(p => p == pos);
-                if (index < 0) return;
-                enemyRoad.RemoveRange(index, enemyRoad.Count - index);
+                UIController.Instance.RemoveSpecialTile(pos);
             }
         }
 
-        UpdateRoad();
     }
 
     private void SetTile(Vector3Int pos, CustomRuleTile tile)
@@ -362,7 +381,9 @@ public class MapEditor : MonoBehaviour
             }
 
             if (tile != null)
+            {
                 map.tiles.Add(pos, new TileInfo(tile.name, tile.Base.buildable));
+            }
         }
 
         int x = map.origin.x;
@@ -459,6 +480,10 @@ public class MapEditor : MonoBehaviour
             routeTilemap.SetTile(enemyRoad[index], TileManager.GetFlag("DESTFLAG").Base);
     }
 
+    public void UpdateZoneNumber()
+    {
+
+    }
     // 전체 맵을 업데이트
     public void UpdateMap()
     {

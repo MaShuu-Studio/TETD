@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\ScriptableButton.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfo\LibraryCard.cs" />
     <Compile Include="Assets\Scripts\Data\DataManager.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditorRoundInfo.cs" />
     <Compile Include="Assets\Scripts\Game Control\SoundController.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\CustomDropdown.cs" />
     <Compile Include="Assets\Scripts\Game Control\LogCollector.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Assets\Scripts\Data\ObjectData.cs" />
     <Compile Include="Assets\Scripts\Game Control\CameraController.cs" />
     <Compile Include="Assets\Scripts\Custom Editor\CustomEditor.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditorDataPanel.cs" />
     <Compile Include="Assets\Scripts\Game Control\MapController.cs" />
     <Compile Include="Assets\Scripts\Game Control\RoundController.cs" />
     <Compile Include="Assets\Scripts\Game Control\Initializer.cs" />
@@ -138,9 +140,11 @@
     <Compile Include="Assets\Scripts\UI\Scriptable Buttons\RerollButton.cs" />
     <Compile Include="Assets\Scripts\UI\DescriptionIcon.cs" />
     <Compile Include="Assets\Scripts\UI\DescriptionPopup.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditorTileProperty.cs" />
     <Compile Include="Assets\Scripts\Game Control\GameController.cs" />
     <Compile Include="Assets\Scripts\Sound\CustomAudioSource.cs" />
     <Compile Include="Assets\Scripts\UI\MapSummarizedInfo.cs" />
+    <Compile Include="Assets\Scripts\Custom Editor\MapEditorMapProperty.cs" />
     <Compile Include="Assets\Scripts\Data\RoundManager.cs" />
     <Compile Include="Assets\Scripts\UI\TowerInfo\TowerUpgradeItem.cs" />
     <Compile Include="Assets\Scripts\Data\EnumData.cs" />
@@ -149,10 +153,6 @@
     <Compile Include="Assets\Scripts\Data\CustomDataManager.cs" />
     <Compile Include="Assets\Scripts\Object\Projectile.cs" />
     <Compile Include="Assets\Scripts\Object\EnemyObject.cs" />
-    <Compile Include="Assets\Scripts\Custom Editor\MapEditorDataPanel.cs" />
-    <Compile Include="Assets\Scripts\Custom Editor\MapEditorMapProperty.cs" />
-    <Compile Include="Assets\Scripts\Custom Editor\MapEditorTileProperty.cs" />
-    <Compile Include="Assets\Scripts\Custom Editor\MapEditorRoundInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

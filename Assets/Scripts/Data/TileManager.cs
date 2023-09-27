@@ -21,7 +21,7 @@ public static class TileManager
     private static string flagPath = "/Sprites/Tile/Flag/";
     private static string backgroundPath = "/Sprites/Tile/Backgrounds/";
 
-    private static string[] flagNames = { "BUILDABLE", "NOTBUILDABLE", "STARTFLAG", "DESTFLAG", "CORNER" };
+    private static string[] flagNames = { "BUILDABLE", "NOTBUILDABLE", "STARTFLAG", "DESTFLAG", "CORNER", "SPECIALZONE" };
     private static string[] tileTypes = { "BUILDABLE", "NOT BUILDABLE", "ROAD" };
     private static string[] mapBackgrounds = { "LOWER", "UPPER" };
 

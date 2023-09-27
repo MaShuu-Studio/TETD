@@ -30,10 +30,10 @@ public class MapEditorMapProperty : MonoBehaviour
         inputs[3].text = prop.speed.ToString();
 
         elementDropdown.onValueChanged.AddListener(index => ChangeElement(index));
-        inputs[0].onValueChanged.AddListener(str => prop.atk = int.Parse(str));
-        inputs[1].onValueChanged.AddListener(str => prop.atkSpeed = int.Parse(str));
-        inputs[2].onValueChanged.AddListener(str => prop.hp = int.Parse(str));
-        inputs[3].onValueChanged.AddListener(str => prop.speed = int.Parse(str));
+        inputs[0].onValueChanged.AddListener(str => int.TryParse(str, out prop.atk));
+        inputs[1].onValueChanged.AddListener(str => int.TryParse(str, out prop.atkSpeed));
+        inputs[2].onValueChanged.AddListener(str => int.TryParse(str, out prop.hp));
+        inputs[3].onValueChanged.AddListener(str => int.TryParse(str, out prop.speed));
     }
 
     public void UpdateElement(int index, List<Element> elements)

@@ -98,6 +98,9 @@ public class UIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI mapNameText;
     [SerializeField] private MapEditorTilePanel mapEditorTilePanel;
     [SerializeField] private MapEditorDataPanel mapEditorDataPanel;
+    [SerializeField] private Transform numberingParent;
+    [SerializeField] private TextMeshProUGUI numberingTextPrefab;
+    private Dictionary<Vector3Int, TextMeshProUGUI> numberings;
 
     [Space]
     [Header("Unit Editor")]
@@ -583,13 +586,66 @@ public class UIController : MonoBehaviour
     public void EditMap()
     {
         ChangeCustomEditorUI(1);
+
+        if (numberings != null)
+        {
+            foreach (var kv in numberings)
+            {
+                Destroy(kv.Value.gameObject);
+            }
+            numberings.Clear();
+        }
+        else numberings = new Dictionary<Vector3Int, TextMeshProUGUI>();
+        numberingTextPrefab.gameObject.SetActive(false);
+
         mapEditorDataPanel.LoadMap();
         mapNameText.text = MapEditor.Instance.MapData.name;
     }
 
+    public void AddSpecialTile(Vector3Int pos)
+    {
+        if (numberings.ContainsKey(pos)) return;
+
+        Vector2 textPos = new Vector2(pos.x + 14, pos.y - 7) * 72;
+        TextMeshProUGUI text = Instantiate(numberingTextPrefab);
+        text.transform.SetParent(numberingParent);
+        text.transform.localScale = Vector3.one;
+        text.transform.localPosition = textPos;
+        text.gameObject.SetActive(true);
+
+        numberings.Add(pos, text);
+        text.text = numberings.Count.ToString();
+
+        mapEditorDataPanel.AddData(pos, numberings.Count);
+    }
+
+    public void RemoveSpecialTile(Vector3Int pos)
+    {
+        if (numberings.ContainsKey(pos) == false) return;
+        mapEditorDataPanel.RemoveData(pos);
+    }
+    
+    public void RemoveNumbering(Vector3Int pos)
+    {
+        Destroy(numberings[pos].gameObject);
+        numberings.Remove(pos);
+
+        UpdateNumbering();
+    }
+
+    private void UpdateNumbering()
+    {
+        int i = 1;
+        foreach(var kv in numberings)
+        {
+            mapEditorDataPanel.UpdateNumber(kv.Key, i);
+            kv.Value.text = (i++).ToString();
+        }
+    }
+
     public bool PointInMapEditPanel()
     {
-        return PointOverUI(mapEditorTilePanel.gameObject);
+        return PointOverUI(mapEditorTilePanel.gameObject) || PointOverUI(mapEditorDataPanel.gameObject);
     }
 
     #endregion

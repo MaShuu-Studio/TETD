@@ -10,14 +10,14 @@ public class MapEditorTilePanel : MonoBehaviour
     // 0: Buildable, 1: Not Buildable, 2: Road, 3: Backgrounds
     [SerializeField] private Transform[] toggles;
     [SerializeField] private GameObject[] palettes;
-    // 0: Buildable, 1: Not Buildable, 2: Road, 3: Route Flag, 4: Backgrounds
+    // 0: Buildable, 1: Not Buildable, 2: Road, 3: Special Zone, 4: Route Flag, 5: Backgrounds
     [SerializeField] private Transform[] tileLists;
     private List<MapEditorTile>[] tiles;
     private List<MapEditorBackgroundTile> backgrounds;
 
     public void Init()
     {
-        tiles = new List<MapEditorTile>[4];
+        tiles = new List<MapEditorTile>[5];
         for (int i = 0; i < tiles.Length; i++)
             tiles[i] = new List<MapEditorTile>();
         backgrounds = new List<MapEditorBackgroundTile>();
@@ -50,7 +50,18 @@ public class MapEditorTilePanel : MonoBehaviour
             }
         }
 
-        // STARTFLAG와 DESTFLAG만 추가
+        // SPECIAL ZONE 추가
+        {
+            CustomRuleTile tile = TileManager.GetFlag("SPECIALZONE");
+            MapEditorTile metile = Instantiate(tilePrefab);
+
+            metile.SetTile(tile, true);
+            metile.transform.SetParent(tileLists[3]);
+            metile.transform.localScale = Vector3.one;
+            tiles[3].Add(metile);
+        }
+
+        // STARTFLAG와 DESTFLAG 추가
         string[] flags = { "STARTFLAG", "DESTFLAG" };
         for (int i = 0; i < flags.Length; i++)
         {
@@ -58,9 +69,9 @@ public class MapEditorTilePanel : MonoBehaviour
             MapEditorTile metile = Instantiate(tilePrefab);
 
             metile.SetTile(tile, true);
-            metile.transform.SetParent(tileLists[3]);
+            metile.transform.SetParent(tileLists[4]);
             metile.transform.localScale = Vector3.one;
-            tiles[3].Add(metile);
+            tiles[4].Add(metile);
         }
 
         // Background Tiles
@@ -71,7 +82,7 @@ public class MapEditorTilePanel : MonoBehaviour
             MapEditorBackgroundTile bgTile = Instantiate(backgroundTilePrefab);
 
             bgTile.SetTile(name, bg);
-            bgTile.transform.SetParent(tileLists[4]);
+            bgTile.transform.SetParent(tileLists[5]);
             bgTile.transform.localScale = Vector3.one;
             backgrounds.Add(bgTile);
         }
